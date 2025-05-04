@@ -1,0 +1,393 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity3D安卓游戏第三方SDK接入 | Blog</title><meta name="author" content="JokeVallen"><meta name="copyright" content="JokeVallen"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="PS：持续更新… 什么是SDK？ SDK（Software Development Kit，软件开发工具包）是一个用于构建应用程序的工具集，包含开发特定软件的必要工具、库、文档和示例代码。SDK通常由软件或硬件厂商提供，帮助开发者更容易地为特定平台、操作系统、设备或服务创建应用程序。  SDK的应用场景 1.平台开发：如Android、iOS等移动操作系统的SDK，提供了开发移动应用的所有必要资源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity3D安卓游戏第三方SDK接入">
+<meta property="og:url" content="https://jokevallen.github.io/2025/05/04/2025-05-04-Unity3D%E5%AE%89%E5%8D%93%E6%B8%B8%E6%88%8F%E7%AC%AC%E4%B8%89%E6%96%B9SDK%E6%8E%A5%E5%85%A5/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="PS：持续更新… 什么是SDK？ SDK（Software Development Kit，软件开发工具包）是一个用于构建应用程序的工具集，包含开发特定软件的必要工具、库、文档和示例代码。SDK通常由软件或硬件厂商提供，帮助开发者更容易地为特定平台、操作系统、设备或服务创建应用程序。  SDK的应用场景 1.平台开发：如Android、iOS等移动操作系统的SDK，提供了开发移动应用的所有必要资源">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://jokevallen.github.io/img/head.png">
+<meta property="article:published_time" content="2025-05-04T10:42:39.210Z">
+<meta property="article:modified_time" content="2025-05-04T13:44:39.583Z">
+<meta property="article:author" content="JokeVallen">
+<meta property="article:tag" content="Unity开发">
+<meta property="article:tag" content="android">
+<meta property="article:tag" content="unity">
+<meta property="article:tag" content="游戏">
+<meta property="article:tag" content="sdk">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/img/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Unity3D安卓游戏第三方SDK接入",
+  "url": "https://jokevallen.github.io/2025/05/04/2025-05-04-Unity3D%E5%AE%89%E5%8D%93%E6%B8%B8%E6%88%8F%E7%AC%AC%E4%B8%89%E6%96%B9SDK%E6%8E%A5%E5%85%A5/",
+  "image": "https://jokevallen.github.io/img/head.png",
+  "datePublished": "2025-05-04T10:42:39.210Z",
+  "dateModified": "2025-05-04T13:44:39.583Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "JokeVallen",
+      "url": "https://jokevallen.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/2025/05/04/2025-05-04-Unity3D%E5%AE%89%E5%8D%93%E6%B8%B8%E6%88%8F%E7%AC%AC%E4%B8%89%E6%96%B9SDK%E6%8E%A5%E5%85%A5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity3D安卓游戏第三方SDK接入',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/logo_light.png" alt="Logo"></a><a class="nav-page-title" href="/"><span class="site-name">Unity3D安卓游戏第三方SDK接入</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Unity3D安卓游戏第三方SDK接入</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">Updated</span><time datetime="2025-05-04T13:44:39.583Z" title="Updated 2025-05-04 21:44:39">2025-05-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p><strong>PS：持续更新…</strong></p>
+<h4 id="什么是SDK？"><a href="#什么是SDK？" class="headerlink" title="什么是SDK？"></a>什么是SDK？</h4><blockquote>
+<p>SDK（Software Development Kit，软件开发工具包）是一个用于构建应用程序的工具集，包含开发特定软件的必要工具、库、文档和示例代码。SDK通常由软件或硬件厂商提供，帮助开发者更容易地为特定平台、操作系统、设备或服务创建应用程序。</p>
+</blockquote>
+<h4 id="SDK的应用场景"><a href="#SDK的应用场景" class="headerlink" title="SDK的应用场景"></a>SDK的应用场景</h4><blockquote>
+<p>1.平台开发：如Android、iOS等移动操作系统的SDK，提供了开发移动应用的所有必要资源。</p>
+<p>2.服务集成：如云服务的SDK，帮助开发者快速集成和使用特定的云服务（如AWS、Google Cloud等）。</p>
+<p>3.硬件开发：一些硬件厂商提供SDK，以便开发者创建与其硬件设备兼容的软件。</p>
+</blockquote>
+<h4 id="Google新版登录SDK–Credential"><a href="#Google新版登录SDK–Credential" class="headerlink" title="Google新版登录SDK–Credential"></a>Google新版登录SDK–Credential</h4><blockquote>
+<p><strong>依赖项：</strong></p>
+<p>（1）implementation ‘androidx.appcompat:appcompat:1.3.1’</p>
+<p>（2）implementation “com.google.android.gms:play-services-auth:21.2.0”</p>
+<p>（3）implementation “androidx.credentials:credentials:1.3.0-rc01”</p>
+<p>（4）implementation “androidx.credentials:credentials-play-services-auth:1.3.0-rc01”</p>
+<p>（5）implementation “com.google.android.libraries.identity.googleid:googleid:1.1.0”</p>
+<p><strong>接入流程：</strong><a target="_blank" rel="noopener" href="https://developer.android.com/identity/sign-in/credential-manager" title="官方文档">官方文档</a></p>
+<p><strong>常见错误：</strong></p>
+<p>（1）Failed to transform annotation-experimental-1.4.0.aar</p>
+<p><img src="https://i-blog.csdnimg.cn/direct/d66e51a475d5422a9425fd903f5f5baf.png"></p>
+<p>（2）androidx.credentials.exceptions.GetCredentialProviderConfigurationException: getCredentialAsync no provider dependencies found - please ensure the desired provider dependencies are added</p>
+<p>1.可能是设备的Google Play Service版本太低导致的，可以尝试更新设备的Google Play Service；</p>
+<p>（3）During begin sign in, failure response from one tap: Missing Feature{name&#x3D;auth_api_credentials_begin_sign_in, version&#x3D;8}</p>
+<p>1.提高依赖项”androidx.credentials:credentials”和”androidx.credentials:credentials-play-services-auth”的版本；</p>
+<p>（4）During begin sign in, failure response from one tap: 10: [28444] Developer console is not set up correctly.</p>
+<p>1.这个可能是因为Google后台配置问题，也可能是本地客户端ID设置错误所致；</p>
+<p>（5）androidx.credentials.exceptions.GetCredentialCancellationException: activity is cancelled by the user.</p>
+<p>1.这个可能是本地客户端ID设置错误所致；</p>
+<p><strong>特殊要求：</strong></p>
+<p>（1）设备Android系统版本最低为8.0，需要设备具备Google三件套（Google服务框架、Google Play服务、Google商店）；</p>
+<p>（2）需要设备具备VPN功能，能够访问Google服务（例如能够正常打开Google商店）；</p>
+</blockquote>
+<h4 id="常见第三方SDK（海外）"><a href="#常见第三方SDK（海外）" class="headerlink" title="常见第三方SDK（海外）"></a>常见第三方SDK（海外）</h4><blockquote>
+<p>1.Google身份验证SDK；</p>
+<p>2.Google支付SDK；</p>
+<p>3.AppsFlyer移动归因和营销分析SDK；</p>
+<p>……</p>
+</blockquote>
+<h4 id="后台配置"><a href="#后台配置" class="headerlink" title="后台配置"></a>后台配置</h4><blockquote>
+<p><strong>Google<strong><strong>登录</strong></strong>SDK**</strong>：**</p>
+<p>1.登录Google Cloud后台，创建一个项目；</p>
+<p>2.开启API和服务（Identity Toolkit API）；</p>
+<p>3.设置OAuth权限请求页面，添加测试用户；</p>
+<p>4.添加OAuth2.0客户端ID，包括Web应用和Android，输入包名以及本地导包的jks的SHA-1指纹（Web应用的客户端ID将用于Google登录SDK）；</p>
+<p>5.值得注意的是，如果本地导包的jks发生改变，也应在后台更新SHA-1指纹，否则无法成功调用SDK。</p>
+<p><strong>Google<strong><strong>支付</strong></strong>SDK**</strong>：**</p>
+<p>1.这个需要Google开发者账号，需要在Google Play控制台配置商品信息；</p>
+<p>2.还需要上传一个应用程序签名密钥，这个需要上传一个.zip文件，生成方法则是通过pepk将开发者账号的配套密钥的pem与本地开发所用的jks联合加密，然后导出为.zip文件；</p>
+<p>3.注意开发者账号的配套密钥不能作为本地开发密钥，Google Play控制台为了安全考虑这种方式不被允许；</p>
+</blockquote>
+<h4 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h4><blockquote>
+<p>示例1将演示如何为Unity3D开发的Android项目接入Google登录SDK。</p>
+<p><strong>开发环境：</strong></p>
+<p>1.Android Studio 2024.1.0.0</p>
+<p>2.Windows 10</p>
+<p>3.Unity3D 2020.3.48f1c1</p>
+<p>4.Android SDK 34 （Android Studio导出环境） Android SDK 10&#x2F;11（Unity构建环境）</p>
+<p>5.Android NDK 19.0.5232133（Unity构建环境、Android Studio导出环境）</p>
+<p>6.JDK 11.0.24（Android Studio导出环境） JDK 1.8.0（Unity构建环境）</p>
+<p>7.Gradle 6.1.1（Unity构建环境、Android Studio导出环境）</p>
+<p>8.Gradle Plugin 4.0.1（Android Studio导出环境）</p>
+<p><strong>Unity****配置：</strong></p>
+<p>1.Minimum api level 22</p>
+<p>2.Target api level 34</p>
+<p><strong>运行环境：</strong></p>
+<p>1.Mumu模拟器，设备（OPPO K10 PGJM10），Android系统（12）；</p>
+<p><strong>功能描述：</strong></p>
+<p>1.Unity3D 搭建UI界面，可供玩家交互，包括登录、注销登录、查看用户信息、退出游戏四个功能；</p>
+<p>2.Android Studio接入Google身份验证SDK，需要登录、注销登录、发送提示信息三个功能；</p>
+<p><strong>流程描述：</strong></p>
+<p>1.玩家进入游戏；</p>
+<p>2.玩家点击登录按钮，触发Google登录功能，需要对登录结果和异常进行反馈；</p>
+<p>3.玩家点击注销登录按钮，触发Google注销登录功能，需要对注销登录结果和异常进行反馈；</p>
+<p>4.玩家点击查看用户信息按钮，显示账户的Google id、名称、邮箱、邮箱是否验证信息，需要对异常进行反馈；</p>
+<p>5.玩家点击退出游戏按钮，关闭游戏程序；</p>
+<p>6.对于结果和异常反馈应采用定时关闭的提示框进行显示；</p>
+<p><strong>方法对应表：</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>方法</strong>**&#x2F;**<strong>端口</strong></th>
+<th><strong>Android</strong><strong>（<strong><strong>Java</strong></strong>）</strong></th>
+<th><strong>Unity3D</strong>**（<strong><strong>C#</strong></strong>）**</th>
+<th><strong>Unity3D</strong>**（<strong><strong>C#</strong></strong>）回调**</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>登录</td>
+<td>askLogin</td>
+<td>OnLoginClick</td>
+<td>OnLoginSuccess</td>
+</tr>
+<tr>
+<td>注销登录</td>
+<td>askLogout</td>
+<td>OnLogoutClick</td>
+<td>OnLogoutSuccess</td>
+</tr>
+<tr>
+<td>发送提示信息</td>
+<td>Null</td>
+<td>SendTip</td>
+<td>Null</td>
+</tr>
+</tbody></table>
+<p><strong>用户信息表：</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>信息</strong>**&#x2F;**<strong>端口</strong></th>
+<th><strong>Android</strong><strong>（<strong><strong>Java</strong></strong>）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>与用户的 Google 帐号相关联的电子邮件地址</td>
+<td>id</td>
+</tr>
+<tr>
+<td>在条目上显示的显示名</td>
+<td>name</td>
+</tr>
+<tr>
+<td>用户的个人资料照片 URI</td>
+<td>photo</td>
+</tr>
+<tr>
+<td>用户的 Google ID Toekn</td>
+<td>token</td>
+</tr>
+</tbody></table>
+</blockquote>
+<p><strong>（1）Unity3D游戏代码</strong></p>
+<p><strong>Tip.cs</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.UI;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提示框组件：用以显示提示框信息以及交互</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Tip</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">SerializeField</span>] Text content;</span><br><span class="line">    [<span class="meta">SerializeField</span>] Button close;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">bool</span> isUsed &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">Send</span>(<span class="params"><span class="built_in">string</span> tip</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (isUsed || <span class="built_in">string</span>.IsNullOrEmpty(tip)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        isUsed = <span class="literal">true</span>;</span><br><span class="line">        content.text = tip;</span><br><span class="line">        gameObject.SetActive(<span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        close.onClick.AddListener(OnClose);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnClose</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        gameObject.SetActive(<span class="literal">false</span>);</span><br><span class="line">        isUsed = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>TipController.cs</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提示框控制器组件：显示提示框的统一调用接口以及控制提示框</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TipController</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> Tip tip;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Queue&lt;<span class="built_in">string</span>&gt; contents = <span class="keyword">new</span> Queue&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">int</span> MAX_COUNT = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Send</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(content) || contents.Count &gt;= MAX_COUNT) <span class="keyword">return</span>;</span><br><span class="line">        contents.Enqueue(content);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (contents.Count &gt; <span class="number">0</span> &amp;&amp; tip.Send(contents.Peek()))</span><br><span class="line">            contents.Dequeue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>UILogic.cs</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.Networking;</span><br><span class="line"><span class="keyword">using</span> UnityEngine.UI;</span><br><span class="line"></span><br><span class="line"><span class="comment">// UI逻辑：UI交互相关的逻辑以及 Android 和 Unity 相互调用</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UILogic</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> Button login;</span><br><span class="line">    <span class="keyword">public</span> Button show;</span><br><span class="line">    <span class="keyword">public</span> Button logout;</span><br><span class="line">    <span class="keyword">public</span> Button quit;</span><br><span class="line">    <span class="keyword">public</span> ScrollRect showView;</span><br><span class="line">    <span class="keyword">public</span> RawImage portrait;</span><br><span class="line">    <span class="keyword">public</span> Text showText;</span><br><span class="line">    <span class="keyword">public</span> Button showViewCloseButton;</span><br><span class="line"></span><br><span class="line">    AndroidJavaObject jo;</span><br><span class="line">    UserData userData;</span><br><span class="line">    <span class="built_in">bool</span> isLoginSuccess;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        jo = <span class="keyword">new</span> AndroidJavaClass(<span class="string">&quot;com.unity3d.player.UnityPlayer&quot;</span>).GetStatic&lt;AndroidJavaObject&gt;(<span class="string">&quot;currentActivity&quot;</span>);</span><br><span class="line">        login.onClick.AddListener(OnLoginClick);</span><br><span class="line">        show.onClick.AddListener(OnShowClick);</span><br><span class="line">        logout.onClick.AddListener(OnLogoutClick);</span><br><span class="line">        quit.onClick.AddListener(OnQuitClick);</span><br><span class="line">        showViewCloseButton.onClick.AddListener(OnShowViewCloseClick);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnDestroy</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        jo.Dispose();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnLoginClick</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        jo.Call(<span class="string">&quot;askLogin&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnShowClick</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isLoginSuccess)</span><br><span class="line">        &#123;</span><br><span class="line">            TipController.Send(<span class="string">&quot;请先进行登录。&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (portrait.texture == <span class="literal">null</span>) StartCoroutine(LoadPortrait(userData.photo));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(showText.text))</span><br><span class="line">        &#123;</span><br><span class="line">            StringBuilder builder = <span class="keyword">new</span> StringBuilder()</span><br><span class="line">            .Append(<span class="string">&quot;Gmail:&quot;</span> + userData.id)</span><br><span class="line">            .Append(<span class="string">&quot;\nUserName:&quot;</span> + userData.name)</span><br><span class="line">            .Append(<span class="string">&quot;\nToken:&quot;</span> + userData.token);</span><br><span class="line">            showText.text = builder.ToString();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        showView.gameObject.SetActive(<span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnLogoutClick</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        jo.Call(<span class="string">&quot;askLogout&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnQuitClick</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Application.Quit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnShowViewCloseClick</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        showView.gameObject.SetActive(<span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">IEnumerator <span class="title">LoadPortrait</span>(<span class="params"><span class="built_in">string</span> uri</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">using</span> (UnityWebRequest www = UnityWebRequestTexture.GetTexture(uri))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">yield</span> <span class="keyword">return</span> www.SendWebRequest();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (www.result != UnityWebRequest.Result.Success)</span><br><span class="line">                TipController.Send(<span class="string">&quot;头像加载失败!&quot;</span>);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                Texture2D texture = DownloadHandlerTexture.GetContent(www);</span><br><span class="line">                portrait.texture = texture;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ************************** Java Call CSharp ******************************</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 登录成功回调：带有用户信息</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnLoginSuccess</span>(<span class="params"><span class="built_in">string</span> jsonStr</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            Debug.Log(jsonStr);</span><br><span class="line">            userData = JsonUtility.FromJson&lt;UserData&gt;(jsonStr);</span><br><span class="line">            Debug.Log(userData);</span><br><span class="line">            isLoginSuccess = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">        &#123;</span><br><span class="line">            TipController.Send(<span class="string">&quot;用户信息获取失败，请尝试重新登录。&quot;</span>);</span><br><span class="line">            Debug.LogError(ex.Message);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注销登录成功回调</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnLogoutSuccess</span>(<span class="params"><span class="built_in">string</span> <span class="keyword">value</span></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        isLoginSuccess = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 信息提示</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SendTip</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        TipController.Send(content);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>UserData.cs</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 用户信息：记录Google登录用户的信息结构体</span></span><br><span class="line"></span><br><span class="line">[<span class="meta">System.Serializable</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">struct</span> UserData</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 与用户的 Google 帐号相关联的电子邮件地址</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在条目上显示的显示名</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户的个人资料照片 URI</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> photo;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户的 Google ID Toekn</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> token;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">string</span> <span class="title">ToString</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">$&quot;[id:<span class="subst">&#123;id&#125;</span>,name:<span class="subst">&#123;name&#125;</span>,photo:<span class="subst">&#123;photo&#125;</span>,token:<span class="subst">&#123;token&#125;</span>]&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>（2）Android端Java代码（部分）</strong></p>
+<p><strong>UnityPlayerActivity.java</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// ****************************** Unity Call *******************************</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">askLogin</span>()</span>&#123;</span><br><span class="line">    GetGoogleIdOption googleIdOption = <span class="keyword">new</span> GetGoogleIdOption.Builder()</span><br><span class="line">            .setFilterByAuthorizedAccounts(<span class="literal">false</span>)</span><br><span class="line">            .setAutoSelectEnabled(<span class="literal">true</span>)</span><br><span class="line">            .setServerClientId(getString(R.<span class="built_in">string</span>.WEB_CLIENT_ID))</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    GetCredentialRequest request = <span class="keyword">new</span> GetCredentialRequest.Builder()</span><br><span class="line">            .addCredentialOption(googleIdOption)</span><br><span class="line">            .build();</span><br><span class="line">    </span><br><span class="line">    CancellationSignal signal = <span class="keyword">new</span> CancellationSignal();</span><br><span class="line">    signal.setOnCancelListener(() -&gt; &#123;</span><br><span class="line">        Log.d(TAG, <span class="string">&quot;askLogin: Preparing credentials with Google was cancelled.&quot;</span>);</span><br><span class="line">        sendTip(<span class="string">&quot;你已取消登录!&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    getCredentialManager().getCredentialAsync(</span><br><span class="line">            <span class="keyword">this</span>,</span><br><span class="line">            request,</span><br><span class="line">            signal,</span><br><span class="line">            Executors.newSingleThreadExecutor(),</span><br><span class="line">            <span class="keyword">new</span> CredentialManagerCallback&lt;GetCredentialResponse, GetCredentialException&gt;() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResult</span>(<span class="params">GetCredentialResponse result</span>)</span> &#123;</span><br><span class="line">                    handleSignIn(result);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                @Override</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span>(<span class="params">GetCredentialException e</span>)</span> &#123;</span><br><span class="line">                    Log.e(TAG, <span class="string">&quot;askLogin: &quot;</span>, e);</span><br><span class="line">                    sendTip(<span class="string">&quot;登录失败!&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">askLogout</span>()</span>&#123;</span><br><span class="line">    ClearCredentialStateRequest clearCredentialStateRequest = <span class="keyword">new</span> ClearCredentialStateRequest();</span><br><span class="line"></span><br><span class="line">    android.os.CancellationSignal cancellationSignal = <span class="keyword">new</span> android.os.CancellationSignal();</span><br><span class="line">    cancellationSignal.setOnCancelListener(() -&gt; &#123;</span><br><span class="line">        Log.d(TAG, <span class="string">&quot;askLoginOut:Preparing credentials with Google was cancelled.&quot;</span>);</span><br><span class="line">        sendTip(<span class="string">&quot;你已取消注销登录操作!&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (credentialManager != <span class="literal">null</span>) &#123;</span><br><span class="line">        getCredentialManager().clearCredentialStateAsync(</span><br><span class="line">                clearCredentialStateRequest,</span><br><span class="line">                cancellationSignal,</span><br><span class="line">                Executors.newSingleThreadExecutor(),</span><br><span class="line">                <span class="keyword">new</span> CredentialManagerCallback&lt;Void, ClearCredentialException&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResult</span>(<span class="params">Void unused</span>)</span> &#123;</span><br><span class="line">                        Log.d(TAG, <span class="string">&quot;askLoginOut:google注销登录成功&quot;</span>);</span><br><span class="line">                        sendTip(<span class="string">&quot;注销登录成功!&quot;</span>);</span><br><span class="line">                        UnityPlayer.UnitySendMessage(<span class="string">&quot;Canvas&quot;</span>,<span class="string">&quot;OnLogoutSuccess&quot;</span>,<span class="string">&quot;&quot;</span>);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span>(<span class="params">ClearCredentialException e</span>)</span> &#123;</span><br><span class="line">                        Log.e(TAG, <span class="string">&quot;askLoginOut:&quot;</span> , e);</span><br><span class="line">                        sendTip(<span class="string">&quot;注销登录失败!&quot;</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ****************************** Java Call *******************************</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendTip</span>(<span class="params">String content</span>)</span>&#123;</span><br><span class="line">    UnityPlayer.UnitySendMessage(<span class="string">&quot;Canvas&quot;</span>,<span class="string">&quot;SendTip&quot;</span>,content);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ****************************** Google Login SDK *******************************</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> CredentialManager <span class="title">getCredentialManager</span>()</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(credentialManager == <span class="literal">null</span>)</span><br><span class="line">        credentialManager = CredentialManager.create(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">return</span> credentialManager;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handleSignIn</span>(<span class="params">GetCredentialResponse result</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// Handle the successfully returned credential.</span></span><br><span class="line">    Credential credential = result.getCredential();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (credential instanceof PublicKeyCredential) &#123;</span><br><span class="line">        String responseJson = ((PublicKeyCredential) credential).getAuthenticationResponseJson();</span><br><span class="line">        <span class="comment">// Share responseJson i.e. a GetCredentialResponse on your server to validate and authenticate</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (credential instanceof PasswordCredential) &#123;</span><br><span class="line">        String username = ((PasswordCredential) credential).getId();</span><br><span class="line">        String password = ((PasswordCredential) credential).getPassword();</span><br><span class="line">        <span class="comment">// Use id and password to send to your server to validate and authenticate</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (credential instanceof CustomCredential) &#123;</span><br><span class="line">        <span class="keyword">if</span> (GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL.<span class="keyword">equals</span>(credential.getType())) &#123;</span><br><span class="line">            <span class="comment">// Use googleIdTokenCredential and extract id to validate and</span></span><br><span class="line">            <span class="comment">// authenticate on your server</span></span><br><span class="line">            GoogleIdTokenCredential googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.getData());</span><br><span class="line">            String idToken = googleIdTokenCredential.getIdToken();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                JSONObject googleLoginInfoReturn = <span class="keyword">new</span> JSONObject();</span><br><span class="line">                googleLoginInfoReturn.put(<span class="string">&quot;id&quot;</span>, googleIdTokenCredential.getId());</span><br><span class="line">                googleLoginInfoReturn.put(<span class="string">&quot;name&quot;</span>,googleIdTokenCredential.getDisplayName());</span><br><span class="line">                googleLoginInfoReturn.put(<span class="string">&quot;photo&quot;</span>,googleIdTokenCredential.getProfilePictureUri());</span><br><span class="line">                googleLoginInfoReturn.put(<span class="string">&quot;token&quot;</span>,idToken);</span><br><span class="line">                Log.d(TAG, <span class="string">&quot;handleSignIn: &quot;</span>+ googleLoginInfoReturn);</span><br><span class="line">                sendTip(<span class="string">&quot;登录成功!&quot;</span>);</span><br><span class="line">                UnityPlayer.UnitySendMessage(<span class="string">&quot;Canvas&quot;</span>,<span class="string">&quot;OnLoginSuccess&quot;</span>,googleLoginInfoReturn.toString());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (JSONException e) &#123;</span><br><span class="line">                Log.e(TAG, <span class="string">&quot;handleSignIn: &quot;</span>, e);</span><br><span class="line">                sendTip(<span class="string">&quot;用户信息解析异常!&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Catch any unrecognized custom credential type here.</span></span><br><span class="line">            Log.d(TAG, <span class="string">&quot;handleSignIn: Unexpected type of credential&quot;</span>);</span><br><span class="line">            sendTip(<span class="string">&quot;未知的登录方式!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Catch any unrecognized credential type here.</span></span><br><span class="line">        Log.d(TAG, <span class="string">&quot;handleSignIn: Unexpected type of credential&quot;</span>);</span><br><span class="line">        sendTip(<span class="string">&quot;未知的登录方式!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>视频</strong></p>
+<p>Google登录SDK</p>
+<p><strong>如果这篇文章对你有帮助，请给作者点个赞吧！</strong></p>
+<blockquote>
+<p>本文迁移自CSDN: <a target="_blank" rel="noopener" href="https://blog.csdn.net/hgf1037882434/article/details/141716917">https://blog.csdn.net/hgf1037882434/article/details/141716917</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://JokeVallen.github.io">JokeVallen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/2025/05/04/2025-05-04-Unity3D%E5%AE%89%E5%8D%93%E6%B8%B8%E6%88%8F%E7%AC%AC%E4%B8%89%E6%96%B9SDK%E6%8E%A5%E5%85%A5/">https://jokevallen.github.io/2025/05/04/2025-05-04-Unity3D%E5%AE%89%E5%8D%93%E6%B8%B8%E6%88%8F%E7%AC%AC%E4%B8%89%E6%96%B9SDK%E6%8E%A5%E5%85%A5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity%E5%BC%80%E5%8F%91/">Unity开发</a><a class="post-meta__tags" href="/tags/android/">android</a><a class="post-meta__tags" href="/tags/unity/">unity</a><a class="post-meta__tags" href="/tags/%E6%B8%B8%E6%88%8F/">游戏</a><a class="post-meta__tags" href="/tags/sdk/">sdk</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/05/04/2025-05-04-%E7%BB%A7%E6%89%BF%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%B8%80%EF%BC%89/" title="继承实现单例模式的探索（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">继承实现单例模式的探索（一）</div></div><div class="info-2"><div class="info-item-1">前言 之前看到朋友采用继承的方式来实现单例模式，觉得很厉害，随后自己去探索了一番，以前实现单例模式都是把代码内联到具体的类中，这使得工程中每次需要使用单例模式时，都采用拷贝的方式，增加了很多冗余代码，并且难以规范单例的统一标准，使得代码不方便扩展和管理。这次探索找到了一种实现方式，先记录下来，后续如果有其它方式再发表系列文章，示例代码为C#。  代码v1.0123456789101112131415161718192021222324252627using System;/// &lt;summary&gt;/// 单例模式基类/// &lt;/summary&gt;/// &lt;typeparam name=&quot;T&quot;&gt;单例类型&lt;/typeparam&gt;public abstract class Singleton&lt;T&gt;where T : class, new()&#123;    public static T instance =&gt; _instance.Value;    static bool _unlock;   ...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-Android%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81%E7%9F%A5%E8%AF%86%E5%90%88%E9%9B%86%EF%BC%88Unity3D%EF%BC%89/" title="Android游戏开发常见知识合集（Unity3D）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Android游戏开发常见知识合集（Unity3D）</div></div><div class="info-2"><div class="info-item-1">PS：持续更新… 简介 Unity3D的特色之一就是具有良好的跨平台特性，随着移动设备的普及，移动端游戏的开发成为了多数游戏开发者所必备的技能之一。而Android作为最为普及的移动端系统，学习如何开发Android游戏是很有必要的。  环境配置 开发环境 1.Unity3D 2.Unity3D构建Android项目必备的模块（Android SDK&#x2F;Android NDK&#x2F;Java JDK&#x2F;Gradle等） 3.Visual Studio 或 Visual Studio Code 发布环境（任选其一） 1.Android Studio发布 2.Unity发布 调试环境（任选其一） 1.真机 + Android Studio 2.AVD（安卓虚拟设备） + Android Studio 3.Unity Remote 4.模拟器 + Android Studio Android Studio****必备模块 1.Android API 2.Android SDK Build-Tools 3.Android SDK Command-line...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/05/04/2025-05-04-Android%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81%E7%9F%A5%E8%AF%86%E5%90%88%E9%9B%86%EF%BC%88Unity3D%EF%BC%89/" title="Android游戏开发常见知识合集（Unity3D）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">Android游戏开发常见知识合集（Unity3D）</div></div><div class="info-2"><div class="info-item-1">PS：持续更新… 简介 Unity3D的特色之一就是具有良好的跨平台特性，随着移动设备的普及，移动端游戏的开发成为了多数游戏开发者所必备的技能之一。而Android作为最为普及的移动端系统，学习如何开发Android游戏是很有必要的。  环境配置 开发环境 1.Unity3D 2.Unity3D构建Android项目必备的模块（Android SDK&#x2F;Android NDK&#x2F;Java JDK&#x2F;Gradle等） 3.Visual Studio 或 Visual Studio Code 发布环境（任选其一） 1.Android Studio发布 2.Unity发布 调试环境（任选其一） 1.真机 + Android Studio 2.AVD（安卓虚拟设备） + Android Studio 3.Unity Remote 4.模拟器 + Android Studio Android Studio****必备模块 1.Android API 2.Android SDK Build-Tools 3.Android SDK Command-line...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-%E5%9F%BA%E4%BA%8EScriptableObject%E8%AE%BE%E8%AE%A1%E6%B8%B8%E6%88%8F%E6%95%B0%E6%8D%AE%E8%A1%A8/" title="基于ScriptableObject设计游戏数据表"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">基于ScriptableObject设计游戏数据表</div></div><div class="info-2"><div class="info-item-1">前言 本篇文章是针对之前对于ScriptableObject概念讲解的实际应用之一，在游戏开发中，我们可以使用该类来设计编辑器时的可读写数据表或者运行时的只读数据表。本文将针对运行时的只读数据表的应用进行探索，并且结合自定义的本地持久化存储方式使得基于ScriptableObject开发的数据表能够在运行时进行读写。  代码代码目录结构  Table  Base Editor Interface Unit      Table则为本模块的根目录，存储各个游戏数据表的脚本，Base目录存储数据表和游戏表基类，Editor目录存储数据表的编辑器脚本，Interface目录存储数据表和数据单元接口，Unit目录存储数据单元。  Base目录BaseTable.cs 12345678910111213141516using System;using UnityEngine;/// &lt;summary&gt;/// 基础表/// &lt;/summary&gt;public abstract class BaseTable : ScriptableObject&#123;   ...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-Monobehaviour%E5%8D%95%E4%BE%8B%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%B8%80%EF%BC%89/" title="Monobehaviour单例实现的探索（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">Monobehaviour单例实现的探索（一）</div></div><div class="info-2"><div class="info-item-1">前言 在Unity3D游戏开发中，Monobehaviour单例模式是常见的设计模式之一，具有广泛的应用需求。本篇文章参考自一位外国友人的代码，让我们学习一下他的设计思路吧。  代码v1.012345678910111213141516171819202122232425262728293031323334353637383940using UnityEngine;/// &lt;summary&gt;/// 非持久化单例/// &lt;/summary&gt;/// &lt;typeparam name=&quot;T&quot;&gt;待封装为单例的类型&lt;/typeparam&gt;/// &lt;remarks&gt;/// 会在场景卸载或程序退出等销毁机制中进行销毁/// &lt;/remarks&gt;public abstract class MonoSingleton&lt;T&gt; : MonoBehaviour where T : MonoBehaviour&#123;    public static T instance &#123; get;...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-UGUI%E7%88%B6%E5%AF%B9%E8%B1%A1%E8%87%AA%E9%80%82%E5%BA%94%E5%AD%90%E5%85%83%E7%B4%A0%E5%B8%83%E5%B1%80%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="UGUI父对象自适应子元素布局解决方案"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">UGUI父对象自适应子元素布局解决方案</div></div><div class="info-2"><div class="info-item-1">问题描述在UI开发中，难免会遇到需要父对象自适应子元素尺寸的问题，这通常是为了解决不同屏幕分辨率的UI自适应问题。实际上我们去仔细了解UGUI的布局组件的原理就能够合理配置组件来解决这个问题。 案例问题： 例如我现在有一个背景面板，背景面板中包含一张图片和一段文字，要求图片和文字进行向左水平居中布局，图片对象根据Sprite自适应大小，文本框根据文字内容自适应大小，且背景面板始终根据二者的总尺寸进行自适应。 解决方案根据上述案例问题，首先肯定能想到需要一个Horizontal Layout Group组件，那么这就解决了图片和文字向左水平居中的问题，其次背景面板需要自适应总尺寸，那么就需要一个Content Size Fitter组件。 接下来是图片和文本框，二者都属于布局元素，所以就各自加上Layout Element组件。图片则勾选Image组件的Preserve Aspect选项，LayoutElement组件保持默认；文本框的LayoutElement组件需要勾选Flexible Width和Flexible...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-Unity%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%90%88%E9%9B%86%EF%BC%88%E4%B8%80%EF%BC%89/" title="Unity常见问题合集（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">Unity常见问题合集（一）</div></div><div class="info-2"><div class="info-item-1">PS：不定期更新……  【目录】 （1）无法关闭自动编译 （2）UnityHub打开一直在转圈  （1）无法关闭自动编译描述： Edit — Preference — General — Auto Refresh，显示”Auto refresh must be set when using collaboration feature.”  1.点击Unity编辑器中的小云朵按钮：  2.在打开的Service界面中找到”unlink project”的按钮，并点击，然后重新打开编辑器即可：   （2）UnityHub打开一直在转圈解决： 通常在找到UnityHub的数据文件目录，Windows系统通常在”系统盘&#x2F;用户目录&#x2F;AppData&#x2F;Roaming&#x2F;UnityHub(或Unity...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-%E3%80%90Attribute%E3%80%91Inspector%E8%A7%86%E5%9B%BE%E6%9E%9A%E4%B8%BE%E5%AD%97%E6%AE%B5%E8%8C%83%E5%9B%B4%E9%99%90%E5%AE%9A%E7%89%B9%E6%80%A7/" title="【Attribute】Inspector视图枚举字段范围限定特性"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">【Attribute】Inspector视图枚举字段范围限定特性</div></div><div class="info-2"><div class="info-item-1">简介为了提升枚举的复用性，有时候我们可以通过限定枚举字段的范围来避免定义新的枚举类型，例如有一个代表方向的枚举（包括None，Left，Up，Right，Down），全局方向（Left，Up，Right，Down），水平方向（Left，Right），竖直方向（Up，Down）。 代码示例(C#)EnumRangeAttribute.cs 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182using System;using System.Linq;using UnityEngine;/// &lt;summary&gt;/// 枚举范围限定特性/// &lt;/summary&gt;[AttributeUsage(AttributeTargets.Field, AllowMultiple = false,...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">JokeVallen</div><div class="author-info-description">Record something from program</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFSDK%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是SDK？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SDK%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">SDK的应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Google%E6%96%B0%E7%89%88%E7%99%BB%E5%BD%95SDK%E2%80%93Credential"><span class="toc-number">3.</span> <span class="toc-text">Google新版登录SDK–Credential</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%AC%AC%E4%B8%89%E6%96%B9SDK%EF%BC%88%E6%B5%B7%E5%A4%96%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">常见第三方SDK（海外）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0%E9%85%8D%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">后台配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B1"><span class="toc-number">6.</span> <span class="toc-text">示例1</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%85%B1%E4%BA%AB%E5%BA%93NetShare/" title="C#实现网络通信共享库NetShare">C#实现网络通信共享库NetShare</a><time datetime="2025-05-04T10:53:11.858Z" title="Created 2025-05-04 18:53:11">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A7%81%E8%81%8A%E9%80%9A%E4%BF%A1/" title="C#实现本地服务器客户端私聊通信">C#实现本地服务器客户端私聊通信</a><time datetime="2025-05-04T10:53:02.087Z" title="Created 2025-05-04 18:53:02">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%A4%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E9%A2%91%E9%81%93%E9%80%9A%E4%BF%A1/" title="C#实现本地服务器多客户端同频道通信">C#实现本地服务器多客户端同频道通信</a><time datetime="2025-05-04T10:52:53.440Z" title="Created 2025-05-04 18:52:53">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-%E8%87%AA%E5%AE%9A%E4%B9%89C-%E7%B1%BB%E5%BA%93%EF%BC%88-dll%E6%96%87%E4%BB%B6%EF%BC%89/" title="自定义C#类库（.dll文件）">自定义C#类库（.dll文件）</a><time datetime="2025-05-04T10:52:44.419Z" title="Created 2025-05-04 18:52:44">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-Unity%E4%B8%AD%E7%9A%84%E5%8D%8F%E7%A8%8B/" title="Unity中的协程">Unity中的协程</a><time datetime="2025-05-04T10:47:03.713Z" title="Created 2025-05-04 18:47:03">2025-05-04</time></div></div></div></div></div></div></main><footer id="footer" style="background: black;"><div id="footer-wrap"><div class="copyright">&copy;2025 By JokeVallen</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || 'a74b9d4a4e8d4d33ba43f85a010004c3'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom/custom.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

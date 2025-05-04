@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C#常识篇（二） | Blog</title><meta name="author" content="JokeVallen"><meta name="copyright" content="JokeVallen"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="委托和事件的区别 委托可以认为是对指定签名的函数的引用，通过委托可以实现将函数作为参数传递或者间接调用函数，委托是类型安全的，仅指向与其声明时指定签名相匹配的函数。委托可以分为单播委托和多播委托，二者的区别在于是对单个方法还是一组方法的引用，多播委托则可以通过特定的符号”+&#x3D;”和”-&#x3D;”来完成函数的订阅和取消订阅。 事件则是一种特殊的多播委托，其相比于普通的多播委托更加安全，事">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#常识篇（二）">
+<meta property="og:url" content="https://jokevallen.github.io/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="委托和事件的区别 委托可以认为是对指定签名的函数的引用，通过委托可以实现将函数作为参数传递或者间接调用函数，委托是类型安全的，仅指向与其声明时指定签名相匹配的函数。委托可以分为单播委托和多播委托，二者的区别在于是对单个方法还是一组方法的引用，多播委托则可以通过特定的符号”+&#x3D;”和”-&#x3D;”来完成函数的订阅和取消订阅。 事件则是一种特殊的多播委托，其相比于普通的多播委托更加安全，事">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://jokevallen.github.io/img/head.png">
+<meta property="article:published_time" content="2025-05-04T10:45:41.156Z">
+<meta property="article:modified_time" content="2025-05-04T13:44:39.574Z">
+<meta property="article:author" content="JokeVallen">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="c#">
+<meta property="article:tag" content="开发语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/img/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C#常识篇（二）",
+  "url": "https://jokevallen.github.io/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%BA%8C%EF%BC%89/",
+  "image": "https://jokevallen.github.io/img/head.png",
+  "datePublished": "2025-05-04T10:45:41.156Z",
+  "dateModified": "2025-05-04T13:44:39.574Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "JokeVallen",
+      "url": "https://jokevallen.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%BA%8C%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C#常识篇（二）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/logo_light.png" alt="Logo"></a><a class="nav-page-title" href="/"><span class="site-name">C#常识篇（二）</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C#常识篇（二）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">Updated</span><time datetime="2025-05-04T13:44:39.574Z" title="Updated 2025-05-04 21:44:39">2025-05-04</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h4 id="委托和事件的区别"><a href="#委托和事件的区别" class="headerlink" title="委托和事件的区别"></a>委托和事件的区别</h4><blockquote>
+<p>委托可以认为是对指定签名的函数的引用，通过委托可以实现将函数作为参数传递或者间接调用函数，委托是类型安全的，仅指向与其声明时指定签名相匹配的函数。委托可以分为单播委托和多播委托，二者的区别在于是对单个方法还是一组方法的引用，多播委托则可以通过特定的符号”+&#x3D;”和”-&#x3D;”来完成函数的订阅和取消订阅。</p>
+<p>事件则是一种特殊的多播委托，其相比于普通的多播委托更加安全，事件将多播委托的调用权限隔离在其所在类的内部，并对外部关闭了直接通过赋值符号”&#x3D;”修改多播委托实例的入口，使得外部调用者仅能够进行基本的函数订阅和取消订阅的操作。</p>
+</blockquote>
+<h4 id="多播委托的底层实现"><a href="#多播委托的底层实现" class="headerlink" title="多播委托的底层实现"></a>多播委托的底层实现</h4><blockquote>
+<p>多播委托实际上是一个类实例，其中定义了一个函数引用列表用于存储订阅的函数。当调用多播委托时，将由CLR来遍历该函数引用列表，并按照订阅顺序依次调用函数。</p>
+</blockquote>
+<h4 id="重载和重写的区别"><a href="#重载和重写的区别" class="headerlink" title="重载和重写的区别"></a>重载和重写的区别</h4><blockquote>
+<p>重载是一种编译时多态，重载函数的名称相同但参数列表不同，在调用时编译器会自动根据传递的参数列表适配指定形式的重载函数。</p>
+<p>重写是一种运行时多态，子类重写父类的方法，在调用时根据实例对象的类型而适配重写函数。</p>
+</blockquote>
+<h4 id="for和foreach的区别"><a href="#for和foreach的区别" class="headerlink" title="for和foreach的区别"></a>for和foreach的区别</h4><blockquote>
+<p>以数组为例，for循环根据数组下标遍历元素，而foreach循环通过生成数组的临时迭代器来遍历元素，并且foreach循环是只读的，修改操作可能导致迭代器失效，例如一边遍历一边删除元素的行为。所以通常来说优先考虑使用for循环。</p>
+</blockquote>
+<h4 id="类和结构体的区别"><a href="#类和结构体的区别" class="headerlink" title="类和结构体的区别"></a>类和结构体的区别</h4><blockquote>
+<p>1.类的实例对象保存在堆上，而其引用保存在栈上；结构体的数据和存储其的变量均保存在栈上。</p>
+<p>2.类能够实现继承、多态和封装，能够实现接口；结构体仅能实现接口。</p>
+<p>3.类为引用类型，可以有多个变量指向同一个类的实例，其中一个变量对实例的修改就会影响其它变量；结构体为值类型，多个变量指向结构体的实例，实际上是各自存储了结构体的副本，所以各自的修改互不影响。</p>
+<p>4.类更适合大型对象、需要封装较多行为或者需要实现继承和多态的情况；结构体则适用于轻量的或具有少量行为的或不可变的数据结构，结构体更偏向于数据而不是行为，这与类有所不同。</p>
+</blockquote>
+<h4 id="foreach的原理"><a href="#foreach的原理" class="headerlink" title="foreach的原理"></a>foreach的原理</h4><blockquote>
+<p>foreach是一种结合迭代器模式遍历实现了IEnumerable（或IEnumerable<T>）接口的容器类的语句，这两个接口会提供获取IEnumerator（或IEnumerator<T>）类型迭代器的方法，foreach会在运行时自动获取迭代器并启动对容器类的遍历。</p>
+</blockquote>
+<h4 id="协变和逆变"><a href="#协变和逆变" class="headerlink" title="协变和逆变"></a>协变和逆变</h4><blockquote>
+<p>协变则是将派生程度更大的赋值给派生程度更小的变量，逆变则是将派生程度更小的赋值给派生程度更大的变量。协变和逆变通常针对数组、委托和泛型参数，例如通过out或in关键字修饰泛型参数，使得方法组具有协变或逆变性，协变性通常体现在方法的返回类型，而逆变性通常体现在方法的参数类型。</p>
+</blockquote>
+<h4 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h4><blockquote>
+<p>结构体隐式继承自System.ValueType，属于值类型，所以其数据和引用它的变量均存储在栈上。以下是结构体的一些特性：</p>
+<p>1.无法实现多态和继承，但是可以实现接口，可以重写Equals、ToString、GetHashCode三个方法；</p>
+<p>2.无法声明本结构体类型的字段或属性；</p>
+<p>3.如果不存在属性且未自定义构造函数，可以不通过new关键字创建结构体实例，但是在使用该结构体实例前须对所有字段进行初始化；</p>
+<p>4.自定义的构造函数将覆盖默认的无参构造函数，所以须通过new关键字创建结构体实例，自定义的构造函数须对所有字段进行初始化；</p>
+<p>结构体偏向于数据而不是行为，通过变量将结构体实例赋值给其它变量时会涉及到结构体的拷贝，对结构体的拷贝会涉及更多的性能开销。结构体的进阶使用可以参考readonly和init关键字相关知识。</p>
+</blockquote>
+<h4 id="常见修饰符"><a href="#常见修饰符" class="headerlink" title="常见修饰符"></a>常见修饰符</h4><blockquote>
+<p>（1）public:能够在其声明所在的类或结构体甚至程序集外部访问，程序集外部访问需要引用其所在程序集；</p>
+<p>（2）protected:能够在直接或间接派生类或其声明所在的类中访问；</p>
+<p>（3）private:仅能够在其声明所在的类或结构体中访问；</p>
+<p>（4）internal:能够在其声明所在的类或结构体之外但在所处程序集之内访问；</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/1f292ada49eb7eef25fb25bc22ee6214.png"></p>
+<p>值得注意的是，未明确指定访问修饰符的类或结构体或接口默认为internal，未明确指定访问修饰符的类成员或结构体成员默认为private，接口成员默认为public。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/ce8d6747b8ea98f6fabd4f4c6ee71930.png"></p>
+</blockquote>
+<h4 id="静态构造函数"><a href="#静态构造函数" class="headerlink" title="静态构造函数"></a>静态构造函数</h4><blockquote>
+<p>静态构造函数用于初始化任何静态数据，或执行仅需执行一次的特定操作。 将在创建第一个实例或引用任何静态成员之前自动调用静态构造函数。 静态构造函数最多调用一次。如果静态字段的初始化并不复杂或者不涉及一些特殊的处理，那么建议在静态字段声明时即进行初始化，使用静态构造函数会影响运行时优化。常见的应用场景包括日志记录、创建非托管代码的包装类以及运行时的参数类型检查。</p>
+</blockquote>
+<p><strong>如果这篇文章对你有帮助，请给作者点个赞吧！</strong></p>
+<blockquote>
+<p>本文迁移自CSDN: <a target="_blank" rel="noopener" href="https://blog.csdn.net/hgf1037882434/article/details/136282711">https://blog.csdn.net/hgf1037882434/article/details/136282711</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://JokeVallen.github.io">JokeVallen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%BA%8C%EF%BC%89/">https://jokevallen.github.io/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%BA%8C%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C#</a><a class="post-meta__tags" href="/tags/c/">c#</a><a class="post-meta__tags" href="/tags/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/">开发语言</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/05/04/2025-05-04-Unity%E4%B8%AD%E7%9A%84ScriptableObject/" title="Unity中的ScriptableObject"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Unity中的ScriptableObject</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/" title="C#常识篇（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">C#常识篇（一）</div></div><div class="info-2"><div class="info-item-1">面向对象的三大特性 继承： 子类通过继承父类来获取基础特性，并且能够基于父类进行扩展以及提升代码的复用性。继承具有传递性，例如A继承自B，C继承自A，那么C就间接继承自B。在C#中，每个类仅允许继承一个父类。继承能够让程序的结构更加明晰。 封装： 将数据和行为封装为一个独立的单元，对外部隐藏具体的实现细节，仅提供必要的调用接口，从而简化外部调用和提升代码的复用性和可维护性。 多态：...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%B8%80%EF%BC%89/" title="C#常识篇（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">C#常识篇（一）</div></div><div class="info-2"><div class="info-item-1">面向对象的三大特性 继承： 子类通过继承父类来获取基础特性，并且能够基于父类进行扩展以及提升代码的复用性。继承具有传递性，例如A继承自B，C继承自A，那么C就间接继承自B。在C#中，每个类仅允许继承一个父类。继承能够让程序的结构更加明晰。 封装： 将数据和行为封装为一个独立的单元，对外部隐藏具体的实现细节，仅提供必要的调用接口，从而简化外部调用和提升代码的复用性和可维护性。 多态：...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-C-%E5%B8%B8%E8%AF%86%E7%AF%87%EF%BC%88%E4%B8%89%EF%BC%89/" title="C#常识篇（三）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">C#常识篇（三）</div></div><div class="info-2"><div class="info-item-1">内置类型字节大小 以下是 C# 中常见内置数据类型的字节大小： bool（布尔）类型：通常为 4 或者 8 字节。在不同平台上可能会有所不同。 byte（无符号字节）类型：始终为 1 字节。 sbyte（有符号字节）类型：始终为 1 字节。 char（Unicode 字符）类型：通常为 2 字节。 short（短整型）类型：通常为 2 字节。 ushort（无符号短整型）类型：通常为 2 字节。 int（整型）类型：通常为 4 字节。 uint（无符号整型）类型：通常为 4 字节。 long（长整型）类型：通常为 8 字节。 ulong（无符号长整型）类型：通常为 8 字节。 float（单精度浮点型）类型：通常为 4 字节。 double（双精度浮点型）类型：通常为 8 字节。 decimal（高精度十进制型）类型：通常为 16...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-%E8%87%AA%E5%AE%9A%E4%B9%89C-%E7%B1%BB%E5%BA%93%EF%BC%88-dll%E6%96%87%E4%BB%B6%EF%BC%89/" title="自定义C#类库（.dll文件）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">自定义C#类库（.dll文件）</div></div><div class="info-2"><div class="info-item-1">环境配置操作系统：Windows 10 开发工具：Visual Studio 2022 .Net桌面开发环境：  开发步骤（一）创建C#类库项目  （二）配置项目名称和项目路径  （三）选择所使用的框架，完成项目创建  （四）创建代码文件，并完成依赖项导入、代码编写以及代码注释  （六）完成类库项目开发后，在顶部菜单栏（生成——配置管理器）打开配置管理器  （七）配置管理器中将项目配置为Release，如果涉及到平台请自行配置  （八）...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%A4%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E9%A2%91%E9%81%93%E9%80%9A%E4%BF%A1/" title="C#实现本地服务器多客户端同频道通信"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">C#实现本地服务器多客户端同频道通信</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%85%B1%E4%BA%AB%E5%BA%93NetShare/" title="C#实现网络通信共享库NetShare"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">C#实现网络通信共享库NetShare</div></div><div class="info-2"><div class="info-item-1">前言网络通信共享库NetShare用于保证客户端与服务器通信数据包的规范和统一，客户端与服务器共同使用本库，提升数据包序列化和反序列化的准确性和安全性，并且用于满足不同的通信数据需求。 NetShare：DataPacket（通用数据包）123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778using System;using System.IO;using System.Runtime.Serialization;namespace NetShare&#123;    /// &lt;summary&gt;    /// 通用数据包    /// &lt;/summary&gt;    [KnownType(typeof(PCDataPacket)), KnownType(typeof(PSDataPacket)),...</div></div></div></a><a class="pagination-related" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A7%81%E8%81%8A%E9%80%9A%E4%BF%A1/" title="C#实现本地服务器客户端私聊通信"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-04</div><div class="info-item-2">C#实现本地服务器客户端私聊通信</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comments</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">JokeVallen</div><div class="author-info-description">Record something from program</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Welcome to my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A7%94%E6%89%98%E5%92%8C%E4%BA%8B%E4%BB%B6%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">委托和事件的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E6%92%AD%E5%A7%94%E6%89%98%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">多播委托的底层实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E9%87%8D%E5%86%99%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">重载和重写的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#for%E5%92%8Cforeach%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.</span> <span class="toc-text">for和foreach的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E5%92%8C%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">5.</span> <span class="toc-text">类和结构体的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#foreach%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">6.</span> <span class="toc-text">foreach的原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E5%8F%98%E5%92%8C%E9%80%86%E5%8F%98"><span class="toc-number">7.</span> <span class="toc-text">协变和逆变</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">8.</span> <span class="toc-text">结构体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">9.</span> <span class="toc-text">常见修饰符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">10.</span> <span class="toc-text">静态构造函数</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%85%B1%E4%BA%AB%E5%BA%93NetShare/" title="C#实现网络通信共享库NetShare">C#实现网络通信共享库NetShare</a><time datetime="2025-05-04T10:53:11.858Z" title="Created 2025-05-04 18:53:11">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A7%81%E8%81%8A%E9%80%9A%E4%BF%A1/" title="C#实现本地服务器客户端私聊通信">C#实现本地服务器客户端私聊通信</a><time datetime="2025-05-04T10:53:02.087Z" title="Created 2025-05-04 18:53:02">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-C-%E5%AE%9E%E7%8E%B0%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%A4%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E9%A2%91%E9%81%93%E9%80%9A%E4%BF%A1/" title="C#实现本地服务器多客户端同频道通信">C#实现本地服务器多客户端同频道通信</a><time datetime="2025-05-04T10:52:53.440Z" title="Created 2025-05-04 18:52:53">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-%E8%87%AA%E5%AE%9A%E4%B9%89C-%E7%B1%BB%E5%BA%93%EF%BC%88-dll%E6%96%87%E4%BB%B6%EF%BC%89/" title="自定义C#类库（.dll文件）">自定义C#类库（.dll文件）</a><time datetime="2025-05-04T10:52:44.419Z" title="Created 2025-05-04 18:52:44">2025-05-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/04/2025-05-04-Unity%E4%B8%AD%E7%9A%84%E5%8D%8F%E7%A8%8B/" title="Unity中的协程">Unity中的协程</a><time datetime="2025-05-04T10:47:03.713Z" title="Created 2025-05-04 18:47:03">2025-05-04</time></div></div></div></div></div></div></main><footer id="footer" style="background: black;"><div id="footer-wrap"><div class="copyright">&copy;2025 By JokeVallen</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll to Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '5d6cd4a8b70bdafe88a1530ccd27042a'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom/custom.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
