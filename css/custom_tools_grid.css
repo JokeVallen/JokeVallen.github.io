@@ -1,0 +1,102 @@
+/* 工具网格样式 - custom_tools_grid.css */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.tool-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-color: #4a6ee0;
+}
+
+.tool-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: #4a6ee0;
+}
+
+.tool-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #1a1a1a;
+}
+
+.tool-description {
+    color: #555;
+    line-height: 1.5;
+    margin: 0 0 18px 0;
+    flex-grow: 1;
+}
+
+.tool-link {
+    display: inline-flex;
+    align-items: center;
+    color: #4a6ee0;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 8px 0;
+    transition: color 0.2s;
+}
+
+.tool-link:hover {
+    color: #2a4ec4;
+    text-decoration: underline;
+}
+
+.tool-link-icon {
+    margin-left: 6px;
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+.tool-link:hover .tool-link-icon {
+    transform: translateX(3px);
+}
+
+.grid-header {
+    text-align: center;
+    margin: 20px 0 30px;
+    color: #333;
+}
+
+.grid-title {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.grid-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+
+    .tool-card {
+        padding: 18px;
+    }
+}
