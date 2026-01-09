@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android游戏开发常见知识合集（Unity3D） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言Unity3D的特色之一就是具有良好的跨平台特性，随着移动设备的普及，移动端游戏的开发成为了多数游戏开发者所必备的技能之一。而Android作为最为普及的移动端系统，学习如何开发Android游戏是很有必要的。 环境配置开发环境 Unity3D Unity3D构建Android项目必备的模块（Android SDK&#x2F;Android NDK&#x2F;Java JDK&#x2F;Gra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android游戏开发常见知识合集（Unity3D）">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/01/02/a4c70e86a885/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="前言Unity3D的特色之一就是具有良好的跨平台特性，随着移动设备的普及，移动端游戏的开发成为了多数游戏开发者所必备的技能之一。而Android作为最为普及的移动端系统，学习如何开发Android游戏是很有必要的。 环境配置开发环境 Unity3D Unity3D构建Android项目必备的模块（Android SDK&#x2F;Android NDK&#x2F;Java JDK&#x2F;Gra">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-01-02T13:32:22.000Z">
+<meta property="article:modified_time" content="2026-01-02T14:10:12.501Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Unity">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Android游戏开发常见知识合集（Unity3D）",
+  "url": "https://jokevallen.github.io/posts/2026/01/02/a4c70e86a885/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-01-02T13:32:22.000Z",
+  "dateModified": "2026-01-02T14:10:12.501Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://JokeVallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/01/02/a4c70e86a885/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android游戏开发常见知识合集（Unity3D）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom_bilibili.css"><link rel="stylesheet" href="/css/custom_table.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo_light.png" alt="Logo"></a><a class="nav-page-title" href="/"><span class="site-name">Android游戏开发常见知识合集（Unity3D）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Android游戏开发常见知识合集（Unity3D）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-01-02T14:10:12.501Z" title="更新于 2026-01-02 22:10:12">2026-01-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity%E5%BC%80%E5%8F%91/">Unity开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Unity3D的特色之一就是具有良好的跨平台特性，随着移动设备的普及，移动端游戏的开发成为了多数游戏开发者所必备的技能之一。而Android作为最为普及的移动端系统，学习如何开发Android游戏是很有必要的。</p>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><ul>
+<li>Unity3D</li>
+<li>Unity3D构建Android项目必备的模块（Android SDK&#x2F;Android NDK&#x2F;Java JDK&#x2F;Gradle等）</li>
+<li>Visual Studio 或 Visual Studio Code</li>
+</ul>
+<h3 id="发布环境（任选其一）"><a href="#发布环境（任选其一）" class="headerlink" title="发布环境（任选其一）"></a>发布环境（任选其一）</h3><ul>
+<li>Android Studio发布</li>
+<li>Unity发布</li>
+</ul>
+<h3 id="调试环境（任选其一）"><a href="#调试环境（任选其一）" class="headerlink" title="调试环境（任选其一）"></a>调试环境（任选其一）</h3><ul>
+<li>真机 + Android Studio</li>
+<li>AVD（安卓虚拟设备） + Android Studio</li>
+<li>Unity Remote</li>
+<li>模拟器 + Android Studio</li>
+</ul>
+<h3 id="Android-Studio-必备模块"><a href="#Android-Studio-必备模块" class="headerlink" title="Android Studio 必备模块"></a>Android Studio 必备模块</h3><ul>
+<li>Android API</li>
+<li>Android SDK Build-Tools</li>
+<li>Android SDK Command-line Tools</li>
+<li>Android SDK Platform-Tools</li>
+</ul>
+<h3 id="Android-Studio-可选模块"><a href="#Android-Studio-可选模块" class="headerlink" title="Android Studio 可选模块"></a>Android Studio 可选模块</h3><ul>
+<li>Android Emulator</li>
+<li>Andorid Emulator hypevisor dirver</li>
+<li>Intel x86 Emulator Accelerator（HAXM installer）</li>
+</ul>
+<h3 id="其他工具（可选）"><a href="#其他工具（可选）" class="headerlink" title="其他工具（可选）"></a>其他工具（可选）</h3><ul>
+<li>adb：连接模拟器以及在模拟器中安装apks等</li>
+<li>bundletool：从aab生成apks等</li>
+<li>keytool：签名密钥创建、查询等</li>
+<li>jarsigner：签名检测等</li>
+<li>pepk：Google开发者后台应用签名密钥加密等</li>
+<li>openssl：密钥文件公钥、证书链导出等</li>
+</ul>
+<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><ul>
+<li>先在Unity中编写好基础的交互逻辑，配置好Android项目的构建环境（SDK、NDK、JDK、Gradle），建议构建环境使用官方推荐配置，自定义可能会存在一些坑；</li>
+<li>勾选项目的arm v7、arm v8，设置Android最小API及目标API；</li>
+<li>构建时可以导出为Android项目，也可以导出为apk文件；<ul>
+<li>若是导出为Andorid项目，则可以在Android Studio中进行项目配置和签名，接入第三方SDK的话，建议选择该方式；</li>
+<li>若是导出为apk，则可以在Unity中进行项目配置和签名；</li>
+</ul>
+</li>
+<li>若是导出为Android项目，则在Android Studio中配置好SDK、NDK、JDK、Gradle版本，这些版本不一定需要跟Unity构建时的版本一致，因为Unity这边的版本仅用于构建，且往往比较旧，只要能兼容即可，第三方库有时候会要求更高的版本。在Android Studio中还需要配置好签名密钥，若要接入第三方SDK，则以UnityPlayerActivity为调用入口，因为Unity的Activity生命周期函数都在这个类中，当然也可以继承该类进行自定义；</li>
+<li>导出为apk则用于测试，导出为aab则用于上传Google Play控制台，在控制台进行发布审核。</li>
+</ul>
+<h2 id="Mumu模拟器代理"><a href="#Mumu模拟器代理" class="headerlink" title="Mumu模拟器代理"></a>Mumu模拟器代理</h2><p>在模拟器——设置——网络中找到当前所连接的网络，打开其高级选项，选择手动代理，代理主机名为运行模拟器主机的网络IPV4地址（CMD中输入ipconfig查询），端口为代理端口，代理需要打开允许局域网的设置。</p>
+<h2 id="Android与Unity代码交互"><a href="#Android与Unity代码交互" class="headerlink" title="Android与Unity代码交互"></a>Android与Unity代码交互</h2><h3 id="Android中的Java代码调用Unity的C-代码"><a href="#Android中的Java代码调用Unity的C-代码" class="headerlink" title="Android中的Java代码调用Unity的C#代码"></a>Android中的Java代码调用Unity的C#代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// s：挂载了Monobehaviour组件的游戏对象名称</span><br><span class="hljs-comment">// s1：Monobehaviour组件中的公共方法名</span><br><span class="hljs-comment">// s2：方法参数</span><br>UnityPlayer.UnitySendMessage(string s,string s1,string s2);<br></code></pre></td></tr></table></figure>
+
+<h3 id="Unity中的C-代码调用Android中的Java代码"><a href="#Unity中的C-代码调用Android中的Java代码" class="headerlink" title="Unity中的C#代码调用Android中的Java代码"></a>Unity中的C#代码调用Android中的Java代码</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 使用AndroidJavaClass或AndroidJavaObject</span><br>AndroidJavaObject jo = <span class="hljs-keyword">new</span> AndroidJavaClass(<span class="hljs-string">&quot;com.unity3d.player.UnityPlayer&quot;</span>).GetStatic&lt;AndroidJavaObject&gt;(<span class="hljs-string">&quot;currentActivity&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>PS：不使用AndroidJavaClass或AndroidJavaObject后，应注意及时释放内存。</p>
+</blockquote>
+<h2 id="Google相关"><a href="#Google相关" class="headerlink" title="Google相关"></a>Google相关</h2><ul>
+<li>Play Asset Delivery（PAD）：<a target="_blank" rel="noopener" href="https://developer.android.com/guide/playcore/asset-delivery?hl=zh-cn">官方文档</a></li>
+<li>Play Feature Delivery（PFD）：<a target="_blank" rel="noopener" href="https://developer.android.com/guide/playcore/feature-delivery?hl=zh-cn">官方文档</a></li>
+<li>Android App Bundle（AAB）：<a target="_blank" rel="noopener" href="https://developer.android.com/guide/app-bundle?hl=zh-cn">官方文档</a></li>
+</ul>
+<h2 id="常用控制台命令"><a href="#常用控制台命令" class="headerlink" title="常用控制台命令"></a>常用控制台命令</h2><p>打印jks密钥文件信息</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">keytool -list -v -keystore my-release-key.keystore<br></code></pre></td></tr></table></figure>
+
+<p>java执行jar包</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">java -jar example.jar<br></code></pre></td></tr></table></figure>
+
+<p>jks导出为pkcs12文件</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">keytool -importkeystore -srckeystore my-release-key.keystore -destkeystore my-release-key.p12 -srcstoretype JKS -deststoretype PKCS12 -srcalias my-key-alias<br></code></pre></td></tr></table></figure>
+
+<p>pkcs12导出私钥pem</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">openssl pkcs12 -<span class="hljs-keyword">in</span> my-release-key.p12 -nodes -nocerts -out private_key.pem<br></code></pre></td></tr></table></figure>
+
+<p>pkcs12导出证书链</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">openssl pkcs12 -<span class="hljs-keyword">in</span> my-release-key.p12 -nokeys -out cert_chain.pem<br></code></pre></td></tr></table></figure>
+
+<p>合并pem</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">cat private_key.pem cert_chain.pem &gt; combined.pem<br></code></pre></td></tr></table></figure>
+
+<p>通过pepk加密本地密钥（jks或keystore）和Google开发者公钥（pem），获取上传控制台的应用签名密钥（zip）</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">java -jar pepk.jar --keystore=my-release-key.keystore --alias=my-key-alias --output=encrypted-output.zip --encryptionkey=your-encryption-key --pem=combined.pem<br></code></pre></td></tr></table></figure>
+
+<p>aab转换为apks</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">java -jar bundletool.jar build-apks --bundle=/<span class="hljs-built_in">path</span>/to/your_app.aab --output=/<span class="hljs-built_in">path</span>/to/output.apks --ks=/<span class="hljs-built_in">path</span>/to/your_keystore.jks --ks-pass=pass:your_keystore_password --ks-key-alias=your_key_alias --key-pass=pass:your_key_password<br></code></pre></td></tr></table></figure>
+
+<p>Android Studio连接Mumu模拟器调试</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">adb connect <span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">7555</span><br></code></pre></td></tr></table></figure>
+
+<p>将apks安装到Mumu模拟器上（执行该操作前先连接Mumu模拟器）</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">java -jar bundletool.jar install-apks --apks=/<span class="hljs-built_in">path</span>/to/your_file.apks --adb=/<span class="hljs-built_in">path</span>/to/adb.exe<br></code></pre></td></tr></table></figure>
+
+<p>keytool生成jks密钥</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bat">keytool -genkeypair -alias your_alias -keyalg RSA -keysize <span class="hljs-number">2048</span> -validity <span class="hljs-number">36500</span> -keystore your_keystore.jks -storepass your_password -keypass your_password<br></code></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://JokeVallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/01/02/a4c70e86a885/">https://jokevallen.github.io/posts/2026/01/02/a4c70e86a885/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://JokeVallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Android/">Android</a><a class="post-meta__tags" href="/tags/Unity/">Unity</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/2026/01/02/5b55e1938680/" title="Unity3D批量修改名称工具"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Unity3D批量修改名称工具</div></div><div class="info-2"><div class="info-item-1">前言该工具用于批量修改某游戏对象的一级子对象名称，功能包括批量添加前后缀、批量修改公共名称字段和批量修改为同一名称，包括撤销和恢复功能。批量添加前后缀可使用预设从指定数字递增或递减至指定数字。 使用示例 初始名称如图：     打开顶部菜单栏中的Tool —- NameModifier工具：     选择修改模式为 “ 批量修改为同一名称 ” ：     选取或拖拽待修改名称的游戏对象的直接父对象，我们这里则是 “ Cells “。新的名称输入 “ Cell “，点击修改：     修改模式切换为 “ 批量添加名称前缀或后缀 ” ，待添加的前缀或后缀输入  “ _ ”，预设选择从指定数字递增，指定数字输入 “ 0 ”，点击修改：    注意事项 注意保存场景文件修改； 如果需要修改预制体中的对象名称，请先移动到场景中，完成后应用修改到预制体； 关闭窗口前将保留修改记录，但是关闭窗口后，记录将被清除，无法再进行撤销和恢复，后续版本中可能会改进。  资源下载GitHub 百度网盘（提取码：1314）  免责声明：由于本文内容未经过正规和严格的测试，可能存在错误，因此造成的损失均由使用...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/02/2cfdfed6650c/" title="Unity3D安卓游戏第三方SDK接入"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Unity3D安卓游戏第三方SDK接入</div></div><div class="info-2"><div class="info-item-1">什么是SDK？SDK（Software Development Kit，软件开发工具包）是一个用于构建应用程序的工具集，包含开发特定软件的必要工具、库、文档和示例代码。SDK通常由软件或硬件厂商提供，帮助开发者更容易地为特定平台、操作系统、设备或服务创建应用程序。 SDK的应用场景 平台开发：如Android、iOS等移动操作系统的SDK，提供了开发移动应用的所有必要资源。 服务集成：如云服务的SDK，帮助开发者快速集成和使用特定的云服务（如AWS、Google Cloud等）。 硬件开发：一些硬件厂商提供SDK，以便开发者创建与其硬件设备兼容的软件。  Google新版登录SDK–Credential依赖项 implementation ‘androidx.appcompat:appcompat:1.3.1’ implementation “com.google.android.gms:play-services-auth:21.2.0” implementation “androidx.credentials:credentials:1.3.0-rc01” implement...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2026/01/02/2cfdfed6650c/" title="Unity3D安卓游戏第三方SDK接入"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-02</div><div class="info-item-2">Unity3D安卓游戏第三方SDK接入</div></div><div class="info-2"><div class="info-item-1">什么是SDK？SDK（Software Development Kit，软件开发工具包）是一个用于构建应用程序的工具集，包含开发特定软件的必要工具、库、文档和示例代码。SDK通常由软件或硬件厂商提供，帮助开发者更容易地为特定平台、操作系统、设备或服务创建应用程序。 SDK的应用场景 平台开发：如Android、iOS等移动操作系统的SDK，提供了开发移动应用的所有必要资源。 服务集成：如云服务的SDK，帮助开发者快速集成和使用特定的云服务（如AWS、Google Cloud等）。 硬件开发：一些硬件厂商提供SDK，以便开发者创建与其硬件设备兼容的软件。  Google新版登录SDK–Credential依赖项 implementation ‘androidx.appcompat:appcompat:1.3.1’ implementation “com.google.android.gms:play-services-auth:21.2.0” implementation “androidx.credentials:credentials:1.3.0-rc01” implement...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/01/fa9905321cd4/" title="基于ScriptableObject设计游戏数据表"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-01</div><div class="info-item-2">基于ScriptableObject设计游戏数据表</div></div><div class="info-2"><div class="info-item-1">前言本篇文章是针对之前对于ScriptableObject概念讲解的实际应用之一，在游戏开发中，我们可以使用该类来设计编辑器时的可读写数据表或者运行时的只读数据表。本文将针对运行时的只读数据表的应用进行探索，并且结合自定义的本地持久化存储方式使得基于ScriptableObject开发的数据表能够在运行时进行读写。 代码代码目录结构 Table Base Editor Interface Unit     Table则为本模块的根目录，存储各个游戏数据表的脚本，Base目录存储数据表和游戏表基类，Editor目录存储数据表的编辑器脚本，Interface目录存储数据表和数据单元接口，Unit目录存储数据单元。  Base目录BaseTable.cs 12345678910111213using System;using UnityEngine;/// &lt;summary&gt;/// 基础表/// &lt;/summary&gt;public abstract class BaseTable : ScriptableObject&#123;    /// &lt;summar...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/05/915597460fd4/" title="Unity的碰撞检测（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-05</div><div class="info-item-2">Unity的碰撞检测（二）</div></div><div class="info-2"><div class="info-item-1"> 温馨提示： ​本文基于前一篇“Unity的碰撞检测(一)”继续探讨Collider输出，阅读本文则默认已阅读前文。  前言对于Collider输出，我们首先应该保证两个游戏对象具备的是碰撞器而非触发器，所以碰撞器的IsTrigger属性必须为false。但是结合前文可知决定Trigger还是Collider输出的并不只有IsTrigger属性，对于影响两个游戏对象碰撞的因素除了碰撞器还有就是刚体，这是我们基于前文的结论所得知的。那么刚体中影响碰撞的属性有两个，分别是BodyType和CollisionDetection。 本次测试我们约定如此：Player具备碰撞器，Enemy具备刚体，Enemy具备触发器或碰撞器，默认属性分别如图1和图2所示：    图 1 碰撞器默认属性      图 2 刚体默认属性   测试用例   表 1 Enemy不同BodyType的测试用例                                   Enemy的碰撞器是否为触发器                                  用例序号                ...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/07/474dfb17857f/" title="Unity摄像机对象锁定旋转运镜模拟"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-07</div><div class="info-item-2">Unity摄像机对象锁定旋转运镜模拟</div></div><div class="info-2"><div class="info-item-1">前言在3D模式下如何模拟实现Unity摄像机对象锁定旋转运镜，可以分为两个部分，第一是实现对象锁定，第二是实现旋转运镜。对象锁定就是无论摄像机如何运动，始终保持对象位于摄像机成像区域的固定位置，旋转运镜就是使得摄像机围绕对象进行旋转运动。 分析 图1  从图1我们可以把摄像机的运动定格到两个状态，status2可以看作status1一帧后摄像机的运动位置和状态，摄像机始终存在一个速度v并且要求这个速度始终沿着圆的切线方向，这样我们才能实现摄像机的旋转运镜，实际上我们只是给摄像机一个status1所示方向上的速度，之所以出现图1中status2的情景，是因为我们对摄像机进行了旋转，否则摄像机就会始终按照图2所示的方式运动。  图2   图3  图3所示是模拟了摄像机的坐标系，这个正方体就代表摄像机，图中的坐标系是摄像机的Local坐标系，z轴指向的是摄影区域的中点，我们结合图1和图3，假设给摄像机施加了一个x轴方向的速度v，那么我们就需要以y轴为轴线对摄像机进行旋转，使得z轴始终指向我们要锁定的游戏对象。 对于对象锁定，我们知道摄像机有一个摄像区域，位于这个区域内的物体才会显示到成...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/07/e2bec2510c9e/" title="【解决方案】关于Unity中下载的扩展插件无法导入命名空间的解决建议"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-07</div><div class="info-item-2">【解决方案】关于Unity中下载的扩展插件无法导入命名空间的解决建议</div></div><div class="info-2"><div class="info-item-1">问题从Unity的PackageMangaer中下载的扩展插件无法在C#代码中引入命名空间 环境Unity版本：2020.3.26.f1c1 开发IDE：VSCode 下载的扩展插件：Cinemachine 解决方案方案一 在Unity编辑器界面：打开扩展工具设置面板（Edit&#x2F;Preferences&#x2F;External Tools）  勾选Embedded packages，点击Regenerate project files按钮即可     图1   F&amp;QQ: Generate .csproj files for各个选项分别代表什么？ A:  Embedded packages（嵌入式包） Local packages（本地包） Git packages（Git包） Registry packages（注册表包） Built-in packages（内置包） Local tarball（本地tarball） Packages from unknown sources（未知来源的包）  Q: 怎么知道要勾选Generate .csproj files...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/05/720ec788db37/" title="Unity的碰撞检测（三）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-05</div><div class="info-item-2">Unity的碰撞检测（三）</div></div><div class="info-2"><div class="info-item-1"> 温馨提示： ​本文基于前一篇“Unity的碰撞检测(二)”继续探讨两个游戏对象具备刚体的碰撞检测，阅读本文则默认已阅读前文。  前言在基于两个游戏对象都具备碰撞器和刚体且属性一致的条件下，若二者刚体的BodyType有所不同是否会出现不同的测试结果。 本次测试我们约定如此：Player与Enemy都具备碰撞器和刚体，默认属性如图1和图2所示：    图 1 碰撞器默认属性      图 2 刚体默认属性   测试用例   表 1 Player和Enemy的刚体的BodyType测试用例                                   游戏对象                                  测试用例序号                                  Static                                  Kinematic                                  Dynamic                                 Player         ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">我与岁月的森林</div><div class="author-info-description">用于记录技术、生活和感想</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">2.1.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E7%8E%AF%E5%A2%83%EF%BC%88%E4%BB%BB%E9%80%89%E5%85%B6%E4%B8%80%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">发布环境（任选其一）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%EF%BC%88%E4%BB%BB%E9%80%89%E5%85%B6%E4%B8%80%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">调试环境（任选其一）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Android-Studio-%E5%BF%85%E5%A4%87%E6%A8%A1%E5%9D%97"><span class="toc-number">2.4.</span> <span class="toc-text">Android Studio 必备模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Android-Studio-%E5%8F%AF%E9%80%89%E6%A8%A1%E5%9D%97"><span class="toc-number">2.5.</span> <span class="toc-text">Android Studio 可选模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">其他工具（可选）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">开发流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mumu%E6%A8%A1%E6%8B%9F%E5%99%A8%E4%BB%A3%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">Mumu模拟器代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android%E4%B8%8EUnity%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92"><span class="toc-number">5.</span> <span class="toc-text">Android与Unity代码交互</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Android%E4%B8%AD%E7%9A%84Java%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8Unity%E7%9A%84C-%E4%BB%A3%E7%A0%81"><span class="toc-number">5.1.</span> <span class="toc-text">Android中的Java代码调用Unity的C#代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unity%E4%B8%AD%E7%9A%84C-%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8Android%E4%B8%AD%E7%9A%84Java%E4%BB%A3%E7%A0%81"><span class="toc-number">5.2.</span> <span class="toc-text">Unity中的C#代码调用Android中的Java代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Google%E7%9B%B8%E5%85%B3"><span class="toc-number">6.</span> <span class="toc-text">Google相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%91%BD%E4%BB%A4"><span class="toc-number">7.</span> <span class="toc-text">常用控制台命令</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/920dce676ecd/" title="【小巧-轻便-实用】ICO图标转换工具">【小巧-轻便-实用】ICO图标转换工具</a><time datetime="2026-01-08T15:23:01.000Z" title="发表于 2026-01-08 23:23:01">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/c8d5f22e46c1/" title="Unity配置SQLite以及遇到的问题">Unity配置SQLite以及遇到的问题</a><time datetime="2026-01-08T15:10:24.000Z" title="发表于 2026-01-08 23:10:24">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/8f1c257e547b/" title="Unity预览或注释中文乱码解决办法">Unity预览或注释中文乱码解决办法</a><time datetime="2026-01-08T14:59:57.000Z" title="发表于 2026-01-08 22:59:57">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/a1958eb9f58b/" title="C#理解回调函数">C#理解回调函数</a><time datetime="2026-01-08T14:55:49.000Z" title="发表于 2026-01-08 22:55:49">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/2c47e155b663/" title="Unity中EditorWindow的创建和停靠">Unity中EditorWindow的创建和停靠</a><time datetime="2026-01-08T14:45:35.000Z" title="发表于 2026-01-08 22:45:35">2026-01-08</time></div></div></div></div></div></div></main><footer id="footer" style="background: black;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || 'cdfa5e747465a70a3f32723ee954c908'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/LogoAdapter.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

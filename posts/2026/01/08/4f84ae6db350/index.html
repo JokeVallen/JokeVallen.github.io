@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Flyweight Pattern（享元模式） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介享元模式是一种结构型设计模式，用于通过共享对象来减少内存开销，适用于需要使用大量相似对象的情况。 享元模式有两个状态，分别是内部状态和外部状态，内部状态由获取指定享元的调用者共享，外部状态由调用者进行传递。例如对于字符”A”而言，无论外部有多少个调用者使用字符”A”，字符”A”的Unicode对于所有调用者而言都是固定一致的，而字符”A”的样式则由调用者来决定，那么字符”A”的Unicode就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flyweight Pattern（享元模式）">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/01/08/4f84ae6db350/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="简介享元模式是一种结构型设计模式，用于通过共享对象来减少内存开销，适用于需要使用大量相似对象的情况。 享元模式有两个状态，分别是内部状态和外部状态，内部状态由获取指定享元的调用者共享，外部状态由调用者进行传递。例如对于字符”A”而言，无论外部有多少个调用者使用字符”A”，字符”A”的Unicode对于所有调用者而言都是固定一致的，而字符”A”的样式则由调用者来决定，那么字符”A”的Unicode就">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-01-08T07:20:35.000Z">
+<meta property="article:modified_time" content="2026-01-08T07:45:02.436Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="编程,学习,生活,哲理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Flyweight Pattern（享元模式）",
+  "url": "https://jokevallen.github.io/posts/2026/01/08/4f84ae6db350/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-01-08T07:20:35.000Z",
+  "dateModified": "2026-01-08T07:45:02.436Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://JokeVallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/01/08/4f84ae6db350/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Flyweight Pattern（享元模式）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom_bilibili.css"><link rel="stylesheet" href="/css/custom_table.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo_light.png" alt="Logo"></a><a class="nav-page-title" href="/"><span class="site-name">Flyweight Pattern（享元模式）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Flyweight Pattern（享元模式）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-01-08T07:45:02.436Z" title="更新于 2026-01-08 15:45:02">2026-01-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>享元模式是一种结构型设计模式，用于通过共享对象来减少内存开销，适用于需要使用大量相似对象的情况。</p>
+<p>享元模式有两个状态，分别是内部状态和外部状态，内部状态由获取指定享元的调用者共享，外部状态由调用者进行传递。例如对于字符”A”而言，无论外部有多少个调用者使用字符”A”，字符”A”的Unicode对于所有调用者而言都是固定一致的，而字符”A”的样式则由调用者来决定，那么字符”A”的Unicode就相当于其内部状态，字符”A”的样式则是外部状态，调用者通过字符”A”的Unicode获取字符”A”的对象，字符”A”提供一个可指定样式的绘制方法，在使用字符”A”时则可以传递不同的样式，通过享元模式就可以避免为每个调用者都创建一个字符”A”对象，从而减少内存开销。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>文本编辑器的字符存储、图形系统中的图元对象、数据库连接池、线程池、Web应用中的缓存管理等。</p>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><div style="text-align:center; color:rgba(207, 204, 204, 0.7)">享元模式与对象池的对比</div>
+<table align="center" border="1" cellpadding="1" cellspacing="1" style="width:600px">
+  <tbody>
+    <tr>
+      <th>特征</th>
+      <th>享元模式</th>
+      <th>对象池</th></tr>
+    <tr>
+      <td>
+        <strong>主要目标</strong></td>
+      <td>最小化相似对象的内存开销，通过共享内部状态。</td>
+      <td>减少创建和销毁对象的开销，通过对象的重复利用。</td></tr>
+    <tr>
+      <td>
+        <strong>对象状态</strong></td>
+      <td>分为内部状态和外部状态。内部状态可被共享，外部状态需要传递。</td>
+      <td>关注对象的整体状态，重点是对象的创建和销毁开销。</td></tr>
+    <tr>
+      <td>
+        <strong>内存占用</strong></td>
+      <td>减小对象实例数量，通过共享内部状态减小内存占用。</td>
+      <td>通过重复使用对象减小内存占用，不一定共享内部状态。</td></tr>
+    <tr>
+      <td>
+        <strong>创建和销毁开销</strong></td>
+      <td>重点不在创建和销毁开销，而在共享内部状态。</td>
+      <td>重点在于减少创建和销毁对象的开销。</td></tr>
+    <tr>
+      <td>
+        <strong>使用场景</strong></td>
+      <td>适用于大量相似对象，且内部状态占用大量内存的情况。</td>
+      <td>适用于对象创建和销毁开销较大的情况，例如数据库连接、线程等。</td></tr>
+    <tr>
+      <td>
+        <strong>实例管理</strong></td>
+      <td>通常通过工厂模式创建和管理享元对象。</td>
+      <td>通常通过池管理已创建的对象实例。</td></tr>
+    <tr>
+      <td>
+        <strong>操作和状态传递</strong></td>
+      <td>操作需要传递外部状态，确保每个对象的特定状态都能正确反映在操作中。</td>
+      <td>操作和状态都在对象池中管理，对象之间通常不需要传递外部状态。</td></tr>
+  </tbody>
+</table>
+
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p><strong>Flyweight（享元接口）：</strong> 定义共享对象的接口，包含操作方法。</p>
+<p><strong>ConcreteFlyweight（具体享元类）：</strong> 实现享元接口，并包含内部状态。具体享元类的实例可以被共享。</p>
+<p><strong>UnsharedConcreteFlyweight（非共享具体享元类）：</strong> 与共享对象协作，但不能被共享的具体享元类，通常是因为它包含了不可共享的外部状态。</p>
+<p><strong>FlyweightFactory（享元工厂）：</strong> 负责创建和管理享元对象，确保共享对象的正确使用。在请求享元对象时，工厂检查是否已经存在该对象，如果存在则返回已有的对象，否则创建一个新对象。</p>
+<p><strong>Client（客户端）：</strong> 使用享元模式的客户端，维护或传递外部状态给享元对象。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li><p><strong>内部状态和外部状态：</strong> 将对象的状态分为内部状态和外部状态。内部状态是可以被共享的，而外部状态是对象在使用过程中会改变的状态，需要由客户端来维护和传递。</p>
+</li>
+<li><p><strong>享元工厂：</strong> 工厂负责管理享元对象，维护一个享元池（集合）。当客户端请求一个享元对象时，工厂检查池中是否已存在该对象的实例，如果存在则返回已有的对象，否则创建一个新的对象并加入池中。</p>
+</li>
+<li><p><strong>享元接口和具体享元类：</strong> 定义享元接口，包含操作方法。具体享元类实现了享元接口，包含内部状态。具体享元类的实例是可以被共享的对象。</p>
+</li>
+<li><p><strong>客户端使用享元对象：</strong> 客户端在使用享元模式时，通过工厂获取享元对象，并传递外部状态。客户端负责维护外部状态，而内部状态由享元对象共享。</p>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><blockquote>
+<p>​提示：可在本栏目的资源篇“设计模式代码示例合集”下载所有完整代码资源。</p>
+</blockquote>
+<h3 id="图形：Shape-cs"><a href="#图形：Shape-cs" class="headerlink" title="图形：Shape.cs"></a>图形：Shape.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">namespace</span> <span class="hljs-title">FlyweightPattern</span>;<br><br><span class="hljs-comment">// 图形类型</span><br><span class="hljs-built_in">enum</span> ShapeType<br>&#123;<br>    Circle, Rectangle<br>&#125;<br><br><span class="hljs-comment">// 图形</span><br><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Shape</span><br>&#123;<br>    <span class="hljs-keyword">protected</span> ShapeType shapeType; <span class="hljs-comment">// 图形的类型</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Shape</span>(<span class="hljs-params">ShapeType shapeType</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">this</span>.shapeType = shapeType;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Draw</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> color</span>)</span>; <span class="hljs-comment">// 根据指定颜色进行绘制</span><br>&#125;<br><br><span class="hljs-comment">// 圆</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">Circle</span> : <span class="hljs-title">Shape</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Circle</span>(<span class="hljs-params">ShapeType shapeType</span>) : <span class="hljs-title">base</span>(<span class="hljs-params">shapeType</span>)</span> &#123; &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Draw</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> color</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">string</span>.IsNullOrEmpty(color)) Console.WriteLine(<span class="hljs-string">$&quot;Circle:Drawing a circle.(HashCode:<span class="hljs-subst">&#123;GetHashCode()&#125;</span>)&quot;</span>);<br>        <span class="hljs-keyword">else</span> Console.WriteLine(<span class="hljs-string">$&quot;Circle:Drawing a circle with <span class="hljs-subst">&#123;color&#125;</span> color.(HashCode:<span class="hljs-subst">&#123;GetHashCode()&#125;</span>)&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 矩形</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">Rectangle</span> : <span class="hljs-title">Shape</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Rectangle</span>(<span class="hljs-params">ShapeType shapeType</span>) : <span class="hljs-title">base</span>(<span class="hljs-params">shapeType</span>)</span> &#123; &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Draw</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> color</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">string</span>.IsNullOrEmpty(color)) Console.WriteLine(<span class="hljs-string">$&quot;Rectangle:Drawing a rectangle.(HashCode:<span class="hljs-subst">&#123;GetHashCode()&#125;</span>)&quot;</span>);<br>        <span class="hljs-keyword">else</span> Console.WriteLine(<span class="hljs-string">$&quot;Rectangle:Drawing a rectangle with <span class="hljs-subst">&#123;color&#125;</span> color.(HashCode:<span class="hljs-subst">&#123;GetHashCode()&#125;</span>)&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="图形管理器：ShapeManager-cs"><a href="#图形管理器：ShapeManager-cs" class="headerlink" title="图形管理器：ShapeManager.cs"></a>图形管理器：ShapeManager.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">namespace</span> <span class="hljs-title">FlyweightPattern</span>;<br><br><span class="hljs-comment">// 图形管理器</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">ShapeManager</span><br>&#123;<br>    <span class="hljs-keyword">private</span> Dictionary&lt;ShapeType, Shape&gt; shapes; <span class="hljs-comment">// 图形集合</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ShapeManager</span>()</span><br>    &#123;<br>        shapes = <span class="hljs-keyword">new</span> Dictionary&lt;ShapeType, Shape&gt;();<br>    &#125;<br><br>    <span class="hljs-comment">// 获取指定类型的图形</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Shape <span class="hljs-title">GetShape</span>(<span class="hljs-params">ShapeType shapeType</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (!shapes.ContainsKey(shapeType))<br>        &#123;<br>            <span class="hljs-keyword">switch</span> (shapeType)<br>            &#123;<br>                <span class="hljs-keyword">case</span> ShapeType.Circle:<br>                    shapes[shapeType] = <span class="hljs-keyword">new</span> Circle(shapeType);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> ShapeType.Rectangle:<br>                    shapes[shapeType] = <span class="hljs-keyword">new</span> Rectangle(shapeType);<br>                    <span class="hljs-keyword">break</span>;<br>                <span class="hljs-literal">default</span>:<br>                    Console.WriteLine(<span class="hljs-string">&quot;Warning:The type of shape doesn&#x27;t exist.&quot;</span>);<br>                    <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> shapes[shapeType];<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="测试代码：Program-cs"><a href="#测试代码：Program-cs" class="headerlink" title="测试代码：Program.cs"></a>测试代码：Program.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// ************* 12.享元模式测试 **************</span><br><span class="hljs-keyword">using</span> FlyweightPattern;<br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> <span class="hljs-keyword">warning</span> disable</span><br><br><span class="hljs-comment">// 创建图形管理器实例并获取圆形和矩形</span><br>ShapeManager shapeManager = <span class="hljs-keyword">new</span> ShapeManager();<br>Circle circle = shapeManager.GetShape(ShapeType.Circle) <span class="hljs-keyword">as</span> Circle;<br>Rectangle rectangle = shapeManager.GetShape(ShapeType.Rectangle) <span class="hljs-keyword">as</span> Rectangle;<br><br><span class="hljs-comment">// 绘制红色的圆形和蓝色的矩形</span><br>circle.Draw(<span class="hljs-string">&quot;red&quot;</span>);<br>rectangle.Draw(<span class="hljs-string">&quot;blue&quot;</span>);<br><br><span class="hljs-comment">// 再次获取一个圆形并绘制成蓝色的圆形</span><br>Circle otherCircle = shapeManager.GetShape(ShapeType.Circle) <span class="hljs-keyword">as</span> Circle;<br>otherCircle.Draw(<span class="hljs-string">&quot;blue&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述代码模拟了对不同颜色的圆形和矩形的绘制。圆形和矩形都继承自图形类，图形类中的图形类型为享元模式中的内部状态，图形类中Draw方法的颜色参数则为外部状态。调用者通过图形管理器的GetShape方法和图形类型参数来获取图形，然后通过调用图形的Draw方法和传递颜色参数来决定绘制什么颜色的图形。测试代码中的circle和otherCircle实际上为同一个实例，通过它们输出的HashCode即可知道。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://JokeVallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/01/08/4f84ae6db350/">https://jokevallen.github.io/posts/2026/01/08/4f84ae6db350/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://JokeVallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/2026/01/08/707b54db08a7/" title="Composite Pattern（组合模式）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Composite Pattern（组合模式）</div></div><div class="info-2"><div class="info-item-1">简介组合模式是一种结构型设计模式，用于将节点及节点容器看作统一的节点对象，使得调用者无需关注是单个节点还是一组节点，只需要通过接口方法直接调用即可。最直观的和最常见的例子就是文件系统，文件系统中的文件夹和文件都看作是文件系统节点，文件夹下面可以包括文件和文件夹，这种树形层次的文件结构就是对组合模式的一种应用。 应用场景文件系统、菜单系统、GUI界面布局等。 结构Component（组件）： 声明了组合中对象的接口，可以是一个抽象类或接口，其中定义了一些用于管理子对象的方法，如添加、删除、获取子对象等。 Leaf（叶子）： 是组合中的叶子节点对象，它没有子对象。实现了组件接口，但是在叶子节点中，这些方法可能是空的实现或抛出异常。 Composite（容器）： 是包含子对象的容器节点对象，它通常会实现组件接口的方法，并包含一个集合用于存储子对象。 Client（客户端）： 通过组件接口与组合中的对象进行交互，不需要知道是处理叶子节点还是容器节点，从而可以统一处理整体和部分。 原理 统一接口： 组合模式的核心思想是将叶子节点和容器节点都视为组件，它们都实现了相同的接口，这样客户端可以一...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/08/1fc79201d884/" title="Proxy Pattern（代理模式）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Proxy Pattern（代理模式）</div></div><div class="info-2"><div class="info-item-1">简介代理模式是一种结构型设计模式，它通常用于控制对对象的访问，可以为对象的访问添加一些额外的操作。例如当我们需要测试对象执行某个方法所耗费的时间时，那么就可以通过代理模式在该方法的执行前后记录一次时间并计算时间间隔。通过代理模式可以对原有对象进行访问控制、延迟加载和简化接口。 应用场景远程代理、虚拟代理、保护代理、缓存代理、日志记录、图片加载优化、数据库连接池、权限管理和动态代理等。 结构抽象主题（Subject）： 定义了真实主题和代理主题的共同接口，客户端通过这个接口访问真实主题或代理主题。 真实主题（Real Subject）： 实现了抽象主题接口，是代理模式中的实际对象，客户端最终要使用的对象。 代理主题（Proxy）： 包含一个引用（指针或引用对象）指向真实主题。实现了抽象主题接口，与真实主题实现相同的接口，使得客户端无需关心真实主题和代理主题的区别。在代理主题中可以控制对真实主题的访问，可以在访问前或访问后执行一些额外的操作，如权限控制、延迟加载、日志记录等。 原理 客户端通过代理访问真实主题： 客户端通常通过抽象主题的接口来访问真实主题，不直接操作真实主题。  代理...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">我与岁月的森林</div><div class="author-info-description">用于记录技术、生活和感想</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94"><span class="toc-number">3.</span> <span class="toc-text">对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-number">6.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%EF%BC%9AShape-cs"><span class="toc-number">6.1.</span> <span class="toc-text">图形：Shape.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%9AShapeManager-cs"><span class="toc-number">6.2.</span> <span class="toc-text">图形管理器：ShapeManager.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%EF%BC%9AProgram-cs"><span class="toc-number">6.3.</span> <span class="toc-text">测试代码：Program.cs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/920dce676ecd/" title="【小巧-轻便-实用】ICO图标转换工具">【小巧-轻便-实用】ICO图标转换工具</a><time datetime="2026-01-08T15:23:01.000Z" title="发表于 2026-01-08 23:23:01">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/c8d5f22e46c1/" title="Unity配置SQLite以及遇到的问题">Unity配置SQLite以及遇到的问题</a><time datetime="2026-01-08T15:10:24.000Z" title="发表于 2026-01-08 23:10:24">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/8f1c257e547b/" title="Unity预览或注释中文乱码解决办法">Unity预览或注释中文乱码解决办法</a><time datetime="2026-01-08T14:59:57.000Z" title="发表于 2026-01-08 22:59:57">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/a1958eb9f58b/" title="C#理解回调函数">C#理解回调函数</a><time datetime="2026-01-08T14:55:49.000Z" title="发表于 2026-01-08 22:55:49">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/2c47e155b663/" title="Unity中EditorWindow的创建和停靠">Unity中EditorWindow的创建和停靠</a><time datetime="2026-01-08T14:45:35.000Z" title="发表于 2026-01-08 22:45:35">2026-01-08</time></div></div></div></div></div></div></main><footer id="footer" style="background: black;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '57fd75d9f2cee09283aaa17884681ade'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/LogoAdapter.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

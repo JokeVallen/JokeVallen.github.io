@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Proxy Pattern（代理模式） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介代理模式是一种结构型设计模式，它通常用于控制对对象的访问，可以为对象的访问添加一些额外的操作。例如当我们需要测试对象执行某个方法所耗费的时间时，那么就可以通过代理模式在该方法的执行前后记录一次时间并计算时间间隔。通过代理模式可以对原有对象进行访问控制、延迟加载和简化接口。 应用场景远程代理、虚拟代理、保护代理、缓存代理、日志记录、图片加载优化、数据库连接池、权限管理和动态代理等。 结构抽象主题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proxy Pattern（代理模式）">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/01/08/1fc79201d884/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="简介代理模式是一种结构型设计模式，它通常用于控制对对象的访问，可以为对象的访问添加一些额外的操作。例如当我们需要测试对象执行某个方法所耗费的时间时，那么就可以通过代理模式在该方法的执行前后记录一次时间并计算时间间隔。通过代理模式可以对原有对象进行访问控制、延迟加载和简化接口。 应用场景远程代理、虚拟代理、保护代理、缓存代理、日志记录、图片加载优化、数据库连接池、权限管理和动态代理等。 结构抽象主题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-01-08T07:16:09.000Z">
+<meta property="article:modified_time" content="2026-01-08T07:19:53.608Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="编程,学习,生活,哲理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Proxy Pattern（代理模式）",
+  "url": "https://jokevallen.github.io/posts/2026/01/08/1fc79201d884/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-01-08T07:16:09.000Z",
+  "dateModified": "2026-01-08T07:19:53.608Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://JokeVallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/01/08/1fc79201d884/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Proxy Pattern（代理模式）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom_bilibili.css"><link rel="stylesheet" href="/css/custom_table.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo_light.png" alt="Logo"></a><a class="nav-page-title" href="/"><span class="site-name">Proxy Pattern（代理模式）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Proxy Pattern（代理模式）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-01-08T07:19:53.608Z" title="更新于 2026-01-08 15:19:53">2026-01-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>代理模式是一种结构型设计模式，它通常用于控制对对象的访问，可以为对象的访问添加一些额外的操作。例如当我们需要测试对象执行某个方法所耗费的时间时，那么就可以通过代理模式在该方法的执行前后记录一次时间并计算时间间隔。通过代理模式可以对原有对象进行访问控制、延迟加载和简化接口。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>远程代理、虚拟代理、保护代理、缓存代理、日志记录、图片加载优化、数据库连接池、权限管理和动态代理等。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p><strong>抽象主题（Subject）：</strong> 定义了真实主题和代理主题的共同接口，客户端通过这个接口访问真实主题或代理主题。</p>
+<p><strong>真实主题（Real Subject）：</strong> 实现了抽象主题接口，是代理模式中的实际对象，客户端最终要使用的对象。</p>
+<p><strong>代理主题（Proxy）：</strong> 包含一个引用（指针或引用对象）指向真实主题。实现了抽象主题接口，与真实主题实现相同的接口，使得客户端无需关心真实主题和代理主题的区别。在代理主题中可以控制对真实主题的访问，可以在访问前或访问后执行一些额外的操作，如权限控制、延迟加载、日志记录等。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li><p><strong>客户端通过代理访问真实主题：</strong> 客户端通常通过抽象主题的接口来访问真实主题，不直接操作真实主题。</p>
+</li>
+<li><p><strong>代理对象控制访问：</strong> 当客户端通过代理访问真实主题时，代理对象可以在访问前后执行一些操作，例如权限验证、日志记录等。</p>
+</li>
+<li><p><strong>延迟加载（虚拟代理）：</strong> 如果使用了虚拟代理，代理对象在需要时才创建和初始化真实对象，以减少资源消耗。</p>
+</li>
+<li><p><strong>其他附加操作：</strong> 代理对象还可以实现一些额外的功能，比如缓存、计算结果的缓存、异常处理等。</p>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><blockquote>
+<p>​提示：可在本栏目的资源篇“设计模式代码示例合集”下载所有完整代码资源。</p>
+</blockquote>
+<h3 id="调试：Debug-cs"><a href="#调试：Debug-cs" class="headerlink" title="调试：Debug.cs"></a>调试：Debug.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">namespace</span> <span class="hljs-title">ProxyPattern</span>;<br><br><span class="hljs-comment">// 调试接口</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title">IDebug</span><br>&#123;<br>    <span class="hljs-comment">// 控制台输出</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Log</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> content</span>)</span>;<br>&#125;<br><br><span class="hljs-comment">// 调试</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">Debug</span> : <span class="hljs-title">IDebug</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Log</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> content</span>)</span><br>    &#123;<br>        Console.WriteLine(content);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 调试代理</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">DebugProxy</span> : <span class="hljs-title">IDebug</span><br>&#123;<br>    <span class="hljs-keyword">private</span> Debug debug;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">DebugProxy</span>()</span><br>    &#123;<br>        debug = <span class="hljs-keyword">new</span> Debug();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Log</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> content</span>)</span><br>    &#123;<br>        Console.WriteLine(<span class="hljs-string">&quot;---------------- Begin ----------------&quot;</span>);<br>        debug.Log(content);<br>        Console.WriteLine(<span class="hljs-string">&quot;----------------  End  ----------------&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="测试代码：Program-cs"><a href="#测试代码：Program-cs" class="headerlink" title="测试代码：Program.cs"></a>测试代码：Program.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// ************* 13.代理模式测试 **************</span><br><span class="hljs-keyword">using</span> ProxyPattern;<br><br>DebugProxy debug = <span class="hljs-keyword">new</span> DebugProxy();<br>debug.Log(<span class="hljs-string">&quot;This is a paragraph.&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述代码实现了为每次控制台输出的内容添加前后分隔线的功能。通过代理模式可以避免修改代理对象的源码，从而实现对对象访问的控制。该示例我们完全可以直接在Debug类的Log方法中添加前后分隔线，但是如果现在Debug类的业务逻辑繁多，结构复杂，直接修改源代码会增加风险从而增加维护成本，通过代理模式则可以在不修改源码的基础上来对Log方法进行控制和扩展。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://JokeVallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/01/08/1fc79201d884/">https://jokevallen.github.io/posts/2026/01/08/1fc79201d884/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://JokeVallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/2026/01/08/4f84ae6db350/" title="Flyweight Pattern（享元模式）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Flyweight Pattern（享元模式）</div></div><div class="info-2"><div class="info-item-1">简介享元模式是一种结构型设计模式，用于通过共享对象来减少内存开销，适用于需要使用大量相似对象的情况。 享元模式有两个状态，分别是内部状态和外部状态，内部状态由获取指定享元的调用者共享，外部状态由调用者进行传递。例如对于字符”A”而言，无论外部有多少个调用者使用字符”A”，字符”A”的Unicode对于所有调用者而言都是固定一致的，而字符”A”的样式则由调用者来决定，那么字符”A”的Unicode就相当于其内部状态，字符”A”的样式则是外部状态，调用者通过字符”A”的Unicode获取字符”A”的对象，字符”A”提供一个可指定样式的绘制方法，在使用字符”A”时则可以传递不同的样式，通过享元模式就可以避免为每个调用者都创建一个字符”A”对象，从而减少内存开销。 应用场景文本编辑器的字符存储、图形系统中的图元对象、数据库连接池、线程池、Web应用中的缓存管理等。 对比享元模式与对象池的对比                特征       享元模式       对象池                     主要目标       最小化相似对象的内存开销，通过共享内部状态。       ...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/08/1f20cdb9428f/" title="Iterator Pattern（迭代器模式）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Iterator Pattern（迭代器模式）</div></div><div class="info-2"><div class="info-item-1">简介迭代器模式是一种行为型设计模式，它为集合对象提供了简便的遍历接口，隐藏了具体的遍历逻辑，除此之外它能够为任何可以获取统一迭代器的集合提供一致的遍历方法，增加了代码的复用性，这对于调用者而言，可以采用同样的方式遍历不同类型的集合，简化了调用逻辑。 应用场景遍历集合对象、封装不同数据结构的遍历、数据库查询结果集、文件系统遍历、菜单导航、文档解析、线程池管理。 结构迭代器接口（Iterator）： 定义了遍历元素的接口，包括 next() 方法用于获取下一个元素，以及 hasNext() 方法用于检查是否还有更多元素。 具体迭代器（Concrete Iterator）： 实现迭代器接口，负责实际遍历集合并跟踪当前位置。 聚合接口（Aggregate）： 定义了创建迭代器的接口，通常包括一个或多个方法返回相应的迭代器。 具体聚合对象（Concrete Aggregate）： 实现聚合接口，返回适当的具体迭代器。 原理 客户端（Client）： 客户端通过聚合接口获取迭代器对象，然后使用迭代器对象遍历集合中的元素。  聚合对象（Aggregate）： 聚合对象负责创建迭代器，并通过其接...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">我与岁月的森林</div><div class="author-info-description">用于记录技术、生活和感想</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%EF%BC%9ADebug-cs"><span class="toc-number">5.1.</span> <span class="toc-text">调试：Debug.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%EF%BC%9AProgram-cs"><span class="toc-number">5.2.</span> <span class="toc-text">测试代码：Program.cs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/920dce676ecd/" title="【小巧-轻便-实用】ICO图标转换工具">【小巧-轻便-实用】ICO图标转换工具</a><time datetime="2026-01-08T15:23:01.000Z" title="发表于 2026-01-08 23:23:01">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/c8d5f22e46c1/" title="Unity配置SQLite以及遇到的问题">Unity配置SQLite以及遇到的问题</a><time datetime="2026-01-08T15:10:24.000Z" title="发表于 2026-01-08 23:10:24">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/8f1c257e547b/" title="Unity预览或注释中文乱码解决办法">Unity预览或注释中文乱码解决办法</a><time datetime="2026-01-08T14:59:57.000Z" title="发表于 2026-01-08 22:59:57">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/a1958eb9f58b/" title="C#理解回调函数">C#理解回调函数</a><time datetime="2026-01-08T14:55:49.000Z" title="发表于 2026-01-08 22:55:49">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/2c47e155b663/" title="Unity中EditorWindow的创建和停靠">Unity中EditorWindow的创建和停靠</a><time datetime="2026-01-08T14:45:35.000Z" title="发表于 2026-01-08 22:45:35">2026-01-08</time></div></div></div></div></div></div></main><footer id="footer" style="background: black;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '1710f5cb211ba58e98b915e622a80aaf'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/LogoAdapter.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

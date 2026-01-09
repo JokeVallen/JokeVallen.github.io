@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Memento Pattern（备忘录模式、存档点模式） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介备忘录模式是一种行为型设计模式，它允许对象在不暴露其内部状态的情况下捕获和恢复其状态。该模式通常用于实现撤销机制。 应用场景文本编辑器的撤销功能、图形设计工具的历史记录、数据库事务管理、游戏状态管理、配置管理、日历应用的日程记录和命令模式的辅助等。 结构发起人（Originator）： 负责创建一个包含当前状态的备忘录对象，并可以使用备忘录对象恢复其状态。 备忘录（Memento）： 用于存储">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Memento Pattern（备忘录模式、存档点模式）">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/01/07/f5b715c04de7/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="简介备忘录模式是一种行为型设计模式，它允许对象在不暴露其内部状态的情况下捕获和恢复其状态。该模式通常用于实现撤销机制。 应用场景文本编辑器的撤销功能、图形设计工具的历史记录、数据库事务管理、游戏状态管理、配置管理、日历应用的日程记录和命令模式的辅助等。 结构发起人（Originator）： 负责创建一个包含当前状态的备忘录对象，并可以使用备忘录对象恢复其状态。 备忘录（Memento）： 用于存储">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-01-07T09:40:18.000Z">
+<meta property="article:modified_time" content="2026-01-08T07:56:07.533Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="编程,学习,生活,哲理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Memento Pattern（备忘录模式、存档点模式）",
+  "url": "https://jokevallen.github.io/posts/2026/01/07/f5b715c04de7/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-01-07T09:40:18.000Z",
+  "dateModified": "2026-01-08T07:56:07.533Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://JokeVallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/01/07/f5b715c04de7/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Memento Pattern（备忘录模式、存档点模式）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom_bilibili.css"><link rel="stylesheet" href="/css/custom_table.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo_light.png" alt="Logo"></a><a class="nav-page-title" href="/"><span class="site-name">Memento Pattern（备忘录模式、存档点模式）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Memento Pattern（备忘录模式、存档点模式）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-01-08T07:56:07.533Z" title="更新于 2026-01-08 15:56:07">2026-01-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>备忘录模式是一种行为型设计模式，它允许对象在不暴露其内部状态的情况下捕获和恢复其状态。该模式通常用于实现撤销机制。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>文本编辑器的撤销功能、图形设计工具的历史记录、数据库事务管理、游戏状态管理、配置管理、日历应用的日程记录和命令模式的辅助等。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p><strong>发起人（Originator）：</strong> 负责创建一个包含当前状态的备忘录对象，并可以使用备忘录对象恢复其状态。</p>
+<p><strong>备忘录（Memento）：</strong> 用于存储发起人对象的内部状态。备忘录对象提供一种机制，允许发起人将其状态恢复到先前的状态。</p>
+<p><strong>管理者（Caretaker）：</strong> 负责保存备忘录对象。管理者可以保存多个备忘录对象，但通常仅在需要的情况下保存最新的状态。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li><p><strong>创建备忘录：</strong> 发起人创建一个备忘录对象，并将其状态设置为当前状态。</p>
+</li>
+<li><p><strong>存储备忘录：</strong> 管理者将备忘录对象保存起来。通常，管理者保存一个备忘录对象，但也可以保存多个以实现多次撤销的功能。</p>
+</li>
+<li><p><strong>恢复状态：</strong> 当需要恢复到先前的状态时，发起人从管理者那里获取相应的备忘录对象，并将其状态恢复。</p>
+</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><blockquote>
+<p>​提示：可在本栏目的资源篇“设计模式代码示例合集”下载所有完整代码资源。</p>
+</blockquote>
+<h3 id="文本备忘录对象：TextMemento-cs"><a href="#文本备忘录对象：TextMemento-cs" class="headerlink" title="文本备忘录对象：TextMemento.cs"></a>文本备忘录对象：TextMemento.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System.Text;<br><br><span class="hljs-keyword">namespace</span> <span class="hljs-title">MementoPattern</span>;<br><br><span class="hljs-comment">// 文本备忘录对象</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">TextMemento</span><br>&#123;<br>    <span class="hljs-comment">// 文本内容</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> text &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">TextMemento</span>(<span class="hljs-params">StringBuilder text</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">this</span>.text = text.ToString();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="备忘录对象管理器：MementoManager-cs"><a href="#备忘录对象管理器：MementoManager-cs" class="headerlink" title="备忘录对象管理器：MementoManager.cs"></a>备忘录对象管理器：MementoManager.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System.Text;<br><br><span class="hljs-keyword">namespace</span> <span class="hljs-title">MementoPattern</span>;<br><br><span class="hljs-comment">// 文本备忘录对象管理器</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">MementoManager</span><br>&#123;<br>    <span class="hljs-comment">// 文本备忘录对象集合</span><br>    <span class="hljs-keyword">private</span> Stack&lt;TextMemento&gt; mementos;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MementoManager</span>()</span><br>    &#123;<br>        mementos = <span class="hljs-keyword">new</span> Stack&lt;TextMemento&gt;();<br>    &#125;<br><br>    <span class="hljs-comment">// 保存当前文本状态</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SaveState</span>(<span class="hljs-params">StringBuilder text</span>)</span><br>    &#123;<br>        mementos.Push(<span class="hljs-keyword">new</span> TextMemento(text));<br>    &#125;<br><br>    <span class="hljs-comment">// 回溯到上一个文本状态</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">BackToPreState</span>(<span class="hljs-params">StringBuilder text</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (mementos.Count &gt; <span class="hljs-number">0</span>)<br>        &#123;<br>            text.Clear();<br>            text.Append(mementos.Pop().text);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="文本编辑器：TextEditor-cs"><a href="#文本编辑器：TextEditor-cs" class="headerlink" title="文本编辑器：TextEditor.cs"></a>文本编辑器：TextEditor.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System.Text;<br><br><span class="hljs-keyword">namespace</span> <span class="hljs-title">MementoPattern</span>;<br><br><span class="hljs-comment">// 文本编辑器</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">TextEditor</span><br>&#123;<br>    <span class="hljs-keyword">private</span> MementoManager manager; <span class="hljs-comment">// 文本备忘录对象管理器</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">TextEditor</span>()</span><br>    &#123;<br>        manager = <span class="hljs-keyword">new</span> MementoManager();<br>    &#125;<br><br>    <span class="hljs-comment">// 保存</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Save</span>(<span class="hljs-params">StringBuilder text</span>)</span><br>    &#123;<br>        manager.SaveState(text);<br>    &#125;<br><br>    <span class="hljs-comment">// 撤销</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Undo</span>(<span class="hljs-params">StringBuilder text</span>)</span><br>    &#123;<br>        manager.BackToPreState(text);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="测试代码：Program-cs"><a href="#测试代码：Program-cs" class="headerlink" title="测试代码：Program.cs"></a>测试代码：Program.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// ************* 21.备忘录模式测试 **************</span><br><span class="hljs-keyword">using</span> System.Text;<br><span class="hljs-keyword">using</span> MementoPattern;<br><br><span class="hljs-comment">// 创建实例</span><br>TextEditor textEditor = <span class="hljs-keyword">new</span> TextEditor();<br>StringBuilder text = <span class="hljs-keyword">new</span> StringBuilder(<span class="hljs-string">&quot;Hello world!&quot;</span>);<br><br><span class="hljs-comment">// 保存文本并输出文本</span><br>textEditor.Save(text);<br>Console.WriteLine(text);<br><br><span class="hljs-comment">// 向文本添加内容并输出文本</span><br>text.Append(<span class="hljs-string">&quot; I am Jack.&quot;</span>);<br>Console.WriteLine(text);<br><br><span class="hljs-comment">// 撤销文本操作并输出文本</span><br>textEditor.Undo(text);<br>Console.WriteLine(text);<br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述代码简单模拟了文本编辑器保存和撤销的功能。文本编辑器提供保存和撤销功能接口，保存功能会将当前文本的内容封装为一个文本备忘录对象，然后在备忘录对象管理器中入栈管理，撤销功能则是让备忘录对象管理器完成一次文本备忘录对象的出栈，并解析读取文本备忘录对象的文本内容，赋值给可变的文本对象。</p>
+<p>细心的小伙伴应该注意到了上面的StringBuilder，这个类是官方提供的用于实现可变字符串需求的，虽然string类型从外部看来也可变，但是它实际上是通过字符串拼接然后返回新的字符串对象来完成“可变”的，而StringBuilder则是在原有字符串基础上直接修改，感兴趣的话可以在网上查阅一下二者更具体的区别，这里就不赘述了。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://JokeVallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/01/07/f5b715c04de7/">https://jokevallen.github.io/posts/2026/01/07/f5b715c04de7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://JokeVallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/2026/01/07/b4c212814a45/" title="泛型工厂应用改进尝试（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">泛型工厂应用改进尝试（一）</div></div><div class="info-2"><div class="info-item-1">实验声明调用者的产品只要满足以下两个条件即可通过该工厂生产食物: 1.要求食物都继承自Food抽象类 2.无参构造方法公开(如果没有单独声明构造方法，默认为公开的无参构造) 术语 分步制作流程：将一个方法的逻辑拆分为多个方法，并且给每一个方法都加上唯一的访问锁。  静态存储：利用静态的存储结构来对数据进行存储。  中间处理逻辑：对静态存储结构的处理，判断当前类型是否存在于静态存储结构中，不存在则创建，使用静态存储就必须使用中间处理逻辑，不使用静态存储则不需要使用中间处理逻辑。   思路通过DateTime.Now获取方法执行的开始时间和结束时间，然后两个时间差值单位精确到毫秒。单线程数值保留4位小数，要求每执行一个线程休眠100毫秒，获取11个单线程执行的总计耗时算作一组数据，共获取20组数据，测试2次；多线程数值不保留小数，多线程共计12线程，要求多线程并发执行，不存在线程休眠，获取11个线程全部执行完成的总计耗时算作一组数据，共获取20组数据，测试2次，其它多线程并发测试类似。（之所以不统计12个线程是因为第一个执行的线程包含了C#文件的编译耗时，所以只统计第二个到最后一个，...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/07/54cbe1268a9d/" title="设计模式代码示例合集"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">设计模式代码示例合集</div></div><div class="info-2"><div class="info-item-1"> 本篇包括了本栏目所有设计模式的完整代码示例，所使用的编程语言是C#，可以使用VSCode或VisualStudio工具打开代码示例合集，这里提供了两个下载链接。  GitHub百度网盘（提取码：1314） </div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">我与岁月的森林</div><div class="author-info-description">用于记录技术、生活和感想</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E5%A4%87%E5%BF%98%E5%BD%95%E5%AF%B9%E8%B1%A1%EF%BC%9ATextMemento-cs"><span class="toc-number">5.1.</span> <span class="toc-text">文本备忘录对象：TextMemento.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%87%E5%BF%98%E5%BD%95%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%9AMementoManager-cs"><span class="toc-number">5.2.</span> <span class="toc-text">备忘录对象管理器：MementoManager.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%EF%BC%9ATextEditor-cs"><span class="toc-number">5.3.</span> <span class="toc-text">文本编辑器：TextEditor.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%EF%BC%9AProgram-cs"><span class="toc-number">5.4.</span> <span class="toc-text">测试代码：Program.cs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/920dce676ecd/" title="【小巧-轻便-实用】ICO图标转换工具">【小巧-轻便-实用】ICO图标转换工具</a><time datetime="2026-01-08T15:23:01.000Z" title="发表于 2026-01-08 23:23:01">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/c8d5f22e46c1/" title="Unity配置SQLite以及遇到的问题">Unity配置SQLite以及遇到的问题</a><time datetime="2026-01-08T15:10:24.000Z" title="发表于 2026-01-08 23:10:24">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/8f1c257e547b/" title="Unity预览或注释中文乱码解决办法">Unity预览或注释中文乱码解决办法</a><time datetime="2026-01-08T14:59:57.000Z" title="发表于 2026-01-08 22:59:57">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/a1958eb9f58b/" title="C#理解回调函数">C#理解回调函数</a><time datetime="2026-01-08T14:55:49.000Z" title="发表于 2026-01-08 22:55:49">2026-01-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2026/01/08/2c47e155b663/" title="Unity中EditorWindow的创建和停靠">Unity中EditorWindow的创建和停靠</a><time datetime="2026-01-08T14:45:35.000Z" title="发表于 2026-01-08 22:45:35">2026-01-08</time></div></div></div></div></div></div></main><footer id="footer" style="background: black;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '494c7e17b905086238c0446644c20347'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/LogoAdapter.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
