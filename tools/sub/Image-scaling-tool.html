@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图片等比例缩放工具 | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="高质量图片等比例缩放工具                   &#x2F;* 日间模式变量（默认） *&#x2F;         :root {             --bg-gradient-start: #f5f7fa;             --bg-gradient-end: #c3cfe2;             --container-bg: whit">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图片等比例缩放工具 | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="&#x2F;* 日间模式变量（默认） *&#x2F;     :root {         --bg-gradient-start: #f5f7fa;         --bg-gradient-end: #c3cfe2;         --container-bg: white;         --text-primary: #333;         --text-secondary: #2c">
 <meta property="og:type" content="website">
 <meta property="og:title" content="图片等比例缩放工具">
 <meta property="og:url" content="https://jokevallen.github.io/tools/sub/Image-scaling-tool.html">
 <meta property="og:site_name" content="我与岁月的森林的博客">
-<meta property="og:description" content="高质量图片等比例缩放工具                   &#x2F;* 日间模式变量（默认） *&#x2F;         :root {             --bg-gradient-start: #f5f7fa;             --bg-gradient-end: #c3cfe2;             --container-bg: whit">
+<meta property="og:description" content="&#x2F;* 日间模式变量（默认） *&#x2F;     :root {         --bg-gradient-start: #f5f7fa;         --bg-gradient-end: #c3cfe2;         --container-bg: white;         --text-primary: #333;         --text-secondary: #2c">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://jokevallen.github.io/images/head.png">
 <meta property="article:published_time" content="2026-01-09T12:57:59.000Z">
-<meta property="article:modified_time" content="2026-01-11T16:21:59.748Z">
+<meta property="article:modified_time" content="2026-01-12T13:27:09.453Z">
 <meta property="article:author" content="我与岁月的森林">
 <meta property="article:tag" content="编程,学习,生活,哲理">
 <meta name="twitter:card" content="summary">
@@ -174,685 +174,873 @@
     btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
     btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
   }
-})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">图片等比例缩放工具</h1></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="page-title">图片等比例缩放工具</div><div class="container" id="article-container"><!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="pjax" content="disable">
-    <title>高质量图片等比例缩放工具</title>
-    <script src="https://unpkg.com/pica/dist/pica.min.js"></script>
-    <style>
-        /* 日间模式变量（默认） */
-        :root {
-            --bg-gradient-start: #f5f7fa;
-            --bg-gradient-end: #c3cfe2;
-            --container-bg: white;
-            --text-primary: #333;
-            --text-secondary: #2c3e50;
-            --text-muted: #7f8c8d;
-            --accent-gradient: linear-gradient(90deg, #3498db, #2ecc71);
-            --primary-color: #3498db;
-            --primary-dark: #2980b9;
-            --success-color: #2ecc71;
-            --success-dark: #27ae60;
-            --danger-color: #e74c3c;
-            --info-bg: linear-gradient(135deg, #e8f4fc 0%, #d5f4e6 100%);
-            --upload-bg: #f8fafc;
-            --upload-hover: #e8f4fc;
-            --upload-active: #d4edff;
-            --control-bg: linear-gradient(135deg, #f9f9f9 0%, #f0f7ff 100%);
-            --box-shadow: rgba(0, 0, 0, 0.15);
-            --box-shadow-light: rgba(0, 0, 0, 0.08);
-            --border-color: #ddd;
-            --method-bg: white;
-            --method-hover: rgba(52, 152, 219, 0.05);
-            --method-active: #e8f4fc;
-            --quality-badge-bg: #2ecc71;
-            --dimension-bg: #f8f9fa;
-            --btn-primary: linear-gradient(135deg, #3498db, #2980b9);
-            --btn-success: linear-gradient(135deg, #2ecc71, #27ae60);
-            --btn-secondary: linear-gradient(135deg, #95a5a6, #7f8c8d);
-            --btn-disabled: #bdc3c7;
-            --status-success-bg: #d5f4e6;
-            --status-success-text: #27ae60;
-            --status-error-bg: #fadbd8;
-            --status-error-text: #e74c3c;
-            --status-info-bg: #d6eaf8;
-            --status-info-text: #3498db;
-            --library-bg: #f0f7ff;
-            --pattern-bg: linear-gradient(45deg, #f5f5f5 25%, #e0e0e0 25%, #e0e0e0 50%, #f5f5f5 50%, #f5f5f5 75%, #e0e0e0 75%);
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">108</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">图片等比例缩放工具</h1></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="page-title">图片等比例缩放工具</div><div class="container" id="article-container"><script src="/js/Image-scaling-tool.js"></script>
+
+<style>
+    /* 日间模式变量（默认） */
+    :root {
+        --bg-gradient-start: #f5f7fa;
+        --bg-gradient-end: #c3cfe2;
+        --container-bg: white;
+        --text-primary: #333;
+        --text-secondary: #2c3e50;
+        --text-muted: #7f8c8d;
+        --accent-gradient: linear-gradient(90deg, #3498db, #2ecc71);
+        --primary-color: #3498db;
+        --primary-dark: #2980b9;
+        --success-color: #2ecc71;
+        --success-dark: #27ae60;
+        --danger-color: #e74c3c;
+        --info-bg: linear-gradient(135deg, #e8f4fc 0%, #d5f4e6 100%);
+        --upload-bg: #f8fafc;
+        --upload-hover: #e8f4fc;
+        --upload-active: #d4edff;
+        --control-bg: linear-gradient(135deg, #f9f9f9 0%, #f0f7ff 100%);
+        --box-shadow: rgba(0, 0, 0, 0.15);
+        --box-shadow-light: rgba(0, 0, 0, 0.08);
+        --border-color: #ddd;
+        --method-bg: white;
+        --method-hover: rgba(52, 152, 219, 0.05);
+        --method-active: #e8f4fc;
+        --quality-badge-bg: #2ecc71;
+        --dimension-bg: #f8f9fa;
+        --btn-primary: linear-gradient(135deg, #3498db, #2980b9);
+        --btn-success: linear-gradient(135deg, #2ecc71, #27ae60);
+        --btn-secondary: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        --btn-disabled: #bdc3c7;
+        --status-success-bg: #d5f4e6;
+        --status-success-text: #27ae60;
+        --status-error-bg: #fadbd8;
+        --status-error-text: #e74c3c;
+        --status-info-bg: #d6eaf8;
+        --status-info-text: #3498db;
+        --library-bg: #f0f7ff;
+        --pattern-bg: linear-gradient(45deg, #f5f5f5 25%, #e0e0e0 25%, #e0e0e0 50%, #f5f5f5 50%, #f5f5f5 75%, #e0e0e0 75%);
+    }
+    
+    /* 夜间模式变量 */
+    [data-theme='dark'] {
+        --bg-gradient-start: #0f172a;
+        --bg-gradient-end: #1e293b;
+        --container-bg: #1e293b;
+        --text-primary: #e2e8f0;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --accent-gradient: linear-gradient(90deg, #1e88e5, #10b981);
+        --primary-color: #3b82f6;
+        --primary-dark: #2563eb;
+        --success-color: #10b981;
+        --success-dark: #059669;
+        --danger-color: #ef4444;
+        --info-bg: linear-gradient(135deg, #1e3a8a 0%, #065f46 100%);
+        --upload-bg: #334155;
+        --upload-hover: #475569;
+        --upload-active: #3b82f6;
+        --control-bg: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+        --box-shadow: rgba(0, 0, 0, 0.3);
+        --box-shadow-light: rgba(0, 0, 0, 0.2);
+        --border-color: #475569;
+        --method-bg: #334155;
+        --method-hover: rgba(59, 130, 246, 0.1);
+        --method-active: #1e3a8a;
+        --quality-badge-bg: #10b981;
+        --dimension-bg: #475569;
+        --btn-primary: linear-gradient(135deg, #3b82f6, #2563eb);
+        --btn-success: linear-gradient(135deg, #10b981, #059669);
+        --btn-secondary: linear-gradient(135deg, #64748b, #475569);
+        --btn-disabled: #475569;
+        --status-success-bg: rgba(16, 185, 129, 0.2);
+        --status-success-text: #10b981;
+        --status-error-bg: rgba(239, 68, 68, 0.2);
+        --status-error-text: #ef4444;
+        --status-info-bg: rgba(59, 130, 246, 0.2);
+        --status-info-text: #3b82f6;
+        --library-bg: rgba(59, 130, 246, 0.1);
+        --pattern-bg: linear-gradient(45deg, #334155 25%, #475569 25%, #475569 50%, #334155 50%, #334155 75%, #475569 75%);
+    }
+    
+    * {
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, background-image 0.3s ease;
+    }
+    
+    .tool-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: var(--container-bg);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px var(--box-shadow);
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tool-container h1 {
+        text-align: center;
+        color: var(--text-secondary);
+        margin-bottom: 10px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .tool-container h1:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: var(--accent-gradient);
+        border-radius: 2px;
+    }
+    
+    .tool-algorithm-info {
+        background: var(--info-bg);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-left: 5px solid var(--primary-color);
+    }
+    
+    .tool-algorithm-info h3 {
+        margin-top: 0;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .tool-algorithm-info h3:before {
+        content: '⚡';
+        font-size: 24px;
+    }
+    
+    .tool-upload-area {
+        border: 3px dashed var(--primary-color);
+        border-radius: 12px;
+        padding: 50px 20px;
+        text-align: center;
+        margin-bottom: 30px;
+        background-color: var(--upload-bg);
+        transition: all 0.3s;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tool-upload-area:hover {
+        background-color: var(--upload-hover);
+        border-color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+    
+    .tool-upload-area.drag-over {
+        background-color: var(--upload-active);
+        border-color: var(--success-color);
+    }
+    
+    .tool-upload-icon {
+        font-size: 70px;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        transition: transform 0.3s;
+    }
+    
+    /* 修复这里：使用 .tool-upload-icon 而不是 .upload-icon */
+    .tool-upload-area:hover .tool-upload-icon {
+        transform: scale(1.1);
+    }
+    
+    .tool-upload-text {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: var(--text-secondary);
+        font-weight: 600;
+    }
+    
+    .tool-upload-subtext {
+        color: var(--text-muted);
+        margin-bottom: 20px;
+    }
+    
+    #file-input {
+        display: none;
+    }
+    
+    .tool-preview-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .tool-preview-box {
+        background: var(--container-bg);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 5px 15px var(--box-shadow-light);
+        transition: transform 0.3s;
+        border: 1px solid var(--border-color);
+    }
+    
+    .tool-preview-box:hover {
+        transform: translateY(-5px);
+    }
+    
+    .tool-preview-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .tool-original-title {
+        border-color: var(--primary-color);
+    }
+    
+    .tool-scaled-title {
+        border-color: var(--success-color);
+    }
+    
+    .tool-quality-badge {
+        background: var(--quality-badge-bg);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .tool-image-container {
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--pattern-bg);
+        background-size: 20px 20px;
+        box-shadow: 0 3px 10px var(--box-shadow-light);
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border-color);
+    }
+    
+    .tool-image-container img {
+        max-width: 100%;
+        max-height: 400px;
+        display: block;
+        object-fit: contain;
+    }
+    
+    .tool-dimensions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        font-size: 14px;
+        color: var(--text-muted);
+        background: var(--dimension-bg);
+        padding: 10px;
+        border-radius: 6px;
+    }
+    
+    .tool-dimension-value {
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+    
+    .tool-controls {
+        background: var(--control-bg);
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+        position: relative;
+        border: 1px solid var(--border-color);
+    }
+    
+    .tool-controls:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--accent-gradient);
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .tool-scale-method {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .tool-method-option {
+        background: var(--method-bg);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 3px 10px var(--box-shadow-light);
+        transition: all 0.3s;
+        border: 2px solid transparent;
+        cursor: pointer;
+    }
+    
+    .tool-method-option:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px var(--box-shadow-light);
+        background-color: var(--method-hover);
+    }
+    
+    .tool-method-option.active {
+        border-color: var(--primary-color);
+        background-color: var(--method-active);
+    }
+    
+    .tool-method-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .tool-method-icon {
+        font-size: 24px;
+        margin-right: 10px;
+        color: var(--primary-color);
+    }
+    
+    .tool-method-title {
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 16px;
+    }
+    
+    .tool-method-controls {
+        margin-top: 15px;
+    }
+    
+    .tool-preset-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .tool-preset-btn {
+        padding: 10px;
+        background: var(--method-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+    
+    .tool-preset-btn:hover {
+        background: var(--method-hover);
+        border-color: var(--primary-color);
+    }
+    
+    .tool-preset-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+    
+    .tool-quality-controls {
+        background: var(--method-bg);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .tool-slider-container {
+        position: relative;
+        margin: 20px 0;
+    }
+
+    .tool-slider-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    /* 滑块轨道和填充 */
+    .tool-slider-wrapper {
+        position: relative;
+        height: 24px;
+        display: flex;
+        align-items: center;
+    }
+
+    .tool-slider-track {
+        position: absolute;
+        width: 100%;
+        height: 6px;
+        background: var(--dimension-bg);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .tool-slider-fill {
+        position: absolute;
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), color-mix(in srgb, var(--primary-color) 70%, var(--success-color) 30%));
+        border-radius: 3px;
+        width: 85%;
+    }
+
+    [data-theme='dark'] .tool-slider-fill {
+        background: linear-gradient(90deg, #3b82f6, #10b981);
+    }
+
+    /* 自定义滑块 */
+    .tool-container input[type="range"] {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: transparent; /* 改为透明，我们用自定义轨道 */
+        outline: none;
+        -webkit-appearance: none;
+        position: relative;
+        z-index: 2;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    /* 滑块拇指 - Webkit浏览器 */
+    .tool-container input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: 3px solid var(--container-bg);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+        position: relative;
+        z-index: 3;
+    }
+
+    .tool-container input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 滑块拇指 - Firefox */
+    .tool-container input[type="range"]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: 3px solid var(--container-bg);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .tool-container input[type="range"]::-moz-range-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 滑块拇指 - IE/Edge */
+    .tool-container input[type="range"]::-ms-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        cursor: pointer;
+        border: 3px solid var(--container-bg);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 滑块轨道 - Firefox */
+    .tool-container input[type="range"]::-moz-range-track {
+        background: transparent;
+        height: 6px;
+        border-radius: 3px;
+    }
+
+    /* 滑块轨道 - IE/Edge */
+    .tool-container input[type="range"]::-ms-track {
+        background: transparent;
+        color: transparent;
+        height: 6px;
+        border-radius: 3px;
+    }
+
+    .tool-container input[type="range"]::-ms-fill-lower {
+        background: var(--primary-color);
+        border-radius: 3px;
+    }
+
+    .tool-container input[type="range"]::-ms-fill-upper {
+        background: var(--dimension-bg);
+        border-radius: 3px;
+    }
+
+    /* 当前值指示器 */
+    .tool-slider-value {
+        position: absolute;
+        top: -30px;
+        transform: translateX(-50%);
+        background: var(--primary-color);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        min-width: 40px;
+        text-align: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .tool-slider-value.show {
+        opacity: 1;
+    }
+
+    .tool-slider-value:after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid var(--primary-color);
+    }
+    
+    .tool-action-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .tool-btn {
+        padding: 16px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: white;
+    }
+    
+    .tool-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px var(--box-shadow-light);
+    }
+    
+    .tool-btn:active {
+        transform: translateY(0);
+    }
+    
+    .tool-btn-primary {
+        background: var(--btn-primary);
+    }
+    
+    .tool-btn-success {
+        background: var(--btn-success);
+    }
+    
+    .tool-btn-secondary {
+        background: var(--btn-secondary);
+    }
+    
+    .tool-btn:disabled {
+        background: var(--btn-disabled);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.6;
+    }
+    
+    .tool-status {
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: none;
+        animation: fadeIn 0.3s;
+    }
+    
+    .tool-status.show {
+        display: block;
+    }
+    
+    .tool-status.success {
+        background: var(--status-success-bg);
+        color: var(--status-success-text);
+        border-left: 4px solid var(--success-color);
+    }
+    
+    .tool-status.error {
+        background: var(--status-error-bg);
+        color: var(--status-error-text);
+        border-left: 4px solid var(--danger-color);
+    }
+    
+    .tool-status.info {
+        background: var(--status-info-bg);
+        color: var(--status-info-text);
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .tool-loading {
+        display: none;
+        text-align: center;
+        padding: 30px;
+    }
+    
+    .tool-loading.show {
+        display: block;
+    }
+    
+    .tool-spinner {
+        border: 4px solid var(--dimension-bg);
+        border-radius: 50%;
+        border-top: 4px solid var(--primary-color);
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+    }
+    
+    .tool-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: var(--dimension-bg);
+        border-radius: 3px;
+        margin: 20px auto;
+        overflow: hidden;
+        max-width: 300px;
+    }
+    
+    .tool-progress-fill {
+        height: 100%;
+        background: var(--accent-gradient);
+        width: 0%;
+        transition: width 0.3s;
+    }
+    
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
         }
-        /* 夜间模式变量 */
-        [data-theme='dark'] {
-            --bg-gradient-start: #0f172a;
-            --bg-gradient-end: #1e293b;
-            --container-bg: #1e293b;
-            --text-primary: #e2e8f0;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --accent-gradient: linear-gradient(90deg, #1e88e5, #10b981);
-            --primary-color: #3b82f6;
-            --primary-dark: #2563eb;
-            --success-color: #10b981;
-            --success-dark: #059669;
-            --danger-color: #ef4444;
-            --info-bg: linear-gradient(135deg, #1e3a8a 0%, #065f46 100%);
-            --upload-bg: #334155;
-            --upload-hover: #475569;
-            --upload-active: #3b82f6;
-            --control-bg: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-            --box-shadow: rgba(0, 0, 0, 0.3);
-            --box-shadow-light: rgba(0, 0, 0, 0.2);
-            --border-color: #475569;
-            --method-bg: #334155;
-            --method-hover: rgba(59, 130, 246, 0.1);
-            --method-active: #1e3a8a;
-            --quality-badge-bg: #10b981;
-            --dimension-bg: #475569;
-            --btn-primary: linear-gradient(135deg, #3b82f6, #2563eb);
-            --btn-success: linear-gradient(135deg, #10b981, #059669);
-            --btn-secondary: linear-gradient(135deg, #64748b, #475569);
-            --btn-disabled: #475569;
-            --status-success-bg: rgba(16, 185, 129, 0.2);
-            --status-success-text: #10b981;
-            --status-error-bg: rgba(239, 68, 68, 0.2);
-            --status-error-text: #ef4444;
-            --status-info-bg: rgba(59, 130, 246, 0.2);
-            --status-info-text: #3b82f6;
-            --library-bg: rgba(59, 130, 246, 0.1);
-            --pattern-bg: linear-gradient(45deg, #334155 25%, #475569 25%, #475569 50%, #334155 50%, #334155 75%, #475569 75%);
+        100% {
+            transform: rotate(360deg);
         }
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, background-image 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
         }
-        body {
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: var(--container-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px var(--box-shadow);
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        h1 {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            position: relative;
-            padding-bottom: 15px;
-        }
-        h1:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: var(--accent-gradient);
-            border-radius: 2px;
-        }
-        .subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
-        .algorithm-info {
-            background: var(--info-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-left: 5px solid var(--primary-color);
-        }
-        .algorithm-info h3 {
-            margin-top: 0;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .algorithm-info h3:before {
-            content: '⚡';
-            font-size: 24px;
-        }
-        .upload-area {
-            border: 3px dashed var(--primary-color);
-            border-radius: 12px;
-            padding: 50px 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            background-color: var(--upload-bg);
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        .upload-area:hover {
-            background-color: var(--upload-hover);
-            border-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        .upload-area.drag-over {
-            background-color: var(--upload-active);
-            border-color: var(--success-color);
-        }
-        .upload-icon {
-            font-size: 70px;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            transition: transform 0.3s;
-        }
-        .upload-area:hover .upload-icon {
-            transform: scale(1.1);
-        }
-        .upload-text {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-        .upload-subtext {
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-        #file-input {
-            display: none;
-        }
-        .preview-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .preview-box {
-            background: var(--container-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px var(--box-shadow-light);
-            transition: transform 0.3s;
-            border: 1px solid var(--border-color);
-        }
-        .preview-box:hover {
-            transform: translateY(-5px);
-        }
-        .preview-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .original-title {
-            border-color: var(--primary-color);
-        }
-        .scaled-title {
-            border-color: var(--success-color);
-        }
-        .quality-badge {
-            background: var(--quality-badge-bg);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .image-container {
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            background: var(--pattern-bg);
-            background-size: 20px 20px;
-            box-shadow: 0 3px 10px var(--box-shadow-light);
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-color);
-        }
-        .image-container img {
-            max-width: 100%;
-            max-height: 400px;
-            display: block;
-            object-fit: contain;
-        }
-        .dimensions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            font-size: 14px;
-            color: var(--text-muted);
-            background: var(--dimension-bg);
-            padding: 10px;
-            border-radius: 6px;
-        }
-        .dimension-value {
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-        .controls {
-            background: var(--control-bg);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            position: relative;
-            border: 1px solid var(--border-color);
-        }
-        .controls:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: var(--accent-gradient);
-            border-radius: 12px 12px 0 0;
-        }
-        .scale-method {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .method-option {
-            background: var(--method-bg);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 3px 10px var(--box-shadow-light);
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-        .method-option:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px var(--box-shadow-light);
-            background-color: var(--method-hover);
-        }
-        .method-option.active {
-            border-color: var(--primary-color);
-            background-color: var(--method-active);
-        }
-        .method-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .method-icon {
-            font-size: 24px;
-            margin-right: 10px;
-            color: var(--primary-color);
-        }
-        .method-title {
-            font-weight: 600;
-            color: var(--text-secondary);
-            font-size: 16px;
-        }
-        .method-controls {
-            margin-top: 15px;
-        }
-        .preset-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .preset-btn {
-            padding: 10px;
-            background: var(--method-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-        .preset-btn:hover {
-            background: var(--method-hover);
-            border-color: var(--primary-color);
-        }
-        .preset-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        .quality-controls {
-            background: var(--method-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-        }
-        .slider-container {
-            margin: 20px 0;
-        }
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--dimension-bg);
-            outline: none;
-            -webkit-appearance: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
-            border: 2px solid var(--container-bg);
-            box-shadow: 0 0 0 1px var(--primary-color);
-        }
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
-        }
-        .btn {
-            padding: 16px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: white;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--box-shadow-light);
-        }
-        .btn:active {
+        to {
+            opacity: 1;
             transform: translateY(0);
         }
-        .btn-primary {
-            background: var(--btn-primary);
+    }
+    
+    .tool-footer {
+        text-align: center;
+        margin-top: 30px;
+        color: var(--text-muted);
+        font-size: 14px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .tool-library-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--library-bg);
+        padding: 8px 15px;
+        border-radius: 20px;
+        margin-top: 10px;
+        color: var(--text-primary);
+    }
+    
+    @media (max-width: 768px) {
+        .tool-container {
+            padding: 20px;
         }
-        .btn-success {
-            background: var(--btn-success);
+        
+        .tool-preview-container {
+            grid-template-columns: 1fr;
         }
-        .btn-secondary {
-            background: var(--btn-secondary);
+        
+        .tool-scale-method {
+            grid-template-columns: 1fr;
         }
-        .btn:disabled {
-            background: var(--btn-disabled);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-            opacity: 0.6;
+        
+        .tool-action-buttons {
+            grid-template-columns: 1fr;
         }
-        .status {
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        .status.show {
-            display: block;
-        }
-        .status.success {
-            background: var(--status-success-bg);
-            color: var(--status-success-text);
-            border-left: 4px solid var(--success-color);
-        }
-        .status.error {
-            background: var(--status-error-bg);
-            color: var(--status-error-text);
-            border-left: 4px solid var(--danger-color);
-        }
-        .status.info {
-            background: var(--status-info-bg);
-            color: var(--status-info-text);
-            border-left: 4px solid var(--primary-color);
-        }
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 30px;
-        }
-        .loading.show {
-            display: block;
-        }
-        .spinner {
-            border: 4px solid var(--dimension-bg);
-            border-radius: 50%;
-            border-top: 4px solid var(--primary-color);
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--dimension-bg);
-            border-radius: 3px;
-            margin: 20px auto;
-            overflow: hidden;
-            max-width: 300px;
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--accent-gradient);
-            width: 0%;
-            transition: width 0.3s;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: var(--text-muted);
-            font-size: 14px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-        .library-info {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--library-bg);
-            padding: 8px 15px;
-            border-radius: 20px;
-            margin-top: 10px;
-            color: var(--text-primary);
-        }
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            .preview-container {
-                grid-template-columns: 1fr;
-            }
-            .scale-method {
-                grid-template-columns: 1fr;
-            }
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <script src="/js/Image-scaling-tool.js"></script>
-    <div class="container">
-        <div class="algorithm-info">
-            <h3>高质量缩放算法说明</h3>
-            <p>本工具使用Pica图像处理库，采用Lanczos重采样算法，相比浏览器默认的双线性插值算法，在缩小图片时能更好地保持细节和清晰度，特别是在缩放50%等比例时效果显著。</p>
-        </div>
-        <div class="upload-area" id="upload-area">
-            <div class="upload-icon">📷</div>
-            <div class="upload-text">点击选择图片或拖拽图片到这里</div>
-            <div class="upload-subtext">支持 JPG, PNG, GIF, WebP, BMP 格式，最大 20MB</div>
-            <input type="file" id="file-input" accept="image/*">
-        </div>
-        <div class="preview-container">
-            <div class="preview-box">
-                <div class="preview-title original-title">
-                    <span>原始图片</span>
-                </div>
-                <div class="image-container">
-                    <img id="original-img" src="" alt="原始图片" loading='lazy'>
-                </div>
-                <div class="dimensions">
-                    <span>宽度: <span class="dimension-value" id="original-width">-</span> px</span>
-                    <span>高度: <span class="dimension-value" id="original-height">-</span> px</span>
-                </div>
+    }
+</style>
+
+<div class="tool-container">
+    <div class="tool-algorithm-info">
+        <h3>高质量缩放算法说明</h3>
+        <p>本工具使用Pica图像处理库，采用Lanczos重采样算法，相比浏览器默认的双线性插值算法，在缩小图片时能更好地保持细节和清晰度，特别是在缩放50%等比例时效果显著。所有图片处理均在浏览器中完成，保护您的隐私安全。</p>
+    </div>
+    <div class="tool-upload-area" id="upload-area">
+        <div class="tool-upload-icon">📷</div>
+        <div class="tool-upload-text">点击选择图片或拖拽图片到这里</div>
+        <div class="tool-upload-subtext">支持 JPG, PNG, GIF, WebP, BMP 格式，最大 20MB</div>
+        <input type="file" id="file-input" accept="image/*">
+    </div>
+    <div class="tool-preview-container">
+        <div class="tool-preview-box">
+            <div class="tool-preview-title tool-original-title">
+                <span>原始图片</span>
             </div>
-            <div class="preview-box">
-                <div class="preview-title scaled-title">
-                    <span>缩放后图片</span>
-                    <span class="quality-badge">高质量</span>
-                </div>
-                <div class="image-container">
-                    <img id="scaled-img" src="" alt="缩放后图片" loading='lazy'>
-                </div>
-                <div class="dimensions">
-                    <span>宽度: <span class="dimension-value" id="scaled-width">-</span> px</span>
-                    <span>高度: <span class="dimension-value" id="scaled-height">-</span> px</span>
-                </div>
+            <div class="tool-image-container">
+                <img id="original-img" src="" alt="原始图片" loading='lazy'>
+            </div>
+            <div class="tool-dimensions">
+                <span>宽度: <span class="tool-dimension-value" id="original-width">-</span> px</span>
+                <span>高度: <span class="tool-dimension-value" id="original-height">-</span> px</span>
             </div>
         </div>
-        <div class="controls">
-            <div class="scale-method">
-                <div class="method-option active" data-method="percent">
-                    <div class="method-header">
-                        <div class="method-icon">%</div>
-                        <div class="method-title">按百分比缩放</div>
-                    </div>
-                    <div class="method-controls">
-                        <input type="number" id="scale-percent" min="1" max="1000" value="50" step="1"
-                            placeholder="百分比">
-                        <div class="preset-grid">
-                            <button class="preset-btn active" data-value="25">25%</button>
-                            <button class="preset-btn" data-value="50">50%</button>
-                            <button class="preset-btn" data-value="75">75%</button>
-                            <button class="preset-btn" data-value="100">100%</button>
-                            <button class="preset-btn" data-value="150">150%</button>
-                            <button class="preset-btn" data-value="200">200%</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="method-option" data-method="width">
-                    <div class="method-header">
-                        <div class="method-icon">↔</div>
-                        <div class="method-title">按目标宽度</div>
-                    </div>
-                    <div class="method-controls">
-                        <input type="number" id="target-width" min="1" value="800" placeholder="目标宽度(px)">
-                        <div class="preset-grid">
-                            <button class="preset-btn" data-value="320">320px</button>
-                            <button class="preset-btn" data-value="640">640px</button>
-                            <button class="preset-btn active" data-value="800">800px</button>
-                            <button class="preset-btn" data-value="1024">1024px</button>
-                            <button class="preset-btn" data-value="1920">1920px</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="method-option" data-method="height">
-                    <div class="method-header">
-                        <div class="method-icon">↕</div>
-                        <div class="method-title">按目标高度</div>
-                    </div>
-                    <div class="method-controls">
-                        <input type="number" id="target-height" min="1" value="600" placeholder="目标高度(px)">
-                        <div class="preset-grid">
-                            <button class="preset-btn" data-value="240">240px</button>
-                            <button class="preset-btn" data-value="480">480px</button>
-                            <button class="preset-btn active" data-value="600">600px</button>
-                            <button class="preset-btn" data-value="768">768px</button>
-                            <button class="preset-btn" data-value="1080">1080px</button>
-                        </div>
-                    </div>
-                </div>
+        <div class="tool-preview-box">
+            <div class="tool-preview-title tool-scaled-title">
+                <span>缩放后图片</span>
+                <span class="tool-quality-badge">高质量</span>
             </div>
-            <div class="quality-controls">
-                <div class="slider-container">
-                    <div class="slider-label">
-                        <span>JPEG质量 (仅对JPG格式有效)</span>
-                        <span id="quality-value">85%</span>
-                    </div>
-                    <input type="range" id="quality-slider" min="1" max="100" value="85">
-                </div>
+            <div class="tool-image-container">
+                <img id="scaled-img" src="" alt="缩放后图片" loading='lazy'>
             </div>
-            <div class="action-buttons">
-                <button id="scale-btn" class="btn btn-primary" disabled>
-                    <span>⚡</span> 高质量缩放
-                </button>
-                <button id="download-btn" class="btn btn-success" disabled>
-                    <span>💾</span> 下载图片
-                </button>
-                <button id="compare-btn" class="btn btn-secondary">
-                    <span>🔍</span> 对比效果
-                </button>
-                <button id="reset-btn" class="btn btn-secondary">
-                    <span>🔄</span> 重置
-                </button>
-            </div>
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <div>使用高质量算法处理中，请稍候...</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-            </div>
-            <div class="status" id="status"></div>
-        </div>
-        <div class="footer">
-            <div>所有图片处理均在浏览器中完成，保护您的隐私安全</div>
-            <div class="library-info">
-                <span>🛠️ 使用</span>
-                <a href="https://github.com/nodeca/pica" target="_blank"
-                    style="color: #3498db; font-weight: 600;">Pica图像处理库</a>
-                <span>提供高质量缩放</span>
+            <div class="tool-dimensions">
+                <span>宽度: <span class="tool-dimension-value" id="scaled-width">-</span> px</span>
+                <span>高度: <span class="tool-dimension-value" id="scaled-height">-</span> px</span>
             </div>
         </div>
     </div>
-</body>
-</html>
+    <div class="tool-controls">
+        <div class="tool-scale-method">
+            <div class="tool-method-option active" data-method="percent">
+                <div class="tool-method-header">
+                    <div class="tool-method-icon">%</div>
+                    <div class="tool-method-title">按百分比缩放</div>
+                </div>
+                <div class="tool-method-controls">
+                    <input type="number" id="scale-percent" min="1" max="1000" value="50" step="1"
+                        placeholder="百分比">
+                    <div class="tool-preset-grid">
+                        <button class="tool-preset-btn active" data-value="25">25%</button>
+                        <button class="tool-preset-btn" data-value="50">50%</button>
+                        <button class="tool-preset-btn" data-value="75">75%</button>
+                        <button class="tool-preset-btn" data-value="100">100%</button>
+                        <button class="tool-preset-btn" data-value="150">150%</button>
+                        <button class="tool-preset-btn" data-value="200">200%</button>
+                    </div>
+                </div>
+            </div>
+            <div class="tool-method-option" data-method="width">
+                <div class="tool-method-header">
+                    <div class="tool-method-icon">↔</div>
+                    <div class="tool-method-title">按目标宽度</div>
+                </div>
+                <div class="tool-method-controls">
+                    <input type="number" id="target-width" min="1" value="800" placeholder="目标宽度(px)">
+                    <div class="tool-preset-grid">
+                        <button class="tool-preset-btn" data-value="320">320px</button>
+                        <button class="tool-preset-btn" data-value="640">640px</button>
+                        <button class="tool-preset-btn active" data-value="800">800px</button>
+                        <button class="tool-preset-btn" data-value="1024">1024px</button>
+                        <button class="tool-preset-btn" data-value="1920">1920px</button>
+                    </div>
+                </div>
+            </div>
+            <div class="tool-method-option" data-method="height">
+                <div class="tool-method-header">
+                    <div class="tool-method-icon">↕</div>
+                    <div class="tool-method-title">按目标高度</div>
+                </div>
+                <div class="tool-method-controls">
+                    <input type="number" id="target-height" min="1" value="600" placeholder="目标高度(px)">
+                    <div class="tool-preset-grid">
+                        <button class="tool-preset-btn" data-value="240">240px</button>
+                        <button class="tool-preset-btn" data-value="480">480px</button>
+                        <button class="tool-preset-btn active" data-value="600">600px</button>
+                        <button class="tool-preset-btn" data-value="768">768px</button>
+                        <button class="tool-preset-btn" data-value="1080">1080px</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tool-quality-controls">
+            <div class="tool-slider-container">
+                <div class="tool-slider-label">
+                    <span>JPEG质量 (仅对JPG格式有效)</span>
+                    <span id="quality-value">85%</span>
+                </div>
+                <div class="tool-slider-wrapper">
+                    <div class="tool-slider-track">
+                        <div class="tool-slider-fill" id="quality-slider-fill"></div>
+                    </div>
+                    <input type="range" id="quality-slider" min="1" max="100" value="85">
+                    <div class="tool-slider-value" id="quality-slider-tooltip">85%</div>
+                </div>
+            </div>
+        </div>
+        <div class="tool-action-buttons">
+            <button id="scale-btn" class="tool-btn tool-btn-primary" disabled>
+                <span>⚡</span> 高质量缩放
+            </button>
+            <button id="download-btn" class="tool-btn tool-btn-success" disabled>
+                <span>💾</span> 下载图片
+            </button>
+            <button id="compare-btn" class="tool-btn tool-btn-secondary">
+                <span>🔍</span> 对比效果
+            </button>
+            <button id="reset-btn" class="tool-btn tool-btn-secondary">
+                <span>🔄</span> 重置
+            </button>
+        </div>
+        <div class="tool-loading" id="loading">
+            <div class="tool-spinner"></div>
+            <div>使用高质量算法处理中，请稍候...</div>
+            <div class="tool-progress-bar">
+                <div class="tool-progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+        <div class="tool-status" id="status"></div>
+    </div>
+    <div class="tool-footer">
+        <div class="tool-library-info">
+            <span>🛠️ 使用</span>
+            <a href="https://github.com/nodeca/pica" target="_blank"
+                style="color: #3498db; font-weight: 600;">Pica图像处理库</a>
+            <span>提供高质量缩放</span>
+        </div>
+    </div>
+</div>
 </div></div></main><footer id="footer" style="background: black;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="/js/custom-global.js"></script><div class="aplayer no-destroy" data-id="17656359701" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-order="random"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
   const destroyAplayer = () => {
     if (window.aplayers) {
