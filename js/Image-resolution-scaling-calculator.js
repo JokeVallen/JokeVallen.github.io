@@ -169,7 +169,7 @@
 
         draggedImages.forEach((image, index) => {
             const fileItem = document.createElement('div');
-            fileItem.className = 'file-item';
+            fileItem.className = 'tool-file-item';
             fileItem.innerHTML = `
                     <div class="file-icon">🖼️</div>
                     <div class="file-name" title="${image.name}">${image.name}</div>
