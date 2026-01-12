@@ -2,7 +2,7 @@
     // DOM元素
     const originalWidthInput = document.getElementById('original-width');
     const originalHeightInput = document.getElementById('original-height');
-    const scaleTypeRadios = document.querySelectorAll('input[name="scale-type"]');
+    const scaleTypeRadios = document.querySelectorAll('.tool-container input[name="scale-type"]');
     const percentControls = document.getElementById('percent-controls');
     const dimensionControls = document.getElementById('dimension-controls');
     const scalePercentInput = document.getElementById('scale-percent-value');
@@ -26,7 +26,7 @@
     let draggedImages = [];
 
     // 示例尺寸点击事件
-    const exampleListItems = document.querySelectorAll('.example-list li');
+    const exampleListItems = document.querySelectorAll('.tool-example-list li');
     exampleListItems.forEach(item => {
         item.addEventListener('click', function () {
             const text = this.querySelector('span').textContent;
@@ -201,7 +201,7 @@
     // 计算缩放后的尺寸
     function calculateScaledDimensions(originalWidth, originalHeight) {
         let newWidth, newHeight;
-        const scaleType = document.querySelector('input[name="scale-type"]:checked').value;
+        const scaleType = document.querySelector('.tool-container input[name="scale-type"]:checked').value;
 
         if (scaleType === 'percent') {
             // 按百分比缩放
@@ -284,10 +284,10 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                     <td>${image.name}</td>
-                    <td class="dimension-cell">
+                    <td class="tool-dimension-cell">
                         <span class="original">${image.width} × ${image.height}</span>
                     </td>
-                    <td class="dimension-cell">
+                    <td class="tool-dimension-cell">
                         <span class="original">${image.width} × ${image.height}</span>
                         <span class="arrow">→</span>
                         <span class="result">${newWidth} × ${newHeight}</span>
