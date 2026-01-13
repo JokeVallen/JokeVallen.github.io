@@ -511,7 +511,7 @@
             let targetWidthValue, targetHeightValue;
 
             if (method === 'percent') {
-                const percent = parseFloat(scalePercent.value) || 50;
+                const percent = parseFloat(scalePercent.value) || 25;
                 const scaleFactor = percent / 100;
                 targetWidthValue = Math.round(originalImageWidth * scaleFactor);
                 targetHeightValue = Math.round(originalImageHeight * scaleFactor);
@@ -610,7 +610,7 @@
         let targetWidthValue, targetHeightValue;
 
         if (method === 'percent') {
-            const percent = parseFloat(scalePercent.value) || 50;
+            const percent = parseFloat(scalePercent.value) || 25;
             const scaleFactor = percent / 100;
             targetWidthValue = Math.round(originalImageWidth * scaleFactor);
             targetHeightValue = Math.round(originalImageHeight * scaleFactor);
