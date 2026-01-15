@@ -20,6 +20,43 @@
 
 /* ------------------------ end ---------------------------------
 
+/* ------------------------ 其它通用样式 ------------------------- */
+
+:root {
+    --custom-formula-bg: #f8f9fa;
+    --custom-formula-border: #ffffff;
+    --custom-formula-text: #333;
+}
+
+[data-theme="dark"] {
+    --custom-formula-bg: #3a3a3a;
+    --custom-formula-border: #444;
+    --custom-formula-text: #d0d0d0;
+}
+
+/* 表格或图片的副标题样式 */
+.custom-subtitle {
+    text-align: center;
+    color: rgba(207, 204, 204, 0.8);
+}
+
+/* 公式 */
+.custom-formula {
+    text-align: left;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--custom-formula-text);
+    padding: 10px 12px;
+    white-space: normal;
+    word-break: break-all;
+    background-color: var(--custom-formula-bg);
+    border-left: 3px solid var(--custom-formula-border);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ------------------------ end ---------------------------------
+
 /* ------------------------ 网格 -------------------------------- */
 
 :root {
@@ -185,196 +222,253 @@
 
 /* ------------------------ 表格 -------------------------------- */
 
+/* =========================================================
+   主题变量（日间模式）
+   ========================================================= */
 :root {
-    /* 日间模式变量 */
+    /* 基础背景 */
     --custom-table-bg-color: white;
     --custom-table-container-bg: white;
+
+    /* 文本颜色 */
     --custom-table-text-primary: #333;
     --custom-table-text-secondary: #666;
+
+    /* 边框颜色 */
     --custom-table-border-color: #ddd;
     --custom-table-border-light: #e1e4e8;
     --custom-table-border-dark: #ccc;
+
+    /* 表头 / 行背景 */
     --custom-table-header-bg: #f8f9fa;
-    --custom-table-category-bg: #f0f7ff;
-    --custom-table-subheader-bg: #f9f9f9;
-    --custom-table-formula-bg: #f8f9fa;
-    --custom-table-formula-border: #ffffff;
-    --custom-table-formula-text: #333;
-    --custom-table-hover-bg: #f6f8fa;
     --custom-table-even-row-bg: #fafbfc;
-    --custom-table-footer-text: #666;
-    --custom-table-footer-border: #eee;
+
+    /* 阴影 */
     --custom-table-shadow: rgba(0, 0, 0, 0.05);
-    --custom-table-cross-color: #000000;
+
+    /* caption */
+    --custom-table-caption-text: #555;
+
+    /* tfoot */
+    --custom-table-footer-bg: #f1f3f5;
+    --custom-table-footer-text: #333;
+    --custom-table-footer-border: #ccc;
+
+    /* 行状态 */
+    --custom-table-row-selected-bg: #e6f2ff;
+    --custom-table-row-danger-bg: #fdecea;
+    --custom-table-row-warning-bg: #fff4e5;
+    --custom-table-row-success-bg: #edf7ed;
 }
 
-/* 夜间模式变量 */
+/* =========================================================
+   主题变量（夜间模式）
+   ========================================================= */
 [data-theme="dark"] {
     --custom-table-bg-color: #1e1e1e;
     --custom-table-container-bg: #2d2d2d;
+
     --custom-table-text-primary: #e0e0e0;
     --custom-table-text-secondary: #a0a0a0;
+
     --custom-table-border-color: #444;
     --custom-table-border-light: #3a3a3a;
     --custom-table-border-dark: #555;
+
     --custom-table-header-bg: #3a3a3a;
-    --custom-table-category-bg: #2a3b4d;
-    --custom-table-subheader-bg: #363636;
-    --custom-table-formula-bg: #3a3a3a;
-    --custom-table-formula-border: #444;
-    --custom-table-formula-text: #d0d0d0;
-    --custom-table-hover-bg: #3d3d3d;
     --custom-table-even-row-bg: #343434;
-    --custom-table-footer-text: #a0a0a0;
-    --custom-table-footer-border: #444;
+
     --custom-table-shadow: rgba(0, 0, 0, 0.2);
-    --custom-table-cross-color: #ffffff;
+
+    --custom-table-caption-text: #aaa;
+
+    --custom-table-footer-bg: #2a2a2a;
+    --custom-table-footer-text: #e0e0e0;
+    --custom-table-footer-border: #555;
+
+    --custom-table-row-selected-bg: #1f3a5a;
+    --custom-table-row-danger-bg: #4a1f1f;
+    --custom-table-row-warning-bg: #4a3b1f;
+    --custom-table-row-success-bg: #1f3a2a;
 }
 
+/* =========================================================
+   表格容器
+   使用：<div class="custom-table-container">
+   ========================================================= */
 .custom-table-container {
     max-width: 1200px;
     margin: 2rem auto;
+    padding: 20px;
+
     background-color: var(--custom-table-container-bg);
+    color: var(--custom-table-text-primary);
+
     border-radius: 3px;
     box-shadow: 0 2px 5px var(--custom-table-shadow);
-    padding: 20px;
-    color: var(--custom-table-text-primary);
+
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.custom-table-title {
-    text-align: center;
-    color: var(--custom-table-text-primary);
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--custom-table-border-color);
-    font-weight: 600;
-    font-size: 1.5rem;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-.custom-table-description {
-    text-align: center;
-    color: var(--custom-table-text-secondary);
-    margin-bottom: 25px;
-    font-size: 14px;
-    transition: color 0.3s ease;
-}
-
+/* =========================================================
+   表格基础样式
+   ========================================================= */
 .custom-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 25px;
+
     font-size: 14px;
     border: 1px solid var(--custom-table-border-light);
+
     transition: border-color 0.3s ease;
 }
 
-.custom-table th {
+/* ---------- caption ---------- */
+/* 使用：<caption>表格标题</caption> */
+.custom-table caption {
+    caption-side: top;
+    padding: 8px 0 12px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    color: var(--custom-table-caption-text);
+}
+
+/* ---------- 表头 thead ---------- */
+.custom-table thead th {
     background-color: var(--custom-table-header-bg);
-    color: var(--custom-table-text-primary);
-    font-weight: 600;
-    text-align: center;
+    border-bottom: 2px solid var(--custom-table-border-dark);
+}
+
+/* ---------- 单元格通用 ---------- */
+.custom-table th {
     padding: 12px 8px;
-    border: 1px solid var(--custom-table-border-dark);
+    text-align: center;
     white-space: nowrap;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+    font-weight: 600;
+    color: var(--custom-table-text-primary);
+
+    border: 1px solid var(--custom-table-border-dark);
+    background-color: var(--custom-table-header-bg);
 }
 
 .custom-table td {
     padding: 10px 8px;
-    border: 1px solid var(--custom-table-border-color);
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
+
     color: var(--custom-table-text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    border: 1px solid var(--custom-table-border-color);
 }
 
-/* 特殊单元格样式 */
-.custom-table-category {
-    font-weight: 600;
-    background-color: var(--custom-table-category-bg);
-    color: var(--custom-table-text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.custom-table-subheader {
-    font-weight: 500;
-    background-color: var(--custom-table-subheader-bg);
-    color: var(--custom-table-text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.custom-table-formula {
-    text-align: left;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--custom-table-formula-text);
-    padding: 10px 12px;
-    white-space: normal;
-    word-break: break-all;
-    background-color: var(--custom-table-formula-bg);
-    border-left: 3px solid var(--custom-table-formula-border);
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-.custom-table-cross {
-    font-weight: bold;
-    font-size: 16px;
-    color: var(--custom-table-cross-color);
-    transition: color 0.3s ease;
-}
-
-.custom-table-footer {
-    font-size: 13px;
-    color: var(--custom-table-footer-text);
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid var(--custom-table-footer-border);
-    font-style: italic;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-/* 行交替颜色（可选） */
+/* ---------- tbody 行交替 ---------- */
 .custom-table tbody tr:nth-child(even) {
     background-color: var(--custom-table-even-row-bg);
-    transition: background-color 0.3s ease;
 }
 
-.custom-table tbody tr:hover {
-    background-color: var(--custom-table-hover-bg);
-    transition: background-color 0.3s ease;
+/* ---------- tfoot ---------- */
+/* 使用：汇总 / 合计 / 备注 */
+.custom-table tfoot {
+    background-color: var(--custom-table-footer-bg);
 }
 
-/* 响应式设计 */
+.custom-table tfoot th,
+.custom-table tfoot td {
+    padding: 10px 8px;
+    font-weight: 600;
+    text-align: center;
+
+    color: var(--custom-table-footer-text);
+    border-top: 2px solid var(--custom-table-footer-border);
+}
+
+/* 使用：<td class="text-right"> */
+.custom-table .text-left {
+    text-align: left;
+}
+
+.custom-table .text-center {
+    text-align: center;
+}
+
+.custom-table .text-right {
+    text-align: right;
+}
+
+/* 使用：<tr class="empty-row"> */
+.custom-table .empty-row td {
+    padding: 20px;
+    text-align: center;
+    font-style: italic;
+    color: var(--custom-table-text-secondary);
+}
+
+/* 使用：<table class="custom-table is-compact"> */
+.custom-table.is-compact th,
+.custom-table.is-compact td {
+    padding: 6px 6px;
+    font-size: 13px;
+}
+
+/* 使用：
+<colgroup>
+  <col class="is-narrow">
+  <col>
+  <col class="is-wide">
+</colgroup>
+*/
+.custom-table col {
+    width: auto;
+}
+
+.custom-table col.is-narrow {
+    width: 80px;
+}
+
+.custom-table col.is-wide {
+    width: 200px;
+}
+
+/* =========================================================
+   行状态（不要写死在 HTML 模板里）
+   ========================================================= */
+.custom-table tr.is-selected {
+    background-color: var(--custom-table-row-selected-bg);
+}
+
+.custom-table tr.is-danger {
+    background-color: var(--custom-table-row-danger-bg);
+}
+
+.custom-table tr.is-warning {
+    background-color: var(--custom-table-row-warning-bg);
+}
+
+.custom-table tr.is-success {
+    background-color: var(--custom-table-row-success-bg);
+}
+
+/* =========================================================
+   响应式：小屏横向滚动
+   ========================================================= */
 @media (max-width: 768px) {
     .custom-table-container {
         padding: 15px;
-        overflow-x: auto;
         margin: 1rem auto;
+        overflow-x: auto;
     }
 
     .custom-table {
-        font-size: 13px;
         min-width: 600px;
-        /* 确保在小屏幕上可以水平滚动 */
+        font-size: 13px;
     }
 
     .custom-table th,
     .custom-table td {
         padding: 8px 5px;
-    }
-
-    .custom-table-formula {
-        font-size: 12px;
-        padding: 8px 10px;
-    }
-
-    .custom-table-title {
-        font-size: 1.3rem;
     }
 }
 
