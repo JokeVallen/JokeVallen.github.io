@@ -1,4 +1,4 @@
-/* ----------------------- 导航栏 -------------------------------
+/* #region 导航栏 */
 
 /* 确保.site-icon是块级元素，并设置基础尺寸 */
 .site-icon {
@@ -18,9 +18,9 @@
     content: url('/images/logo-dark.png') !important;
 }
 
-/* ------------------------ end ---------------------------------
+/* #endregion */
 
-/* ------------------------ 其它通用样式 ------------------------- */
+/* #region 其它通用样式 */
 
 :root {
     --custom-formula-bg: #f8f9fa;
@@ -40,6 +40,13 @@
     color: rgba(207, 204, 204, 0.8);
 }
 
+/* 声明 */
+.custom-statement {
+    text-align: center;
+    color: rgba(207, 204, 204, 0.8);
+    font-style: italic;
+}
+
 /* 公式 */
 .custom-formula {
     text-align: left;
@@ -55,9 +62,9 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* ------------------------ end ---------------------------------
+/* #endregion */
 
-/* ------------------------ 网格 -------------------------------- */
+/* #region 网格 */
 
 :root {
     /* 日间模式变量 */
@@ -218,9 +225,9 @@
     transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* ------------------------ end ---------------------------------
+/* #endregion */
 
-/* ------------------------ 表格 -------------------------------- */
+/* #region 表格 */
 
 /* =========================================================
    主题变量（日间模式）
@@ -331,7 +338,7 @@
     padding: 8px 0 12px;
     font-size: 14px;
     font-weight: 500;
-    text-align: left;
+    text-align: center;
     color: var(--custom-table-caption-text);
 }
 
@@ -472,9 +479,9 @@
     }
 }
 
-/* ------------------------ end ---------------------------------
+/* #endregion */
 
-/* ------------------------ Bilibili ----------------------------
+/* #region Bilibili */
 
 /* 增强选择器优先级，确保规则生效 */
 .bilibili {
@@ -516,4 +523,210 @@
     box-shadow: 0 22px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* ------------------------ end ---------------------------------
+/* #endregion */
+
+/* #region 博文图片*/
+
+/* =========================================================
+   博文图片样式（Post Image Styles）
+   设计目标：
+   1. 博文中图片外观统一（边框 / 留白 / 夜间模式）
+   2. 图片尺寸不强制，允许作者手动调控
+   3. 不破坏图片原始比例
+   4. 可选交互（点击 / 对齐 / 图注）
+   ========================================================= */
+
+
+/* =========================================================
+   一、主题变量（日间模式）
+   只在这里调整颜色、层级、观感
+   ========================================================= */
+:root {
+    /* 图片容器背景（形成画框感） */
+    --post-image-bg: #f7f8fa;
+
+    /* 图片边框 */
+    --post-image-border-color: #dcdfe6;
+
+    /* 图片阴影（轻量，正文不喧宾夺主） */
+    --post-image-shadow: rgba(0, 0, 0, 0.06);
+
+    /* 图注文字颜色 */
+    --post-image-caption-text: #666;
+
+    /* Hover / 点击遮罩 */
+    --post-image-overlay: rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   二、主题变量（夜间模式）
+   使用方式：<html data-theme="dark">
+   ========================================================= */
+[data-theme="dark"] {
+    --post-image-bg: #2b2b2b;
+    --post-image-border-color: #444;
+    --post-image-shadow: rgba(0, 0, 0, 0.35);
+    --post-image-caption-text: #aaa;
+    --post-image-overlay: rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   三、博文图片基础容器（必须使用）
+   使用：
+   <div class="post-image">
+     <img src="..." alt="">
+   </div>
+   ========================================================= */
+.post-image {
+    position: relative;
+    display: block;
+
+    /* 博文中的自然留白 */
+    margin: 1.5rem auto;
+    padding: 6px;
+
+    background-color: var(--post-image-bg);
+    border: 1px solid var(--post-image-border-color);
+    border-radius: 4px;
+
+    box-shadow: 0 1px 4px var(--post-image-shadow);
+
+    /* 尺寸接口（作者可控） */
+    --post-img-width: auto;
+    --post-img-max-width: 100%;
+
+    width: var(--post-img-width);
+    max-width: var(--post-img-max-width);
+
+    transition:
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   四、博文图片本体（不控制尺寸，只保证比例）
+   图片默认尺寸策略说明：
+   - 不显式指定尺寸时，使用图片自身固有尺寸
+   - 通过 max-width: 100% 限制不超过正文宽度
+   - 小图不放大，大图自动等比缩小
+   ========================================================= */
+.post-image img {
+    display: block;
+
+    max-width: 100%;
+    /* 防止超出正文 */
+    height: auto;
+    /* 永远保持原始比例 */
+
+    margin: 0 auto;
+}
+
+.post-image a {
+    display: inline-block;
+    cursor: zoom-in;
+}
+
+
+
+/* =========================================================
+   五、尺寸控制（作者在 HTML 中通过 CSS 变量调节）
+   推荐用法示例：
+   <div class="post-image" style="--post-img-max-width: 640px;">
+   ========================================================= */
+
+/* 不需要额外样式，变量已在 .post-image 中定义 */
+
+
+/* =========================================================
+   六、对齐方式（正文排版常用）
+   ========================================================= */
+.post-image.is-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-image.is-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.post-image.is-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+
+/* =========================================================
+   七、可点击图片（例如：点击查看大图）
+   使用：class="post-image is-clickable"
+   ========================================================= */
+.post-image.is-clickable {
+    cursor: pointer;
+}
+
+/* Hover 提示 */
+.post-image.is-clickable:hover {
+    box-shadow: 0 4px 12px var(--post-image-shadow);
+}
+
+/* Hover 遮罩层 */
+.post-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    pointer-events: none;
+}
+
+.post-image.is-clickable:hover::after {
+    background-color: var(--post-image-overlay);
+}
+
+
+/* =========================================================
+   八、禁用 / 弱化展示（非主要内容）
+   使用：class="post-image is-muted"
+   ========================================================= */
+.post-image.is-muted {
+    opacity: 0.6;
+}
+
+
+/* =========================================================
+   九、图注（Caption）
+   使用：
+   <div class="post-image">
+     <img ...>
+     <div class="post-image-caption">图注文字</div>
+   </div>
+   ========================================================= */
+.post-image-caption {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--post-image-caption-text);
+}
+
+
+/* =========================================================
+   十、响应式微调（小屏）
+   ========================================================= */
+@media (max-width: 768px) {
+    .post-image {
+        padding: 4px;
+        margin: 1.2rem auto;
+    }
+
+    .post-image-caption {
+        font-size: 12px;
+    }
+}
+
+/* #endregion */
