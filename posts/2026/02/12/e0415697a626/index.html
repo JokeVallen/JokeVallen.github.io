@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity3D编辑器协程工具 | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本工具由博主与 AI 共同开发，该版本为轻量版本，未附带过多功能，只覆盖了基础的功能。完全版本将另行发布，敬请期待。  前言在 Unity3D 编辑器中，协程是一种非常有用的工具，可以帮助我们在编辑器环境下执行异步任务。然而，Unity 的编辑器协程系统与运行时的协程系统有所不同，使用起来可能会有些麻烦。为了简化这一过程，我们开发了一个专门用于 Unity3D 编辑器的协程工具。 功能特性核心功">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity3D编辑器协程工具">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/02/12/e0415697a626/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="本工具由博主与 AI 共同开发，该版本为轻量版本，未附带过多功能，只覆盖了基础的功能。完全版本将另行发布，敬请期待。  前言在 Unity3D 编辑器中，协程是一种非常有用的工具，可以帮助我们在编辑器环境下执行异步任务。然而，Unity 的编辑器协程系统与运行时的协程系统有所不同，使用起来可能会有些麻烦。为了简化这一过程，我们开发了一个专门用于 Unity3D 编辑器的协程工具。 功能特性核心功">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-02-12T15:02:11.000Z">
+<meta property="article:modified_time" content="2026-02-12T15:30:33.875Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="游戏开发">
+<meta property="article:tag" content="编辑器工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Unity3D编辑器协程工具",
+  "url": "https://jokevallen.github.io/posts/2026/02/12/e0415697a626/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-02-12T15:02:11.000Z",
+  "dateModified": "2026-02-12T15:30:33.875Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://jokevallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/02/12/e0415697a626/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity3D编辑器协程工具',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a><a class="nav-page-title" href="/"><span class="site-name">Unity3D编辑器协程工具</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Unity3D编辑器协程工具</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-02-12T15:30:33.875Z" title="更新于 2026-02-12 23:30:33">2026-02-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity%E5%BC%80%E5%8F%91/">Unity开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>本工具由博主与 AI 共同开发，该版本为轻量版本，未附带过多功能，只覆盖了基础的功能。完全版本将另行发布，敬请期待。</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 Unity3D 编辑器中，协程是一种非常有用的工具，可以帮助我们在编辑器环境下执行异步任务。然而，Unity 的编辑器协程系统与运行时的协程系统有所不同，使用起来可能会有些麻烦。为了简化这一过程，我们开发了一个专门用于 Unity3D 编辑器的协程工具。</p>
+<h2 id="功能特性"><a href="#功能特性" class="headerlink" title="功能特性"></a>功能特性</h2><h3 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h3><ul>
+<li>✅ <strong>编辑器协程执行</strong> - 在 EditorApplication.update 中运行协程，完全支持 yield return</li>
+<li>✅ <strong>泛型返回值</strong> - 通过 <code>EditorCoroutine&lt;T&gt;</code> 获取协程执行结果</li>
+<li>✅ <strong>取消令牌支持</strong> - 使用 <code>EditorCoroutineCancelToken</code> 优雅地中止协程</li>
+<li>✅ <strong>嵌套协程</strong> - 自动处理嵌套迭代器，支持复杂的协程链</li>
+<li>✅ <strong>异常捕获</strong> - 内置异常处理机制，不会导致编辑器崩溃</li>
+<li>✅ <strong>完整的等待方法</strong> - WaitFrame、WaitSeconds、WaitUntil、Delay 等</li>
+<li>✅ <strong>生命周期管理</strong> - Start&#x2F;Stop&#x2F;Dispose 完整的资源管理</li>
+</ul>
+<h3 id="无依赖"><a href="#无依赖" class="headerlink" title="无依赖"></a>无依赖</h3><ul>
+<li>不依赖任何第三方库</li>
+<li>仅使用 Unity 内置的 Editor 和 Coroutine API</li>
+<li>最小化代码体积</li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="方式一：直接复制源文件"><a href="#方式一：直接复制源文件" class="headerlink" title="方式一：直接复制源文件"></a>方式一：直接复制源文件</h3><p>将 <code>Core</code> 目录下的所有 <code>*.cs</code> 文件复制到你的项目中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Assets/<br>└── Plugins/<br>    └── EditorCoroutines/<br>        ├── EditorCoroutine.cs<br>        ├── EditorCoroutine.cs<br>        ├── EditorCoroutineCancelToken.cs<br>        ├── EditorCoroutineExtensions.Wait.cs<br>        └── EditorCoroutineHelper.cs<br></code></pre></td></tr></table></figure>
+
+<h3 id="方式二：导入dll文件"><a href="#方式二：导入dll文件" class="headerlink" title="方式二：导入dll文件"></a>方式二：导入dll文件</h3><p>在 <code>Assets/Plugins/Editor/</code> 目录下放置编译好的 <code>EditorCoroutines.Lit.dll</code> 和 <code>EditorCoroutines.Lit.xml</code> 文件。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>请参考资源下载中的 <code>example.unitypackage</code>，其中包含了多个使用示例，展示了如何在编辑器中使用协程工具来执行异步任务。</p>
+<ul>
+<li>RenameWindow：选定目录 + 选定资源类型 + 批量随机命名。</li>
+<li>DownloadWindow：网络下载 + 本地存储 + 实时加载。</li>
+</ul>
+<h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><table>
+<thead>
+<tr>
+<th>版本号</th>
+<th>改进说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>……</td>
+<td>……</td>
+</tr>
+</tbody></table>
+<h2 id="资源下载"><a href="#资源下载" class="headerlink" title="资源下载"></a>资源下载</h2><p><a target="_blank" rel="noopener" href="https://github.com/JokeVallen/UnityTools/tree/main/EditorCoroutines.Lit">Github</a><br><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/5-tylJq0b_5EAWGb72NbOvA">百度网盘</a></p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><ul class="series-items"><li><a href="/posts/2026/01/06/57ff96dfb397/" title="Unity3D光照过渡工具">Unity3D光照过渡工具</a></li><li><a href="/posts/2026/01/02/5b55e1938680/" title="Unity3D批量修改名称工具">Unity3D批量修改名称工具</a></li><li><a href="/posts/2026/01/02/253b27144c5e/" title="Unity3D瓦片地图辅助定位工具">Unity3D瓦片地图辅助定位工具</a></li><li><a href="/posts/2026/02/12/e0415697a626/" title="Unity3D编辑器协程工具">Unity3D编辑器协程工具</a></li><li><a href="/posts/2026/02/01/37b2ffc26a88/" title="Unity3D编辑器图标浏览器">Unity3D编辑器图标浏览器</a></li><li><a href="/posts/2026/01/03/5187e46df20b/" title="Unity3D资源包管理器">Unity3D资源包管理器</a></li><li><a href="/posts/2026/01/06/08de461308a6/" title="Unity3D音频管理器">Unity3D音频管理器</a></li></ul></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/02/12/e0415697a626/">https://jokevallen.github.io/posts/2026/02/12/e0415697a626/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jokevallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8%E5%B7%A5%E5%85%B7/">编辑器工具</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/2026/02/09/fbd783021d0f/" title="Unity常识篇（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Unity常识篇（一）</div></div><div class="info-2"><div class="info-item-1">Awake 与 OnDestroy 的关系当组件被添加到活动状态的游戏对象时，Awake 会被调用，当组件被销毁时，OnDestroy 会被调用。如果 Awake 未被调用，那么 OnDestroy 也不会被调用，例如将组件添加到禁用状态的游戏对象然后再销毁组件时，二者都不会被调用。 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2026/02/09/fbd783021d0f/" title="Unity常识篇（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-02-09</div><div class="info-item-2">Unity常识篇（一）</div></div><div class="info-2"><div class="info-item-1">Awake 与 OnDestroy 的关系当组件被添加到活动状态的游戏对象时，Awake 会被调用，当组件被销毁时，OnDestroy 会被调用。如果 Awake 未被调用，那么 OnDestroy 也不会被调用，例如将组件添加到禁用状态的游戏对象然后再销毁组件时，二者都不会被调用。 </div></div></div></a><a class="pagination-related" href="/posts/2026/02/01/37b2ffc26a88/" title="Unity3D编辑器图标浏览器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-02-12</div><div class="info-item-2">Unity3D编辑器图标浏览器</div></div><div class="info-2"><div class="info-item-1"> 本工具由博主与 ChatGPT 共同开发  前言这款工具用于查询 Unity编辑器内置图标 以及放在 Assets/Editor Default Resources 目录下的图标资源，在工具界面可以浏览图标，鼠标悬浮时会显示图标名称，点击图标可快速将图标名称复制到系统剪切板。该工具可以结合 EditorGUIUtility.IconContent() 、EditorGUIUtility.Load() 、 EditorGUIUtility.LoadRequired() 等官方API方法使用。因为采用了反射技术访问内部字段，所以工具会根据当前编辑器界面覆盖到的图标而动态增加，不过需要手动点击刷新按钮显示新的图标。 界面截图        代码12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091...</div></div></div></a><a class="pagination-related" href="/posts/2026/02/08/fb33a1610ef5/" title="UGUI的布局系统（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-02-08</div><div class="info-item-2">UGUI的布局系统（二）</div></div><div class="info-2"><div class="info-item-1">前言本文内容涵盖 UGUI 布局系统的组成、工作原理和扩展接口，根据官方文档和实际案例进行讲解。本系列后续文章会针对具体扩展进行实践，一步步带领开发者开发自定义的布局组件，以在此过程中加深对 UGUI 布局系统的理解。 布局系统的组成布局系统由布局元素和布局控制器组成。 布局元素布局元素须挂载 RectTransform 组件，因为该组件是布局系统的核心单元，它也是布局元素记录自身位置、大小、锚点模式、轴心、旋转和缩放等信息的集合体。布局元素不能也不应去主动控制自身位置、大小等影响整体布局的参数的修改，而只是提供要求的信息，如以下信息：    属性 说明    Ignore Layout 布局系统是否忽略该布局元素   Minimum width 宽度最小值   Minimum height 高度最小值   Preferred width 宽度优选值   Preferred height 高度优选值   Flexible width 宽度灵活值，[0,1]   Flexible height 高度灵活值，[0,1]   Layout Priority 布局属性优先级，当存在一个以...</div></div></div></a><a class="pagination-related" href="/posts/2026/02/08/c8a975cea354/" title="UGUI的布局系统（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-02-08</div><div class="info-item-2">UGUI的布局系统（一）</div></div><div class="info-2"><div class="info-item-1">前言本系列内容参考自官方文档，并结合具体实践进行讲解，帮助开发者更好地理解 UGUI 的布局系统。学习 UGUI 的布局系统，我们先从官方已有的布局组件开始学习，本文将逐一讲解它们的代码和布局效果。在项目 UI 开发的需求中，布局是常见的需求，当你注意到它们的时候意味着你的项目需要适配不同分辨率的设备。 事实上 UGUI 官方提供的布局组件能适应大部分布局需求，因为布局组件可以组合使用实现预期效果，例如父元素需要根据子元素的大小变化而自适应或者子元素在父元素有限的范围中灵活分布等等。 本文先从 RectTransform 、Anchors 、 Pivot 三个概念开始讲解。 RectTransform这是 UGUI 所有 UI 元素都离不开的核心组件，它承担着 UI 元素的位置、旋转、大小的控制，所有布局组件的计算都离不开它。要学习它离不开几个两个重要概念：Anchors 和 Pivot。 Anchors通常被称为锚点，顾名思义，它作为 UI 元素位置和大小控制的参考点，当我们需要 UI 元素始终保持在父元素的相对位置时，就可以将锚点锚定在父元素矩形的任意位置，锚点值是相对父元素...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/04/7ed673d41718/" title="【Attribute】Inspector视图可视不可编辑字段特性"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-15</div><div class="info-item-2">【Attribute】Inspector视图可视不可编辑字段特性</div></div><div class="info-2"><div class="info-item-1">前言在Unity开发中，有时候我们存在这种需求，需要在Inspector视图中可以查看字段信息但是无法对字段进行赋值，那么我们也可以像Unity内置的[SerializeField]、[Tooltip]等特性那样自定义一个特性，用于满足这个需求。 代码EditDisabledAttribute.cs123456using System;using UnityEngine;// 禁用可序列化字段在Inspector面板的编辑[AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]public class EditDisabledAttribute : PropertyAttribute &#123; &#125;  EditDisabledDrawer.cs1234567891011121314151617181920212223242526272829303132333435363738394041424344#if UNITY_EDITORusing System;usi...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/03/eff7987880b4/" title="【Demo】场景加载"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-07</div><div class="info-item-2">【Demo】场景加载</div></div><div class="info-2"><div class="info-item-1">前言场景加载是游戏开发中必不可少的环节，本文初步探索了场景加载以及加载过程中的资源处理。 演示             资源下载百度网盘（提取码：1314） </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E7%89%B9%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">功能特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="toc-number">2.1.</span> <span class="toc-text">核心功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E4%BE%9D%E8%B5%96"><span class="toc-number">2.2.</span> <span class="toc-text">无依赖</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E7%9B%B4%E6%8E%A5%E5%A4%8D%E5%88%B6%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">方式一：直接复制源文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E5%AF%BC%E5%85%A5dll%E6%96%87%E4%BB%B6"><span class="toc-number">3.2.</span> <span class="toc-text">方式二：导入dll文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.</span> <span class="toc-text">示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E"><span class="toc-number">5.</span> <span class="toc-text">版本说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E4%B8%8B%E8%BD%BD"><span class="toc-number">6.</span> <span class="toc-text">资源下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">7.</span> <span class="toc-text">系列文章</span></a></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || 'b9e2911b574e11bf75c99fe5b6650446'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom-global.js"></script><div class="aplayer no-destroy" data-id="17656359701" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-order="random" data-lrctype="0"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
