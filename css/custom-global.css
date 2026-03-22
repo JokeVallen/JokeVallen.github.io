@@ -630,11 +630,6 @@
     cursor: zoom-in;
 }
 
-/* gif 图片无限循环播放 */
-.post-image img[src$=".gif"] {
-    animation-iteration-count: infinite;
-}
-
 /* =========================================================
    五、尺寸控制（作者在 HTML 中通过 CSS 变量调节）
    推荐用法示例：
