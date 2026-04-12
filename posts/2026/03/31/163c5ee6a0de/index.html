@@ -1,0 +1,465 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>AssetBundle（三） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文将针对 AssetBundle 的资源规划、分组原则和策略进行阐述。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AssetBundle（三）">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/03/31/163c5ee6a0de/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="本文将针对 AssetBundle 的资源规划、分组原则和策略进行阐述。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-03-31T07:26:44.000Z">
+<meta property="article:modified_time" content="2026-04-12T09:43:29.326Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="API">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="资源管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "AssetBundle（三）",
+  "url": "https://jokevallen.github.io/posts/2026/03/31/163c5ee6a0de/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-03-31T07:26:44.000Z",
+  "dateModified": "2026-04-12T09:43:29.326Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://jokevallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/03/31/163c5ee6a0de/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'AssetBundle（三）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">131</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a><a class="nav-page-title" href="/"><span class="site-name">AssetBundle（三）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">AssetBundle（三）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-04-12T09:43:29.326Z" title="更新于 2026-04-12 17:43:29">2026-04-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity%E5%BC%80%E5%8F%91/">Unity开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>阅读本系列文章前建议先阅读<a target="_blank" rel="noopener" href="https://docs.unity3d.com/cn/2020.3/Manual/AssetBundlesIntro.html">官方文档</a>，本系列文章将尽可能避免赘述官方文档，而是偏向于对官方文档的解释和补充。</p>
+</blockquote>
+<blockquote>
+<p>内容由博主和 AI 协助创作，经由博主审阅，读者仍需审慎阅读。</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>做好资源规划是 AssetBundle 使用的基石。规划得当，可以极大提升加载速度、减小包体、简化热更新；规划失误，则会带来冗余、卡顿、更新困难等问题。对于任何一个项目而言，资源管理是重要且不可忽视的任务，特别是对于需要推行正式版本进行发售的产品，涉及到后续的版本的资源更新，没有好的资源管理方案将会导致项目后期资源维护风险和成本提高，进而影响用户体验和产品销量。接下来我们将根据 AI 提供的建议来总结资源规划中的可行方案。</p>
+<h2 id="资源普查"><a href="#资源普查" class="headerlink" title="资源普查"></a>资源普查</h2><p>可以通过表格或编辑器工具对项目资源进行统计，可以从资源类型、体积、引用源、更新频率、平台差异等维度去统计项目资源，结合真实合理的资源统计信息是我们设计有效和稳定的分组策略的前提，得益于此还能提升项目稳定性和可维护性。</p>
+<ul>
+<li>资源类型：纹理、音频、预制体、场景、模型等等，资源的类型、粒度应该结合项目进行划分，例如音频本身是一个粗粒度指标，但也可以划分出具体的音频格式。</li>
+<li>资源体积：资源的体积统计是非常有必要的，这能让我们区分哪些资源是大体积资源，哪些是轻量资源，是分组的重要参考指标之一。</li>
+<li>引用源：资源被项目的哪些部分引用，划分的粒度应该根据项目进行调整，例如UI模块、相机模块、角色模块等等，或者具体到某个脚本，细粒度意味着更详细，但是并非所有项目都需要如此。</li>
+<li>更新频率：资源的更新频率也是分组的重要参考指标之一，往往更新频率高的会与低的资源分离，这个指标可以通过量化或主观词统计，具体也是根据项目决定，初始项目如果没有历史数据，可以先尽可能客观地进行人为标注，最次也要用主观词进行标注，同时要提供对项目资源历史更新数据的统计接口，以便于提供更准确的量化统计支持。</li>
+<li>平台差异：不同平台对于资源的兼容性存在差异，所以这个指标也是分组的重要参考指标之一。<br>……</li>
+</ul>
+<p>这些只是列举资源普查的部分维度，我们可以视情况增减，建议对统计数据进行视图建模或者其它更具可读性的方式，让开发者能够更直观地审查项目资源规划的健康度。如果你希望定制化开发一个资源普查的工具，应该以细粒度去统计资源数据，然后根据细粒度数据和开发者具体需求提供各种数据视图的建模，这样能够更灵活以尽可能覆盖更多需求场景。</p>
+<h2 id="构建依赖关系视图"><a href="#构建依赖关系视图" class="headerlink" title="构建依赖关系视图"></a>构建依赖关系视图</h2><p>建议通过编辑器工具或其它外部工具为资源的依赖关系数据建模，并通过可视化或更易读的方式展现依赖关系统计数据，对于项目开发团队而言这是非常有必要的，循环依赖导致的内存泄漏和资源冗余等问题，往往都是依赖关系与分组不适配所致，所以为了保证尽可能构建出合理稳定的 AssetBundle，我们应该在进行分组和构建流程前提供视图信息供开发者审查。</p>
+<h2 id="管理共享依赖"><a href="#管理共享依赖" class="headerlink" title="管理共享依赖"></a>管理共享依赖</h2><p>为了避免资源冗余，我们需要根据依赖关系视图去审查各个资源之间的依赖，把那些共同依赖提取出来作为共享依赖进行管理。Unity 默认是不进行资源查重的，所以不同 AssetBundle 中可以导入同一个资源，那这就会导致产品整体体积出现冗余部分。所以在进行分组和构建前，结合依赖关系视图，去统计出那些共同依赖的资源，对它们进行重组和管理。</p>
+<div class="note warning simple"><p>本部分内容由 AI 提供，请审慎阅读。</p>
+</div>
+
+<p><strong>问题：</strong> 多个 Bundle 如果都直接引用同一张纹理，默认情况下 Unity 会将这张纹理分别打包进每个 Bundle，造成冗余（包体膨胀，内存中也会出现多份）。</p>
+<p><strong>解决方案：</strong></p>
+<ul>
+<li>识别公共资源：找出被多个模块引用的资源（如 UI 框架图、公共角色材质、通用 Shader）。</li>
+<li>建立“共享 Bundle”：将这些资源单独打包成一个或多个 Bundle（例如 common_textures.bundle、common_materials.bundle）。</li>
+<li>设置依赖关系：在打包时，通过设置 AssetImporter 的 assetBundleName，让其他 Bundle 不包含这些资源，而是依赖共享 Bundle。Unity 构建系统会自动处理引用。</li>
+<li>运行时先加载共享 Bundle：加载任何依赖它的 Bundle 前，确保共享 Bundle 已在内存中（最好常驻）。</li>
+</ul>
+<p><strong>如何发现冗余：</strong></p>
+<ul>
+<li>使用 AssetBundle Browser 的 “Show Dependencies” 视图，查看哪些资源被重复包含。</li>
+<li>编写脚本，在构建后分析所有 Bundle 内的资源列表，找出出现次数超过一次的资产。</li>
+</ul>
+<h2 id="设计分组维度"><a href="#设计分组维度" class="headerlink" title="设计分组维度"></a>设计分组维度</h2><p>分组维度有很多，例如可以从功能模块、资源类型和引用关系等各个维度进行分组，但是每个项目资源偏重不同，资源普查的数据也不同，所以适用的分组维度也会有所区别，但并非一个项目就必须规定只按照一种维度划分资源，各个维度之间也可以混用组合，实现更灵活的分组维度设计，同时也要结合资源地具体使用情景。最重要的是要结合我们的资源普查数据去设计。</p>
+<div class="note warning simple"><p>本部分内容由 AI 提供，请审慎阅读。</p>
+</div>
+
+<h3 id="按逻辑实体分组（按功能模块）"><a href="#按逻辑实体分组（按功能模块）" class="headerlink" title="按逻辑实体分组（按功能模块）"></a>按逻辑实体分组（按功能模块）</h3><p><strong>做法：</strong> 将完成一个完整功能的资源打包在一起。例如：ui_shop.bundle（包含商城界面的所有纹理、字体、预制体）、character_knight.bundle（包含骑士的模型、动画、特效、音效）。</p>
+<p><strong>适用：</strong> DLC、角色皮肤、可下载的功能模块。</p>
+<p><strong>优点：</strong> 更新某个功能只需下载一个 Bundle，逻辑清晰。</p>
+<p><strong>注意：</strong> 避免跨模块共享资源被重复打包（例如骑士和法师共用同一个特效纹理，应提取到共享 Bundle）。</p>
+<h3 id="按类型分组（按资源类型）"><a href="#按类型分组（按资源类型）" class="headerlink" title="按类型分组（按资源类型）"></a>按类型分组（按资源类型）</h3><p><strong>做法：</strong> 将所有音频打包到 audio.bundle，所有 Shader 打包到 shaders.bundle，所有本地化文本打包到 localization.bundle。</p>
+<p><strong>适用：</strong> 全局通用且很少变动的资源，或者需要平台差异化（如音频压缩格式各平台不同，但可以整个替换）。</p>
+<p><strong>优点：</strong> 便于平台复用，减少冗余。</p>
+<p><strong>缺点：</strong> 如果某个场景只用到其中一小部分音频，却需要加载整个音频 Bundle，浪费内存和加载时间。因此类型分组适合常驻内存或体积较小的资源。</p>
+<h3 id="按并发内容分组（按场景-关卡）"><a href="#按并发内容分组（按场景-关卡）" class="headerlink" title="按并发内容分组（按场景&#x2F;关卡）"></a>按并发内容分组（按场景&#x2F;关卡）</h3><p><strong>做法：</strong> 将每个关卡几乎所有的独有资源（场景文件、角色、敌人、特效、音效）打包成一个 Bundle。例如 level_1.bundle。</p>
+<p><strong>适用：</strong> 线性关卡游戏、竞技场地图。</p>
+<p><strong>优点：</strong> 加载关卡时只需要加载一个 Bundle，加载速度最快，依赖管理最简单。</p>
+<p><strong>注意：</strong> 共享资源（如全局 UI、通用音效）仍需单独打包，并确保在进入关卡前已常驻。</p>
+<h3 id="实际项目中的混合策略示例"><a href="#实际项目中的混合策略示例" class="headerlink" title="实际项目中的混合策略示例"></a>实际项目中的混合策略示例</h3><p><strong>常驻资源：</strong> shaders.bundle、common_audio.bundle、common_ui.bundle（启动时加载，永不卸载）。</p>
+<p><strong>角色皮肤：</strong> skin_knight_01.bundle、skin_mage_02.bundle（按需加载，用完卸载）。</p>
+<p><strong>关卡：</strong> level_1.bundle、level_2.bundle（进入时加载，退出时卸载）。</p>
+<p><strong>共享依赖：</strong> fx_common.bundle（多个角色共用的特效材质、粒子系统）。</p>
+<h2 id="控制分组粒度"><a href="#控制分组粒度" class="headerlink" title="控制分组粒度"></a>控制分组粒度</h2><p>避免”一个资源一个 Bundle”和”所有资源一个Bundle”两种极端选择。应该根据项目划分粒度，构建的平台也是常见的参考维度之一。Bundle 过多会增加资源维护和管理的成本，会带来不必要的额外开销。Bundle 太少会使得资源加载变得笨重不灵活，甚至导致内存峰值过高引发程序崩溃等问题。</p>
+<div class="note warning simple"><p>本部分内容由 AI 提供，请审慎阅读。</p>
+</div>
+
+<h3 id="过细的粒度（每个资源独立一个-Bundle）"><a href="#过细的粒度（每个资源独立一个-Bundle）" class="headerlink" title="过细的粒度（每个资源独立一个 Bundle）"></a>过细的粒度（每个资源独立一个 Bundle）</h3><p>弊端：大量小文件导致加载请求过多（每个请求有网络&#x2F;IO 开销），依赖关系复杂，总构建时间增长，且 Unity 对每个 Bundle 有固定元数据开销（几十 KB 到几百 KB），累计起来浪费空间。</p>
+<p>何时可用：对于极小体积且需要极高更新频率的资源（如 JSON 配置表、每日活动文本），可以单独打包。</p>
+<h3 id="过粗的粒度（一个超级-Bundle-包含所有资源）"><a href="#过粗的粒度（一个超级-Bundle-包含所有资源）" class="headerlink" title="过粗的粒度（一个超级 Bundle 包含所有资源）"></a>过粗的粒度（一个超级 Bundle 包含所有资源）</h3><p>弊端：任何小改动都要下载整个大包（几百 MB）；内存中一次性加载大量资源，峰值过高可能导致移动端崩溃；场景切换时无法卸载不需要的部分。</p>
+<p>何时可用：对于一次性下载的 DLC 资料片，且用户接受大包下载。</p>
+<h3 id="推荐粒度"><a href="#推荐粒度" class="headerlink" title="推荐粒度"></a>推荐粒度</h3><ul>
+<li>移动端：单个 Bundle 大小控制在 5~20 MB（经验值，可根据项目调整）。</li>
+<li>PC&#x2F;主机：可以放宽到 50~100 MB，但仍建议按场景或模块拆分。</li>
+<li>使用工具分析：构建后用 AssetBundle Browser 或自定义脚本检查每个 Bundle 的大小，拆解过大的包。</li>
+</ul>
+<h2 id="更新频率在分组策略中的重要性"><a href="#更新频率在分组策略中的重要性" class="headerlink" title="更新频率在分组策略中的重要性"></a>更新频率在分组策略中的重要性</h2><div class="note warning simple"><p>本部分内容由 AI 提供，请审慎阅读。</p>
+</div>
+
+<p>这是实现高效热更新的关键。将资源分为三类：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>示例</th>
+<th>打包策略</th>
+<th>更新策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>极少变动</td>
+<td>Shader、全局音频、基础 UI 框架</td>
+<td>单独 Bundle，随首包发布或极少数更新</td>
+<td>版本大更新时整包替换</td>
+</tr>
+<tr>
+<td>频繁变动</td>
+<td>活动配置、节日 UI、数值表</td>
+<td>小体积 Bundle，每个独立</td>
+<td>每次启动检查更新，单独下载</td>
+</tr>
+<tr>
+<td>模块内变动</td>
+<td>角色皮肤、关卡修正</td>
+<td>按模块打包，体积适中</td>
+<td>仅当该模块有新版本时下载</td>
+</tr>
+</tbody></table>
+<p><strong>原则：</strong> 把更新频率不同的资源拆到不同 Bundle，这样修改活动配置时，用户只需要下载一个很小的配置文件 Bundle，而不必重新下载整个 UI 包。</p>
+<h2 id="平台和设备级别在分组策略中的重要性"><a href="#平台和设备级别在分组策略中的重要性" class="headerlink" title="平台和设备级别在分组策略中的重要性"></a>平台和设备级别在分组策略中的重要性</h2><div class="note warning simple"><p>本部分内容由 AI 提供，请审慎阅读。</p>
+</div>
+
+<h3 id="平台差异"><a href="#平台差异" class="headerlink" title="平台差异"></a>平台差异</h3><ul>
+<li>纹理格式：Android 用 ASTC，iOS 用 ASTC 或 PVRTC，PC 用 DXT&#x2F;BC。需要分别为每个平台构建 AssetBundle。</li>
+<li>音频压缩：移动端常用 ADPCM 或 Vorbis，PC 可用 MP3。</li>
+<li>平台特有资源：例如 Android 的 Google Play 服务图标、iOS 的 GameCenter 图标，应单独打包，避免跨平台冗余。</li>
+</ul>
+<p><strong>建议：</strong> 在构建脚本中，通过 BuildTarget 参数生成不同平台的 Bundle，并存入不同文件夹（如 Bundles&#x2F;Android&#x2F;、Bundles&#x2F;iOS&#x2F;）。版本清单文件也区分平台。</p>
+<h3 id="设备分级（高端-低端）"><a href="#设备分级（高端-低端）" class="headerlink" title="设备分级（高端&#x2F;低端）"></a>设备分级（高端&#x2F;低端）</h3><ul>
+<li>为低端设备准备低分辨率纹理、简化模型、更少的粒子效果。</li>
+<li>打包时使用 资源变体（Variants）或 Addressable 的 “标签” 功能，将不同级别的资源放入不同 Bundle。例如 texture_hd.bundle 和 texture_ld.bundle。</li>
+<li>运行时根据设备性能指标（如内存大小、屏幕分辨率）选择合适的 Bundle 下载。</li>
+</ul>
+<h2 id="自包含策略"><a href="#自包含策略" class="headerlink" title="自包含策略"></a>自包含策略</h2><div class="note warning simple"><p>本部分内容由 AI 提供，请审慎阅读。</p>
+</div>
+
+<p>对于基于关卡的线性游戏，强烈建议采用 <strong>每个关卡一个 Bundle，且该 Bundle 包含关卡所需的大部分独有资源</strong> （模型、纹理、音频、特效）。这样可以做到：</p>
+<ul>
+<li>进入关卡时只需加载 1 个 Bundle（外加共享 Bundle）。</li>
+<li>退出关卡时卸载该 Bundle，彻底释放内存。</li>
+</ul>
+<p><strong>如何避免重复：</strong></p>
+<ul>
+<li>如果两个关卡共享同一个怪物模型，不要将它放进关卡 Bundle，而是放入共享 Bundle。</li>
+<li>共享 Bundle 在游戏启动时加载，常驻内存。</li>
+</ul>
+<p><strong>何时不适合自包含：</strong></p>
+<ul>
+<li>开放世界游戏，资源复用率极高，无法按关卡拆分。此时可按区域或类型分组，配合流式加载。</li>
+</ul>
+<h2 id="迭代优化"><a href="#迭代优化" class="headerlink" title="迭代优化"></a>迭代优化</h2><ul>
+<li>项目开发过程中，资源引用关系会不断变化，定期重新审视分组策略。</li>
+<li>每次大版本发布前，做一次完整构建和分析，优化冗余和过大的 Bundle。</li>
+<li>利用 CI 自动生成分组报告，团队可审阅并调整。</li>
+</ul>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><ul class="series-items"><li><a href="/posts/2026/03/31/b52f6d526775/" title="AssetBundle常见问题集锦">AssetBundle常见问题集锦</a></li><li><a href="/posts/2026/01/06/09942405c100/" title="AssetBundle（一）">AssetBundle（一）</a></li><li><a href="/posts/2026/03/31/163c5ee6a0de/" title="AssetBundle（三）">AssetBundle（三）</a></li><li><a href="/posts/2026/03/30/be7f33717ee5/" title="AssetBundle（二）">AssetBundle（二）</a></li><li><a href="/posts/2026/03/26/37533af164eb/" title="AssetBundle（五）">AssetBundle（五）</a></li><li><a href="/posts/2026/03/27/b56b68c74ce8/" title="AssetBundle（六）">AssetBundle（六）</a></li><li><a href="/posts/2026/03/26/2f00a9cbd0cb/" title="AssetBundle（四）">AssetBundle（四）</a></li></ul></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/03/31/163c5ee6a0de/">https://jokevallen.github.io/posts/2026/03/31/163c5ee6a0de/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jokevallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/API/">API</a><a class="post-meta__tags" href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/">资源管理</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/2026/03/30/be7f33717ee5/" title="AssetBundle（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">AssetBundle（二）</div></div><div class="info-2"><div class="info-item-1">本文介绍 AssetBundle 在游戏项目中的常规流程以及各流程的建议。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2026/03/27/b56b68c74ce8/" title="AssetBundle（六）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-01</div><div class="info-item-2">AssetBundle（六）</div></div><div class="info-2"><div class="info-item-1">本篇文章介绍了为热更新业务场景搭建模拟环境，包括本地静态资源服务器、可编程服务器等。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/06/09942405c100/" title="AssetBundle（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-01</div><div class="info-item-2">AssetBundle（一）</div></div><div class="info-2"><div class="info-item-1">介绍 AssetBundle 的定义、组成和用途。</div></div></div></a><a class="pagination-related" href="/posts/2026/03/30/be7f33717ee5/" title="AssetBundle（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-12</div><div class="info-item-2">AssetBundle（二）</div></div><div class="info-2"><div class="info-item-1">本文介绍 AssetBundle 在游戏项目中的常规流程以及各流程的建议。</div></div></div></a><a class="pagination-related" href="/posts/2026/03/26/37533af164eb/" title="AssetBundle（五）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-01</div><div class="info-item-2">AssetBundle（五）</div></div><div class="info-2"><div class="info-item-1">介绍 AssetBundle 的各种加载方式（同步/异步、批量、复合资源）、网络下载及卸载方法。</div></div></div></a><a class="pagination-related" href="/posts/2026/03/26/2f00a9cbd0cb/" title="AssetBundle（四）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-01</div><div class="info-item-2">AssetBundle（四）</div></div><div class="info-2"><div class="info-item-1">介绍 Unity 中 AssetBundle 的几种构建方式，并展示构建结果。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/05/c613ee643de1/" title="Unity的碰撞检测（六）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-25</div><div class="info-item-2">Unity的碰撞检测（六）</div></div><div class="info-2"><div class="info-item-1"> 温馨提示： ​本文基于前一篇“Unity的碰撞检测(五)”继续探讨两个游戏对象具备刚体的BodyType均为Dynamic，但是Collision Detection属性不同的碰撞检测，阅读本文则默认已阅读前文。  前言在基于两个游戏对象都具备碰撞器和刚体的前提下，如果碰撞器属性一致，而一个游戏对象的刚体的BodyType为Dynamic，另一个为Kinematic，除了Collision Detection属性不一致，其它属性保持一致，那么会对碰撞检测产生什么影响？ 本次测试我们约定如此：Player与Enemy都具备碰撞器和刚体，Player的刚体的BodyType为Dynamic，而Enemy的刚体的BodyType为Kinematic，且仅Player进行高速碰撞，默认属性如图1和图2所示：           图1 碰撞器默认属性             图2 刚体默认属性   测试用例   表 1 Player和Enemy的刚体的Collision Detection测试用例                                   游戏对象       ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%99%AE%E6%9F%A5"><span class="toc-number">2.</span> <span class="toc-text">资源普查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E8%A7%86%E5%9B%BE"><span class="toc-number">3.</span> <span class="toc-text">构建依赖关系视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%85%B1%E4%BA%AB%E4%BE%9D%E8%B5%96"><span class="toc-number">4.</span> <span class="toc-text">管理共享依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%88%86%E7%BB%84%E7%BB%B4%E5%BA%A6"><span class="toc-number">5.</span> <span class="toc-text">设计分组维度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E9%80%BB%E8%BE%91%E5%AE%9E%E4%BD%93%E5%88%86%E7%BB%84%EF%BC%88%E6%8C%89%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">按逻辑实体分组（按功能模块）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E7%B1%BB%E5%9E%8B%E5%88%86%E7%BB%84%EF%BC%88%E6%8C%89%E8%B5%84%E6%BA%90%E7%B1%BB%E5%9E%8B%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">按类型分组（按资源类型）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E5%B9%B6%E5%8F%91%E5%86%85%E5%AE%B9%E5%88%86%E7%BB%84%EF%BC%88%E6%8C%89%E5%9C%BA%E6%99%AF-%E5%85%B3%E5%8D%A1%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">按并发内容分组（按场景&#x2F;关卡）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E6%B7%B7%E5%90%88%E7%AD%96%E7%95%A5%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.4.</span> <span class="toc-text">实际项目中的混合策略示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%88%86%E7%BB%84%E7%B2%92%E5%BA%A6"><span class="toc-number">6.</span> <span class="toc-text">控制分组粒度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E7%BB%86%E7%9A%84%E7%B2%92%E5%BA%A6%EF%BC%88%E6%AF%8F%E4%B8%AA%E8%B5%84%E6%BA%90%E7%8B%AC%E7%AB%8B%E4%B8%80%E4%B8%AA-Bundle%EF%BC%89"><span class="toc-number">6.1.</span> <span class="toc-text">过细的粒度（每个资源独立一个 Bundle）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E7%B2%97%E7%9A%84%E7%B2%92%E5%BA%A6%EF%BC%88%E4%B8%80%E4%B8%AA%E8%B6%85%E7%BA%A7-Bundle-%E5%8C%85%E5%90%AB%E6%89%80%E6%9C%89%E8%B5%84%E6%BA%90%EF%BC%89"><span class="toc-number">6.2.</span> <span class="toc-text">过粗的粒度（一个超级 Bundle 包含所有资源）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E7%B2%92%E5%BA%A6"><span class="toc-number">6.3.</span> <span class="toc-text">推荐粒度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E9%A2%91%E7%8E%87%E5%9C%A8%E5%88%86%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">7.</span> <span class="toc-text">更新频率在分组策略中的重要性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B3%E5%8F%B0%E5%92%8C%E8%AE%BE%E5%A4%87%E7%BA%A7%E5%88%AB%E5%9C%A8%E5%88%86%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">8.</span> <span class="toc-text">平台和设备级别在分组策略中的重要性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E5%8F%B0%E5%B7%AE%E5%BC%82"><span class="toc-number">8.1.</span> <span class="toc-text">平台差异</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E5%88%86%E7%BA%A7%EF%BC%88%E9%AB%98%E7%AB%AF-%E4%BD%8E%E7%AB%AF%EF%BC%89"><span class="toc-number">8.2.</span> <span class="toc-text">设备分级（高端&#x2F;低端）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8C%85%E5%90%AB%E7%AD%96%E7%95%A5"><span class="toc-number">9.</span> <span class="toc-text">自包含策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E4%BC%98%E5%8C%96"><span class="toc-number">10.</span> <span class="toc-text">迭代优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">11.</span> <span class="toc-text">系列文章</span></a></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || 'ef4745142dafeb6bc662538e18b6ac2f'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom-global.js"></script><div class="aplayer no-destroy" data-id="17656359701" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false" data-order="random" data-lrctype="0"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

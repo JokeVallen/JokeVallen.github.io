@@ -1,0 +1,393 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>AssetBundle（六） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本篇文章介绍了为热更新业务场景搭建模拟环境，包括本地静态资源服务器、可编程服务器等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AssetBundle（六）">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/03/27/b56b68c74ce8/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="本篇文章介绍了为热更新业务场景搭建模拟环境，包括本地静态资源服务器、可编程服务器等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-03-27T02:28:53.000Z">
+<meta property="article:modified_time" content="2026-04-01T05:13:52.614Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="API">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="资源管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "AssetBundle（六）",
+  "url": "https://jokevallen.github.io/posts/2026/03/27/b56b68c74ce8/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-03-27T02:28:53.000Z",
+  "dateModified": "2026-04-01T05:13:52.614Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://jokevallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/03/27/b56b68c74ce8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'AssetBundle（六）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">131</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a><a class="nav-page-title" href="/"><span class="site-name">AssetBundle（六）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">AssetBundle（六）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-04-01T05:13:52.614Z" title="更新于 2026-04-01 13:13:52">2026-04-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity%E5%BC%80%E5%8F%91/">Unity开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>阅读本系列文章前建议先阅读<a target="_blank" rel="noopener" href="https://docs.unity3d.com/cn/2020.3/Manual/AssetBundlesIntro.html">官方文档</a>，本系列文章将尽可能避免赘述官方文档，而是偏向于对官方文档的解释和补充。</p>
+</blockquote>
+<h2 id="示例环境"><a href="#示例环境" class="headerlink" title="示例环境"></a>示例环境</h2><ul>
+<li>Unity 版本：2020.3.48f1  </li>
+<li>C# 语言版本: 7.0  </li>
+<li>C# 框架：.NET Standard 2.0  </li>
+<li>IDE: Visual Studio Code</li>
+</ul>
+<h2 id="搭建本地网络服务器"><a href="#搭建本地网络服务器" class="headerlink" title="搭建本地网络服务器"></a>搭建本地网络服务器</h2><h3 id="Live-Server-插件"><a href="#Live-Server-插件" class="headerlink" title="Live Server 插件"></a>Live Server 插件</h3><p>该插件可能不止在 Visual Studio Code 提供，如果要快速开发和校验，可以用这些插件快速开启一个本地静态资源服务器，然后模拟客户端下载 AssetBundle 资源，但这种无法接近真实的热更新环境，只是为了快速便捷和学习使用。我们将 AssetBundle 资源放在项目根目录（Assets 同级目录）的 “AssetBundles&#x2F;StandaloneWindows” 目录中，下载该插件后在 Visual Studio Code 右下方会有一个 <code>Go Live</code> 按钮，点击它即可构建一个本地服务器，它是基于项目的，为了便捷，我们直接在前端项目启动，启动后会打开浏览器显示资源目录（如图1所示）。</p>
+<div class="post-image" style="--post-img-width: 1271px;">
+    <img src="img1.png" loading='lazy'>
+    <div class="post-image-caption">图1</div>
+</div>
+
+<p>在网页的资源目录中找到要下载的 AssetBundle 资源，前端就可以通过地址如 <code>http://127.0.0.1:5500/AssetBundles/StandaloneWindows/StandaloneWindows</code> 去模拟网络下载热更新资源了。</p>
+<h4 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> IEnumerator <span class="hljs-title">DownloadAssetBundleFromLiveServer</span>()</span><br>&#123;<br>    <span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> req = UnityWebRequestAssetBundle.GetAssetBundle(<span class="hljs-string">&quot;http://127.0.0.1:5500/AssetBundles/StandaloneWindows/StandaloneWindows&quot;</span>))<br>    &#123;<br>        <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> req.SendWebRequest();<br><br>        <span class="hljs-keyword">if</span> (req.result != UnityWebRequest.Result.Success)<br>        &#123;<br>            Debug.LogError(<span class="hljs-string">&quot;Failed to download assetbundle from live server.&quot;</span>);<br>            <span class="hljs-keyword">yield</span> <span class="hljs-keyword">break</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">var</span> ab = DownloadHandlerAssetBundle.GetContent(req);<br>        <span class="hljs-keyword">if</span> (ab == <span class="hljs-literal">null</span>)<br>        &#123;<br>            Debug.LogError(<span class="hljs-string">&quot;AssetBundle is null.&quot;</span>);<br>            <span class="hljs-keyword">yield</span> <span class="hljs-keyword">break</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">var</span> abr = ab.LoadAssetAsync&lt;AssetBundleManifest&gt;(<span class="hljs-string">&quot;AssetBundleManifest&quot;</span>);<br>        <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> abr;<br><br>        <span class="hljs-keyword">var</span> manifest = abr.asset <span class="hljs-keyword">as</span> AssetBundleManifest;<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> item <span class="hljs-keyword">in</span> manifest.GetAllAssetBundles())<br>        &#123;<br>            Debug.Log(item);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Node-js-Express"><a href="#Node-js-Express" class="headerlink" title="Node.js + Express"></a>Node.js + Express</h3><p>这个方案相对 LiveServer 插件来说会复杂一些，但是通过它们可以构建一个可编程服务器，能提供的功能也更多一些，例如通过 API 查询版本、模拟通信、延迟等等，需要下载 <a target="_blank" rel="noopener" href="https://nodejs.org/en">Node.js</a>，然后在本地创建一个目录，通过 <code>命令提示符</code> 窗口路由到该目录，然后调用 <code>npm init -y</code> 创建项目，再通过 <code>npm install express</code> 和 <code>npm install server-index</code> 安装两个包，前者用于构建本地服务器，后者用于辅助网页浏览资源目录。然后需要在该项目根目录编写一个 JavaScript 脚本，通过 <code>node 脚本名.js</code> 启动服务器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// server.js</span><br><br><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);<br><span class="hljs-keyword">const</span> serveIndex = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;serve-index&#x27;</span>);<br><span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();<br><span class="hljs-keyword">const</span> port = <span class="hljs-number">5500</span>;<br><br><span class="hljs-comment">// 静态资源服务（用于热更新资源文件，如 .zip、.apk、.bundle 等）</span><br>app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/assets&#x27;</span>, express.<span class="hljs-title function_">static</span>(<span class="hljs-string">&#x27;public&#x27;</span>));<br><br><span class="hljs-comment">// 目录浏览功能（访问目录时显示列表）</span><br>app.<span class="hljs-title function_">use</span>(<span class="hljs-string">&#x27;/assets&#x27;</span>, <span class="hljs-title function_">serveIndex</span>(<span class="hljs-string">&#x27;public&#x27;</span>, &#123; <span class="hljs-attr">icons</span>: <span class="hljs-literal">true</span> &#125;));<br><br><span class="hljs-comment">// 模拟热更新版本查询接口</span><br>app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/version&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>    res.<span class="hljs-title function_">json</span>(&#123;<br>        <span class="hljs-attr">currentVersion</span>: <span class="hljs-string">&#x27;1.2.0&#x27;</span>,<br>        <span class="hljs-attr">updateUrl</span>: <span class="hljs-string">&#x27;/assets/update.zip&#x27;</span>,<br>        <span class="hljs-attr">mandatory</span>: <span class="hljs-literal">true</span><br>    &#125;);<br>&#125;);<br><br><span class="hljs-comment">// 模拟登录/通信接口</span><br>app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/api/user/login&#x27;</span>, express.<span class="hljs-title function_">json</span>(), <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> &#123; username, password &#125; = req.<span class="hljs-property">body</span>;<br>    <span class="hljs-keyword">if</span> (username === <span class="hljs-string">&#x27;test&#x27;</span> &amp;&amp; password === <span class="hljs-string">&#x27;123&#x27;</span>) &#123;<br>        res.<span class="hljs-title function_">json</span>(&#123; <span class="hljs-attr">token</span>: <span class="hljs-string">&#x27;fake-jwt-token&#x27;</span> &#125;);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        res.<span class="hljs-title function_">status</span>(<span class="hljs-number">401</span>).<span class="hljs-title function_">json</span>(&#123; <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;Invalid credentials&#x27;</span> &#125;);<br>    &#125;<br>&#125;);<br><br><span class="hljs-comment">// 模拟带延迟的响应（测试超时/加载效果）</span><br>app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/slow&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> res.<span class="hljs-title function_">json</span>(&#123; <span class="hljs-attr">data</span>: <span class="hljs-string">&#x27;delayed response&#x27;</span> &#125;), port);<br>&#125;);<br><br>app.<span class="hljs-title function_">listen</span>(port, <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Mock server running at http://localhost:<span class="hljs-subst">$&#123;port&#125;</span>`</span>);<br>&#125;);<br><br>app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>    res.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Mock server is running!&#x27;</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<div class="note warning simple"><p>上述代码由 AI 生成，仅提供演示作用，请根据具体需求进行实现。</p>
+</div>
+
+<h3 id="Python-Flask"><a href="#Python-Flask" class="headerlink" title="Python + Flask"></a>Python + Flask</h3><p>Flask 是 Python Web 的一个轻量框架，如果你更熟悉 Python 语言，可以通过它快速搭建一个可编程服务器，然后模拟热更新业务场景。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, jsonify, send_from_directory, abort<br><span class="hljs-keyword">from</span> flask_cors <span class="hljs-keyword">import</span> CORS<br><br>app = Flask(__name__)<br>CORS(app)  <span class="hljs-comment"># 允许所有跨域请求（开发环境方便）</span><br><br><span class="hljs-comment"># 配置：更新包的存放目录</span><br>UPDATE_DIR = <span class="hljs-string">&#x27;static&#x27;</span><br><span class="hljs-comment"># 模拟的最新版本信息</span><br>LATEST_VERSION = &#123;<br>    <span class="hljs-string">&#x27;version&#x27;</span>: <span class="hljs-string">&#x27;1.2.0&#x27;</span>,<br>    <span class="hljs-string">&#x27;release_notes&#x27;</span>: <span class="hljs-string">&#x27;修复若干bug，优化性能&#x27;</span>,<br>    <span class="hljs-string">&#x27;download_url&#x27;</span>: <span class="hljs-string">&#x27;http://localhost:5000/download/patch_v1.2.0.zip&#x27;</span>,<br>    <span class="hljs-string">&#x27;force_update&#x27;</span>: <span class="hljs-literal">False</span>          <span class="hljs-comment"># 是否强制更新</span><br>&#125;<br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/check_update&#x27;</span>, methods=[<span class="hljs-string">&#x27;GET&#x27;</span>]</span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_update</span>():<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    客户端调用此接口检查更新。</span><br><span class="hljs-string">    可传入当前版本号（如 ?current_version=1.1.0）进行比对。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    current = request.args.get(<span class="hljs-string">&#x27;current_version&#x27;</span>, <span class="hljs-string">&#x27;0.0.0&#x27;</span>)<br>    <span class="hljs-keyword">if</span> current &lt; LATEST_VERSION[<span class="hljs-string">&#x27;version&#x27;</span>]:<br>        <span class="hljs-comment"># 有更新，返回最新版本信息</span><br>        <span class="hljs-keyword">return</span> jsonify(&#123;<br>            <span class="hljs-string">&#x27;has_update&#x27;</span>: <span class="hljs-literal">True</span>,<br>            **LATEST_VERSION<br>        &#125;)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> jsonify(&#123;<br>            <span class="hljs-string">&#x27;has_update&#x27;</span>: <span class="hljs-literal">False</span>,<br>            <span class="hljs-string">&#x27;message&#x27;</span>: <span class="hljs-string">&#x27;已是最新版本&#x27;</span><br>        &#125;)<br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/download/&lt;filename&gt;&#x27;</span>, methods=[<span class="hljs-string">&#x27;GET&#x27;</span>]</span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">download_file</span>(<span class="hljs-params">filename</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    提供更新包下载服务，文件必须位于 UPDATE_DIR 目录下。</span><br><span class="hljs-string">    示例：http://localhost:5000/download/patch_v1.2.0.zip</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    file_path = os.path.join(UPDATE_DIR, filename)<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(file_path):<br>        abort(<span class="hljs-number">404</span>, description=<span class="hljs-string">&#x27;文件不存在&#x27;</span>)<br>    <span class="hljs-keyword">return</span> send_from_directory(UPDATE_DIR, filename, as_attachment=<span class="hljs-literal">True</span>)<br><br><span class="hljs-comment"># 可选：提供一个简单的管理页面，用于查看当前版本信息和上传新包（演示用）</span><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/&#x27;</span>, methods=[<span class="hljs-string">&#x27;GET&#x27;</span>]</span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">index</span>():<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">    &lt;h2&gt;热更新模拟服务器&lt;/h2&gt;</span><br><span class="hljs-string">    &lt;p&gt;当前最新版本：&#123;&#125; (&#123;&#125;)&lt;/p&gt;</span><br><span class="hljs-string">    &lt;p&gt;下载地址：&lt;a href=&quot;&#123;&#125;&quot;&gt;&#123;&#125;&lt;/a&gt;&lt;/p&gt;</span><br><span class="hljs-string">    &lt;p&gt;接口：&lt;a href=&quot;/check_update&quot;&gt;/check_update&lt;/a&gt;&lt;/p&gt;</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span>.<span class="hljs-built_in">format</span>(<br>        LATEST_VERSION[<span class="hljs-string">&#x27;version&#x27;</span>],<br>        LATEST_VERSION[<span class="hljs-string">&#x27;release_notes&#x27;</span>],<br>        LATEST_VERSION[<span class="hljs-string">&#x27;download_url&#x27;</span>],<br>        LATEST_VERSION[<span class="hljs-string">&#x27;download_url&#x27;</span>]<br>    )<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    <span class="hljs-comment"># 确保 static 目录存在</span><br>    os.makedirs(UPDATE_DIR, exist_ok=<span class="hljs-literal">True</span>)<br>    app.run(host=<span class="hljs-string">&#x27;0.0.0.0&#x27;</span>, port=<span class="hljs-number">5000</span>, debug=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+
+<div class="note warning simple"><p>上述代码由 AI 生成，仅提供演示作用，请根据具体需求进行实现。</p>
+</div>
+
+<h2 id="模拟项目补充内容"><a href="#模拟项目补充内容" class="headerlink" title="模拟项目补充内容"></a>模拟项目补充内容</h2><div class="note warning simple"><p>本部分内容由 AI 提供，请审慎阅读。</p>
+</div>
+
+<h3 id="多版本共存与动态路由"><a href="#多版本共存与动态路由" class="headerlink" title="多版本共存与动态路由"></a>多版本共存与动态路由</h3><p>功能：支持同时托管多个版本的更新包，通过 URL 路径（如 &#x2F;v1.2.0&#x2F;patch.zip）或请求头（如 Accept-Version）区分。</p>
+<p>原因：真实 CDN 会为不同版本保留独立资源，客户端可按需拉取指定版本，便于灰度发布或回滚测试。</p>
+<h3 id="模拟-CDN-缓存行为（Cache-Control-ETag-Last-Modified）"><a href="#模拟-CDN-缓存行为（Cache-Control-ETag-Last-Modified）" class="headerlink" title="模拟 CDN 缓存行为（Cache-Control &#x2F; ETag &#x2F; Last-Modified）"></a>模拟 CDN 缓存行为（Cache-Control &#x2F; ETag &#x2F; Last-Modified）</h3><p>功能：返回正确的 HTTP 缓存头（Cache-Control、ETag、Last-Modified），并支持 If-None-Match &#x2F; If-Modified-Since 条件请求。</p>
+<p>原因：真实 CDN 会利用缓存减少回源，客户端应正确处理缓存头，避免重复下载。本地模拟可验证客户端的缓存策略是否正确。</p>
+<h3 id="断点续传与分片下载（Range-Requests）"><a href="#断点续传与分片下载（Range-Requests）" class="headerlink" title="断点续传与分片下载（Range Requests）"></a>断点续传与分片下载（Range Requests）</h3><p>功能：支持 Range 请求头，返回 206 Partial Content，允许客户端从指定字节偏移量下载。</p>
+<p>原因：大型更新包（如数百 MB）需要支持断点续传，模拟 CDN 应能正确处理分片下载，以测试客户端的断点续传逻辑。</p>
+<h3 id="动态限速与网络状况模拟"><a href="#动态限速与网络状况模拟" class="headerlink" title="动态限速与网络状况模拟"></a>动态限速与网络状况模拟</h3><p>功能：可编程控制响应速度，如限制下载带宽、随机延迟、模拟丢包或连接中断。</p>
+<p>原因：真实 CDN 虽然快，但客户端需在弱网环境下测试。本地服务器可故意引入延迟&#x2F;限速，验证下载超时、重试机制。</p>
+<h3 id="URL-重定向与回源模拟"><a href="#URL-重定向与回源模拟" class="headerlink" title="URL 重定向与回源模拟"></a>URL 重定向与回源模拟</h3><p>功能：返回 302 或 307 临时重定向到另一个 URL（例如指向备用 CDN 或临时签名 URL）。</p>
+<p>原因：真实场景中 CDN 可能基于地理位置或负载均衡重定向客户端，测试客户端是否跟随重定向。</p>
+<h3 id="安全策略模拟（签名-URL-防盗链）"><a href="#安全策略模拟（签名-URL-防盗链）" class="headerlink" title="安全策略模拟（签名 URL &#x2F; 防盗链）"></a>安全策略模拟（签名 URL &#x2F; 防盗链）</h3><p>功能：要求请求携带正确的签名参数（如 ?expires&#x3D;&amp;token&#x3D;）或检查 Referer 头，未通过则返回 403。</p>
+<p>原因：生产环境常使用签名 URL 防止盗链，本地模拟可验证客户端生成签名的逻辑。</p>
+<h3 id="灰度发布与-A-B-测试支持"><a href="#灰度发布与-A-B-测试支持" class="headerlink" title="灰度发布与 A&#x2F;B 测试支持"></a>灰度发布与 A&#x2F;B 测试支持</h3><p>功能：根据请求头（如 X-User-ID）或 IP 返回不同版本，模拟按用户比例下发新版本。</p>
+<p>原因：真实热更新可能采用灰度策略，客户端需能正确处理不同版本的资源。</p>
+<h3 id="错误注入（4xx-5xx-响应）"><a href="#错误注入（4xx-5xx-响应）" class="headerlink" title="错误注入（4xx &#x2F; 5xx 响应）"></a>错误注入（4xx &#x2F; 5xx 响应）</h3><p>功能：可配置随机或按比例返回 404、500、503 等错误，或模拟 CDN 节点异常。</p>
+<p>原因：测试客户端在下载失败时的重试、降级、回滚等容错逻辑。</p>
+<h3 id="日志与监控模拟"><a href="#日志与监控模拟" class="headerlink" title="日志与监控模拟"></a>日志与监控模拟</h3><p>功能：记录每次请求的详细信息（IP、User-Agent、耗时、状态码），并提供可查询的 API 或本地日志文件。</p>
+<p>原因：真实 CDN 会提供访问日志，本地模拟可帮助分析客户端行为，验证更新请求是否符合预期。</p>
+<h3 id="资源完整性校验（Content-MD5-自定义头）"><a href="#资源完整性校验（Content-MD5-自定义头）" class="headerlink" title="资源完整性校验（Content-MD5 &#x2F; 自定义头）"></a>资源完整性校验（Content-MD5 &#x2F; 自定义头）</h3><p>功能：在响应头中加入 Content-MD5 或自定义校验和头（如 X-Checksum-Sha256），便于客户端验证下载文件完整性。</p>
+<p>原因：真实场景下更新包可能被篡改或传输错误，客户端应校验文件哈希。</p>
+<h3 id="配置动态更新（热加载）"><a href="#配置动态更新（热加载）" class="headerlink" title="配置动态更新（热加载）"></a>配置动态更新（热加载）</h3><p>功能：服务器支持在不重启的情况下修改版本信息、文件映射、限速规则等配置。</p>
+<p>原因：便于测试中快速切换场景（如发布新版本、模拟 CDN 故障），无需频繁重启服务。</p>
+<h3 id="模拟-CDN-边缘节点行为（可选）"><a href="#模拟-CDN-边缘节点行为（可选）" class="headerlink" title="模拟 CDN 边缘节点行为（可选）"></a>模拟 CDN 边缘节点行为（可选）</h3><p>功能：启动多个实例，每个实例模拟不同地域的节点，通过反向代理实现一致性哈希或地理就近响应。</p>
+<p>原因：测试客户端的多节点切换、节点健康检测和故障转移机制。</p>
+<h2 id="特别说明"><a href="#特别说明" class="headerlink" title="特别说明"></a>特别说明</h2><p>如果不使用本地服务器，也可以自行使用云服务器供应商的产品，只不过如果不是生产环境是没必要的，当然如果你想更大程度去模拟真实的业务场景，也是可以的。另外，可以考虑在虚拟机上单独运行我们的本地服务器，让前端开发环境与之分离，以达到更大程度模拟热更新业务场景的目的。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/docs/latest/api/">Node.js</a></li>
+<li><a target="_blank" rel="noopener" href="https://expressjs.com/">Express</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/">Python</a></li>
+<li><a target="_blank" rel="noopener" href="https://flask.palletsprojects.com/en/stable/quickstart/">Flask</a></li>
+</ul>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><ul class="series-items"><li><a href="/posts/2026/03/31/b52f6d526775/" title="AssetBundle常见问题集锦">AssetBundle常见问题集锦</a></li><li><a href="/posts/2026/01/06/09942405c100/" title="AssetBundle（一）">AssetBundle（一）</a></li><li><a href="/posts/2026/03/31/163c5ee6a0de/" title="AssetBundle（三）">AssetBundle（三）</a></li><li><a href="/posts/2026/03/30/be7f33717ee5/" title="AssetBundle（二）">AssetBundle（二）</a></li><li><a href="/posts/2026/03/26/37533af164eb/" title="AssetBundle（五）">AssetBundle（五）</a></li><li><a href="/posts/2026/03/27/b56b68c74ce8/" title="AssetBundle（六）">AssetBundle（六）</a></li><li><a href="/posts/2026/03/26/2f00a9cbd0cb/" title="AssetBundle（四）">AssetBundle（四）</a></li></ul></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/03/27/b56b68c74ce8/">https://jokevallen.github.io/posts/2026/03/27/b56b68c74ce8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jokevallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/API/">API</a><a class="post-meta__tags" href="/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/">资源管理</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/2026/03/30/be7f33717ee5/" title="AssetBundle（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">AssetBundle（二）</div></div><div class="info-2"><div class="info-item-1">本文介绍 AssetBundle 在游戏项目中的常规流程以及各流程的建议。</div></div></div></a><a class="pagination-related" href="/posts/2026/03/26/37533af164eb/" title="AssetBundle（五）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">AssetBundle（五）</div></div><div class="info-2"><div class="info-item-1">介绍 AssetBundle 的各种加载方式（同步/异步、批量、复合资源）、网络下载及卸载方法。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2026/03/30/be7f33717ee5/" title="AssetBundle（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-12</div><div class="info-item-2">AssetBundle（二）</div></div><div class="info-2"><div class="info-item-1">本文介绍 AssetBundle 在游戏项目中的常规流程以及各流程的建议。</div></div></div></a><a class="pagination-related" href="/posts/2026/03/26/2f00a9cbd0cb/" title="AssetBundle（四）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-01</div><div class="info-item-2">AssetBundle（四）</div></div><div class="info-2"><div class="info-item-1">介绍 Unity 中 AssetBundle 的几种构建方式，并展示构建结果。</div></div></div></a><a class="pagination-related" href="/posts/2026/03/31/163c5ee6a0de/" title="AssetBundle（三）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-12</div><div class="info-item-2">AssetBundle（三）</div></div><div class="info-2"><div class="info-item-1">本文将针对 AssetBundle 的资源规划、分组原则和策略进行阐述。</div></div></div></a><a class="pagination-related" href="/posts/2026/03/26/37533af164eb/" title="AssetBundle（五）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-01</div><div class="info-item-2">AssetBundle（五）</div></div><div class="info-2"><div class="info-item-1">介绍 AssetBundle 的各种加载方式（同步/异步、批量、复合资源）、网络下载及卸载方法。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/06/09942405c100/" title="AssetBundle（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-01</div><div class="info-item-2">AssetBundle（一）</div></div><div class="info-2"><div class="info-item-1">介绍 AssetBundle 的定义、组成和用途。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/05/f035df818883/" title="Unity的碰撞检测（总结篇）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-25</div><div class="info-item-2">Unity的碰撞检测（总结篇）</div></div><div class="info-2"><div class="info-item-1">结论有效碰撞的必要条件 两个游戏对象至少有一个具备刚体。 两个游戏对象必须有至少一个碰撞器。 至少一个刚体的BodyType属性为Dynamic（即IsKinematic为false）。   刚体必须是 Dynamic 才会被物理引擎主动推动，Static 或 Kinematic 的刚体可以参与碰撞检测，但不会因碰撞而移动。  有效触发的必要条件 两个游戏对象至少有一个具备刚体。 两个游戏对象至少有一个具备触发器（即IsTrigger为true），另一个具备触发器或碰撞器。  在有效碰撞的前提下进行正确的碰撞检测的条件两个游戏对象在发生有效碰撞的前提下，要能够正确进行碰撞检测则至少有一个游戏对象的刚体的Collision Detection为Continous或Continous Dynamic或Continous Speculative。   Continuous 检测模式主要针对高速移动物体防止“隧穿”（tunneling）。   Continuous Dynamic 对动态物体有效，Continuous 对所有刚体有效。   Continuous Speculative 在...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">示例环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">搭建本地网络服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Live-Server-%E6%8F%92%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">Live Server 插件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-number">2.1.1.</span> <span class="toc-text">示例代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-js-Express"><span class="toc-number">2.2.</span> <span class="toc-text">Node.js + Express</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-Flask"><span class="toc-number">2.3.</span> <span class="toc-text">Python + Flask</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E9%A1%B9%E7%9B%AE%E8%A1%A5%E5%85%85%E5%86%85%E5%AE%B9"><span class="toc-number">3.</span> <span class="toc-text">模拟项目补充内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%89%88%E6%9C%AC%E5%85%B1%E5%AD%98%E4%B8%8E%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1"><span class="toc-number">3.1.</span> <span class="toc-text">多版本共存与动态路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F-CDN-%E7%BC%93%E5%AD%98%E8%A1%8C%E4%B8%BA%EF%BC%88Cache-Control-ETag-Last-Modified%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">模拟 CDN 缓存行为（Cache-Control &#x2F; ETag &#x2F; Last-Modified）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E4%B8%8E%E5%88%86%E7%89%87%E4%B8%8B%E8%BD%BD%EF%BC%88Range-Requests%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">断点续传与分片下载（Range Requests）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E9%99%90%E9%80%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E7%8A%B6%E5%86%B5%E6%A8%A1%E6%8B%9F"><span class="toc-number">3.4.</span> <span class="toc-text">动态限速与网络状况模拟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URL-%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E5%9B%9E%E6%BA%90%E6%A8%A1%E6%8B%9F"><span class="toc-number">3.5.</span> <span class="toc-text">URL 重定向与回源模拟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5%E6%A8%A1%E6%8B%9F%EF%BC%88%E7%AD%BE%E5%90%8D-URL-%E9%98%B2%E7%9B%97%E9%93%BE%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">安全策略模拟（签名 URL &#x2F; 防盗链）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83%E4%B8%8E-A-B-%E6%B5%8B%E8%AF%95%E6%94%AF%E6%8C%81"><span class="toc-number">3.7.</span> <span class="toc-text">灰度发布与 A&#x2F;B 测试支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E6%B3%A8%E5%85%A5%EF%BC%884xx-5xx-%E5%93%8D%E5%BA%94%EF%BC%89"><span class="toc-number">3.8.</span> <span class="toc-text">错误注入（4xx &#x2F; 5xx 响应）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E4%B8%8E%E7%9B%91%E6%8E%A7%E6%A8%A1%E6%8B%9F"><span class="toc-number">3.9.</span> <span class="toc-text">日志与监控模拟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C%EF%BC%88Content-MD5-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%A4%B4%EF%BC%89"><span class="toc-number">3.10.</span> <span class="toc-text">资源完整性校验（Content-MD5 &#x2F; 自定义头）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%8A%A8%E6%80%81%E6%9B%B4%E6%96%B0%EF%BC%88%E7%83%AD%E5%8A%A0%E8%BD%BD%EF%BC%89"><span class="toc-number">3.11.</span> <span class="toc-text">配置动态更新（热加载）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F-CDN-%E8%BE%B9%E7%BC%98%E8%8A%82%E7%82%B9%E8%A1%8C%E4%B8%BA%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">3.12.</span> <span class="toc-text">模拟 CDN 边缘节点行为（可选）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%88%AB%E8%AF%B4%E6%98%8E"><span class="toc-number">4.</span> <span class="toc-text">特别说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">系列文章</span></a></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '69c5fa3ee57569f6d141abe02cd55928'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom-global.js"></script><div class="aplayer no-destroy" data-id="17656359701" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false" data-order="random" data-lrctype="0"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
