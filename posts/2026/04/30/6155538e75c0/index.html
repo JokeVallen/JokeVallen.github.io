@@ -1,0 +1,355 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity项目模板之测试项目 | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="该文章介绍了用于 Unity 测试的自定义项目模板，旨在避免重复搭建测试环境，模板基于 Unity TestFramework、Performance 和 Code Coverage 插件，支持单元测试、基准测试和测试覆盖率。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity项目模板之测试项目">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/04/30/6155538e75c0/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="该文章介绍了用于 Unity 测试的自定义项目模板，旨在避免重复搭建测试环境，模板基于 Unity TestFramework、Performance 和 Code Coverage 插件，支持单元测试、基准测试和测试覆盖率。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-04-30T09:00:35.000Z">
+<meta property="article:modified_time" content="2026-04-30T11:07:50.689Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="工具使用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Unity项目模板之测试项目",
+  "url": "https://jokevallen.github.io/posts/2026/04/30/6155538e75c0/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-04-30T09:00:35.000Z",
+  "dateModified": "2026-04-30T11:07:50.689Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://jokevallen.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/04/30/6155538e75c0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity项目模板之测试项目',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><meta name="generator" content="Hexo 8.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">136</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a><a class="nav-page-title" href="/"><span class="site-name">Unity项目模板之测试项目</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Unity项目模板之测试项目</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-04-30T11:07:50.689Z" title="更新于 2026-04-30 19:07:50">2026-04-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity%E5%BC%80%E5%8F%91/">Unity开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>项目开发中为避免重复造轮子而导致人力成本浪费，对于常见项目我们可以通过 Unity 的项目模板功能自定义，而测试项目就是其中之一，单元测试、集成测试和基准测试等等，基于项目模板快速创建测试项目然后将待测试的源码复制进来即可开始进行，节约创建项目、搭建测试环境等重复行为带来的时间开销。本文将以基于 Unity TestFramework、Unity TestFramework Performance 和 Code Coverage 插件的测试项目模板为例，同时介绍一些项目模板常见问题的解决方案。如果你想先了解如何创建项目模板等基础教程可以先浏览系列文章中的 <strong>“Unity自定义项目模板”</strong>。</p>
+<h2 id="模板目录结构"><a href="#模板目录结构" class="headerlink" title="模板目录结构"></a>模板目录结构</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs text">（基于 Windows CMD tree 生成）<br>\---package<br>    |   package.json<br>    |   <br>    \---ProjectData~<br>        +---Assets<br>        |   |   package_blacklist.json<br>        |   |   TemplateInitializer.cs<br>        |   |   Tests.asmdef<br>        |   |   <br>        |   +---.Assets<br>        |   |   \---Common<br>        |   |           FailedTestsHook.cs<br>        |   |           <br>        |   +---EditModeTests<br>        |   |       EditModeTests.asmdef<br>        |   |       <br>        |   +---PlayModeTests<br>        |   |       PlayModeTests.asmdef<br>        |   |       <br>        |   +---Scenes<br>        |   |       Demo.unity<br>        |   |       <br>        |   \---Source<br>        |           Source.asmdef<br>        |               <br>        +---Packages    <br>        +---ProjectSettings<br></code></pre></td></tr></table></figure>
+
+<p>在本文中目录结构主要关注 <code>ProjectData~/Assets</code> 目录即可。</p>
+<p><code>Assets</code> 目录下包括了几个文件和文件夹，其中 <code>package_blacklist.json</code> 是与 <code>TemplateInitializer.cs</code> 搭配使用的，后者是一个模板初始化脚本，会在基于模板创建的项目打开时自动执行，主要负责清理 Unity 默认引入的的内置资源包以及将 <code>.Assets</code> 目录中的资源重新导入 <code>Assets</code> 目录，<code>package_blacklist.json</code> 用来定义需要移除的 Unity 默认引入的的内置资源包名单，格式与 <code>manifest.json</code> 一样，你可以自主决定保留哪些内置资源包，只需要从黑名单中移除它们即可，黑名单功能本质上是覆写 <code>manifest.json</code>。</p>
+<p><code>.Assets</code> 目录相当于是模板项目中需要放入 <code>Assets</code> 目录的资产副本，因为基于模板创建的项目可能不会主动触发 UPM 的 Resolve，此时 <code>Packages</code> 目录为空，任何资源包都未导入，这就导致 <code>Assets</code> 目录中若存在需要引用资源包的脚本或其它资产就会引发错误，所以 <code>TemplateInitializer</code> 的作用则是主动触发 UPM 的 Resolve 并根据黑名单覆写 <code>manifest.json</code>，使得你的 <code>Packages</code> 目录下只保留你在设计项目模板时显式要求的资源包，在完成以上行为后它会重新将 <code>.Assets</code> 目录中的资源移至 <code>Assets</code> 目录并进行刷新。</p>
+<p>正常情况下，若项目模板本身不存在错误，例如在 <code>Assets</code> 目录而不是 <code>.Assets</code> 目录下放置阻断程序集正常编译的资产，那么 <code>TemplateInitializer</code> 往往都会正常执行，并且执行完成后会自动销毁自身的脚本文件及<code>package_blacklist.json</code>、<code>.Assets</code> 等临时资源，你只需要在首次打开基于模板创建的项目时安静等待它完成即可，它本质上是一个自动处理脚本，且会在控制台详细打印处理流程，但阻断它的执行意味着你需要人为介入上述这些繁琐的工作。</p>
+<p>记住几个重要提示：</p>
+<ul>
+<li>你所有需要放置在 <code>Assets</code> 目录中的额外资源应该放在 <code>.Assets</code> 目录中。</li>
+<li>通过 <code>package_blacklist.json</code> 决定需要移除和保留的 Unity 默认引入的内置资源包。</li>
+<li>不建议阻断 <code>TemplateInitializer</code> 的执行，否则需要人为接续处理流程。</li>
+</ul>
+<h2 id="模板介绍"><a href="#模板介绍" class="headerlink" title="模板介绍"></a>模板介绍</h2><p>上述目录涵盖了 EditMode 和 PlayMode 进行单元测试的目录，<code>Source</code> 是放置待测试源码的目录，<code>FailedTestsHook.cs</code> 是一个 Test Runner 出现未通过的测试时自动生成失败测试报告的自动处理脚本，模板已引入 <code>Unity TestFramework</code> 、<code>Unity TestFramework Performance</code> 和 <code>Code Coverage</code> 资源包，分别覆盖了单元测试、基准测试和测试覆盖率的功能。</p>
+<h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><table>
+<thead>
+<tr>
+<th>版本号</th>
+<th>改进说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<h2 id="资源下载"><a href="#资源下载" class="headerlink" title="资源下载"></a>资源下载</h2><p><a target="_blank" rel="noopener" href="https://github.com/JokeVallen/UnityTools/tree/main/Unity%20Project%20Templates/com.unity.template.testproject">Github</a><br><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/57vPdZQTfIMrZcWMKiEW-Zw">百度网盘</a></p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><ul class="series-items"><li><a href="/posts/2026/02/02/fccaafeef7d9/" title="Unity自定义项目模板">Unity自定义项目模板</a></li><li><a href="/posts/2026/04/30/6155538e75c0/" title="Unity项目模板之测试项目">Unity项目模板之测试项目</a></li></ul></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/04/30/6155538e75c0/">https://jokevallen.github.io/posts/2026/04/30/6155538e75c0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jokevallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/">工具使用</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/2026/04/30/0127e98e5f4a/" title="Unity编辑器IMGUI扩展（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Unity编辑器IMGUI扩展（一）</div></div><div class="info-2"><div class="info-item-1">自定义 EditorObjectFieldUtility，提供无选择器及自定义按钮行为的 ObjectField，兼容 Rect 和 Layout 两种模式。</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2026/01/07/e2bec2510c9e/" title="【解决方案】关于Unity中下载的扩展插件无法导入命名空间的解决建议"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-15</div><div class="info-item-2">【解决方案】关于Unity中下载的扩展插件无法导入命名空间的解决建议</div></div><div class="info-2"><div class="info-item-1">问题从Unity的PackageMangaer中下载的扩展插件无法在C#代码中引入命名空间 环境Unity版本：2020.3.26.f1c1 开发IDE：VSCode 下载的扩展插件：Cinemachine 解决方案方案一 在Unity编辑器界面：打开扩展工具设置面板（Edit&#x2F;Preferences&#x2F;External Tools）  勾选Embedded packages，点击Regenerate project files按钮即可             图1   F&amp;QQ: Generate .csproj files for各个选项分别代表什么？ A:  Embedded packages（嵌入式包） Local packages（本地包） Git packages（Git包） Registry packages（注册表包） Built-in packages（内置包） Local tarball（本地tarball） Packages from unknown sources（未知来源的包）  Q: 怎么知道要勾选Generate .cspr...</div></div></div></a><a class="pagination-related" href="/posts/2026/02/02/fccaafeef7d9/" title="Unity自定义项目模板"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-30</div><div class="info-item-2">Unity自定义项目模板</div></div><div class="info-2"><div class="info-item-1">本文详细介绍了 Unity 自定义项目模板的完整创建流程，涵盖模板项目配置、结构整理、package.json 编写及 tgz 打包等关键步骤，帮助团队将成熟框架和常用配置沉淀为可复用的项目模板，显著提升新项目启动效率。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/04/3175b9e7175b/" title="Unity的常见API（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-15</div><div class="info-item-2">Unity的常见API（一）</div></div><div class="info-2"><div class="info-item-1">组件的Invoke和InvokeRepeating方法12public void Invoke(string methodName, float time);public void InvokeRepeating(string methodName, float time, float repeatRate);   methodName表示待执行的方法名称，time表示首次执行所延迟的时间，repeatRate表示周期性执行的时间。（时间单位均为秒） Invoke指定的方法仅执行一次，InvokeRepeating指定的方法会执行多次。 Invoke指定的方法会延迟至参数指定的秒数后执行，InvokeRepeating指定的方法在time秒后首次执行，之后将按照repeatRate所指定的秒数为周期执行。 通过CancleInvoke取消Invoke和InvokeRepeating的执行。 Invoke与InvokeRepeating的执行与Time.timeScale有关，当timeScale为0时不执行，为2时执行速度将是原来的两倍。 Invoke系列方法不接受含参数的方法，...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/08/a2bd68836c36/" title="浏览器插件的打包和解压"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-15</div><div class="info-item-2">浏览器插件的打包和解压</div></div><div class="info-2"><div class="info-item-1">浏览器插件打包（以Chrome为例） 进入扩展程序页面，打开开发者模式，点击打包扩展程序           填写插件根目录，如果是更新扩展则需要填写私钥文件路径           找到Chrome的插件安装路径，在浏览器地址栏输入chrome:&#x2F;&#x2F;version，个人资料路径下的Extensions则为插件目录           根据ID查看对应插件的文件夹，复制好插件的根路径即可                    打包完成后会生成一个.crx和.pem文件，.crx文件是加载插件的文件而.pem是私钥文件          浏览器插件解压（以某浏览器为例） 将.crx文件重命名为.rar或.zip，然后对插件进行解压           加载已解压的插件                           </div></div></div></a><a class="pagination-related" href="/posts/2026/01/04/30b8475672ed/" title="CharacterController组件的基本使用"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-04</div><div class="info-item-2">CharacterController组件的基本使用</div></div><div class="info-2"><div class="info-item-1">前言CharacterController是一个基础的角色控制组件，通过它我们可以实现包括移动、奔跑、跳跃、爬楼梯和爬斜坡等基本的角色操作。它主要用于不基于刚体物理的第一人称或第三人称的角色控制。 注意事项 Move 方法是基于世界坐标系的，并且没有重力支持；  SimpleMove方法也是基于世界坐标系的，有重力支持（重力为游戏项目的全局重力值，在Editor-Project Settings-Physics-Gravity设置）；  跳跃应该采用Move方法；  isGrounded与Skin Width和Min Move Distance参数有关。当你觉得isGrounded的判断不精确时可以尝试调节Skin Width和Min Move Distance参数。官方建议Skin Width保持为Radius参数的10%，而Min Move Distance为0；  对于穿透、卡住、碰撞抖动等问题可以通过适当增大Skin Width的方式来解决；  使用该组件后无法通过Transform组件直接修改坐标、旋转等变换值，需要先禁用该组件，修改完成后再重新启用。   总结自官方英...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/06/368b2ccf0bc7/" title="尝试自主打造一个有限状态机（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-25</div><div class="info-item-2">尝试自主打造一个有限状态机（一）</div></div><div class="info-2"><div class="info-item-1"> 本系列文章要求读者具备一定的C#编程基础，同时对接口和抽象类、继承关系、设计模式以及面向对象等知识有所了解，在文章中我会对这些知识进行简要的阐述，对于描述有误的地方敬请指正。  前言我们都知道Unity有自带的有限状态机Animator，它的功能非常强大，为了探索它背后的原理，我开启了这个系列的文章，尝试通过自主打造一个有限状态机来理解Animator的工作原理，同时我会将这个状态机应用于实际，进而测试它是否能够正常运转以及它的性能如何，最后针对测试结果去探索优化的方案。 词表   名称 阐述    状态转换路径 以某个状态作为源状态，另一个状态作为目标状态，从源状态到目标状态的过渡关系称之为状态转换路径。   理论上的状态机我们从理论上的状态机去分析一个通用状态机的组成部分，进而探索状态机的设计原理和技巧。所以我们需要明确以下五个问题的答案：  状态机是什么？  状态机有什么作用？  状态机的组成部分有哪些？  状态机的工作原理是什么？  应该怎么去设计一个状态机？   状态机的定义有限状态机（英语：finite-state machine，缩写：FSM）又称有限状态自动机（...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">模板目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.</span> <span class="toc-text">模板介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E"><span class="toc-number">4.</span> <span class="toc-text">版本说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E4%B8%8B%E8%BD%BD"><span class="toc-number">5.</span> <span class="toc-text">资源下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">系列文章</span></a></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || 'c6a4dbb4ecfb8d5230b64a3ec288a08f'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom-global.js"></script><div class="aplayer no-destroy" data-id="17656359701" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false" data-order="random" data-lrctype="0"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
