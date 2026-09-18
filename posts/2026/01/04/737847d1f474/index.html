@@ -1,0 +1,834 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C#常识篇（三） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="内置值类型字节大小以下是 C# 中常见内置值类型的字节大小： bool （布尔）类型：始终为 1 字节。byte （无符号字节）类型：始终为 1 字节。sbyte （有符号字节）类型：始终为 1 字节。char （Unicode 字符）类型：通常为 2 字节。short （短整型）类型：通常为 2 字节。ushort （无符号短整型）类型：通常为 2 字节。int （整型）类型：通常为 4 字节。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#常识篇（三）">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/01/04/737847d1f474/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="内置值类型字节大小以下是 C# 中常见内置值类型的字节大小： bool （布尔）类型：始终为 1 字节。byte （无符号字节）类型：始终为 1 字节。sbyte （有符号字节）类型：始终为 1 字节。char （Unicode 字符）类型：通常为 2 字节。short （短整型）类型：通常为 2 字节。ushort （无符号短整型）类型：通常为 2 字节。int （整型）类型：通常为 4 字节。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-01-04T11:05:58.000Z">
+<meta property="article:modified_time" content="2026-01-19T08:54:58.014Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="C#">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C#常识篇（三）",
+  "url": "https://jokevallen.github.io/posts/2026/01/04/737847d1f474/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-01-04T11:05:58.000Z",
+  "dateModified": "2026-01-19T08:54:58.014Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://github.com/JokeVallen"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/01/04/737847d1f474/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C#常识篇（三）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><link rel="stylesheet" href="/css/hexo-timer.css"><link rel="stylesheet" href="/css/hexo-answer-sheet.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">156</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-book-open"></i><span> 题库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a><a class="nav-page-title" href="/"><span class="site-name">C#常识篇（三）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-book-open"></i><span> 题库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">C#常识篇（三）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-01-19T08:54:58.014Z" title="更新于 2026-01-19 16:54:58">2026-01-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/">C#</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="内置值类型字节大小"><a href="#内置值类型字节大小" class="headerlink" title="内置值类型字节大小"></a>内置值类型字节大小</h2><p>以下是 C# 中常见内置值类型的字节大小：</p>
+<p><code>bool</code> （布尔）类型：始终为 1 字节。<br><code>byte</code> （无符号字节）类型：始终为 1 字节。<br><code>sbyte</code> （有符号字节）类型：始终为 1 字节。<br><code>char</code> （Unicode 字符）类型：通常为 2 字节。<br><code>short</code> （短整型）类型：通常为 2 字节。<br><code>ushort</code> （无符号短整型）类型：通常为 2 字节。<br><code>int</code> （整型）类型：通常为 4 字节。<br><code>uint</code> （无符号整型）类型：通常为 4 字节。<br><code>long</code> （长整型）类型：通常为 8 字节。<br><code>ulong</code> （无符号长整型）类型：通常为 8 字节。<br><code>float</code> （单精度浮点型）类型：通常为 4 字节。<br><code>double</code> （双精度浮点型）类型：通常为 8 字节。<br><code>decimal</code> （高精度十进制型）类型：通常为 16 字节。  </p>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types">内置值类型</a></p>
+<h2 id="using语句"><a href="#using语句" class="headerlink" title="using语句"></a>using语句</h2><p><code>using</code> 语句用于正确使用可释放对象（实现 <code>IDisposable</code> 接口），<code>using</code> 语句块中无论是否发生异常都会释放可释放对象。<code>using</code> 语句可声明多个可释放对象，释放将按照声明的相反顺序进行。常见的文件I&#x2F;O操作可以使用 <code>using</code> 语句。</p>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/using">using语句</a></p>
+<h2 id="装箱和取消装箱"><a href="#装箱和取消装箱" class="headerlink" title="装箱和取消装箱"></a>装箱和取消装箱</h2><p>装箱是将值类型转换为 <code>object</code> 类型或由此值类型实现的任何接口类型的过程。 常见语言运行时 (CLR) 对值类型进行装箱时，会将值包装在 <code>System.Object</code> 实例中并将其存储在托管堆中。 取消装箱将从对象中提取值类型。 装箱是隐式的；取消装箱是显式的。</p>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing">装箱和拆箱</a></p>
+<h2 id="静态存储区和托管堆的区别"><a href="#静态存储区和托管堆的区别" class="headerlink" title="静态存储区和托管堆的区别"></a>静态存储区和托管堆的区别</h2><p>静态存储区（Static Storage Area）和托管堆（Managed Heap）是两个与内存管理相关的概念，通常用于描述不同的内存分配和管理方式。</p>
+<p><strong>静态存储区：</strong> 静态存储区是指用于存储静态变量的内存区域。静态变量是在程序编译时就被分配内存，并在整个程序生命周期内都存在的变量。这些变量通常包括全局变量、静态类成员变量以及静态局部变量。静态存储区的生命周期与程序的生命周期相同，在程序启动时被分配内存，在程序结束时释放内存。</p>
+<p><strong>托管堆：</strong> 托管堆是托管语言（例如C#、Java等）中用于存储动态分配的对象的内存区域。在C#中，所有的类实例都是在托管堆上分配的。与静态存储区不同，托管堆上的对象的生命周期不是固定的，它们会在不再被引用时由垃圾回收器进行回收。</p>
+<p><strong>总结：</strong> 虽然它们都是用于存储数据的内存区域，但是它们所存储的数据类型和生命周期是不同的，因此静态存储区和托管堆在内存管理中扮演不同的角色。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>静态存储区</th>
+<th>托管堆</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>存储内容</td>
+<td>静态变量、类型元数据、常量</td>
+<td>对象实例、数组、字符串</td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td>应用程序域生命周期</td>
+<td>对象引用生命周期</td>
+</tr>
+<tr>
+<td>管理方式</td>
+<td>手动管理（需要显式清理）</td>
+<td>自动垃圾回收</td>
+</tr>
+<tr>
+<td>分配时机</td>
+<td>类型加载时</td>
+<td>运行时动态分配</td>
+</tr>
+<tr>
+<td>访问方式</td>
+<td>直接通过类型访问</td>
+<td>通过对象引用访问</td>
+</tr>
+<tr>
+<td>性能特点</td>
+<td>访问快，无GC压力</td>
+<td>访问稍慢，受GC影响</td>
+</tr>
+<tr>
+<td>内存泄漏</td>
+<td>容易发生（需手动管理）</td>
+<td>较少发生（自动管理</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>全局配置、缓存、单例</td>
+<td>业务对象、临时数据、集合</td>
+</tr>
+</tbody></table>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals#the-managed-heap">托管堆</a></p>
+<h2 id="输入流和输出流"><a href="#输入流和输出流" class="headerlink" title="输入流和输出流"></a>输入流和输出流</h2><p>输入流（Input Stream）和输出流（Output Stream）是在计算机编程中常用的概念，用于处理数据流的读取和写入。</p>
+<p><strong>输入流：</strong></p>
+<ol>
+<li>输入流用于从数据源（如文件、网络连接、键盘输入等）读取数据。</li>
+<li>输入流的主要任务是从外部数据源读取数据并提供给程序使用。</li>
+<li>输入流通常提供一系列的读取方法，例如读取一个字节、读取一段字节数组、读取一个字符等。</li>
+</ol>
+<p>示例：从文件中读取数据、从网络连接中接收数据等。</p>
+<p><strong>输出流：</strong></p>
+<ol>
+<li>输出流用于向目标位置（如文件、网络连接、屏幕显示等）写入数据。</li>
+<li>输出流的主要任务是将程序中的数据写入到外部目标位置。</li>
+<li>输出流通常提供一系列的写入方法，例如写入一个字节、写入一段字节数组、写入一个字符等。</li>
+</ol>
+<p>示例：向文件中写入数据、向网络连接发送数据等。</p>
+<p><strong>总结：</strong> 在许多编程语言中，包括Java、C#、Python等，都提供了用于处理输入流和输出流的相关类库或模块。通过使用这些类库或模块，程序可以方便地与外部数据源进行交互，实现数据的读取和写入操作。输入流和输出流的概念在各种应用场景中都有着广泛的应用，如文件处理、网络通信、数据传输等。</p>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/standard/io/#streams">Stream</a></p>
+<h2 id="继承中方法的重写"><a href="#继承中方法的重写" class="headerlink" title="继承中方法的重写"></a>继承中方法的重写</h2><ul>
+<li><p>派生类可以重写的基类方法</p>
+<ul>
+<li>基类中使用 <code>virtual</code> 关键字进行限定的方法（简称“虚方法”）；</li>
+<li>在派生类中使用 <code>new</code> 关键字对与基类同名的方法进行重写（简称“隐藏方法”）；</li>
+<li>基类是抽象类，抽象类中使用 <code>abstract</code> 关键字进行限定的方法（简称“抽象方法”）。</li>
+</ul>
+</li>
+<li><p>virtual关键字详解<br><code>virtual</code> 关键字用于定义虚方法，基类中的虚方法可以被直接或间接派生类选择性重写。</p>
+</li>
+<li><p>new关键字详解<br><code>new</code> 关键字用于隐藏方法，这里的隐藏是派生类对基类隐藏同名方法，其在编译时根据声明类型决定的，这不同于重写的方法。直观的区别就在于声明为基类而实例化为派生类的对象将无法调用派生类的隐藏方法，但是声明与实例化均为派生类的对象则可以调用派生类的隐藏方法。</p>
+</li>
+<li><p>abstract关键字详解<br><code>abstract</code> 关键字用于声明抽象类和抽象方法，且抽象方法仅存在于抽象类中，直接派生类被要求必须完成基类中抽象方法的定义，除非直接派生类也为抽象类。</p>
+</li>
+<li><p>seald关键字详解<br><code>seald</code> 关键字用于声明密封类和密封方法，密封类无法被继承，密封方法无法被重写。</p>
+</li>
+</ul>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/virtual">virtual</a> <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/new-modifier">new</a> <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/abstract">abstract</a> <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/sealed">seald</a></p>
+<h2 id="readonly关键字"><a href="#readonly关键字" class="headerlink" title="readonly关键字"></a>readonly关键字</h2><p> <code>readonly</code> 关键字通常用于字段和结构体。</p>
+<ol>
+<li><code>readonly</code> 修饰的字段只能在声明时或其所在类的构造函数中进行初始化， <code>readonly</code> 修饰的结构体中所有字段都是隐式地被 <code>readonly</code> 限定；</li>
+<li><code>readonly</code> 修饰的字段可能是值类型也可能是引用类型，若为值类型，那么则为不可变对象，若为引用类型，则只能保证当前字段所指向的实例不变，但无法保证实例内部的状态不变，且官方不建议使用 <code>readonly</code> 修饰可变引用类型的字段，特别是对于向外公开的可变引用类型，因为这可能存在安全漏洞。</li>
+</ol>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/readonly">readonly关键字</a></p>
+<h2 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h2><p> <code>static</code> 关键字可用于修饰类、字段、属性、方法、运算符、事件和构造函数。</p>
+<ul>
+<li><code>static</code> 修饰类：静态类的字段、属性和其它成员必须都是静态的。</li>
+<li><code>static</code> 修饰字段：外部访问范围将不限于某个实例对象而是整个类，通常以”类名.字段名”的方式进行访问，在类的内部将作为所有实例对象的共享字段。</li>
+<li><code>static</code> 修饰属性：与 <code>static</code> 字段相似，不同的是属性可以控制get和set权限。</li>
+<li><code>static</code> 修饰方法：外部访问范围将不限于某个实例对象而是整个类，通常以”类名.方法名”的方式进行访问，在类的内部将作为所有实例对象的共享方法。</li>
+<li><code>static</code> 构造函数：对于接口、类和静态类都具有静态构造函数。</li>
+</ul>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/static">static关键字</a></p>
+<h2 id="索引器"><a href="#索引器" class="headerlink" title="索引器"></a>索引器</h2><p>索引器与属性类似，只不过属性通常针对字段，而索引器针对整个类或结构体。通过索引器可以自定义类似于数组下标访问、字典键值访问的规则，尤其是对于一些自定义的数据结构，创建索引器可以使得访问和修改更加便捷。属性的各种用法均适用于索引器，除了”自动实现属性”的用法，索引器可以指定多个参数。</p>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/indexers/">索引器</a></p>
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><p>运算符重载与函数重载类似，通过对某个类或结构体的可重载运算符进行重载，使得该类或结构体的实例在运算符表达式中按照重载的逻辑进行操作，运算符重载与函数重载一样具备编译时自动匹配的特性。值得注意的是运算符重载需要明确可重载运算符以及成对重载的运算符，运算符重载的参数至少有一个类型包含当前类。</p>
+<p>参考文档：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/operator-overloading">运算符重载</a></p>
+<h2 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h2><ul class="series-items"><li><a href="/posts/2025/12/31/fdf14fba7e13/" title="C#常识篇（一）">C#常识篇（一）</a></li><li><a href="/posts/2026/01/04/737847d1f474/" title="C#常识篇（三）">C#常识篇（三）</a></li><li><a href="/posts/2026/01/04/beeedb417140/" title="C#常识篇（二）">C#常识篇（二）</a></li></ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/JokeVallen">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/01/04/737847d1f474/">https://jokevallen.github.io/posts/2026/01/04/737847d1f474/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jokevallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CSharp/">C#</a></div></div><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2026/01/01/53c1f0831838/" title="字段临时缓存包装器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-02</div><div class="info-item-2">字段临时缓存包装器</div></div><div class="info-2"><div class="info-item-1">前言在实际开发中，我们有时候存在一种需求，例如对于某个字段，我们希望在某个明确的保存节点前对字段的修改都仅作为缓存保留，最终是否应用这些修改取决于某些条件，比如玩家对游戏设置的修改可能需要玩家明确确认应用修改后才会保存下来，在此之前玩家在游戏界面上的所有修改都是临时的。 本文基于这个需求探索出了一种解决方案——“临时缓存包装器”，通过创建字段或用于存储字段临时数据的数据结构的副本来实现临时缓存，虽然我们同样可以采用直接声明一个同类型的新字段的方式来达到同样的目的，但是这可能会增加冗余代码，且不利于代码的维护，通过包装器来封装临时缓存的通用逻辑，从而与具体业务逻辑进行隔离。 简介：该类的开发目的是用于给指定类型的源字段创建副本并将其作为源字段的临时缓存，通过该包装器对副本进行一系列的修改，调用者可以在任何需要的时候从该包装器中读取到新的修改，也可以通过解包的方法将副本数据同步到源字段。 具体功能：  创建包装器的方式包括二进制包装、JSON包装和自定义创建，分别对应三个静态方法。 解包方式分为二进制解包和JSON解包，分别对应两个实例方法。 1.2版本开始仅提供一个基本属性——缓存...</div></div></div></a><a class="pagination-related" href="/posts/2026/01/02/5846436f9852/" title="数组、列表和字典等可枚举类型的控制台输出扩展方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-02</div><div class="info-item-2">数组、列表和字典等可枚举类型的控制台输出扩展方法</div></div><div class="info-2"><div class="info-item-1">前言在程序开发中我们经常需要对数组、列表和字典等可枚举类型进行调试输出，每次都去手动敲一个for或foreach循环比较麻烦，所以我们可以考虑用一个静态类为可枚举类型添加扩展方法，从而实现快速输出可枚举类型的数据。 代码LogUtility.cs123456789101112131415161718192021222324252627#if UNITY_EDITORusing System;using System.Collections.Generic;using System.Linq;using UnityEngine;namespace LogToolAPI&#123;    [System.Diagnostics.DebuggerStepThrough]    public static class LogUtility    &#123;        public static void Log&lt;T&gt;(this IEnumerable&lt;T&gt; source, string prefix = &quot;&quot;)        &#123;...</div></div></div></a><a class="pagination-related" href="/posts/2026/04/17/e9c55985e6ba/" title="C#设计—利用包装器思维合并松散概念"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-07-16</div><div class="info-item-2">C#设计—利用包装器思维合并松散概念</div></div><div class="info-2"><div class="info-item-1">该文章介绍了一个通过泛型结构体 `Ignorer<T>` 封装多个过滤参数的设计，利用隐式转换、运算符重载和位域标记等技术，在保持轻量、无 GC 分配的同时，简化方法调用时的参数传递并提升易用性。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/02/43ee105b7dff/" title="继承实现单例模式的探索（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-26</div><div class="info-item-2">继承实现单例模式的探索（一）</div></div><div class="info-2"><div class="info-item-1">前言之前看到朋友采用继承的方式来实现单例模式，觉得很厉害，随后自己去探索了一番，以前实现单例模式都是把代码内联到具体的类中，这使得工程中每次需要使用单例模式时，都采用拷贝的方式，增加了很多冗余代码，并且难以规范单例的统一标准，使得代码不方便扩展和管理。这次探索找到了一种实现方式，先记录下来，后续如果有其它方式再发表系列文章，示例代码为C#。 代码v1.0123456789101112131415161718192021222324using System;/// &lt;summary&gt;/// 单例模式基类/// &lt;/summary&gt;/// &lt;typeparam name=&quot;T&quot;&gt;单例类型&lt;/typeparam&gt;public abstract class Singleton&lt;T&gt;where T : class, new()&#123;    public static T instance =&gt; _instance.Value;    static bool _unlock;    static re...</div></div></div></a><a class="pagination-related" href="/posts/2026/05/06/5e1f9438ec5a/" title="Unity对象工厂"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-07-03</div><div class="info-item-2">Unity对象工厂</div></div><div class="info-2"><div class="info-item-1">本文介绍了一个用于Unity的零GC、可扩展的对象工厂系统，通过统一对象创建入口来解决后期维护难题，并支持自定义工厂注册。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/04/beeedb417140/" title="C#常识篇（二）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-19</div><div class="info-item-2">C#常识篇（二）</div></div><div class="info-2"><div class="info-item-1">方法的签名在 C# 中，方法的签名由方法名、类型参数的数量以及每个参数的类型和传递方式组成。但是，返回类型和参数名不被视为方法签名的一部分。 参考文档：签名和重载 委托和事件的区别委托可以认为是对指定函数类型的引用，通过委托可以实现将函数作为参数或者变量进行调用，委托是类型安全的，仅指向与其声明时指定函数类型相匹配的函数。委托可以分为单播委托和多播委托，二者的区别在于是对单个方法还是一组方法的引用，多播委托则可以通过特定的符号 += 和 -= 来完成函数的订阅和取消订阅。 事件则是一种特殊的多播委托，其相比于普通的多播委托更加安全，事件将多播委托的调用权限隔离在其所在类的内部，并对外部关闭了直接通过赋值符号 = 修改多播委托实例的入口，使得外部调用者仅能够进行基本的函数订阅和取消订阅的操作。 参考文档：委托 事件 多播委托的底层实现多播委托实际上是一个类实例，其中定义了一个函数引用列表用于存储订阅的函数。当调用多播委托时，将由实例内部来遍历该函数引用列表，并按照订阅顺序依次调用函数，CLR提供底层支持。 参考文档：多播委托 重载和重写的区别重载是一种编译时多态，重载函数的名称相同...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%AE%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%AD%97%E8%8A%82%E5%A4%A7%E5%B0%8F"><span class="toc-number">1.</span> <span class="toc-text">内置值类型字节大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using%E8%AF%AD%E5%8F%A5"><span class="toc-number">2.</span> <span class="toc-text">using语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E7%AE%B1%E5%92%8C%E5%8F%96%E6%B6%88%E8%A3%85%E7%AE%B1"><span class="toc-number">3.</span> <span class="toc-text">装箱和取消装箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%AD%98%E5%82%A8%E5%8C%BA%E5%92%8C%E6%89%98%E7%AE%A1%E5%A0%86%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">4.</span> <span class="toc-text">静态存储区和托管堆的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E6%B5%81%E5%92%8C%E8%BE%93%E5%87%BA%E6%B5%81"><span class="toc-number">5.</span> <span class="toc-text">输入流和输出流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%A7%E6%89%BF%E4%B8%AD%E6%96%B9%E6%B3%95%E7%9A%84%E9%87%8D%E5%86%99"><span class="toc-number">6.</span> <span class="toc-text">继承中方法的重写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#readonly%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">7.</span> <span class="toc-text">readonly关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#static%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">8.</span> <span class="toc-text">static关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%99%A8"><span class="toc-number">9.</span> <span class="toc-text">索引器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="toc-number">10.</span> <span class="toc-text">运算符重载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-number">11.</span> <span class="toc-text">系列文章</span></a></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
+
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
+
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      lastPointerX: 0,
+      lastPointerY: 0
+    }
+
+    const onPointerDown = e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (state.pointers.size === 1) {
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = curVb.slice()
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
+        return
+      }
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+      } else if (state.pointers.size === 1) {
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+      }
+    }
+
+    const onWheel = e => {
+      // Prevent event bubbling from triggering external scroll
+      e.preventDefault()
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (init) setCurVb(init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      // Clean up event listeners before removing old SVG
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
+
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
+    })
+  }
+
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (true) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '63e503ce3c4857c17e73380decf7e5c3'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom-global.js" defer></script><script src="/js/hexo-timer.js" defer></script><script src="/js/hexo-answer-sheet.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
