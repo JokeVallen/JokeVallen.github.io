@@ -1,0 +1,447 @@
+/* ============================================================
+ * Hexo Butterfly 答题卡样式
+ * 滚动只在题目区（.as-body），头部/按钮/结果栏固定
+ * ============================================================ */
+
+/* ---------- 基础容器：flex 列布局 ---------- */
+.hexo-answer-sheet {
+    margin: 2rem auto;
+    max-width: 640px;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #f8fafc, #eef2f7);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    user-select: none;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ---------- 头部（固定） ---------- */
+.as-header {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.as-label {
+    font-weight: 600;
+}
+
+.as-progress {
+    padding: 2px 10px;
+    border-radius: 20px;
+    background: #e2e8f0;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 题目区（唯一滚动区域） ---------- */
+.as-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0.25rem 0.25rem 0.25rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.as-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.as-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.as-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ---------- 每行题目 ---------- */
+.as-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+.as-row:last-child {
+    border-bottom: none;
+}
+
+.as-num {
+    min-width: 2.4rem;
+    text-align: right;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+}
+
+.as-multi-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: #fef3c7;
+    color: #d97706;
+    line-height: 1.2;
+}
+
+.as-options {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+/* ---------- 选项按钮 ---------- */
+.as-opt {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid #cbd5e1;
+    background: #fff;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.as-opt:hover:not(:disabled) {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.as-opt:disabled {
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+
+.as-opt.selected {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+.as-opt.correct {
+    background: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #fff !important;
+}
+
+.as-opt.wrong {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #fff !important;
+}
+
+.as-opt.correct-reveal {
+    background: #dcfce7 !important;
+    border-color: #16a34a !important;
+    color: #15803d !important;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+}
+
+/* ---------- 多列布局 ---------- */
+.hexo-answer-sheet.cols-2 .as-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1.5rem;
+    align-content: start;
+}
+
+.hexo-answer-sheet.cols-3 .as-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0 1rem;
+    align-content: start;
+}
+
+.hexo-answer-sheet.cols-2 .as-opt,
+.hexo-answer-sheet.cols-3 .as-opt {
+    width: 32px;
+    height: 32px;
+    font-size: 0.82rem;
+}
+
+.hexo-answer-sheet.cols-2 .as-num,
+.hexo-answer-sheet.cols-3 .as-num {
+    min-width: 2rem;
+}
+
+/* ---------- 按钮区（固定） ---------- */
+.as-controls {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.as-btn {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.as-grade {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.as-grade:hover:not(:disabled) {
+    background: #2563eb;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+.as-grade:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.as-reset {
+    background: #64748b;
+    color: #fff;
+}
+
+.as-reset:hover {
+    background: #475569;
+    box-shadow: 0 4px 10px rgba(100, 116, 139, 0.3);
+}
+
+/* ---------- 结果栏（固定） ---------- */
+.as-result {
+    flex: 0 0 auto;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.as-result.pass {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.as-result.fail {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* ============================================================
+ * 悬浮基础样式
+ * 注意：position / 定位值 / transform 由 HTML 内联提供
+ * ============================================================ */
+.hexo-answer-sheet.is-sticky {
+    width: 320px;
+    max-width: calc(100vw - 48px);
+    max-height: calc(100vh - 60px);
+    overflow: hidden;
+    margin: 0;
+    padding: 1rem 1.15rem;
+    background: rgba(248, 250, 252, 0.97);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.hexo-answer-sheet.is-sticky .as-header {
+    font-size: 0.78rem;
+    margin-bottom: 0.6rem;
+}
+
+.hexo-answer-sheet.is-sticky .as-row {
+    padding: 0.2rem 0;
+    gap: 0.4rem;
+}
+
+.hexo-answer-sheet.is-sticky .as-num {
+    min-width: 1.8rem;
+    font-size: 0.75rem;
+}
+
+.hexo-answer-sheet.is-sticky .as-opt {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+}
+
+.hexo-answer-sheet.is-sticky .as-options {
+    gap: 0.3rem;
+}
+
+.hexo-answer-sheet.is-sticky .as-controls {
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.hexo-answer-sheet.is-sticky .as-btn {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.78rem;
+}
+
+.hexo-answer-sheet.is-sticky .as-result {
+    font-size: 0.82rem;
+    padding: 0.5rem 0.7rem;
+}
+
+.hexo-answer-sheet.is-sticky.cols-2 .as-body,
+.hexo-answer-sheet.is-sticky.cols-3 .as-body {
+    display: block;
+}
+
+/* 悬停：只做阴影反馈，不动 transform */
+.hexo-answer-sheet.is-sticky:hover {
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.22);
+}
+
+/* ============================================================
+ * 暗色模式
+ * ============================================================ */
+[data-theme="dark"] .hexo-answer-sheet {
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .as-header {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .as-progress {
+    background: #334155;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .as-num {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .as-multi-tag {
+    background: #78350f;
+    color: #fcd34d;
+}
+
+[data-theme="dark"] .as-row {
+    border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .as-opt {
+    background: #1e293b;
+    border-color: #475569;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .as-opt:hover:not(:disabled) {
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .as-opt.selected {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+[data-theme="dark"] .as-opt.correct {
+    background: #16a34a !important;
+    border-color: #16a34a !important;
+}
+
+[data-theme="dark"] .as-opt.wrong {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+}
+
+[data-theme="dark"] .as-opt.correct-reveal {
+    background: #14532d !important;
+    border-color: #16a34a !important;
+    color: #86efac !important;
+}
+
+[data-theme="dark"] .as-result.pass {
+    background: #14532d;
+    color: #86efac;
+}
+
+[data-theme="dark"] .as-result.fail {
+    background: #7f1d1d;
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .hexo-answer-sheet.is-sticky {
+    background: rgba(30, 41, 59, 0.97);
+}
+
+[data-theme="dark"] .as-body {
+    scrollbar-color: #475569 transparent;
+}
+
+[data-theme="dark"] .as-body::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+/* ============================================================
+ * 移动端适配（!important 覆盖内联定位）
+ * ============================================================ */
+@media (max-width: 768px) {
+    .hexo-answer-sheet {
+        padding: 1.25rem 1rem;
+    }
+
+    .as-opt {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+
+    .as-num {
+        min-width: 1.6rem;
+        font-size: 0.8rem;
+    }
+
+    .as-options {
+        gap: 0.35rem;
+    }
+
+    .hexo-answer-sheet.is-sticky,
+    .hexo-answer-sheet.is-sticky[class*="pos-"] {
+        top: auto !important;
+        left: 3vw !important;
+        right: 3vw !important;
+        bottom: 3vh !important;
+        width: auto !important;
+        transform: none !important;
+    }
+
+    .hexo-answer-sheet.cols-2 .as-body,
+    .hexo-answer-sheet.cols-3 .as-body {
+        display: block;
+    }
+}
