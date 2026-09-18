@@ -1,0 +1,730 @@
+/* #region 导航栏 */
+
+/* 确保.site-icon是块级元素，并设置基础尺寸 */
+.site-icon {
+    display: block;
+    height: 2rem;
+    /* 建议设置固定高度以保持布局稳定 */
+}
+
+/* 当日间模式激活时，确保使用日间Logo */
+.site-icon,
+[data-theme='light'] .site-icon {
+    content: url('/images/logo-light.png') !important;
+}
+
+/* 当夜间模式激活时，切换到夜间Logo */
+[data-theme='dark'] .site-icon {
+    content: url('/images/logo-dark.png') !important;
+}
+
+/* #endregion */
+
+/* #region 其它通用样式 */
+
+:root {
+    --custom-formula-bg: #f8f9fa;
+    --custom-formula-border: #ffffff;
+    --custom-formula-text: #333;
+}
+
+[data-theme="dark"] {
+    --custom-formula-bg: #3a3a3a;
+    --custom-formula-border: #444;
+    --custom-formula-text: #d0d0d0;
+}
+
+/* 表格或图片的副标题样式 */
+.custom-subtitle {
+    text-align: center;
+    color: rgba(207, 204, 204, 0.8);
+}
+
+/* 声明 */
+.custom-statement {
+    text-align: center;
+    color: rgba(207, 204, 204, 0.8);
+    font-style: italic;
+}
+
+/* 公式 */
+.custom-formula {
+    text-align: left;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--custom-formula-text);
+    padding: 10px 12px;
+    white-space: normal;
+    word-break: break-all;
+    background-color: var(--custom-formula-bg);
+    border-left: 3px solid var(--custom-formula-border);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* #endregion */
+
+/* #region 网格 */
+
+:root {
+    /* 日间模式变量 */
+    --custom-grid-bg: transparent;
+    --custom-grid-item-bg: white;
+    --custom-grid-item-border: #eaeaea;
+    --custom-grid-item-hover-border: #4a6ee0;
+    --custom-grid-item-shadow-light: rgba(0, 0, 0, 0.08);
+    --custom-grid-item-shadow-medium: rgba(0, 0, 0, 0.12);
+    --custom-grid-item-icon-color: #4a6ee0;
+    --custom-grid-item-name-color: #1a1a1a;
+    --custom-grid-item-description-color: #555;
+    --custom-grid-item-link-color: #4a6ee0;
+    --custom-grid-item-link-hover-color: #2a4ec4;
+    --custom-grid-header-color: #333;
+    --custom-grid-title-color: #1a1a1a;
+    --custom-grid-subtitle-color: #666;
+}
+
+[data-theme='dark'] {
+    /* 夜间模式变量 */
+    --custom-grid-bg: transparent;
+    --custom-grid-item-bg: #1e293b;
+    --custom-grid-item-border: #334155;
+    --custom-grid-item-hover-border: #4a6ee0;
+    --custom-grid-item-shadow-light: rgba(0, 0, 0, 0.2);
+    --custom-grid-item-shadow-medium: rgba(0, 0, 0, 0.3);
+    --custom-grid-item-icon-color: #60a5fa;
+    --custom-grid-item-name-color: #e2e8f0;
+    --custom-grid-item-description-color: #94a3b8;
+    --custom-grid-item-link-color: #60a5fa;
+    --custom-grid-item-link-hover-color: #3b82f6;
+    --custom-grid-header-color: #e2e8f0;
+    --custom-grid-title-color: #e2e8f0;
+    --custom-grid-subtitle-color: #94a3b8;
+}
+
+/* 网格样式 */
+.custom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--custom-grid-bg);
+    transition: background-color 0.3s ease;
+}
+
+.custom-grid-item {
+    background: var(--custom-grid-item-bg);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 4px 12px var(--custom-grid-item-shadow-light);
+    transition: all 0.3s ease;
+    border: 1px solid var(--custom-grid-item-border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.custom-grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--custom-grid-item-shadow-medium);
+    border-color: var(--custom-grid-item-hover-border);
+}
+
+.custom-grid-item-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: var(--custom-grid-item-icon-color);
+    transition: color 0.3s ease;
+}
+
+.custom-grid-item-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: var(--custom-grid-item-name-color);
+    transition: color 0.3s ease;
+}
+
+.custom-grid-item-description {
+    color: var(--custom-grid-item-description-color);
+    line-height: 1.5;
+    margin: 0 0 18px 0;
+    flex-grow: 1;
+    transition: color 0.3s ease;
+}
+
+.custom-grid-item-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--custom-grid-item-link-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 8px 0;
+    transition: color 0.2s;
+}
+
+.custom-grid-item-link:hover {
+    color: var(--custom-grid-item-link-hover-color);
+    text-decoration: underline;
+}
+
+.custom-grid-item-link-icon {
+    margin-left: 6px;
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+.custom-grid-item-link:hover .custom-grid-item-link-icon {
+    transform: translateX(3px);
+}
+
+.custom-grid-header {
+    text-align: center;
+    margin: 20px 0 30px;
+    color: var(--custom-grid-header-color);
+    transition: color 0.3s ease;
+}
+
+.custom-grid-title {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    color: var(--custom-grid-title-color);
+    transition: color 0.3s ease;
+}
+
+.custom-grid-subtitle {
+    color: var(--custom-grid-subtitle-color);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+    transition: color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .custom-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+
+    .custom-grid-item {
+        padding: 18px;
+    }
+}
+
+/* 可选：为卡片添加平滑的颜色过渡 */
+.custom-grid-item,
+.custom-grid-item-icon,
+.custom-grid-item-name,
+.custom-grid-item-description,
+.custom-grid-header,
+.custom-grid-title,
+.custom-grid-subtitle {
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* #endregion */
+
+/* #region 表格 */
+
+/* =========================================================
+   主题变量（日间模式）
+   ========================================================= */
+:root {
+    /* 基础背景 */
+    --custom-table-bg-color: white;
+    --custom-table-container-bg: white;
+
+    /* 文本颜色 */
+    --custom-table-text-primary: #333;
+    --custom-table-text-secondary: #666;
+
+    /* 边框颜色 */
+    --custom-table-border-color: #ddd;
+    --custom-table-border-light: #e1e4e8;
+    --custom-table-border-dark: #ccc;
+
+    /* 表头 / 行背景 */
+    --custom-table-header-bg: #f8f9fa;
+    --custom-table-even-row-bg: #fafbfc;
+
+    /* 阴影 */
+    --custom-table-shadow: rgba(0, 0, 0, 0.05);
+
+    /* caption */
+    --custom-table-caption-text: #555;
+
+    /* tfoot */
+    --custom-table-footer-bg: #f1f3f5;
+    --custom-table-footer-text: #333;
+    --custom-table-footer-border: #ccc;
+
+    /* 行状态 */
+    --custom-table-row-selected-bg: #e6f2ff;
+    --custom-table-row-danger-bg: #fdecea;
+    --custom-table-row-warning-bg: #fff4e5;
+    --custom-table-row-success-bg: #edf7ed;
+}
+
+/* =========================================================
+   主题变量（夜间模式）
+   ========================================================= */
+[data-theme="dark"] {
+    --custom-table-bg-color: #1e1e1e;
+    --custom-table-container-bg: #2d2d2d;
+
+    --custom-table-text-primary: #e0e0e0;
+    --custom-table-text-secondary: #a0a0a0;
+
+    --custom-table-border-color: #444;
+    --custom-table-border-light: #3a3a3a;
+    --custom-table-border-dark: #555;
+
+    --custom-table-header-bg: #3a3a3a;
+    --custom-table-even-row-bg: #343434;
+
+    --custom-table-shadow: rgba(0, 0, 0, 0.2);
+
+    --custom-table-caption-text: #aaa;
+
+    --custom-table-footer-bg: #2a2a2a;
+    --custom-table-footer-text: #e0e0e0;
+    --custom-table-footer-border: #555;
+
+    --custom-table-row-selected-bg: #1f3a5a;
+    --custom-table-row-danger-bg: #4a1f1f;
+    --custom-table-row-warning-bg: #4a3b1f;
+    --custom-table-row-success-bg: #1f3a2a;
+}
+
+/* =========================================================
+   表格容器
+   使用：<div class="custom-table-container">
+   ========================================================= */
+.custom-table-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+
+    background-color: var(--custom-table-container-bg);
+    color: var(--custom-table-text-primary);
+
+    border-radius: 3px;
+    box-shadow: 0 2px 5px var(--custom-table-shadow);
+
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* =========================================================
+   表格基础样式
+   ========================================================= */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+
+    font-size: 14px;
+    border: 1px solid var(--custom-table-border-light);
+
+    transition: border-color 0.3s ease;
+}
+
+/* ---------- caption ---------- */
+/* 使用：<caption>表格标题</caption> */
+.custom-table caption {
+    caption-side: top;
+    padding: 8px 0 12px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--custom-table-caption-text);
+}
+
+/* ---------- 表头 thead ---------- */
+.custom-table thead th {
+    background-color: var(--custom-table-header-bg);
+    border-bottom: 2px solid var(--custom-table-border-dark);
+}
+
+/* ---------- 单元格通用 ---------- */
+.custom-table th {
+    padding: 12px 8px;
+    text-align: center;
+    white-space: nowrap;
+
+    font-weight: 600;
+    color: var(--custom-table-text-primary);
+
+    border: 1px solid var(--custom-table-border-dark);
+    background-color: var(--custom-table-header-bg);
+}
+
+.custom-table td {
+    padding: 10px 8px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    color: var(--custom-table-text-primary);
+    border: 1px solid var(--custom-table-border-color);
+}
+
+/* ---------- tbody 行交替 ---------- */
+.custom-table tbody tr:nth-child(even) {
+    background-color: var(--custom-table-even-row-bg);
+}
+
+/* ---------- tfoot ---------- */
+/* 使用：汇总 / 合计 / 备注 */
+.custom-table tfoot {
+    background-color: var(--custom-table-footer-bg);
+}
+
+.custom-table tfoot th,
+.custom-table tfoot td {
+    padding: 10px 8px;
+    font-weight: 600;
+    text-align: center;
+
+    color: var(--custom-table-footer-text);
+    border-top: 2px solid var(--custom-table-footer-border);
+}
+
+/* 使用：<td class="text-right"> */
+.custom-table .text-left {
+    text-align: left;
+}
+
+.custom-table .text-center {
+    text-align: center;
+}
+
+.custom-table .text-right {
+    text-align: right;
+}
+
+/* 使用：<tr class="empty-row"> */
+.custom-table .empty-row td {
+    padding: 20px;
+    text-align: center;
+    font-style: italic;
+    color: var(--custom-table-text-secondary);
+}
+
+/* 使用：<table class="custom-table is-compact"> */
+.custom-table.is-compact th,
+.custom-table.is-compact td {
+    padding: 6px 6px;
+    font-size: 13px;
+}
+
+/* 使用：
+<colgroup>
+  <col class="is-narrow">
+  <col>
+  <col class="is-wide">
+</colgroup>
+*/
+.custom-table col {
+    width: auto;
+}
+
+.custom-table col.is-narrow {
+    width: 80px;
+}
+
+.custom-table col.is-wide {
+    width: 200px;
+}
+
+/* =========================================================
+   行状态（不要写死在 HTML 模板里）
+   ========================================================= */
+.custom-table tr.is-selected {
+    background-color: var(--custom-table-row-selected-bg);
+}
+
+.custom-table tr.is-danger {
+    background-color: var(--custom-table-row-danger-bg);
+}
+
+.custom-table tr.is-warning {
+    background-color: var(--custom-table-row-warning-bg);
+}
+
+.custom-table tr.is-success {
+    background-color: var(--custom-table-row-success-bg);
+}
+
+/* =========================================================
+   响应式：小屏横向滚动
+   ========================================================= */
+@media (max-width: 768px) {
+    .custom-table-container {
+        padding: 15px;
+        margin: 1rem auto;
+        overflow-x: auto;
+    }
+
+    .custom-table {
+        min-width: 600px;
+        font-size: 13px;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        padding: 8px 5px;
+    }
+}
+
+/* #endregion */
+
+/* #region Bilibili */
+
+/* 增强选择器优先级，确保规则生效 */
+.bilibili {
+    position: relative;
+    /* 核心宽度方案：占据文章内容区的全部可用宽度 */
+    width: 100%;
+    /* 限制在大屏幕上的最大宽度，可调整数值 */
+    max-width: 1024px;
+    /* 更显著的上下间距 */
+    margin: 3rem auto;
+    /* 16:9 宽高比 */
+    padding-top: 56.25%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(145deg, #f0f4f9, #e6ebf1);
+    /* 渐变背景更现代 */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: block;
+}
+
+/* 确保iframe绝对定位并强制继承容器全部空间 */
+.bilibili iframe {
+    position: absolute !important;
+    /* 使用 !important 确保规则优先级最高 */
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    border-radius: inherit;
+    /* 可选：添加一个显眼的临时边框用于调试，确认iframe大小 */
+    /* box-shadow: inset 0 0 0 2px red; */
+}
+
+/* 悬停效果 */
+.bilibili:hover {
+    transform: translateY(-6px) scale(1.005);
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* #endregion */
+
+/* #region 博文图片*/
+
+/* =========================================================
+   博文图片样式（Post Image Styles）
+   设计目标：
+   1. 博文中图片外观统一（边框 / 留白 / 夜间模式）
+   2. 图片尺寸不强制，允许作者手动调控
+   3. 不破坏图片原始比例
+   4. 可选交互（点击 / 对齐 / 图注）
+   ========================================================= */
+
+
+/* =========================================================
+   一、主题变量（日间模式）
+   只在这里调整颜色、层级、观感
+   ========================================================= */
+:root {
+    /* 图片容器背景（形成画框感） */
+    --post-image-bg: #f7f8fa;
+
+    /* 图片边框 */
+    --post-image-border-color: #dcdfe6;
+
+    /* 图片阴影（轻量，正文不喧宾夺主） */
+    --post-image-shadow: rgba(0, 0, 0, 0.06);
+
+    /* 图注文字颜色 */
+    --post-image-caption-text: #666;
+
+    /* Hover / 点击遮罩 */
+    --post-image-overlay: rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   二、主题变量（夜间模式）
+   使用方式：<html data-theme="dark">
+   ========================================================= */
+[data-theme="dark"] {
+    --post-image-bg: #2b2b2b;
+    --post-image-border-color: #444;
+    --post-image-shadow: rgba(0, 0, 0, 0.35);
+    --post-image-caption-text: #aaa;
+    --post-image-overlay: rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   三、博文图片基础容器（必须使用）
+   使用：
+   <div class="post-image">
+     <img src="..." alt="">
+   </div>
+   ========================================================= */
+.post-image {
+    position: relative;
+    display: block;
+
+    /* 博文中的自然留白 */
+    margin: 1.5rem auto;
+    padding: 6px;
+
+    background-color: var(--post-image-bg);
+    border: 1px solid var(--post-image-border-color);
+    border-radius: 4px;
+
+    box-shadow: 0 1px 4px var(--post-image-shadow);
+
+    /* 尺寸接口（作者可控） */
+    --post-img-width: auto;
+    --post-img-max-width: 100%;
+
+    width: var(--post-img-width);
+    max-width: var(--post-img-max-width);
+
+    transition:
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   四、博文图片本体（不控制尺寸，只保证比例）
+   图片默认尺寸策略说明：
+   - 不显式指定尺寸时，使用图片自身固有尺寸
+   - 通过 max-width: 100% 限制不超过正文宽度
+   - 小图不放大，大图自动等比缩小
+   ========================================================= */
+.post-image img {
+    display: block;
+
+    max-width: 100%;
+    /* 防止超出正文 */
+    height: auto;
+    /* 永远保持原始比例 */
+
+    margin: 0 auto;
+}
+
+.post-image a {
+    display: inline-block;
+    cursor: zoom-in;
+}
+
+/* =========================================================
+   五、尺寸控制（作者在 HTML 中通过 CSS 变量调节）
+   推荐用法示例：
+   <div class="post-image" style="--post-img-max-width: 640px;">
+   ========================================================= */
+
+/* 不需要额外样式，变量已在 .post-image 中定义 */
+
+
+/* =========================================================
+   六、对齐方式（正文排版常用）
+   ========================================================= */
+.post-image.is-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-image.is-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.post-image.is-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+
+/* =========================================================
+   七、可点击图片（例如：点击查看大图）
+   使用：class="post-image is-clickable"
+   ========================================================= */
+.post-image.is-clickable {
+    cursor: pointer;
+}
+
+/* Hover 提示 */
+.post-image.is-clickable:hover {
+    box-shadow: 0 4px 12px var(--post-image-shadow);
+}
+
+/* Hover 遮罩层 */
+.post-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    pointer-events: none;
+}
+
+.post-image.is-clickable:hover::after {
+    background-color: var(--post-image-overlay);
+}
+
+
+/* =========================================================
+   八、禁用 / 弱化展示（非主要内容）
+   使用：class="post-image is-muted"
+   ========================================================= */
+.post-image.is-muted {
+    opacity: 0.6;
+}
+
+
+/* =========================================================
+   九、图注（Caption）
+   使用：
+   <div class="post-image">
+     <img ...>
+     <div class="post-image-caption">图注文字</div>
+   </div>
+   ========================================================= */
+.post-image-caption {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--post-image-caption-text);
+}
+
+
+/* =========================================================
+   十、响应式微调（小屏）
+   ========================================================= */
+@media (max-width: 768px) {
+    .post-image {
+        padding: 4px;
+        margin: 1.2rem auto;
+    }
+
+    .post-image-caption {
+        font-size: 12px;
+    }
+}
+
+/* #endregion */
