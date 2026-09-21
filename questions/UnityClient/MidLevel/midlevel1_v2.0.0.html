@@ -1,0 +1,1668 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity客户端中级笔试题卷（一） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="倒计时就绪01:00:00开始暂停重置 1-110 题（单选）已完成 0&#x2F;1101ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9ABCD10ABCD11ABCD12ABCD13ABCD14ABCD15ABCD16ABCD17ABCD18ABCD19ABCD20ABCD21ABCD22ABCD23ABCD24ABCD25ABCD26ABCD27ABCD28ABCD2">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unity客户端中级笔试题卷（一）">
+<meta property="og:url" content="https://jokevallen.github.io/questions/UnityClient/MidLevel/midlevel1_v2.0.0.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="倒计时就绪01:00:00开始暂停重置 1-110 题（单选）已完成 0&#x2F;1101ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9ABCD10ABCD11ABCD12ABCD13ABCD14ABCD15ABCD16ABCD17ABCD18ABCD19ABCD20ABCD21ABCD22ABCD23ABCD24ABCD25ABCD26ABCD27ABCD28ABCD2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-09-21T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-21T12:02:55.794Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="编程,学习,生活,哲理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/questions/UnityClient/MidLevel/midlevel1_v2.0.0.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity客户端中级笔试题卷（一）',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><link rel="stylesheet" href="/css/hexo-timer.css"><link rel="stylesheet" href="/css/hexo-answer-sheet.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">156</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-book-open"></i><span> 题库</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-book-open"></i><span> 题库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">Unity客户端中级笔试题卷（一）</h1></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="page-title">Unity客户端中级笔试题卷（一）</div><div class="container" id="article-container"><div class="hexo-timer is-sticky pos-middle-left" id="hexo-timer-t82s4wfc" style="position:fixed;z-index:9999;top:50%;left:2vw;right:auto;bottom:auto;transform:translateY(-50%);" data-mode="down" data-initial="3600" data-persist="false" data-auto="false"><div class="timer-header"><span class="timer-label">倒计时</span><span class="timer-status">就绪</span></div><div class="timer-display">01:00:00</div><div class="timer-controls"><button class="timer-btn timer-start" type="button">开始</button><button class="timer-btn timer-pause" type="button" disabled>暂停</button><button class="timer-btn timer-reset" type="button">重置</button></div></div>
+<div class="hexo-answer-sheet is-sticky pos-middle-right" id="hexo-answer-sheet-rfevesl4" style="width:15%;height:60%;position:fixed;z-index:9999;top:50%;right:2vw;left:auto;bottom:auto;transform:translateY(-50%);"data-answers="D|A|D|C|B|A|D|C|B|D|A|D|B|C|B|B|A|A|C|B|B|C|D|D|C|B|A|A|A|D|C|A|B|B|C|C|C|A|B|D|B|B|B|A|C|A|D|A|A|A|D|D|A|C|D|A|D|B|B|C|C|A|C|D|C|B|A|D|B|A|B|A|D|B|B|A|A|D|A|C|D|D|D|C|C|D|D|B|B|C|C|A|D|B|B|A|D|A|C|C|C|B|A|B|C|C|C|A|D|B"data-multiple="00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"data-persist="true"data-opts="ABCD"><div class="as-header"><span class="as-label">1-110 题（单选）</span><span class="as-progress">已完成 0/110</span></div><div class="as-body"><div class="as-row" data-index="0" data-multiple="0"><span class="as-num">1</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="1" data-multiple="0"><span class="as-num">2</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="2" data-multiple="0"><span class="as-num">3</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="3" data-multiple="0"><span class="as-num">4</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="4" data-multiple="0"><span class="as-num">5</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="5" data-multiple="0"><span class="as-num">6</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="6" data-multiple="0"><span class="as-num">7</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="7" data-multiple="0"><span class="as-num">8</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="8" data-multiple="0"><span class="as-num">9</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="9" data-multiple="0"><span class="as-num">10</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="10" data-multiple="0"><span class="as-num">11</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="11" data-multiple="0"><span class="as-num">12</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="12" data-multiple="0"><span class="as-num">13</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="13" data-multiple="0"><span class="as-num">14</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="14" data-multiple="0"><span class="as-num">15</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="15" data-multiple="0"><span class="as-num">16</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="16" data-multiple="0"><span class="as-num">17</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="17" data-multiple="0"><span class="as-num">18</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="18" data-multiple="0"><span class="as-num">19</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="19" data-multiple="0"><span class="as-num">20</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="20" data-multiple="0"><span class="as-num">21</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="21" data-multiple="0"><span class="as-num">22</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="22" data-multiple="0"><span class="as-num">23</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="23" data-multiple="0"><span class="as-num">24</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="24" data-multiple="0"><span class="as-num">25</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="25" data-multiple="0"><span class="as-num">26</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="26" data-multiple="0"><span class="as-num">27</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="27" data-multiple="0"><span class="as-num">28</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="28" data-multiple="0"><span class="as-num">29</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="29" data-multiple="0"><span class="as-num">30</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="30" data-multiple="0"><span class="as-num">31</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="31" data-multiple="0"><span class="as-num">32</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="32" data-multiple="0"><span class="as-num">33</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="33" data-multiple="0"><span class="as-num">34</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="34" data-multiple="0"><span class="as-num">35</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="35" data-multiple="0"><span class="as-num">36</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="36" data-multiple="0"><span class="as-num">37</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="37" data-multiple="0"><span class="as-num">38</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="38" data-multiple="0"><span class="as-num">39</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="39" data-multiple="0"><span class="as-num">40</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="40" data-multiple="0"><span class="as-num">41</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="41" data-multiple="0"><span class="as-num">42</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="42" data-multiple="0"><span class="as-num">43</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="43" data-multiple="0"><span class="as-num">44</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="44" data-multiple="0"><span class="as-num">45</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="45" data-multiple="0"><span class="as-num">46</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="46" data-multiple="0"><span class="as-num">47</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="47" data-multiple="0"><span class="as-num">48</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="48" data-multiple="0"><span class="as-num">49</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="49" data-multiple="0"><span class="as-num">50</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="50" data-multiple="0"><span class="as-num">51</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="51" data-multiple="0"><span class="as-num">52</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="52" data-multiple="0"><span class="as-num">53</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="53" data-multiple="0"><span class="as-num">54</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="54" data-multiple="0"><span class="as-num">55</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="55" data-multiple="0"><span class="as-num">56</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="56" data-multiple="0"><span class="as-num">57</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="57" data-multiple="0"><span class="as-num">58</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="58" data-multiple="0"><span class="as-num">59</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="59" data-multiple="0"><span class="as-num">60</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="60" data-multiple="0"><span class="as-num">61</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="61" data-multiple="0"><span class="as-num">62</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="62" data-multiple="0"><span class="as-num">63</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="63" data-multiple="0"><span class="as-num">64</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="64" data-multiple="0"><span class="as-num">65</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="65" data-multiple="0"><span class="as-num">66</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="66" data-multiple="0"><span class="as-num">67</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="67" data-multiple="0"><span class="as-num">68</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="68" data-multiple="0"><span class="as-num">69</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="69" data-multiple="0"><span class="as-num">70</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="70" data-multiple="0"><span class="as-num">71</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="71" data-multiple="0"><span class="as-num">72</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="72" data-multiple="0"><span class="as-num">73</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="73" data-multiple="0"><span class="as-num">74</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="74" data-multiple="0"><span class="as-num">75</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="75" data-multiple="0"><span class="as-num">76</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="76" data-multiple="0"><span class="as-num">77</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="77" data-multiple="0"><span class="as-num">78</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="78" data-multiple="0"><span class="as-num">79</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="79" data-multiple="0"><span class="as-num">80</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="80" data-multiple="0"><span class="as-num">81</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="81" data-multiple="0"><span class="as-num">82</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="82" data-multiple="0"><span class="as-num">83</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="83" data-multiple="0"><span class="as-num">84</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="84" data-multiple="0"><span class="as-num">85</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="85" data-multiple="0"><span class="as-num">86</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="86" data-multiple="0"><span class="as-num">87</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="87" data-multiple="0"><span class="as-num">88</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="88" data-multiple="0"><span class="as-num">89</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="89" data-multiple="0"><span class="as-num">90</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="90" data-multiple="0"><span class="as-num">91</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="91" data-multiple="0"><span class="as-num">92</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="92" data-multiple="0"><span class="as-num">93</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="93" data-multiple="0"><span class="as-num">94</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="94" data-multiple="0"><span class="as-num">95</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="95" data-multiple="0"><span class="as-num">96</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="96" data-multiple="0"><span class="as-num">97</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="97" data-multiple="0"><span class="as-num">98</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="98" data-multiple="0"><span class="as-num">99</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="99" data-multiple="0"><span class="as-num">100</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="100" data-multiple="0"><span class="as-num">101</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="101" data-multiple="0"><span class="as-num">102</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="102" data-multiple="0"><span class="as-num">103</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="103" data-multiple="0"><span class="as-num">104</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="104" data-multiple="0"><span class="as-num">105</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="105" data-multiple="0"><span class="as-num">106</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="106" data-multiple="0"><span class="as-num">107</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="107" data-multiple="0"><span class="as-num">108</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="108" data-multiple="0"><span class="as-num">109</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="109" data-multiple="0"><span class="as-num">110</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div></div><div class="as-controls"><button type="button" class="as-btn as-grade">批卷</button><button type="button" class="as-btn as-reset">重置</button></div><div class="as-result" style="display:none;"></div></div>
+
+<blockquote>
+<p>题卷版本：v2.0.0</p>
+</blockquote>
+<blockquote>
+<p>本卷共 <strong>110 道客观题 + 12 道主观题</strong>，侧重中级工程判断与边界分析。</p>
+</blockquote>
+<div class="note info no-icon simple"><p><strong>考前须知：</strong></p>
+<ol>
+<li>每道题的答案和解析默认隐藏，答题者可以根据需要点击<code>查看答案</code>按钮来查看正确答案和解析。</li>
+<li>PC 端可以通过 <code>Ctrl + F</code> 快捷键来搜索含有指定内容的题目。</li>
+</ol>
+</div>
+
+<h2 id="全卷考察点概览"><a href="#全卷考察点概览" class="headerlink" title="全卷考察点概览"></a>全卷考察点概览</h2><h3 id="客观题"><a href="#客观题" class="headerlink" title="客观题"></a>客观题</h3><table>
+<thead>
+<tr>
+<th>大知识点</th>
+<th>题数</th>
+<th>细分知识点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C# 基础</td>
+<td>20</td>
+<td>初始化&#x2F;构造顺序、运算符重载、数组与泛型协变、dynamic、async&#x2F;await 上下文、迭代器 Dispose、Nullable、字符串驻留、反射与 IL2CPP、WeakReference、IDisposable、IComparable&#x2F;IComparer、模式匹配、checked、AttributeUsage、交错&#x2F;多维数组、const&#x2F;readonly、struct 装箱</td>
+</tr>
+<tr>
+<td>Unity 引擎基础</td>
+<td>17</td>
+<td>物理插值&#x2F;外推、Kinematic 与 CharacterController、ScriptableObject 资产污染、Additive 场景、QueryTriggerInteraction、ForceMode、MovePosition&#x2F;MoveRotation、触发器回调、fixedDeltaTime&#x2F;maximumDeltaTime、帧率设置、Culling Mask 与物理、异步加载激活、OffMeshLink、Animator Culling、SerializeReference、多场景光照</td>
+</tr>
+<tr>
+<td>UI</td>
+<td>12</td>
+<td>Canvas 重建范围、RectMask2D、ContentSizeFitter 循环、AspectRatioFitter、SafeArea、CanvasGroup、EventTrigger、TMP SDF 图集、ScrollRect 虚拟列表、GraphicRaycaster、Canvas 排序、按钮防连点</td>
+</tr>
+<tr>
+<td>资源管理</td>
+<td>16</td>
+<td>LZMA&#x2F;LZ4 取舍、AB 卸载与引用计数、循环依赖、Addressables 释放、未使用资源回收、纹理压缩与 Mipmap、Prefab Variant、Atlas Variant、AudioClip Load Type、Read&#x2F;Write、AB Variant、远程 Catalog、资源加密、增量打包、资源冗余、场景打包</td>
+</tr>
+<tr>
+<td>性能优化</td>
+<td>17</td>
+<td>SetPass&#x2F;DrawCall、静态&#x2F;动态合批、GPU Instancing、SRP Batcher、Overdraw、GC 来源、ProfilerRecorder、Memory Profiler、真机 Profiling、LOD、遮挡剔除、视锥剔除、Frame Debugger、Mipmap、物理频率、Animator Culling</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>13</td>
+<td>帧同步&#x2F;状态同步、Protobuf、四次挥手、粘包、心跳、WebSocket、断线重连、RPC、Keep-Alive、延迟补偿、阻塞&#x2F;非阻塞 Socket、消息合并、加密</td>
+</tr>
+<tr>
+<td>设计模式</td>
+<td>8</td>
+<td>命令、状态&#x2F;FSM&#x2F;层次状态机、组合、享元、责任链、中介者、门面、MVVM</td>
+</tr>
+<tr>
+<td>数学</td>
+<td>3</td>
+<td>投影长度、反射公式、矩阵变换顺序</td>
+</tr>
+<tr>
+<td>数据结构与算法</td>
+<td>4</td>
+<td>快排最坏情况、哈希冲突、归并&#x2F;快排取舍、BST 后继</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>110</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="主观题"><a href="#主观题" class="headerlink" title="主观题"></a>主观题</h3><table>
+<thead>
+<tr>
+<th>题号</th>
+<th>类型</th>
+<th>考察知识点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>简答</td>
+<td>协程与 Invoke 的区别，常见 yield 指令的恢复时机</td>
+</tr>
+<tr>
+<td>2</td>
+<td>简答</td>
+<td>MonoBehaviour 单例、跨场景保留与防重复</td>
+</tr>
+<tr>
+<td>3</td>
+<td>简答</td>
+<td>对象池的适用场景与关键问题</td>
+</tr>
+<tr>
+<td>4</td>
+<td>简答</td>
+<td>ScriptableObject 的用途、优势与与 MonoBehaviour 的区别</td>
+</tr>
+<tr>
+<td>5</td>
+<td>简答</td>
+<td>C# 迭代器状态机原理与内存&#x2F;执行时机差异</td>
+</tr>
+<tr>
+<td>6</td>
+<td>简答</td>
+<td>观察者&#x2F;事件系统的优点、常见坑与健壮事件中心设计</td>
+</tr>
+<tr>
+<td>7</td>
+<td>简答</td>
+<td>LOD、遮挡剔除、视锥剔除的区别与作用</td>
+</tr>
+<tr>
+<td>8</td>
+<td>简答</td>
+<td>async&#x2F;await、协程、UniTask 的区别与适用场景</td>
+</tr>
+<tr>
+<td>9</td>
+<td>简答</td>
+<td>C# GC 基本原理与减少 GC 的常用方法</td>
+</tr>
+<tr>
+<td>10</td>
+<td>简答</td>
+<td>Resources、AssetBundle、Addressables 对比</td>
+</tr>
+<tr>
+<td>11</td>
+<td>简答</td>
+<td>Unity UI 性能优化常见手段</td>
+</tr>
+<tr>
+<td>12</td>
+<td>简答</td>
+<td>AssetBundle 依赖管理与引用计数、资源泄漏原因</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="一、客观题"><a href="#一、客观题" class="headerlink" title="一、客观题"></a>一、客观题</h2><h3 id="C-基础"><a href="#C-基础" class="headerlink" title="C# 基础"></a>C# 基础</h3><p><strong>1.</strong> 阅读以下代码，输出顺序是？</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> &#123; <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">A</span>()</span> &#123; Console.WriteLine(<span class="hljs-string">&quot;A&quot;</span>); &#125; &#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> : <span class="hljs-title">A</span><br>&#123;<br>    <span class="hljs-built_in">int</span> x = Init();<br>    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> <span class="hljs-title">Init</span>()</span> &#123; Console.WriteLine(<span class="hljs-string">&quot;x&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">B</span>()</span> &#123; Console.WriteLine(<span class="hljs-string">&quot;B&quot;</span>); &#125;<br>&#125;<br><span class="hljs-keyword">new</span> B();<br></code></pre></td></tr></table></figure>
+<p>A. x → B → A　B. A → x → B　C. A → B → x　D. x → A → B</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：派生类实例字段初始化器先执行，随后进入基类构造函数，最后执行派生类构造函数体。因此顺序为 x → A → B。这是继承体系中容易记反的边界。</li>
+</ul>
+</div></div>
+
+<p><strong>2.</strong> 某类型只重写了 &#x3D;&#x3D; 运算符（按 Id 比较），没有重写 Equals 和 GetHashCode。把它作为 HashSet&lt;T&gt; 的元素时，最可能的现象是？<br>A. 可能把相同 Id 的对象当成不同元素　B. 一定会编译报错　C. 能按 Id 正确去重，因为 HashSet 内部调用 &#x3D;&#x3D;　D. 运行时必定抛出 InvalidOperationException</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：HashSet&#x2F;Dictionary 通过 GetHashCode 定位、用 Equals 判等，与 &#x3D;&#x3D; 是两套机制。重写 &#x3D;&#x3D; 时应同步重写 Equals 与 GetHashCode，否则集合语义与运算符语义不一致。</li>
+</ul>
+</div></div>
+
+<p><strong>3.</strong> 以下代码编译通过，运行结果是？</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-built_in">object</span>[] arr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>[<span class="hljs-number">1</span>];<br>arr[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+<p>A. 正常运行，arr[0] 为 1　B. 编译期报错，不能把 string[] 赋给 object[]　C. 运行时把 1 自动转成字符串　D. 运行时抛出 ArrayTypeMismatchException</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：数组协变允许 string[] 赋给 object[]，但运行时数组仍记录元素类型为 string；写入 int 会触发 ArrayTypeMismatchException。协变只在读取时安全。</li>
+</ul>
+</div></div>
+
+<p><strong>4.</strong> 下列泛型赋值<strong>不合法</strong>的是？<br>A. IEnumerable&lt;object&gt; e &#x3D; new List&lt;string&gt;();　B. Func&lt;string, object&gt; f &#x3D; s &#x3D;&gt; s;　C. IEnumerable&lt;string&gt; e &#x3D; new List&lt;object&gt;();　D. Action&lt;string&gt; a &#x3D; (Action&lt;object&gt;)(o &#x3D;&gt; { });</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：IEnumerable&lt;out T&gt; 支持协变，因此 List&lt;string&gt; 可以赋给 IEnumerable&lt;object&gt;，反之则不行。Action&lt;in T&gt; 支持逆变，Func 的输出支持协变，对应赋值合法。因此不合法的是把 IEnumerable&lt;object&gt; 赋给 IEnumerable&lt;string&gt;。</li>
+</ul>
+</div></div>
+
+<p><strong>5.</strong> 有以下两个重载，执行 dynamic d &#x3D; “hi”; F(d); 的结果是？</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">F</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> o</span>)</span> &#123; Console.WriteLine(<span class="hljs-string">&quot;object&quot;</span>); &#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">F</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> s</span>)</span> &#123; Console.WriteLine(<span class="hljs-string">&quot;string&quot;</span>); &#125;<br></code></pre></td></tr></table></figure>
+<p>A. 编译期报错，无法确定重载　B. 运行时绑定，输出 string　C. 输出 object　D. 随机选择其中一个</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：dynamic 会跳过编译期重载解析，在运行时根据实际类型选择重载，因此调用 F(string)。若直接写 F(“hi”) 则在编译期绑定。</li>
+</ul>
+</div></div>
+
+<p><strong>6.</strong> 在 Unity 中，下面的异步方法最可能在非主线程访问 Unity API、从而出问题的是？<br>A. await Task.Delay(100).ConfigureAwait(false); transform.position &#x3D; Vector3.zero;　B. await UniTask.Delay(100); transform.position &#x3D; Vector3.zero;　C. await Task.Run(() &#x3D;&gt; { }); transform.position &#x3D; Vector3.zero;　D. await Task.Delay(100); transform.position &#x3D; Vector3.zero;</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Unity 的同步上下文会把普通 await 的后续逻辑调回主线程；ConfigureAwait(false) 放弃该上下文，后续可能在线程池线程执行，此时访问 Transform 等 Unity API 不再安全。</li>
+</ul>
+</div></div>
+
+<p><strong>7.</strong> 使用 foreach 遍历一个由 yield 实现的迭代器时，在循环中提前 break，迭代器中的 finally 块会怎样？<br>A. 取决于迭代器是否为 async，普通迭代器不执行　B. 只有发生异常时才会执行，正常 break 不执行　C. 不会执行，迭代器被直接丢弃，finally 被跳过　D. 会执行，foreach 结束时会调用 Dispose</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：foreach 生成的 try&#x2F;finally 会在退出循环时调用枚举器的 Dispose；编译器生成的迭代器状态机在 Dispose 中执行 finally，用于释放资源。</li>
+</ul>
+</div></div>
+
+<p><strong>8.</strong> 泛型方法带约束 where T : struct 时，方法内 T? 的含义是？<br>A. 与 T 完全相同　B. 编译错误，值类型不能写成 T?　C. Nullable&lt;T&gt;　D. 仅当 T 为引用类型时才合法</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：where T : struct 表示非可空值类型，但 T? 会被解释为 Nullable&lt;T&gt;，用于表达可空值类型；Nullable&lt;T&gt; 本身不满足 struct 约束，但 T? 这个写法是合法的。</li>
+</ul>
+</div></div>
+
+<p><strong>9.</strong> 执行以下代码，两个 ReferenceEquals 的结果分别是？</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-built_in">string</span> s = <span class="hljs-keyword">new</span> System.Text.StringBuilder(<span class="hljs-string">&quot;hello&quot;</span>).ToString();<br><span class="hljs-built_in">string</span> i = <span class="hljs-built_in">string</span>.Intern(s);<br>Console.WriteLine(ReferenceEquals(s, <span class="hljs-string">&quot;hello&quot;</span>));<br>Console.WriteLine(ReferenceEquals(i, <span class="hljs-string">&quot;hello&quot;</span>));<br></code></pre></td></tr></table></figure>
+<p>A. True &#x2F; True　B. False &#x2F; True　C. True &#x2F; False　D. False &#x2F; False</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：StringBuilder.ToString() 生成的是运行时新字符串，不在驻留池，故第一个为 False；string.Intern 返回驻留池中与内容相同的实例，第二个为 True。</li>
+</ul>
+</div></div>
+
+<p><strong>10.</strong> 用反射 GetMethod(“X”).Invoke(…) 调用某个方法，编辑器下正常，IL2CPP 打包后可能失败。最可能的原因是？<br>A. 反射不能用字符串方法名　B. Invoke 只能调用 public 方法　C. IL2CPP 不支持任何反射　D. 代码剥离把未被静态引用的方法裁掉</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：IL2CPP 构建会做托管代码剥离，仅被反射字符串引用的成员可能被裁掉；需要通过 link.xml、[Preserve] 或强引用方式保留。</li>
+</ul>
+</div></div>
+
+<p><strong>11.</strong> 要用缓存长期持有大对象，又不想阻止 GC 回收它，较合适的做法是？<br>A. 用 WeakReference&lt;T&gt;　B. 用 static 字段强引用　C. 把对象设为 DontDestroyOnLoad　D. 用 Dictionary&lt;string, object&gt; 强引用缓存</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：WeakReference&lt;T&gt; 不阻止目标被回收；TryGetTarget 能安全判断对象是否仍存活。强引用缓存会让对象无法回收，是内存泄漏的常见来源。</li>
+</ul>
+</div></div>
+
+<p><strong>12.</strong> 下列<strong>不能</strong>直接重载的运算符是？<br>A. +　B. &#x3D;&#x3D;　C. true　D. &#x3D;</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：赋值运算符 &#x3D; 不能重载；&#x3D;&#x3D;&#x2F;!&#x3D; 必须成对重载，true&#x2F;false 也必须成对。+ 等算术运算符可重载。</li>
+</ul>
+</div></div>
+
+<p><strong>13.</strong> 一个类同时实现了 IDisposable 和终结器。在 Dispose 中较规范的做法是？<br>A. 只调用 GC.Collect() 强制触发一次回收　B. 调用 GC.SuppressFinalize(this)　C. 调用 GC.KeepAlive(this) 让对象保持存活　D. 手动调用 Finalize 完成资源释放</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：Dispose 已释放资源后调用 GC.SuppressFinalize(this)，告诉 GC 不必再执行终结器，避免重复释放与多一次终结开销。Dispose 还应保证可重复调用。</li>
+</ul>
+</div></div>
+
+<p><strong>14.</strong> 某类型不想修改自身、又希望支持「按价格排序」和「按名称排序」两套规则，应优先使用？<br>A. 让类型实现多个 IComparable&lt;T&gt;　B. 用 Equals 重写比较　C. 定义两个实现 IComparer&lt;T&gt; 的比较器　D. 用 &#x3D;&#x3D; 重载比较</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：IComparable&lt;T&gt; 是类型自身的默认比较；多种外部排序规则应使用 IComparer&lt;T&gt;，通过 Sort 传入，保持类型无侵入。</li>
+</ul>
+</div></div>
+
+<p><strong>15.</strong> switch 模式匹配中，case int i when i &gt; 0: 的匹配条件是？<br>A. 只要类型为 int 就匹配　B. 类型为 int 且 i &gt; 0 同时成立才匹配　C. when 子句只用于 default　D. 会先执行 when 再判断类型</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：when 是在模式匹配成功之后追加的守卫条件，二者都满足才会进入该分支；不满足时会继续尝试后续 case。</li>
+</ul>
+</div></div>
+
+<p><strong>16.</strong> 在 checked 块中执行 int.MaxValue + 1，结果是？<br>A. 回绕为 int.MinValue　B. 抛出 OverflowException　C. 编译期报错　D. 自动提升为 long</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：C# 默认是 unchecked，溢出回绕；checked 块会开启整型溢出检查并抛出 OverflowException。该设置不影响浮点数。</li>
+</ul>
+</div></div>
+
+<p><strong>17.</strong> 自定义特性类时，AttributeUsage 的哪个属性控制它能否被派生类继承？<br>A. Inherited　B. AllowMultiple　C. ValidOn　D. Targets</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Inherited 控制特性是否随派生类继承；AllowMultiple 控制能否重复标注；ValidOn 指定可应用的目标。</li>
+</ul>
+</div></div>
+
+<p><strong>18.</strong> 关于 int[][] 与 int[,]，下列说法正确的是？<br>A. int[][] 是交错数组　B. 两者只是语法不同，内存布局完全一致　C. int[,] 是交错数组　D. 两者都是连续矩形数组</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：int[][] 是数组的数组，每一行是独立引用，长度可不同；int[,] 在内存中连续、行列固定，访问与缓存表现不同。</li>
+</ul>
+</div></div>
+
+<p><strong>19.</strong> 需要在运行时根据平台配置初始化一个不可变的值，较合适的是？<br>A. const　B. readonly 实例字段　C. static readonly　D. 普通 static 字段</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：const 必须编译期常量；static readonly 可在静态构造函数或声明处运行时初始化，且初始化后不可再赋值，适合平台相关配置。</li>
+</ul>
+</div></div>
+
+<p><strong>20.</strong> 以下 struct 通过接口方法自增后，输出是？</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">struct</span> S &#123; <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> X; <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Inc</span>()</span> &#123; X++; &#125; &#125;<br>S s = <span class="hljs-keyword">new</span> S();<br>IInc it = s;<br>it.Inc();<br>Console.WriteLine(s.X);<br><span class="hljs-keyword">interface</span> <span class="hljs-title">IInc</span> &#123; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Inc</span>()</span>; &#125;<br></code></pre></td></tr></table></figure>
+<p>A. 1　B. 0　C. 2　D. 编译错误</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：struct 转为接口会发生装箱，it.Inc() 修改的是装箱副本，原变量 s.X 仍为 0。通过接口修改结构体是不可靠的，这是装箱语义的典型边界。</li>
+</ul>
+</div></div>
+
+<h3 id="Unity-引擎基础"><a href="#Unity-引擎基础" class="headerlink" title="Unity 引擎基础"></a>Unity 引擎基础</h3><p><strong>21.</strong> 刚体在固定物理帧移动、渲染帧插值时出现明显抖动。开启 Rigidbody.interpolation 后仍抖动，最可能的原因是？<br>A. 插值只能在 Update 中生效，FixedUpdate 无法参与　B. 在 FixedUpdate 中直接改了 transform.position　C. 没有开启连续碰撞检测，导致显示与物理不同步　D. 质量设置过低，物理更新频率被引擎自动降级</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：插值基于物理帧的刚体位置做显示平滑；若同时直接写 transform.position，会破坏物理内部状态与插值基准，导致抖动。移动应使用 MovePosition 或速度、力。</li>
+</ul>
+</div></div>
+
+<p><strong>22.</strong> 某高速弹丸使用 Rigidbody 的 Extrapolate 插值且碰撞异常，最合理的处理是？<br>A. 继续用外推，速度越快越准　B. 提高渲染帧率即可　C. 改用 Interpolate　D. 关闭刚体</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Extrapolate 按速度预测，可造成穿越或错误位置；高速物体应开启连续碰撞检测，并优先用 Interpolate 做显示平滑，避免依赖外推。</li>
+</ul>
+</div></div>
+
+<p><strong>23.</strong> 角色需要贴合地面移动、受斜坡与台阶约束，且不参与受力的布娃娃物理。较合适的是？<br>A. Rigidbody + AddForce　B. BoxCollider 不带刚体　C. Rigidbody 设为 Kinematic 后直接写 transform.position　D. CharacterController</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：CharacterController 专为角色移动设计，自带胶囊体、斜坡与台阶处理，不依赖受力；Rigidbody 更适合受物理力与碰撞模拟的对象。</li>
+</ul>
+</div></div>
+
+<p><strong>24.</strong> 在编辑器下运行时修改一个 ScriptableObject 资产字段，可能带来什么风险？<br>A. 无风险，退出播放会自动还原　B. 会触发编译　C. 只影响当前帧　D. 会修改磁盘上的资产本身</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：运行时对 ScriptableObject 资产的赋值会写入该资产，编辑器下可能被保存下来造成数据污染；需要临时修改时应 Instantiate 出副本。</li>
+</ul>
+</div></div>
+
+<p><strong>25.</strong> 用 LoadSceneMode.Additive 叠加加载场景后，想让新场景中的对象成为后续 Instantiate 的默认父级，应调用？<br>A. SceneManager.MoveGameObjectToScene　B. SceneManager.UnloadSceneAsync　C. SceneManager.SetActiveScene(newScene)　D. DontDestroyOnLoad</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：SetActiveScene 决定新创建对象所属的活动场景与默认父级；MoveGameObjectToScene 用于移动已有对象，UnloadSceneAsync 用于卸载。</li>
+</ul>
+</div></div>
+
+<p><strong>26.</strong> Physics.Raycast 想命中触发器，同时只检测指定层，正确的参数组合是？<br>A. 只传 LayerMask，触发器默认一定会命中，无需额外设置　B. 传 LayerMask 并设置 QueryTriggerInteraction.Collide　C. 把触发器层从 LayerMask 中剔除，避免命中触发器　D. 必须改用 Physics.OverlapSphere，Raycast 不支持触发器</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：物理查询默认可能忽略触发器，是否命中由 QueryTriggerInteraction 控制；LayerMask 负责层过滤。二者职责不同，需要组合使用。</li>
+</ul>
+</div></div>
+
+<p><strong>27.</strong> 想让一个刚体瞬间获得一个速度变化，且不受质量影响，应使用？<br>A. ForceMode.VelocityChange　B. ForceMode.Acceleration　C. ForceMode.Impulse　D. ForceMode.Force</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：VelocityChange 直接改变速度、无视质量；Impulse 是冲量，效果与质量有关；Force&#x2F;Acceleration 是持续力&#x2F;加速度，需乘以时间步长。</li>
+</ul>
+</div></div>
+
+<p><strong>28.</strong> 对 Rigidbody 开启 Interpolate 后，还在 Update 中每帧修改 transform.rotation，最可能出现的问题是？<br>A. 与物理插值互相覆盖　B. 只影响碰撞检测　C. 刚体自动转为 Kinematic　D. 插值自动禁用，无影响</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Interpolate 会基于物理帧状态插值渲染姿态；在 Update 中直接写 transform 会覆盖插值结果，造成显示与物理不同步。旋转应使用 MoveRotation 或 angularVelocity。</li>
+</ul>
+</div></div>
+
+<p><strong>29.</strong> 一个 Kinematic 刚体与普通碰撞体发生接触，能否触发 OnTriggerEnter？<br>A. 可以，前提是至少一方为 isTrigger 且 Kinematic 参与查询　B. 不能，Kinematic 刚体不会产生任何碰撞或触发回调　C. 只有 Dynamic 与 Dynamic 之间才能触发，其他组合无效　D. 必须把 Kinematic 改为 Static 后，触发回调才会生效</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：触发器回调要求至少一方带 Rigidbody，Kinematic 刚体可以触发；是否影响其他刚体由 detectCollisions 等设置决定，与是否 Dynamic 无必然关系。</li>
+</ul>
+</div></div>
+
+<p><strong>30.</strong> Time.fixedDeltaTime 设为 0.02、某帧卡顿耗时 0.5 秒时，Unity 默认会怎样处理物理步进？<br>A. 自动降低 fixedDeltaTime　B. 补跑 25 次 FixedUpdate，无上限　C. 直接跳过所有物理　D. 受 Time.maximumDeltaTime 限制</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：Unity 用 maximumDeltaTime 限制单帧最多补偿的时间，防止因卡顿补跑过多 FixedUpdate 造成恶性循环；超出部分会被丢弃或调整。</li>
+</ul>
+</div></div>
+
+<p><strong>31.</strong> 移动端既想锁 30 帧、又想避免垂直同步干扰，正确设置是？<br>A. QualitySettings.vSyncCount &#x3D; 1，Application.targetFrameRate &#x3D; 30　B. 只设 vSyncCount &#x3D; 1 即可　C. QualitySettings.vSyncCount &#x3D; 0，Application.targetFrameRate &#x3D; 30　D. 只设 Application.targetFrameRate &#x3D; -1</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：vSyncCount 会覆盖 targetFrameRate；要使用 targetFrameRate 锁帧，应先把 vSyncCount 设为 0。</li>
+</ul>
+</div></div>
+
+<p><strong>32.</strong> 相机 Culling Mask 设置为只渲染 Enemy 层，是否会影响 Physics.Raycast 的命中结果？<br>A. 不会，Culling Mask 只影响相机渲染　B. 会，物理查询也按相机 Culling Mask 过滤　C. 会影响，但只影响 2D 物理　D. 需要同时关闭 Physics.queriesHitTriggers</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Culling Mask 是相机渲染过滤；物理查询的层过滤由 Physics.Raycast 的 layerMask 参数独立控制，二者互不影响。</li>
+</ul>
+</div></div>
+
+<p><strong>33.</strong> 用 SceneManager.LoadSceneAsync 加载并希望先做完资源准备再切场景，正确做法是？<br>A. 把 priority 设为 0，让加载在后台低优先级进行　B. 设 allowSceneActivation &#x3D; false　C. 加载完立即自动切换，无法控制激活时机　D. 用同步 LoadScene 替代，彻底避免异步问题</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：AsyncOperation.allowSceneActivation &#x3D; false 会让加载停在约 90% 并暂停激活；准备完成后再置 true 触发切换。加载进度与激活进度需要分别处理。</li>
+</ul>
+</div></div>
+
+<p><strong>34.</strong> 想让 NavMeshAgent 在寻路遇到沟壑时跳过去，较合适的做法是？<br>A. 提高 speed　B. 在沟壑上放置 OffMeshLink　C. 关闭 NavMeshAgent 的 autoTraverseOffMeshLink　D. 把 obstacleAvoidanceType 设为 None</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：OffMeshLink 用于连接两段不相连的导航网格，实现跳跃、爬梯等特殊移动；可通过 autoTraverseOffMeshLink 与 OnOffMeshLink 自定义通过方式。</li>
+</ul>
+</div></div>
+
+<p><strong>35.</strong> 大量角色使用 Animator 但屏幕外仍持续更新，优化较合适的做法是？<br>A. 把所有 Animator 的 Culling Mode 设为 Always Animate　B. 关闭 Apply Root Motion　C. 设为 Cull Update Transforms 或 Cull Completely　D. 降低动画帧率即可</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Always Animate 即使不可见也更新；Cull Update Transforms 在不可见时停止变换更新，Cull Completely 完全停止，适合大量角色场景。</li>
+</ul>
+</div></div>
+
+<p><strong>36.</strong> 需要在 Inspector 中序列化一个接口类型字段并保存多态实例，应使用？<br>A. 普通 public 字段　B. static 字段　C. [SerializeReference]　D. [NonSerialized]</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Unity 默认不支持接口&#x2F;多态引用的直接序列化；[SerializeReference] 可在 Inspector 中保存多态对象引用，配合 [Serializable] 使用。</li>
+</ul>
+</div></div>
+
+<p><strong>37.</strong> 多场景叠加时，想让某个场景的光照设置成为全局生效的设置，应把它设为？<br>A. 设置为 Baked 并手动合并　B. Single 模式加载　C. Active Scene　D. 无所谓，所有场景光照都会自动叠加</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：多场景编辑时只有 Active Scene（活动场景）的光照设置作为全局光照参数生效；其他叠加场景的光照设置不会自动参与。</li>
+</ul>
+</div></div>
+
+<h3 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h3><p><strong>38.</strong> 一个界面里既有每帧变化的血条，也有大量静态图标。为降低 UGUI 重建开销，较合理的做法是？<br>A. 把频繁变化与静态元素拆到不同 Canvas，缩小重建范围　B. 关闭所有 Canvas 的 Pixel Perfect　C. 每帧手动调用 Canvas.ForceUpdateCanvases　D. 全部放在同一个 Canvas 下</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：UGUI 元素变化会标脏其所在 Canvas，触发整块网格重建。把高频变化元素拆到独立 Canvas，可避免静态部分被反复重建。</li>
+</ul>
+</div></div>
+
+<p><strong>39.</strong> RectMask2D 相比 Mask 的主要优势与限制是？<br>A. 支持任意形状裁剪，且开销更低　B. 矩形裁剪、开销较低，但不支持任意形状　C. 与 Mask 完全等价　D. 只能用于 World Space Canvas</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：RectMask2D 只做矩形裁剪，不依赖模板缓冲与额外 DrawCall，性能更好；需要圆形、异形裁切时仍要用 Mask 或自定义 Shader。</li>
+</ul>
+</div></div>
+
+<p><strong>40.</strong> ContentSizeFitter 与 VerticalLayoutGroup 同时使用时出现布局抖动，根本原因是？<br>A. 两者不能同时挂载　B. 缺少 AspectRatioFitter　C. ContentSizeFitter 会禁用布局组　D. 两者互相依赖尺寸，形成重建循环</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：布局组根据子物体算出内容尺寸，ContentSizeFitter 又反过来修改自身尺寸，二者可能反复触发重建。应让尺寸来源单向化，或固定其中一方。</li>
+</ul>
+</div></div>
+
+<p><strong>41.</strong> AspectRatioFitter 与 Canvas Scaler 同时使用时，最需要留意的是？<br>A. 前者会禁用后者　B. 两者都会修改尺寸　C. 后者会覆盖前者的宽高比　D. 二者完全独立，无影响</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：Canvas Scaler 负责整体缩放，AspectRatioFitter 负责单个元素宽高比；两者叠加会改变可用尺寸，必须明确谁是尺寸来源，否则比例会异常。</li>
+</ul>
+</div></div>
+
+<p><strong>42.</strong> Screen.safeArea 返回的矩形单位是？<br>A. 归一化比例（0~1）　B. 像素　C. 画布参考分辨率单位　D. 世界坐标</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：Screen.safeArea 返回像素单位的 Rect；换算到 UI 锚点坐标时通常还要除以 Screen.width&#x2F;height 或结合 Canvas 缩放处理，不能直接当作锚点比例使用。</li>
+</ul>
+</div></div>
+
+<p><strong>43.</strong> 某弹窗需要「整体渐隐、期间不可点击、但仍允许射线穿透到下层」。CanvasGroup 应如何设置？<br>A. alpha&#x3D;0，interactable&#x3D;true，blocksRaycasts&#x3D;true　B. alpha 渐变为 0，interactable&#x3D;false　C. alpha&#x3D;1，interactable&#x3D;false，blocksRaycasts&#x3D;false　D. alpha&#x3D;0，interactable&#x3D;true，blocksRaycasts&#x3D;false</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：alpha 控制显示，interactable 控制是否可交互，blocksRaycasts 控制是否拦截射线；动画期间要禁止点击且让射线穿透下层，应关闭后两者。</li>
+</ul>
+</div></div>
+
+<p><strong>44.</strong> 大量使用 EventTrigger 配置 UI 事件，相比在脚本中实现事件接口，主要问题是？<br>A. 每个事件类型都会反射式添加组件&#x2F;回调　B. 无法序列化，运行时事件会丢失　C. 只能在编辑器下使用，发布版本失效　D. 不能处理点击与拖拽等常用事件</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：EventTrigger 方便但会为每个事件类型增加内部实现与回调列表，数量大时管理困难、开销更高；性能敏感或逻辑复杂的界面更适合实现 IPointerClickHandler 等接口。</li>
+</ul>
+</div></div>
+
+<p><strong>45.</strong> TextMeshPro 使用 SDF 字体的主要原理是？<br>A. 为每个字号单独烘焙一张位图字体　B. 把所有中文字符一次性打进图集　C. 存储字形边缘的距离场，缩放时重建清晰边缘　D. 在运行时用矢量笔迹逐帧绘制文字</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：SDF 保存的是到字形边缘的距离信息，可在不同字号下重建平滑边缘；它仍需字体资源与图集，但不必为每个字号单独烘焙。</li>
+</ul>
+</div></div>
+
+<p><strong>46.</strong> ScrollRect 实现无限列表时，除了复用 Item，还必须重点处理的是？<br>A. 复用时的数据刷新、锚点与布局位置　B. 把 Content 设为 LayoutGroup　C. 关闭 Mask　D. 每帧销毁重建</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：虚拟列表的核心是「位置 → 索引 → 数据」的映射与复用；必须处理数据增删、跳转、异步刷新时的索引错位，以及 Item 尺寸不一时的高度计算。</li>
+</ul>
+</div></div>
+
+<p><strong>47.</strong> 一个全屏 GraphicRaycaster 在移动端点击响应慢，较有效的优化是？<br>A. 增加场景中的 EventSystem 数量　B. 开启 Pixel Perfect 提升点击精度　C. 增大 Canvas 的尺寸与分辨率　D. 关闭非交互元素的 Raycast Target</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：GraphicRaycaster 会遍历并检测射线目标；关闭纯展示元素的 Raycast Target 能显著减少检测开销，是最直接的 UI 点击优化。</li>
+</ul>
+</div></div>
+
+<p><strong>48.</strong> 两个嵌套 Canvas 之间控制渲染顺序，较可靠的方式是？<br>A. 通过 Sorting Layer 与 Sort Order 控制　B. 改变元素的锚点、pivot 与相对位置　C. 调整元素的颜色、透明度与混合模式　D. 只调整 Transform 的 z 值，依赖 3D 深度排序</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Canvas 之间按 Sorting Layer、Sort Order 排序；嵌套 Canvas 的 overrideSorting 会改变其排序行为。UGUI 通常不靠 z 值决定顺序。</li>
+</ul>
+</div></div>
+
+<p><strong>49.</strong> 按钮点击后立刻被多次触发，较规范且通用的处理是？<br>A. 点击后把 interactable 设为 false　B. 在回调里加 Debug.Log，方便排查重复点击　C. 每帧检测鼠标按键状态，判断是否重复按下　D. 用 EventTrigger 替代按钮回调，统一处理</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：防连点应在交互层拦截：点击后禁用 interactable 或加冷却时间；涉及网络&#x2F;资源请求时还要做幂等，避免重复提交。只加日志不能解决问题。</li>
+</ul>
+</div></div>
+
+<h3 id="资源管理"><a href="#资源管理" class="headerlink" title="资源管理"></a>资源管理</h3><p><strong>50.</strong> 一个资源包主要面向首次下载、加载频率低，另一个资源包需要频繁随机加载。压缩方式较合理的组合是？<br>A. 下载型用 LZMA　B. 两者都用 LZ4　C. 两者都用 LZMA　D. 与加载频率无关，随机选</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：LZMA 压缩率高、包体小，但加载时通常需整体解压，适合下载优先；LZ4 可随机读取、加载快，适合频繁加载。应按包的使用特征选择。</li>
+</ul>
+</div></div>
+
+<p><strong>51.</strong> AssetBundle.Unload(false) 之后，已从该包加载的贴图还能用吗？何时真正释放？<br>A. 立即释放，贴图不可用　B. 一定内存泄漏，永远不释放　C. 需要使用 Resources.UnloadAsset 才能保留　D. 仍可用，因为只卸载了包</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：Unload(false) 释放包本身，已加载资源继续存活；资源实际释放依赖引用计数归零与后续卸载&#x2F;回收。Unload(true) 会强制卸载资源，可能导致引用变 missing。</li>
+</ul>
+</div></div>
+
+<p><strong>52.</strong> AssetBundle 之间出现循环依赖时，最可能的结果是？<br>A. 只影响加载顺序，不影响结果　B. 完全正常，运行时自动处理　C. 只会增加压缩率　D. 打包直接失败或运行时依赖无法解析</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：AssetBundle 依赖由 Manifest 记录，循环依赖会让加载顺序无法确定、打包器也可能报错；应把共享资源抽到无环的公共包中。</li>
+</ul>
+</div></div>
+
+<p><strong>53.</strong> 使用 Addressables 的 LoadAssetAsync 后，正确的释放方式是？<br>A. 对返回的 handle 调用 Release　B. 什么都不用做，GC 会回收　C. 调用 Destroy 即可释放底层依赖　D. 必须重启应用</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Addressables 内部维护引用计数；资源 handle 用 Release，通过 InstantiateAsync 得到的实例用 ReleaseInstance。只 Destroy 实例不会释放底层资源与依赖。</li>
+</ul>
+</div></div>
+
+<p><strong>54.</strong> 在场景切换后调用 Resources.UnloadUnusedAssets，其主要代价是？<br>A. 只会释放 AssetBundle　B. 会导致场景对象被销毁　C. 需要遍历并判定所有托管&#x2F;原生引用　D. 只影响编辑器</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：该接口会全量扫描未使用资源，耗时并触发 GC；通常配合切场景等时机调用，不应每帧或频繁执行。它不会销毁仍被引用的对象。</li>
+</ul>
+</div></div>
+
+<p><strong>55.</strong> 一张 2048×2048 的贴图，移动端显示尺寸约 200×200，且无透明通道。最省显存的设置组合是？<br>A. 原尺寸 + RGBA32 + 开启 Mipmap，保证画质与远景效果　B. 原尺寸 + 压缩 + 开启 Read&#x2F;Write，兼顾运行时读写　C. 原尺寸 + RGBA32 + 关闭 Mipmap，省去压缩与解码步骤　D. 按需缩小到 256 或 512 + 平台 RGB 压缩 + 关闭 Mipmap</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：贴图显存与分辨率平方成正比，应按实际显示尺寸下采样；无透明用 RGB 压缩，UI 不随距离变化可关闭 Mipmap，并避免 Read&#x2F;Write Enabled 的额外 CPU 拷贝。</li>
+</ul>
+</div></div>
+
+<p><strong>56.</strong> 基于父 Prefab 创建 Variant 后，父 Prefab 修改了某个属性，而 Variant 未覆盖该属性，结果是？<br>A. Variant 会同步父 Prefab 的修改　B. 必须手动重新应用变体，才会同步更新　C. 打包时检测到差异并直接报错中断　D. Variant 保持旧值不变，不跟随父级变化</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Prefab Variant 只覆盖被显式修改的属性，未覆盖部分继承父 Prefab，父级修改会同步下来；这是变体与普通 Prefab 拷贝的核心区别。</li>
+</ul>
+</div></div>
+
+<p><strong>57.</strong> SpriteAtlas 的 Variant 与 Packing 设置，正确理解是？<br>A. Packing 控制图集的数量与分组　B. Variant 与 Packing 的作用完全相同　C. Variant 控制图集的压缩格式　D. Variant 用于不同分辨率&#x2F;平台派生图集</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：Atlas Variant 用于为不同平台或分辨率生成不同图集变体；Packing 设置控制图集内精灵的排布与紧凑程度，二者职责不同。</li>
+</ul>
+</div></div>
+
+<p><strong>58.</strong> 一段很长的背景音乐，应优先选择哪种 AudioClip Load Type？<br>A. Decompress On Load　B. Streaming　C. Compressed In Memory　D. 三者无区别</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：长音频用 Streaming，边播边读，内存占用低；短音效常用 Decompress On Load 降低解码开销；Compressed In Memory 适合需低延迟且非超长的音频。</li>
+</ul>
+</div></div>
+
+<p><strong>59.</strong> 模型开启 Read&#x2F;Write Enabled 后内存增加，原因是？<br>A. 烘焙了光照贴图、光探针与反射探针　B. 在 CPU 端保留了一份可访问的网格副本　C. 生成了额外的贴图、材质与 Shader 变体　D. 复制了动画数据、骨骼与蒙皮信息</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：开启后 Unity 会在 CPU 侧保留网格数据副本，允许 Mesh.vertices 等运行时访问，代价是额外内存；不需要运行时读写时应关闭。</li>
+</ul>
+</div></div>
+
+<p><strong>60.</strong> AssetBundle 的 Variant（变体）主要用于？<br>A. 提高 AssetBundle 的整体压缩率　B. 为同一资源提供不同的逻辑名称　C. 同一资源针对不同平台&#x2F;画质打包不同版本　D. 替代 AssetBundle 的依赖管理机制</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：变体用于同一逻辑资源的多个物理版本（如 HD&#x2F;SD、不同平台），运行时按后缀选择；它不是命名技巧，也不能替代依赖管理。</li>
+</ul>
+</div></div>
+
+<p><strong>61.</strong> Addressables 远程更新时，Catalog 的作用是？<br>A. 直接存放所有资源的字节与依赖信息　B. 只用于本地开发阶段的调试与验证　C. 存储运行时地址到物理位置的映射与版本信息　D. 替代 CDN 完成资源下载与分发</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Catalog 记录地址、分组、依赖等元数据，是运行时解析资源位置的核心；更新远程 Catalog 后可指向新的资源包，实现热更。</li>
+</ul>
+</div></div>
+
+<p><strong>62.</strong> 对 AssetBundle 加密后，最直接的代价是？<br>A. 运行时需要解密　B. 包体变小　C. 无法再热更　D. 资源无法加载</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：加密会增加解密计算与内存开销，且密钥在客户端总可能被逆向；定位应是提高破解成本，而非绝对防破解。</li>
+</ul>
+</div></div>
+
+<p><strong>63.</strong> 增量打包能减少构建时间与更新体积，其核心依据是？<br>A. 按资源文件名与目录顺序逐个扫描　B. 以文件大小与修改日期决定是否重打　C. 通过哈希&#x2F;引用变化判断哪些资源需要重打包　D. 随机抽样部分资源进行重新打包</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：增量打包比较资源内容哈希、依赖与打包配置，只重建发生变化的包；因此稳定的哈希与依赖记录是前提。</li>
+</ul>
+</div></div>
+
+<p><strong>64.</strong> 打包后发现同一个纹理出现在多个 AssetBundle 中，导致内存翻倍。最合理的处理是？<br>A. 忽略冗余，等待引擎自动合并　B. 减少资源包数量，合并成一个大包　C. 把纹理分辨率改小，降低内存　D. 把公共依赖抽到独立公共包</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：资源被多个包重复引用会各自打包一份，运行时同时加载就会内存翻倍；应把共享资源抽到公共依赖包，统一引用。</li>
+</ul>
+</div></div>
+
+<p><strong>65.</strong> 想把一个场景及其依赖打成 AssetBundle，正确的认知是？<br>A. 必须使用 LZMA　B. 场景不能打进 AssetBundle　C. 场景可作为 AssetBundle 资源加载　D. 只能通过 Resources 加载场景</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：场景可以作为 AssetBundle 加载；但场景常包含光照贴图、NavMesh、Terrain 等外部依赖，需要一并打进依赖包或用 Addressables 管理。</li>
+</ul>
+</div></div>
+
+<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><p><strong>66.</strong> SetPass Call 与 DrawCall 的区别是？<br>A. 两者完全等价　B. SetPass Call 统计渲染状态切换次数　C. SetPass Call 是三角面数　D. DrawCall 只统计 UI</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：SetPass 反映 Shader&#x2F;材质等状态切换，DrawCall 反映提交绘制次数；批处理可让一次 SetPass 服务多个 DrawCall。优化时要同时关注两者与 Batches。</li>
+</ul>
+</div></div>
+
+<p><strong>67.</strong> 静态合批能减少 DrawCall，但主要代价是？<br>A. 对象不能再移动　B. 必须每帧重建　C. 会降低分辨率　D. 只能用于 UI</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：静态合批把多个静态网格合并成一个大网格，减少绘制调用，但会多一份合并网格内存，且这些对象在运行时不能移动。</li>
+</ul>
+</div></div>
+
+<p><strong>68.</strong> 动态合批无法生效的常见原因是？<br>A. 对象使用相同材质，导致合批请求被引擎直接忽略　B. 没有开启静态合批，动态合批因此无法正常生效　C. 对象数量太少，达不到动态合批所需的最小阈值　D. 顶点数超过上限、使用不同材质或非统一缩放导致无法合并</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：动态合批有顶点数限制，且要求材质相同、变换满足条件；不同材质、大网格、非统一缩放等都会导致合批失败。</li>
+</ul>
+</div></div>
+
+<p><strong>69.</strong> GPU Instancing 相比静态&#x2F;动态合批的主要优势是？<br>A. 不需要相同网格　B. 对相同网格与材质的大量实例　C. 可以处理不同 Shader　D. 自动减少纹理内存</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：GPU Instancing 适合大量相同网格&#x2F;材质的实例，通过逐实例数据（如颜色、变换）一次绘制；它不要求对象静止，也不减少纹理内存。</li>
+</ul>
+</div></div>
+
+<p><strong>70.</strong> 使用 SRP Batcher 时，较容易被忽略的前提是？<br>A. Shader 需兼容 SRP Batcher 与 CBUFFER 布局　B. 只能用于内置渲染管线，URP 下无法使用　C. 必须开启静态合批，否则 SRP Batcher 不会生效　D. 必须关闭 GPU Instancing，避免两种批处理冲突</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：SRP Batcher 通过复用材质常量缓冲减少状态切换，要求 Shader 符合 SRP Batcher 兼容规范；不兼容的 Shader 会被排除在批处理之外。</li>
+</ul>
+</div></div>
+
+<p><strong>71.</strong> 想快速定位某帧 Overdraw 严重的区域，较合适的做法是？<br>A. 查看 Console 报错日志，定位异常绘制来源　B. 用 Overdraw 视图或 Frame Debugger 查看叠层　C. 查看 Memory Profiler 快照，分析纹理占用　D. 关闭抗锯齿与后处理，降低每像素渲染开销</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：Overdraw 是像素被重复绘制；Scene 视图 Overdraw 模式可直观看到叠层密度，Frame Debugger 可查看绘制顺序，从而定位全屏半透明、粒子等来源。</li>
+</ul>
+</div></div>
+
+<p><strong>72.</strong> 以下最可能持续产生托管堆 GC 分配的是？<br>A. 在 Update 中做返回 string 的日志拼接　B. 缓存委托字段，避免每次创建新的委托实例　C. 使用 for 循环遍历数组并累加数值，不产生分配　D. 使用对象池复用高频创建的子弹与特效对象</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：日志拼接会生成临时字符串；若每帧执行，会持续产生 GC。缓存委托、对象池、普通 for 循环本身不产生分配。</li>
+</ul>
+</div></div>
+
+<p><strong>73.</strong> 想在运行时程序化采集每帧 GC Alloc、DrawCall 等指标并上报，较合适的是？<br>A. Frame Debugger　B. Debug.Log　C. Memory Profiler 快照　D. ProfilerRecorder</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：ProfilerRecorder 可在运行时读取指定 Profiler 计数器，适合做性能监控与上报；Memory Profiler 与 Frame Debugger 偏手动分析。</li>
+</ul>
+</div></div>
+
+<p><strong>74.</strong> 怀疑某次操作造成内存泄漏，最有效的定位手段是？<br>A. 观察帧率曲线，判断是否存在周期性卡顿　B. 连续两次 Memory Profiler 快照并对比差异　C. 查看 DrawCall 数量，判断渲染批次是否异常　D. 打印关键日志，追踪对象的创建与销毁</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：Memory Profiler 快照对比能显示哪些对象&#x2F;资源在两次操作间持续增长，从而定位泄漏来源；帧率与 DrawCall 无法直接反映内存泄漏。</li>
+</ul>
+</div></div>
+
+<p><strong>75.</strong> 真机连接 Profiler 的常见前提是？<br>A. 必须关闭 Wi-Fi　B. 打包 Development Build　C. 必须是 Release 包　D. 真机不支持 Profiler</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：真机分析通常需要 Development Build 与网络连接；Release 包一般不可连接。还应关注真机与编辑器的性能差异，避免以编辑器数据为准。</li>
+</ul>
+</div></div>
+
+<p><strong>76.</strong> LOD Group 的 Bias 参数主要影响？<br>A. 切换距离，值越大越倾向于使用低细节　B. 模型的顶点颜色与贴图通道数量　C. 阴影的分辨率与级联阴影数量　D. 材质的数量与 Shader 的复杂程度</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：LOD Bias 会整体调整 LOD 切换距离，可用于按性能目标倾向高&#x2F;低细节；它不改变模型本身或阴影设置。</li>
+</ul>
+</div></div>
+
+<p><strong>77.</strong> Occlusion Culling 对动态移动物体通常？<br>A. 需配合动态遮挡物或使用其他剔除方案　B. 会自动遮挡并剔除所有移动物体　C. 无法剔除任何物体，只能靠视锥　D. 会按距离自动降低移动物的 LOD</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Occlusion Culling 需要预先烘焙静态遮挡数据；移动物体作为遮挡物或需要动态遮挡时，要额外配置 Occluder&#x2F;Occludee 或改用其他方案。</li>
+</ul>
+</div></div>
+
+<p><strong>78.</strong> 物体明明在屏幕内却被视锥剔除，最可能的原因是？<br>A. 相机 FOV 太小，导致可见范围比实际视锥更窄　B. 没有开启遮挡剔除，导致物体被错误地隐藏　C. 材质丢失后，渲染器会被引擎判定为不可见　D. 物体的 Bounds 或蒙皮包围盒不准</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：视锥剔除基于包围盒；动画&#x2F;蒙皮物体若包围盒未随姿态更新，可能被误剔除。可调整 SkinnedMeshRenderer.updateWhenOffscreen 或手动扩大 Bounds。</li>
+</ul>
+</div></div>
+
+<p><strong>79.</strong> Frame Debugger 最适合用来分析？<br>A. 逐帧查看 DrawCall、渲染批次与渲染状态　B. 分析网络流量，定位延迟与丢包原因　C. 分析脚本 GC，定位每帧的托管堆分配　D. 分析内存增长，定位未释放的资源与引用</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：Frame Debugger 展示每帧的渲染事件顺序与批次拆分，适合定位合批失败、材质切换、Overdraw 来源；内存与网络需用对应工具。</li>
+</ul>
+</div></div>
+
+<p><strong>80.</strong> 关于 Streaming Mipmaps，下列说法正确的是？<br>A. 关闭后一定会降低显存占用　B. 会增加约 33% 显存，但远景更稳定　C. 按需加载 mip 级别，降低纹理常驻内存　D. 只能用于 UI 纹理</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Streaming Mipmaps 按相机距离逐步加载 mip 级别，能降低大纹理的常驻内存；它需要配合纹理的 Streaming Mipmaps 设置与内存预算。</li>
+</ul>
+</div></div>
+
+<p><strong>81.</strong> fixedDeltaTime 从 0.02 调到 0.01，最直接的影响是？<br>A. 物理模拟更稳定，性能也会更好　B. 物理精度下降，但 CPU 开销更低　C. 物理精度与性能都不受影响　D. 物理更精确，但 CPU 开销增大</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：减小固定步长意味着同样时间内的物理步数增多，模拟更精细但 CPU 开销上升；需要结合设备性能与 maximumDeltaTime 权衡。</li>
+</ul>
+</div></div>
+
+<p><strong>82.</strong> 大量远处角色的 Animator 仍在更新，性能开销明显。较合适的优化是？<br>A. 直接删除所有远处的 Animator 组件　B. 全部设为 Always Animate 保证连贯　C. 提高动画采样率，让动作更细腻　D. 用 Culling Mode 在不可见时停止更新</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：Animator Culling 可在不可见时减少&#x2F;停止更新；远处角色可进一步降帧、合并骨骼或切换简化动画，综合降低 CPU 开销。</li>
+</ul>
+</div></div>
+
+<h3 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h3><p><strong>83.</strong> 帧同步与状态同步的核心区别是？<br>A. 状态同步由客户端同步输入并各自演算　B. 帧同步由服务器下发所有单位完整状态　C. 两者都不需要服务器　D. 帧同步同步玩家输入、各端做确定性演算</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：帧同步只同步输入与帧号，要求逻辑帧严格确定、可校验；状态同步以服务器权威状态为准，客户端更多负责平滑表现。两者对一致性、带宽与作弊的取舍不同。</li>
+</ul>
+</div></div>
+
+<p><strong>84.</strong> Protobuf 相比 JSON 的主要优势是？<br>A. 可读性更好　B. 不需要版本管理　C. 二进制体积更小、解析更快　D. 天然加密</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Protobuf 使用二进制编码与 schema，体积小、解析快；代价是可读性差、需要维护 .proto 与生成代码，字段变更要遵守兼容规则。</li>
+</ul>
+</div></div>
+
+<p><strong>85.</strong> TCP 四次挥手中，主动关闭方进入 TIME_WAIT 的主要目的是？<br>A. 压缩传输数据，降低带宽占用与网络延迟　B. 协商加密算法与密钥，保证后续通信安全可靠　C. 等待对方重传的 FIN&#x2F;数据并吸收旧连接报文　D. 分配新的端口号，避免与旧连接的四元组冲突</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：TIME_WAIT 等待 2MSL，确保最后一个 ACK 能到达，并让旧连接的延迟报文自然消亡，防止污染使用相同四元组的新连接。</li>
+</ul>
+</div></div>
+
+<p><strong>86.</strong> TCP 粘包&#x2F;拆包的常见解决方式是？<br>A. 增大发送缓冲区　B. 对数据进行压缩　C. 关闭 Nagle 算法　D. 自定义长度头、定长消息或分隔符</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：TCP 是字节流，无消息边界；应用层必须自己定义长度头、定长或分隔符来切分消息。关 Nagle 只改变发送时机，不能解决边界问题。</li>
+</ul>
+</div></div>
+
+<p><strong>87.</strong> 心跳间隔设置过短或过长分别会带来什么问题？<br>A. 与体验无关　B. 越长越精准　C. 过短更省电　D. 过短增加流量与耗电</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：心跳用于检测连接存活并维持 NAT 映射；间隔需结合网络环境权衡，过短浪费流量与电量，过长则断开后感知慢。可配合超时与重连策略。</li>
+</ul>
+</div></div>
+
+<p><strong>88.</strong> WebSocket 与普通 TCP 连接的主要区别是？<br>A. 基于 UDP，不保证消息可靠到达　B. 通过 HTTP 握手后建立全双工通信　C. 只能由客户端主动请求，服务器不能推送　D. 每次通信都要重新建立一次连接</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：WebSocket 在 HTTP 握手后升级为长连接，基于 TCP 全双工；它提供帧协议与消息边界，适合服务器主动推送的实时场景。</li>
+</ul>
+</div></div>
+
+<p><strong>89.</strong> 断线重连后最稳妥的状态恢复策略是？<br>A. 客户端重连后自行假设状态　B. 服务器按会话令牌校验　C. 重启客户端　D. 只重连不恢复</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：重连需要会话标识与鉴权，服务器确认玩家身份后决定全量&#x2F;增量恢复；客户端据服务器状态校正本地预测，避免状态分叉。</li>
+</ul>
+</div></div>
+
+<p><strong>90.</strong> RPC 调用中，最容易出问题的是？<br>A. 本地方法名与远程方法名是否完全一致　B. 编译器版本与目标框架版本是否匹配　C. 序列化兼容、超时&#x2F;失败处理与调用顺序　D. 代码注释是否完整、命名是否规范</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：RPC 本质是远程调用，需处理序列化、超时、重试、幂等与乱序；不能假设它像本地方法一样即时且必然成功。</li>
+</ul>
+</div></div>
+
+<p><strong>91.</strong> HTTP&#x2F;1.1 的 Keep-Alive 主要影响是？<br>A. 强制每次请求都重新建立 TCP 连接　B. 让 HTTP 协议变成有状态的长连接　C. 复用 TCP 连接减少握手开销　D. 与底层 TCP 连接的管理无关</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Keep-Alive 复用底层 TCP 连接，降低握手与慢启动开销；代价是服务器要维护更多空闲长连接，需要合理超时与连接数控制。</li>
+</ul>
+</div></div>
+
+<p><strong>92.</strong> 延迟补偿的典型做法是？<br>A. 服务器根据客户端延迟做回滚&#x2F;时间对齐　B. 降低帧率，减轻服务器计算压力　C. 直接忽略高延迟玩家的操作　D. 提高玩家网速，从根本上降低延迟</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：延迟补偿通过服务器时间轴回滚、命中判定对齐等方式，补偿网络往返带来的时间差；它不是提高带宽，也不能完全消除延迟。</li>
+</ul>
+</div></div>
+
+<p><strong>93.</strong> 阻塞 Socket 与非阻塞 Socket 的主要区别是？<br>A. 阻塞只能用于 UDP　B. 非阻塞不能收发数据　C. 两者完全等价　D. 阻塞调用会一直等待直到操作完成</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：阻塞 Socket 的收发&#x2F;连接会挂起线程，非阻塞配合 select&#x2F;poll&#x2F;epoll 或异步回调提升并发能力；要结合线程模型与平台 API 选择。</li>
+</ul>
+</div></div>
+
+<p><strong>94.</strong> 短时间内大量小消息直接逐条发送，较合理的优化是？<br>A. 每条消息都单独发送，保证实时性　B. 在客户端做消息队列&#x2F;合并批量发送　C. 改用 TCP 连接，利用其合并机制　D. 对每条消息单独加密后再发送</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：小包过多会增加协议头与系统调用开销，也可能触发 Nagle 行为；合并为批量消息能提高吞吐，但要控制延迟，避免批量等待过久。</li>
+</ul>
+</div></div>
+
+<p><strong>95.</strong> 游戏通信中保护数据不被篡改与窃听，较合理的组合是？<br>A. 只做 Base64　B. 使用 AES 对称加密传输数据　C. 明文即可　D. 只压缩不加密</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：对称加密适合大批量数据，非对称加密&#x2F;密钥交换解决密钥分发，TLS 则提供成熟的加密与完整性保护。编码（Base64）与压缩都无法防篡改。</li>
+</ul>
+</div></div>
+
+<h3 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h3><p><strong>96.</strong> 需要把「请求」参数化、支持排队与撤销重做，较合适的模式是？<br>A. 命令模式　B. 策略模式　C. 单例模式　D. 门面模式</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：命令模式把请求封装为对象，可参数化、排队、记录日志并支持撤销&#x2F;重做；策略模式关注算法替换，不负责请求的排队与生命周期。</li>
+</ul>
+</div></div>
+
+<p><strong>97.</strong> 状态模式与有限状态机（FSM）的关系，以及层次状态机的作用是？<br>A. FSM 只能有一个状态　B. 两者完全相同　C. 层次状态机不能处理状态迁移　D. 状态模式是面向对象实现方式</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：状态模式用多态把状态行为拆分，FSM 强调状态与迁移；层次状态机通过父子状态复用公共逻辑，适合角色&#x2F;UI 等复杂状态体系。</li>
+</ul>
+</div></div>
+
+<p><strong>98.</strong> 需要统一处理「单个对象」与「对象组合」，对外提供一致接口，较适合的是？<br>A. 组合模式　B. 享元模式　C. 责任链模式　D. 中介者模式</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：组合模式把对象组织成树形结构，让叶子与容器具有一致接口，客户端无需区分单个与组合对象，常用于 UI 树、组织架构等。</li>
+</ul>
+</div></div>
+
+<p><strong>99.</strong> 场景中有大量外观相似、仅少量状态不同的子弹，想显著降低内存。较适合的是？<br>A. 命令模式，把请求封装成对象　B. 每个子弹独立保存一份完整配置　C. 享元模式，把可共享的内部状态抽出复用　D. 观察者模式，通知所有子弹更新</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：享元模式把内部状态（如模型、材质、基础参数）共享，外部状态（位置、速度、剩余时间）单独存放，从而减少大量重复对象的内存。</li>
+</ul>
+</div></div>
+
+<p><strong>100.</strong> 多个处理器需要按顺序尝试处理同一请求，直到有一个能处理，较适合的是？<br>A. 单例模式　B. 策略模式　C. 责任链模式　D. 门面模式</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：责任链把处理者连成链，请求沿链传递直到被处理或到达末尾，实现发送者与处理者解耦；适合审批、事件拦截、伤害计算等流程。</li>
+</ul>
+</div></div>
+
+<p><strong>101.</strong> 多个 UI 模块需要互相通信，直接互相引用导致网状依赖。较合适的模式是？<br>A. 工厂模式　B. 单例模式　C. 中介者模式或事件中心　D. 享元模式</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：中介者&#x2F;事件中心把多对多交互收敛为模块与中心的一对多，降低耦合；观察者模式也常用于事件订阅，但中介者更强调集中协调。</li>
+</ul>
+</div></div>
+
+<p><strong>102.</strong> 一个子系统内部有多个复杂类，希望对外只暴露简单调用入口，较适合的是？<br>A. 组合模式　B. 门面模式　C. 命令模式　D. 策略模式</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：门面模式为复杂子系统提供统一高层接口，简化调用方与子系统的耦合；它不改变子系统内部结构。</li>
+</ul>
+</div></div>
+
+<p><strong>103.</strong> MVVM 中 ViewModel 的职责是？<br>A. 暴露数据与命令供 View 绑定　B. 负责资源加载　C. 直接持有并渲染 View　D. 负责网络底层</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：MVVM 通过数据绑定让 View 观察 ViewModel 的状态与命令，ViewModel 不直接操作 View，便于测试与替换视图层。</li>
+</ul>
+</div></div>
+
+<h3 id="数学"><a href="#数学" class="headerlink" title="数学"></a>数学</h3><p><strong>104.</strong> 向量 a 在单位向量 b 上的投影长度是？<br>A. |a|&#x2F;|b|　B. a·b　C. a×b　D. |a||b|</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：当 b 为单位向量时，点乘 a·b 就是 a 在 b 方向上的投影长度（带符号）。若 b 不是单位向量，投影长度应为 (a·b)&#x2F;|b|。</li>
+</ul>
+</div></div>
+
+<p><strong>105.</strong> 入射方向 d 与单位法线 n，反射向量的正确公式是？<br>A. d’ &#x3D; -d　B. d’ &#x3D; d + n　C. d’ &#x3D; d - 2(d·n)n　D. d’ &#x3D; 2(d·n)n - d</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：反射公式为 d’ &#x3D; d - 2(d·n)n，要求 n 为单位向量；若不归一化，需要除以 |n|²。Vector3.Reflect 内部即按此计算。</li>
+</ul>
+</div></div>
+
+<p><strong>106.</strong> 关于矩阵变换，下列说法正确的是？<br>A. 矩阵只能表示颜色、透明度与简单混合　B. 矩阵之间不能组合，只能表示单一变换　C. 平移、旋转、缩放都可用矩阵表示并可组合　D. 矩阵与 3D 变换无关，只用于 UI 布局</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：Matrix4x4 可表示平移、旋转、缩放及其组合；矩阵乘法一般不满足交换律，父子变换的先后顺序会影响最终结果。</li>
+</ul>
+</div></div>
+
+<h3 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h3><p><strong>107.</strong> 快速排序在什么情况下退化到 O(n²)，较常见的规避方式是？<br>A. 数据已逆序时最优　B. 数据量越大越稳定　C. 每次选到极值作基准时退化　D. 使用链表即可避免</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>C</strong></li>
+<li>解析：快排最坏情况是每次划分极不平衡，递归深度 O(n)、时间 O(n²)；随机化基准或三数取中可大幅降低触发概率，但仍非绝对。</li>
+</ul>
+</div></div>
+
+<p><strong>108.</strong> 哈希表发生冲突时，链地址法与开放寻址法的主要区别是？<br>A. 链地址法把冲突元素挂在同一桶的链上　B. 两者完全一样　C. 链地址法不能删除元素　D. 开放寻址法不需要哈希函数</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>A</strong></li>
+<li>解析：链地址法每个桶维护链表&#x2F;红黑树，删除方便但可能有指针开销；开放寻址法通过线性&#x2F;二次探测寻找空位，缓存更友好但删除需墓碑标记且装载因子敏感。</li>
+</ul>
+</div></div>
+
+<p><strong>109.</strong> 归并排序相比快速排序的典型优劣是？<br>A. 最坏 O(n²)　B. 更快且不需要额外空间　C. 不稳定但省内存　D. 稳定、最坏 O(n log n)</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>D</strong></li>
+<li>解析：归并排序是稳定排序，最坏与平均均为 O(n log n)，但需要 O(n) 额外空间；快排平均更快、原地，但最坏 O(n²) 且不稳定。</li>
+</ul>
+</div></div>
+
+<p><strong>110.</strong> 在二叉搜索树中求某节点的中序后继，O(h) 的做法是？<br>A. 中序遍历整棵树　B. 若右子树非空取右子树最左节点　C. 必须排序后查找　D. 无法在 O(h) 内完成</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><ul>
+<li>正确答案：<strong>B</strong></li>
+<li>解析：中序后继分两种情况：有右子树时是右子树的最小节点；无右子树时向上找第一个使当前子树位于其左子树的祖先。沿路径移动，复杂度 O(h)。</li>
+</ul>
+</div></div>
+
+
+<h2 id="二、主观题"><a href="#二、主观题" class="headerlink" title="二、主观题"></a>二、主观题</h2><blockquote>
+<p>主观题共 12 题。简答题请写出关键点与结论；编程题请给出完整代码、边界处理与复杂度分析。参考答案默认隐藏，建议先自行作答再展开对照。</p>
+</blockquote>
+<h3 id="1-（简答）请说明协程与-Invoke-的区别，以及常见-yield-指令（yield-return-null、WaitForSeconds、WaitForFixedUpdate、WaitForEndOfFrame）的恢复时机。"><a href="#1-（简答）请说明协程与-Invoke-的区别，以及常见-yield-指令（yield-return-null、WaitForSeconds、WaitForFixedUpdate、WaitForEndOfFrame）的恢复时机。" class="headerlink" title="1.（简答）请说明协程与 Invoke 的区别，以及常见 yield 指令（yield return null、WaitForSeconds、WaitForFixedUpdate、WaitForEndOfFrame）的恢复时机。"></a>1.（简答）请说明协程与 Invoke 的区别，以及常见 yield 指令（yield return null、WaitForSeconds、WaitForFixedUpdate、WaitForEndOfFrame）的恢复时机。</h3><p><strong>题目：</strong> 请说明协程与 Invoke 的区别，并说明 yield return null、WaitForSeconds、WaitForFixedUpdate、WaitForEndOfFrame、WaitForSecondsRealtime 各自的恢复时机与受 timeScale 影响的情况。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p><strong>Invoke</strong>：按延迟调用方法（一次或重复），不能跨帧暂停、不能带参数、不能暂停&#x2F;恢复。<br><strong>协程</strong>：返回 IEnumerator，由 Unity 调度，可跨帧、可带参、可暂停&#x2F;恢复&#x2F;停止，控制更灵活。<br>常见 yield 指令的恢复时机：</p>
+<ul>
+<li>yield return null：下一帧 Update 之后；</li>
+<li>WaitForSeconds：缩放时间到达后；</li>
+<li>WaitForSecondsRealtime：真实时间到达后；</li>
+<li>WaitForFixedUpdate：下一次 FixedUpdate 之前；</li>
+<li>WaitForEndOfFrame：当前帧渲染完成之后。</li>
+</ul>
+</div></div>
+
+<h3 id="2-（简答）请说明-Unity-中-MonoBehaviour-单例的实现方式，以及跨场景保留、防止重复实例时需要注意什么。"><a href="#2-（简答）请说明-Unity-中-MonoBehaviour-单例的实现方式，以及跨场景保留、防止重复实例时需要注意什么。" class="headerlink" title="2.（简答）请说明 Unity 中 MonoBehaviour 单例的实现方式，以及跨场景保留、防止重复实例时需要注意什么。"></a>2.（简答）请说明 Unity 中 MonoBehaviour 单例的实现方式，以及跨场景保留、防止重复实例时需要注意什么。</h3><p><strong>题目：</strong> 请说明 Unity 中 MonoBehaviour 单例的几种实现方式，并重点分析跨场景保留、重复实例、场景切换后引用失效与线程安全等注意点。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>实现：静态 Instance 字段 + Awake 中判空赋值，重复实例销毁；跨场景可 DontDestroyOnLoad。<br>注意事项：</p>
+<ul>
+<li>切换场景默认销毁对象，需要 DontDestroyOnLoad；</li>
+<li>重复进入场景会创建多个实例，需判重销毁；</li>
+<li>播放模式退出&#x2F;域重载时静态字段可能残留，应在 OnDestroy 清理；</li>
+<li>不要在 OnDestroy 中访问可能已销毁的其他对象。</li>
+</ul>
+</div></div>
+
+<h3 id="3-（简答）请说明对象池的适用场景，以及实现时必须处理的关键问题。"><a href="#3-（简答）请说明对象池的适用场景，以及实现时必须处理的关键问题。" class="headerlink" title="3.（简答）请说明对象池的适用场景，以及实现时必须处理的关键问题。"></a>3.（简答）请说明对象池的适用场景，以及实现时必须处理的关键问题。</h3><p><strong>题目：</strong> 请说明对象池的适用场景与不适用场景，并给出实现时必须处理的关键问题：容量策略、状态重置、异常归还、预暖与内存上限。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>适用场景：频繁创建&#x2F;销毁且状态可复用的对象（子弹、特效、列表项）。<br>关键问题：</p>
+<ul>
+<li>回收时重置状态，避免取出“脏对象”；</li>
+<li>设置池上限，避免内存只增不减；</li>
+<li>取出与回收必须成对，避免泄漏；</li>
+<li>必要时考虑线程安全与多池分类管理。</li>
+</ul>
+</div></div>
+
+<h3 id="4-（简答）请说明-ScriptableObject-的用途与优势，以及它与-MonoBehaviour-的区别。"><a href="#4-（简答）请说明-ScriptableObject-的用途与优势，以及它与-MonoBehaviour-的区别。" class="headerlink" title="4.（简答）请说明 ScriptableObject 的用途与优势，以及它与 MonoBehaviour 的区别。"></a>4.（简答）请说明 ScriptableObject 的用途与优势，以及它与 MonoBehaviour 的区别。</h3><p><strong>题目：</strong> 请说明 ScriptableObject 的用途与优势，并从生命周期、挂载方式、序列化、运行时修改资产、内存与热更角度说明它与 MonoBehaviour 的区别。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>用途：以资源形式存储可序列化的共享数据，如配置表、游戏参数、技能数据。<br>优势：</p>
+<ul>
+<li>不依附 GameObject，可被多个对象引用，节省内存；</li>
+<li>可在 Inspector 编辑，可作为资源热更；</li>
+<li>适合数据驱动设计。<br>区别：MonoBehaviour 必须挂载在 GameObject 上并参与帧循环；ScriptableObject 是纯数据资产。</li>
+</ul>
+</div></div>
+
+<h3 id="5-（简答）请说明-C-迭代器（yield）的状态机原理，以及它与“返回数组”在内存与执行时机上的差异。"><a href="#5-（简答）请说明-C-迭代器（yield）的状态机原理，以及它与“返回数组”在内存与执行时机上的差异。" class="headerlink" title="5.（简答）请说明 C# 迭代器（yield）的状态机原理，以及它与“返回数组”在内存与执行时机上的差异。"></a>5.（简答）请说明 C# 迭代器（yield）的状态机原理，以及它与“返回数组”在内存与执行时机上的差异。</h3><p><strong>题目：</strong> 请说明 C# 迭代器（yield）的状态机原理，并比较它与一次性返回数组在内存占用、执行时机、异常与 Dispose 行为上的差异。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>编译器会把含 yield 的方法编译成一个<strong>状态机类</strong>，保存执行位置与局部变量。<br>调用方法时<strong>不会立即执行方法体</strong>；每次 MoveNext() 才推进到下一个 yield 并暂停。<br>与返回数组相比：</p>
+<ul>
+<li>迭代器惰性计算，额外空间 O(1)，适合大数据流；</li>
+<li>返回数组一次性计算，需要 O(n) 空间。</li>
+</ul>
+</div></div>
+
+<h3 id="6-（简答）请说明观察者-事件系统的优点与常见坑，并给出一个健壮事件中心的设计要点。"><a href="#6-（简答）请说明观察者-事件系统的优点与常见坑，并给出一个健壮事件中心的设计要点。" class="headerlink" title="6.（简答）请说明观察者&#x2F;事件系统的优点与常见坑，并给出一个健壮事件中心的设计要点。"></a>6.（简答）请说明观察者&#x2F;事件系统的优点与常见坑，并给出一个健壮事件中心的设计要点。</h3><p><strong>题目：</strong> 请说明观察者&#x2F;事件系统的优点与常见坑，并给出一个健壮事件中心的设计要点，覆盖订阅退订、异常隔离、线程安全与生命周期。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>优点：一对多通知、发布者与订阅者解耦、易于扩展。<br>常见坑：</p>
+<ul>
+<li>忘记退订导致内存泄漏&#x2F;悬挂引用；</li>
+<li>回调中增删监听者导致遍历异常（应先复制一份再触发）；</li>
+<li>某个监听者抛异常会中断后续监听者（可逐个 try&#x2F;catch）；</li>
+<li>事件顺序不保证，避免依赖顺序。</li>
+</ul>
+</div></div>
+
+<h3 id="7-（简答）请说明-LOD、遮挡剔除（Occlusion-Culling）、视锥剔除（Frustum-Culling）三者的区别与作用。"><a href="#7-（简答）请说明-LOD、遮挡剔除（Occlusion-Culling）、视锥剔除（Frustum-Culling）三者的区别与作用。" class="headerlink" title="7.（简答）请说明 LOD、遮挡剔除（Occlusion Culling）、视锥剔除（Frustum Culling）三者的区别与作用。"></a>7.（简答）请说明 LOD、遮挡剔除（Occlusion Culling）、视锥剔除（Frustum Culling）三者的区别与作用。</h3><p><strong>题目：</strong> 请说明 LOD、遮挡剔除（Occlusion Culling）、视锥剔除（Frustum Culling）三者的原理、区别、开销与适用场景，并说明各自常见的配置误区。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>视锥剔除：剔除不在相机视锥体内的物体，Unity 默认开启。<br>遮挡剔除：剔除被其他物体挡住、不可见的物体，需烘焙。<br>LOD：根据物体与相机距离切换不同精度模型，降低远距离渲染开销。三者都是减少渲染量的优化手段。</p>
+</div></div>
+
+<h3 id="8-（简答）请比较-async-await、Unity-协程、UniTask-三者的区别与适用场景。"><a href="#8-（简答）请比较-async-await、Unity-协程、UniTask-三者的区别与适用场景。" class="headerlink" title="8.（简答）请比较 async&#x2F;await、Unity 协程、UniTask 三者的区别与适用场景。"></a>8.（简答）请比较 async&#x2F;await、Unity 协程、UniTask 三者的区别与适用场景。</h3><p><strong>题目：</strong> 请比较 async&#x2F;await、Unity 协程、UniTask 三者在调度模型、返回值、异常传播、取消、GC 与线程切换上的区别，并给出各自适用场景。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>协程：由 Unity 原生调度、主线程、无返回值无取消、有 GC。<br>async&#x2F;await：C# 语言特性，原生 Task 可能在线程池执行，操作 Unity API 有生命周期与线程坑。<br>UniTask：struct + PlayerLoop 驱动，主线程、零分配、可取消、可组合、可绑定 Destroy，适合 Unity 异步。</p>
+</div></div>
+
+<h3 id="9-（简答）请简述-C-垃圾回收（GC）的基本原理，以及减少-GC-的常用方法。"><a href="#9-（简答）请简述-C-垃圾回收（GC）的基本原理，以及减少-GC-的常用方法。" class="headerlink" title="9.（简答）请简述 C# 垃圾回收（GC）的基本原理，以及减少 GC 的常用方法。"></a>9.（简答）请简述 C# 垃圾回收（GC）的基本原理，以及减少 GC 的常用方法。</h3><p><strong>题目：</strong> 请简述 C# 垃圾回收的基本原理（分代、标记-清除&#x2F;压缩、触发时机），并从分配来源、对象池、缓存、装箱与闭包等角度说明减少 GC 的常用方法。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>GC 自动回收托管堆上不再被引用的对象，采用分代回收（0&#x2F;1&#x2F;2 代），大对象进入 LOH。<br>减少 GC：避免频繁 new、字符串拼接、装箱、闭包捕获、LINQ；使用对象池、缓存、结构体、StringBuilder、避免每帧分配。</p>
+</div></div>
+
+<h3 id="10-（简答）请对比-Resources、AssetBundle、Addressables-三种资源加载方式。"><a href="#10-（简答）请对比-Resources、AssetBundle、Addressables-三种资源加载方式。" class="headerlink" title="10.（简答）请对比 Resources、AssetBundle、Addressables 三种资源加载方式。"></a>10.（简答）请对比 Resources、AssetBundle、Addressables 三种资源加载方式。</h3><p><strong>题目：</strong> 请从加载方式、依赖管理、引用计数、卸载、热更、包体与开发效率等维度对比 Resources、AssetBundle、Addressables，并给出选型建议。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>Resources：简单但资源全部打进包体、难管理，不推荐大量使用。<br>AssetBundle：可分包、热更新、按需加载，但需自己管理依赖、引用计数、卸载、构建。<br>Addressables：在 AB 之上提供高层封装，自动处理依赖、引用计数、异步与远程更新，降低管理成本。</p>
+</div></div>
+
+<h3 id="11-（简答）请列举-Unity-中-UI-性能优化的常见手段。"><a href="#11-（简答）请列举-Unity-中-UI-性能优化的常见手段。" class="headerlink" title="11.（简答）请列举 Unity 中 UI 性能优化的常见手段。"></a>11.（简答）请列举 Unity 中 UI 性能优化的常见手段。</h3><p><strong>题目：</strong> 请列举 Unity UI 性能优化的常见手段，覆盖 Canvas 重建、DrawCall&#x2F;合批、Raycast、布局、Overdraw、图集与长列表，并说明各自的适用条件。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p>拆分 Canvas 减少重建范围；动静分离；使用图集减少 DrawCall；关闭不必要 Raycast Target；避免频繁布局重建（SetActive 而非改尺寸）；控制 Overdraw；长列表用虚拟列表&#x2F;对象池；文字与图片合批；避免每帧改 UI 尺寸&#x2F;颜色。</p>
+</div></div>
+
+<h3 id="12-（简答）请说明-AssetBundle-的依赖管理与引用计数机制，以及常见的资源泄漏原因。"><a href="#12-（简答）请说明-AssetBundle-的依赖管理与引用计数机制，以及常见的资源泄漏原因。" class="headerlink" title="12.（简答）请说明 AssetBundle 的依赖管理与引用计数机制，以及常见的资源泄漏原因。"></a>12.（简答）请说明 AssetBundle 的依赖管理与引用计数机制，以及常见的资源泄漏原因。</h3><p><strong>题目：</strong> 请说明 AssetBundle 的依赖管理与引用计数机制，并列举常见的资源泄漏原因与排查方法，覆盖 Unload、Handle 释放、场景切换与异常路径。</p>
+<div class="hide-block"><button type="button" class="hide-button" style="background-color: orange;">查看答案</button><div class="hide-content"><p><strong>标准答案：</strong></p>
+<p><strong>依赖管理</strong>：通过 Manifest 记录 AB 之间的依赖；加载资源前需先加载其依赖包；公共资源应抽到单独 AB，避免重复打包与内存翻倍。<br><strong>引用计数</strong>：加载&#x2F;实例化时增加引用，卸载或 Release 时减少；引用为 0 时才可安全 Unload。<br><strong>常见泄漏</strong>：只加载不卸载；Unload(true) 误卸载仍被其他对象引用的资源；依赖包未正确释放。</p>
+</div></div>
+</div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
+
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
+
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      lastPointerX: 0,
+      lastPointerY: 0
+    }
+
+    const onPointerDown = e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (state.pointers.size === 1) {
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = curVb.slice()
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
+        return
+      }
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+      } else if (state.pointers.size === 1) {
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+      }
+    }
+
+    const onWheel = e => {
+      // Prevent event bubbling from triggering external scroll
+      e.preventDefault()
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (init) setCurVb(init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      // Clean up event listeners before removing old SVG
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
+
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
+    })
+  }
+
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (true) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="/js/custom-global.js" defer></script><script src="/js/hexo-timer.js" defer></script><script src="/js/hexo-answer-sheet.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
