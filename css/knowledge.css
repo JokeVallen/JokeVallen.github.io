@@ -1,0 +1,584 @@
+/* ============================================================
+   知识库样式
+   架构：分类概览视图 + 卡片列表视图，单页切换
+   ============================================================ */
+
+/* ========== 页面容器 ========== */
+#knowledge-page {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ========== 加载 / 错误状态 ========== */
+.knowledge-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    padding: 3rem 0;
+    opacity: .7;
+}
+
+.knowledge-loading-text {
+    font-size: .9rem;
+}
+
+.knowledge-error {
+    text-align: center;
+    padding: 2rem 0;
+    color: #e06c75;
+    font-size: .9rem;
+}
+
+/* ========== 视图容器 ========== */
+.knowledge-view {
+    animation: knowledge-fade .25s ease;
+}
+
+@keyframes knowledge-fade {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ========== 标题区 ========== */
+.knowledge-header {
+    margin-bottom: 1.2rem;
+}
+
+.knowledge-title {
+    font-size: 1.6rem;
+    margin: 0 0 .3rem;
+    color: inherit;
+}
+
+.knowledge-subtitle {
+    color: inherit;
+    opacity: 0.6;
+    font-size: .9rem;
+    margin: 0;
+}
+
+/* ============================================================
+   分类概览视图
+   ============================================================ */
+
+.knowledge-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.knowledge-category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: .6rem;
+    min-height: 96px;
+    padding: 1.1rem 1.2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(127, 127, 127, 0.15);
+    background: var(--card-bg, rgba(127, 127, 127, 0.06));
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
+}
+
+.knowledge-category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    border-color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-category-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: inherit;
+}
+
+.knowledge-category-count {
+    font-size: .8rem;
+    color: inherit;
+    opacity: .55;
+}
+
+/* ============================================================
+   卡片列表视图
+   ============================================================ */
+
+#knowledge-view-cards .knowledge-header {
+    margin-bottom: .5rem;
+}
+
+.knowledge-back {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(127, 127, 127, 0.25);
+    background: transparent;
+    color: inherit;
+    font-size: .85rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.knowledge-back:hover {
+    border-color: var(--theme-color, #49b1f5);
+    color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-current-cat {
+    font-size: 1.3rem;
+    margin: .8rem 0 0;
+    color: inherit;
+}
+
+/* ========== 工具栏（搜索框） ========== */
+.knowledge-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    margin: 1.2rem 0 1.5rem;
+}
+
+.knowledge-search {
+    width: 100%;
+    padding: .5rem .9rem;
+    border-radius: 8px;
+    border: 1px solid rgba(127, 127, 127, 0.25);
+    background: transparent;
+    color: inherit;
+    outline: none;
+    transition: border-color .2s;
+    line-height: 1.4;
+    height: auto;
+    min-height: 2.2rem;
+    font-size: .95rem;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.knowledge-search:focus {
+    border-color: var(--theme-color, #49b1f5);
+}
+
+/* ========== 卡片网格 ========== */
+.knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.1rem;
+    align-items: start;
+}
+
+.knowledge-card {
+    background: var(--card-bg, rgba(127, 127, 127, 0.06));
+    border: 1px solid rgba(127, 127, 127, 0.15);
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.knowledge-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== 卡片头部 ========== */
+.knowledge-card__header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .4rem .6rem;
+    margin-bottom: .6rem;
+}
+
+.knowledge-card__icon {
+    color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-card__title {
+    font-size: 1.05rem;
+    margin: 0;
+    flex: 1;
+    color: inherit;
+}
+
+/* 日期：用透明度保证浅色/深色都清晰 */
+.knowledge-card__date {
+    color: inherit;
+    opacity: 0.55;
+    font-size: .75rem;
+    white-space: nowrap;
+}
+
+/* ========== 卡片正文 ========== */
+.knowledge-card__body {
+    font-size: .9rem;
+    line-height: 1.65;
+    color: inherit;
+    word-break: break-word;
+}
+
+.knowledge-card__body p {
+    margin: 0 0 .6em;
+}
+
+.knowledge-card__body p:last-child {
+    margin-bottom: 0;
+}
+
+.knowledge-card__body h1,
+.knowledge-card__body h2,
+.knowledge-card__body h3 {
+    font-size: 1rem;
+    margin: .6em 0 .4em;
+}
+
+.knowledge-card__body ul,
+.knowledge-card__body ol {
+    padding-left: 1.2em;
+    margin: .4em 0;
+}
+
+/* ========== 卡片底部 ========== */
+.knowledge-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-top: .9rem;
+    padding-top: .6rem;
+    border-top: 1px dashed rgba(127, 127, 127, 0.25);
+    font-size: .78rem;
+}
+
+.knowledge-card__cat {
+    color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+}
+
+.knowledge-tag {
+    padding: .1rem .5rem;
+    border-radius: 999px;
+    background: rgba(127, 127, 127, 0.12);
+    color: inherit;
+    opacity: 0.75;
+}
+
+/* ========== 空状态 ========== */
+.knowledge-empty {
+    text-align: center;
+    color: inherit;
+    opacity: .5;
+    padding: 2rem 0;
+}
+
+/* ========== 卡片折叠 ========== */
+.knowledge-card__header {
+    cursor: pointer;
+    user-select: none;
+}
+
+.knowledge-card__toggle {
+    margin-left: auto;
+    font-size: .8rem;
+    opacity: .5;
+    transition: transform .25s ease, opacity .2s;
+    flex-shrink: 0;
+}
+
+.knowledge-card__header:hover .knowledge-card__toggle {
+    opacity: 1;
+    color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-card:not(.is-collapsed) .knowledge-card__toggle {
+    transform: rotate(180deg);
+}
+
+.knowledge-card__body-wrapper {
+    overflow: hidden;
+}
+
+.knowledge-card.is-collapsed .knowledge-card__body-wrapper {
+    display: none;
+}
+
+.knowledge-card__body-inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* 折叠状态下卡片更紧凑 */
+.knowledge-card.is-collapsed {
+    padding-top: .9rem;
+    padding-bottom: .9rem;
+}
+
+.knowledge-card.is-collapsed .knowledge-card__header {
+    margin-bottom: 0;
+}
+
+.knowledge-card.is-collapsed .knowledge-card__footer {
+    margin-top: .5rem;
+    padding-top: 0;
+    border-top: 0;
+}
+
+/* ========== 卡片反馈入口 ========== */
+.knowledge-card__feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .75rem;
+}
+
+.knowledge-feedback-link {
+    color: inherit;
+    opacity: .55;
+    text-decoration: none;
+    transition: opacity .2s, color .2s;
+}
+
+.knowledge-feedback-link:hover {
+    opacity: 1;
+    color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-feedback-sep {
+    opacity: .3;
+    margin: 0 .1rem;
+}
+
+/* ============================================================
+   代码块：卡片内自包含深色主题，不依赖主题样式作用域
+   ============================================================ */
+
+.knowledge-card__body figure.highlight {
+    padding: 0 !important;
+    margin: .6em 0 !important;
+    background: #282c34;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: .82rem;
+    line-height: 1.55;
+}
+
+/* 隐藏 Mac 圆点和展开箭头，保留语言标签和复制按钮 */
+.knowledge-card__body figure.highlight .highlight-tools .macStyle,
+.knowledge-card__body figure.highlight .highlight-tools .expand,
+.knowledge-card__body figure.highlight .code-expand-btn {
+    display: none;
+}
+
+/* 工具栏整体样式 */
+.knowledge-card__body figure.highlight .highlight-tools {
+    background: #21252b;
+    color: #abb2bf;
+    height: 28px;
+    line-height: 28px;
+    padding: 0 .8rem;
+    font-size: .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.knowledge-card__body figure.highlight .highlight-tools .code-lang {
+    text-transform: uppercase;
+    opacity: 0.7;
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.knowledge-card__body figure.highlight .highlight-tools .copy-button {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity .2s;
+    margin-left: auto;
+}
+
+.knowledge-card__body figure.highlight .highlight-tools .copy-button:hover {
+    opacity: 1;
+    color: #61afef;
+}
+
+/* 清掉表格默认样式 */
+.knowledge-card__body figure.highlight table,
+.knowledge-card__body figure.highlight tbody,
+.knowledge-card__body figure.highlight tr,
+.knowledge-card__body figure.highlight td {
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+/* 关键：固定 table 布局，让 td 不随内容变宽 */
+.knowledge-card__body figure.highlight table {
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+.knowledge-card__body figure.highlight td.code {
+    width: 100% !important;
+    overflow: hidden !important;
+}
+
+/* pre 成为真正的横向滚动容器 */
+.knowledge-card__body figure.highlight pre {
+    margin: 0 !important;
+    padding: .7rem .9rem !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: pre !important;
+    background: transparent !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 定制滚动条，避免遮挡内容 */
+.knowledge-card__body figure.highlight pre::-webkit-scrollbar {
+    height: 6px;
+}
+
+.knowledge-card__body figure.highlight pre::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 3px;
+}
+
+.knowledge-card__body figure.highlight pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.knowledge-card__body figure.highlight pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.knowledge-card__body figure.highlight code,
+.knowledge-card__body figure.highlight .hljs {
+    font-family: "SF Mono", Consolas, Monaco, "Courier New", monospace !important;
+    background: transparent !important;
+    color: #abb2bf !important;
+    font-size: inherit !important;
+}
+
+/* hljs token 配色（darker 主题） */
+.knowledge-card__body .hljs-comment,
+.knowledge-card__body .hljs-quote {
+    color: #5c6370 !important;
+    font-style: italic;
+}
+
+.knowledge-card__body .hljs-keyword,
+.knowledge-card__body .hljs-selector-tag,
+.knowledge-card__body .hljs-subst {
+    color: #c678dd !important;
+}
+
+.knowledge-card__body .hljs-string,
+.knowledge-card__body .hljs-doctag,
+.knowledge-card__body .hljs-regexp {
+    color: #98c379 !important;
+}
+
+.knowledge-card__body .hljs-number,
+.knowledge-card__body .hljs-literal {
+    color: #d19a66 !important;
+}
+
+.knowledge-card__body .hljs-title,
+.knowledge-card__body .hljs-section,
+.knowledge-card__body .hljs-name {
+    color: #61afef !important;
+}
+
+.knowledge-card__body .hljs-type,
+.knowledge-card__body .hljs-class .hljs-title {
+    color: #e5c07b !important;
+}
+
+.knowledge-card__body .hljs-variable,
+.knowledge-card__body .hljs-attr,
+.knowledge-card__body .hljs-attribute,
+.knowledge-card__body .hljs-params {
+    color: #e06c75 !important;
+}
+
+.knowledge-card__body .hljs-built_in,
+.knowledge-card__body .hljs-symbol,
+.knowledge-card__body .hljs-bullet,
+.knowledge-card__body .hljs-meta {
+    color: #56b6c2 !important;
+}
+
+.knowledge-card__body .hljs-tag {
+    color: #abb2bf !important;
+}
+
+.knowledge-card__body .hljs-tag .hljs-name,
+.knowledge-card__body .hljs-tag .hljs-attr {
+    color: #e06c75 !important;
+}
+
+.knowledge-card__body .hljs-function,
+.knowledge-card__body .hljs-title.function_ {
+    color: #61afef !important;
+}
+
+/* 行内代码 */
+.knowledge-card__body :not(pre)>code {
+    font-family: "SF Mono", Consolas, Monaco, "Courier New", monospace;
+    background: rgba(127, 127, 127, 0.15);
+    padding: .1em .35em;
+    border-radius: 4px;
+    font-size: .88em;
+    color: #e06c75;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+
+@media (max-width: 640px) {
+    #knowledge-page {
+        padding: 0 .2rem;
+    }
+
+    .knowledge-title {
+        font-size: 1.35rem;
+    }
+
+    .knowledge-category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: .8rem;
+    }
+
+    .knowledge-category-card {
+        min-height: 84px;
+        padding: .9rem 1rem;
+    }
+
+    .knowledge-grid {
+        grid-template-columns: 1fr;
+    }
+}
