@@ -5,6 +5,7 @@
     categories: [],
     cards: [],
     currentCat: null,
+    currentTag: null,
     view: 'categories',
     keyword: '',
     loaded: false
@@ -16,8 +17,11 @@
 
   const els = {};
 
-  function updateUrl(cat, cardId) {
-    const search = cat ? '?cat=' + encodeURIComponent(cat) : '';
+  function updateUrl(cat, cardId, tag) {
+    const parts = [];
+    if (cat) parts.push('cat=' + encodeURIComponent(cat));
+    if (tag) parts.push('tag=' + encodeURIComponent(tag));
+    const search = parts.length ? '?' + parts.join('&') : '';
     const hash = cardId ? '#' + encodeURIComponent(cardId) : '';
     history.replaceState(null, '', location.pathname + search + hash);
   }
@@ -25,6 +29,7 @@
   function handleHash() {
     const params = new URLSearchParams(location.search);
     const catFromQuery = params.get('cat');
+    const tagFromQuery = params.get('tag');
     const rawHash = decodeURIComponent(location.hash.slice(1));
 
     if (rawHash) {
@@ -32,6 +37,7 @@
       const card = state.cards.find((c) => c.id === cardId);
       if (card) {
         enterCategory(card.category, { skipScroll: true, skipUrl: true });
+        if (tagFromQuery) applyTag(tagFromQuery);
         focusCard(card.id);
         return;
       }
@@ -39,7 +45,10 @@
 
     if (catFromQuery) {
       const exists = state.categories.some((c) => c.name === catFromQuery);
-      if (exists) enterCategory(catFromQuery, { skipUrl: true });
+      if (exists) {
+        enterCategory(catFromQuery, { skipUrl: true });
+        if (tagFromQuery) applyTag(tagFromQuery);
+      }
     }
   }
 
@@ -178,6 +187,7 @@
     els.grid = document.getElementById('knowledge-grid');
     els.empty = document.getElementById('knowledge-empty');
     els.search = document.getElementById('knowledge-search');
+    els.tagBar = document.getElementById('knowledge-tag-bar');
 
     // 用配置里的文案覆盖
     const loadingText = document.querySelector('.knowledge-loading-text');
@@ -250,19 +260,106 @@
     });
   }
 
+  function renderTagBar() {
+    const bar = els.tagBar;
+    if (!bar) return;
+    bar.innerHTML = '';
+    bar.classList.remove('is-expanded');
+
+    const cardsInCat = state.cards.filter((c) => c.category === state.currentCat);
+
+    const counter = new Map();
+    cardsInCat.forEach((card) => {
+      (card.tags || []).forEach((t) => {
+        counter.set(t, (counter.get(t) || 0) + 1);
+      });
+    });
+
+    if (counter.size === 0) {
+      bar.style.display = 'none';
+      return;
+    }
+    bar.style.display = '';
+
+    // "全部"按钮
+    const allBtn = document.createElement('button');
+    allBtn.type = 'button';
+    allBtn.className = 'knowledge-tag-btn is-active';
+    allBtn.dataset.tag = '';
+    allBtn.innerHTML = '全部<span class="knowledge-tag-count">' + cardsInCat.length + '</span>';
+    bar.appendChild(allBtn);
+
+    // 标签按数量倒序
+    const sorted = [...counter.entries()].sort((a, b) => b[1] - a[1]);
+
+    // 超过这个数量时，默认只显示前 N 个
+    const COLLAPSE_AFTER = 6;
+
+    sorted.forEach(([tag, count], idx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'knowledge-tag-btn';
+      btn.dataset.tag = tag;
+      btn.innerHTML = '#' + tag + '<span class="knowledge-tag-count">' + count + '</span>';
+      // 超出前 N 个的标签标记为"待展开"
+      if (idx >= COLLAPSE_AFTER) {
+        btn.dataset.collapsed = 'true';
+      }
+      bar.appendChild(btn);
+    });
+
+    // 只要标签数超过阈值，就追加"更多"按钮
+    if (sorted.length > COLLAPSE_AFTER) {
+      const hiddenCount = sorted.length - COLLAPSE_AFTER;
+      const moreBtn = document.createElement('button');
+      moreBtn.type = 'button';
+      moreBtn.className = 'knowledge-tag-more';
+      moreBtn.dataset.expanded = 'false';
+      moreBtn.dataset.hidden = hiddenCount;
+      moreBtn.textContent = '更多 (' + hiddenCount + ')';
+      bar.appendChild(moreBtn);
+    }
+  }
+
+  function applyTag(tag) {
+    if (!tag) {
+      state.currentTag = null;
+    } else {
+      // 确认该 tag 在当前分类下存在
+      const cardsInCat = state.cards.filter((c) => c.category === state.currentCat);
+      const exists = cardsInCat.some((c) => (c.tags || []).includes(tag));
+      if (!exists) return;
+      state.currentTag = tag;
+    }
+
+    // 同步按钮状态
+    const bar = els.tagBar;
+    if (bar) {
+      bar.querySelectorAll('.knowledge-tag-btn').forEach((b) => {
+        const bTag = b.dataset.tag || null;
+        b.classList.toggle('is-active', bTag === state.currentTag);
+      });
+    }
+
+    renderCards();
+    updateUrl(state.currentCat, null, state.currentTag);
+  }
+
   function enterCategory(name, opts) {
     opts = opts || {};
     state.currentCat = name;
+    state.currentTag = null;
     state.keyword = '';
     if (els.search) els.search.value = '';
     els.currentCat.textContent = name;
+    renderTagBar();
     renderCards();
     showOnly('cards');
     if (!opts.skipScroll) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     if (!opts.skipUrl) {
-      updateUrl(name, null);
+      updateUrl(name, null, null);
     }
   }
 
@@ -275,7 +372,7 @@
     if (els.search) els.search.value = '';
     showOnly('categories');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    updateUrl(null, null);
+    updateUrl(null, null, null);
   }
 
   function renderCards() {
@@ -301,7 +398,9 @@
     // 搜索只切 display
     let visible = 0;
     currentCards.forEach((card, i) => {
-      const ok = !keyword || card.searchText.includes(keyword);
+      const tagOk = !state.currentTag || (card.tags || []).includes(state.currentTag);
+      const kwOk = !keyword || card.searchText.includes(keyword);
+      const ok = tagOk && kwOk;
       const el = currentCardEls[i];
       el.style.display = ok ? '' : 'none';
       if (ok) visible++;
@@ -437,6 +536,32 @@
       enterCategory(catCard.dataset.category);
       return;
     }
+
+    // 标签"更多"展开/收起
+    const moreBtn = e.target.closest('.knowledge-tag-more');
+    if (moreBtn) {
+      const bar = els.tagBar;
+      const expanded = moreBtn.dataset.expanded === 'true';
+      if (expanded) {
+        bar.classList.remove('is-expanded');
+        moreBtn.dataset.expanded = 'false';
+        moreBtn.textContent = '更多 (' + moreBtn.dataset.hidden + ')';
+      } else {
+        bar.classList.add('is-expanded');
+        moreBtn.dataset.expanded = 'true';
+        moreBtn.textContent = '收起';
+      }
+      return;
+    }
+
+    // 标签筛选
+    const tagBtn = e.target.closest('.knowledge-tag-btn');
+    if (tagBtn) {
+      const tag = tagBtn.dataset.tag || null;
+      applyTag(tag);
+      return;
+    }
+
     // 返回
     if (e.target.closest('#knowledge-back')) {
       backToCategories();

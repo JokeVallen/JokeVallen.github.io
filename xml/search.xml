@@ -32,35 +32,6 @@
     
     <entry>
       
-        <title>Unity模拟面试问答合集</title>
-      
-      <link href="/posts/2026/09/08/0dc4339be0ed/"/>
-      <url>/posts/2026/09/08/0dc4339be0ed/</url>
-      
-        <content type="html"><![CDATA[<blockquote><p>答案仅供参考，若存在有误的地方请在本文下方评论区中提出疑问，本文将不定期持续更新…</p></blockquote><h2 id="C"><a href="#C" class="headerlink" title="C#"></a>C#</h2><p><strong>Q1:</strong> 在Unity中，值类型（Struct）和引用类型（Class）在内存分配上有什么本质区别？既然Struct更节省GC，为什么我们在定义Monobehaviour组件或作为数据容器的Model时，普遍强制要求使用Class，而不是Struct？</p><details class="toggle" style="border: 1px solid default"><summary class="toggle-button" style="background-color: default;color: default">查看答案</summary><div class="toggle-content"><p>在内存分配上，值类型通常存储于栈内存中，而引用类型存储于堆内存中。对于复杂结构的对象来说，使用结构体反而得不偿失，因为结构体对于复杂结构拷贝成本较高，同时这些组件或数据容器是需要对修改实时同步的，而值类型实例之间的修改互不影响，不满足这一需求。</p></div></details>]]></content>
-      
-      
-      <categories>
-          
-          <category> 求职经验 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Unity </tag>
-            
-            <tag> 游戏开发 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      
         <title>Unity性能热点排查技巧汇总</title>
       
       <link href="/posts/2026/09/07/c346e7e6cd4d/"/>
@@ -3973,9 +3944,9 @@
       
         <tags>
             
-            <tag> Android </tag>
-            
             <tag> Unity </tag>
+            
+            <tag> Android </tag>
             
         </tags>
       
@@ -4002,9 +3973,9 @@
       
         <tags>
             
-            <tag> Android </tag>
-            
             <tag> Unity </tag>
+            
+            <tag> Android </tag>
             
             <tag> 游戏开发 </tag>
             

@@ -175,12 +175,82 @@
     border-color: var(--theme-color, #49b1f5);
 }
 
+/* ========== 标签筛选栏 ========== */
+.knowledge-tag-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.knowledge-tag-bar:not(.is-expanded) .knowledge-tag-btn[data-collapsed="true"] {
+    display: none;
+}
+
+/* "更多"按钮视觉上和标签一致 */
+.knowledge-tag-more {
+    display: inline-flex;
+    align-items: center;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    border: 1px dashed rgba(127, 127, 127, 0.4);
+    background: transparent;
+    color: inherit;
+    font-size: .78rem;
+    font-family: inherit;
+    cursor: pointer;
+    opacity: .75;
+    transition: all .2s;
+}
+
+.knowledge-tag-more:hover {
+    opacity: 1;
+    border-color: var(--theme-color, #49b1f5);
+    color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-tag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(127, 127, 127, 0.25);
+    background: transparent;
+    color: inherit;
+    font-size: .78rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.knowledge-tag-btn:hover {
+    border-color: var(--theme-color, #49b1f5);
+    color: var(--theme-color, #49b1f5);
+}
+
+.knowledge-tag-btn.is-active {
+    background: var(--theme-color, #49b1f5);
+    border-color: var(--theme-color, #49b1f5);
+    color: #fff;
+}
+
+.knowledge-tag-count {
+    opacity: .7;
+    font-size: .9em;
+}
+
 /* ========== 卡片网格 ========== */
 .knowledge-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.1rem;
     align-items: start;
+}
+
+@supports (grid-template-rows: masonry) {
+    .knowledge-grid {
+        grid-template-rows: masonry;
+    }
 }
 
 .knowledge-card {
@@ -190,6 +260,10 @@
     padding: 1.1rem 1.2rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     transition: transform .2s ease, box-shadow .2s ease;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1.1rem;
 }
 
 /* ============================================================
@@ -609,6 +683,12 @@
    响应式
    ============================================================ */
 
+@media (max-width: 1100px) {
+    .knowledge-grid {
+        column-count: 2;
+    }
+}
+
 @media (max-width: 640px) {
     #knowledge-page {
         padding: 0 .2rem;
@@ -629,6 +709,6 @@
     }
 
     .knowledge-grid {
-        grid-template-columns: 1fr;
+        column-count: 1;
     }
 }
