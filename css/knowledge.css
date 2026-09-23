@@ -192,6 +192,56 @@
     transition: transform .2s ease, box-shadow .2s ease;
 }
 
+/* ============================================================
+   锚点定位：沿边框流动的光
+   ============================================================ */
+
+@property --knowledge-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.knowledge-card.is-highlighted {
+    position: relative;
+    z-index: 1;
+    border-color: transparent;
+    box-shadow: 0 0 16px rgba(255, 184, 0, 0.35);
+    transition: box-shadow .3s ease;
+}
+
+.knowledge-card.is-highlighted::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    padding: 2px;
+    /* 光带宽度：只在这 2px 上显示 */
+    background: conic-gradient(from var(--knowledge-angle),
+            transparent 0deg,
+            transparent 280deg,
+            #ff4d4f 310deg,
+            #ffb800 335deg,
+            #22d3ee 360deg);
+    /* 挖掉中间，只在 padding 区域显示渐变 */
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: knowledge-border-spin 1.6s linear infinite;
+}
+
+@keyframes knowledge-border-spin {
+    to {
+        --knowledge-angle: 360deg;
+    }
+}
+
 .knowledge-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);

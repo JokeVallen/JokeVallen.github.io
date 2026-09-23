@@ -16,6 +16,63 @@
 
   const els = {};
 
+  function updateUrl(cat, cardId) {
+    const search = cat ? '?cat=' + encodeURIComponent(cat) : '';
+    const hash = cardId ? '#' + encodeURIComponent(cardId) : '';
+    history.replaceState(null, '', location.pathname + search + hash);
+  }
+
+  function handleHash() {
+    const params = new URLSearchParams(location.search);
+    const catFromQuery = params.get('cat');
+    const rawHash = decodeURIComponent(location.hash.slice(1));
+
+    if (rawHash) {
+      const cardId = rawHash.replace(/^card-/, '');
+      const card = state.cards.find((c) => c.id === cardId);
+      if (card) {
+        enterCategory(card.category, { skipScroll: true, skipUrl: true });
+        focusCard(card.id);
+        return;
+      }
+    }
+
+    if (catFromQuery) {
+      const exists = state.categories.some((c) => c.name === catFromQuery);
+      if (exists) enterCategory(catFromQuery, { skipUrl: true });
+    }
+  }
+
+  function focusCard(id) {
+    let attempts = 0;
+    const maxAttempts = 20;
+
+    function tryScroll() {
+      const el = document.querySelector('[data-card-id="' + id + '"]');
+      if (!el) {
+        if (++attempts < maxAttempts) {
+          setTimeout(tryScroll, 50);
+        } else {
+          console.warn('[knowledge] 未找到卡片', id);
+        }
+        return;
+      }
+
+      el.classList.remove('is-collapsed');
+      saveCollapsedState(id, false);
+
+      const rect = el.getBoundingClientRect();
+      const targetY = window.pageYOffset + rect.top
+        - window.innerHeight / 2 + rect.height / 2;
+      window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+
+      el.classList.add('is-highlighted');
+      setTimeout(() => el.classList.remove('is-highlighted'), 3500);
+    }
+
+    tryScroll();
+  }
+
   /* ---------- 折叠状态存储 ---------- */
   const COLLAPSE_KEY = 'knowledge-collapsed-v2';
 
@@ -149,6 +206,7 @@
       state.loaded = true;
       renderCategories();
       showOnly('categories');
+      handleHash();
     } catch (err) {
       console.error('[knowledge] 加载失败', err);
       els.error.textContent = '知识库数据加载失败，请刷新重试';
@@ -192,14 +250,20 @@
     });
   }
 
-  function enterCategory(name) {
+  function enterCategory(name, opts) {
+    opts = opts || {};
     state.currentCat = name;
     state.keyword = '';
     if (els.search) els.search.value = '';
     els.currentCat.textContent = name;
     renderCards();
     showOnly('cards');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!opts.skipScroll) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (!opts.skipUrl) {
+      updateUrl(name, null);
+    }
   }
 
   function backToCategories() {
@@ -211,6 +275,7 @@
     if (els.search) els.search.value = '';
     showOnly('categories');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateUrl(null, null);
   }
 
   function renderCards() {
@@ -437,6 +502,10 @@
       document.body.removeChild(ta);
     }
   }
+
+  window.addEventListener('hashchange', function () {
+    if (document.getElementById('knowledge-page')) handleHash();
+  });
 
   /* ---------- PJAX 支持 ---------- */
   document.addEventListener('pjax:complete', function () {
