@@ -36,6 +36,67 @@
   font-size: 0.8rem;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+.timer-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.timer-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.timer-toggle:hover {
+  background: rgba(100, 116, 139, 0.18);
+  color: #334155;
+}
+
+/* ---------- Mini 模式：只显示时间与展开按钮 ---------- */
+.hexo-timer.is-mini {
+  width: auto;
+  max-width: none;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+.hexo-timer.is-mini .timer-header {
+  justify-content: flex-end;
+  min-height: 20px;
+  margin-bottom: 0.15rem;
+}
+
+.hexo-timer.is-mini .timer-label,
+.hexo-timer.is-mini .timer-status {
+  display: none;
+}
+
+.hexo-timer.is-mini .timer-display {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.hexo-timer.is-mini .timer-controls {
+  display: none;
+}
+
+.hexo-timer.is-mini .timer-toggle {
+  width: 22px;
+  height: 22px;
+  font-size: 0.7rem;
+}
+
 
 .timer-status.running {
   background: #dcfce7;
@@ -311,5 +372,16 @@
     flex: 1 1 0;
     padding: 0.3rem 0.2rem;
     font-size: 0.7rem;
+  }
+  .hexo-timer.is-sticky.is-mini {
+    width: auto !important;
+    min-width: 108px;
+    max-width: calc(100vw - 16px);
+    padding: 0.4rem 0.55rem;
+  }
+
+  .hexo-timer.is-sticky.is-mini .timer-display {
+    font-size: 1rem;
+    margin: 0;
   }
 }

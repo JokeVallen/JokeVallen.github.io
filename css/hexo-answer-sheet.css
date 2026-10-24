@@ -41,6 +41,54 @@
     font-size: 0.8rem;
     font-variant-numeric: tabular-nums;
 }
+.as-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.as-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: rgba(100, 116, 139, 0.1);
+    color: #64748b;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.as-toggle:hover {
+    background: rgba(100, 116, 139, 0.18);
+    color: #334155;
+}
+
+/* ---------- Mini 模式：只保留标题、进度与展开按钮 ---------- */
+.hexo-answer-sheet.is-mini {
+    padding: 0.55rem 0.7rem;
+}
+
+.hexo-answer-sheet.is-mini .as-header {
+    margin-bottom: 0;
+}
+
+.hexo-answer-sheet.is-mini .as-label {
+    max-width: 58%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hexo-answer-sheet.is-mini .as-body,
+.hexo-answer-sheet.is-mini .as-controls,
+.hexo-answer-sheet.is-mini .as-result {
+    display: none !important;
+}
+
 
 /* ---------- 题目区（唯一滚动区域） ---------- */
 .as-body {
@@ -454,6 +502,10 @@
     }
 
     body.has-sticky-answer-sheet #article-container {
+        padding-bottom: 76px;
+    }
+
+    body.has-sticky-answer-sheet.answer-sheet-expanded #article-container {
         padding-bottom: 54vh;
     }
 

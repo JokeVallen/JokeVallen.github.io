@@ -33,6 +33,27 @@
         const startBtn = timer.querySelector('.timer-start');
         const pauseBtn = timer.querySelector('.timer-pause');
         const resetBtn = timer.querySelector('.timer-reset');
+        const toggleBtn = timer.querySelector('.timer-toggle');
+        const MINI_KEY = 'hexo-timer-mini';
+        let isMini = false;
+        try {
+            const savedMini = localStorage.getItem(MINI_KEY);
+            if (savedMini === '1' || savedMini === '0') {
+                isMini = savedMini === '1';
+            } else if (window.matchMedia) {
+                isMini = window.matchMedia('(max-width: 768px)').matches;
+            }
+        } catch (e) { /* ignore */ }
+
+        function applyMini() {
+            timer.classList.toggle('is-mini', isMini);
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-expanded', isMini ? 'false' : 'true');
+                toggleBtn.innerHTML = isMini
+                    ? '<i class="fas fa-chevron-up"></i>'
+                    : '<i class="fas fa-chevron-down"></i>';
+            }
+        }
 
         // ---- 状态 ----
         // displaySeconds 语义：
@@ -205,6 +226,13 @@
         startBtn.addEventListener('click', start);
         pauseBtn.addEventListener('click', pause);
         resetBtn.addEventListener('click', reset);
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                isMini = !isMini;
+                try { localStorage.setItem(MINI_KEY, isMini ? '1' : '0'); } catch (e) { /* ignore */ }
+                applyMini();
+            });
+        }
 
         display.addEventListener('click', function () {
             if (isAlarming) stopAlarm();
@@ -223,6 +251,7 @@
             }
         });
         window.addEventListener('pagehide', function () { save(true); });
+        applyMini();
 
         // ---- 初始渲染 ----
         if (mode === 'down' && displaySeconds === 0 && initial > 0) {

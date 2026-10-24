@@ -21,6 +21,28 @@
         const gradeBtn = sheet.querySelector('.as-grade');
         const resetBtn = sheet.querySelector('.as-reset');
         const resultEl = sheet.querySelector('.as-result');
+        const toggleBtn = sheet.querySelector('.as-toggle');
+        const MINI_KEY = 'hexo-answer-sheet-mini';
+        let isMini = false;
+        try {
+            const savedMini = localStorage.getItem(MINI_KEY);
+            if (savedMini === '1' || savedMini === '0') {
+                isMini = savedMini === '1';
+            } else if (window.matchMedia) {
+                isMini = window.matchMedia('(max-width: 768px)').matches;
+            }
+        } catch (e) { /* ignore */ }
+
+        function applyMini() {
+            sheet.classList.toggle('is-mini', isMini);
+            if (toggleBtn) {
+                toggleBtn.setAttribute('aria-expanded', isMini ? 'false' : 'true');
+                toggleBtn.innerHTML = isMini
+                    ? '<i class="fas fa-chevron-up"></i>'
+                    : '<i class="fas fa-chevron-down"></i>';
+            }
+            updateBodyExpandedState();
+        }
 
         // 二维缓存：optCache[i][letter] = element
         const optCache = [];
@@ -175,6 +197,12 @@
         sheet.addEventListener('click', function (e) {
             const target = e.target;
 
+            if (target.closest && target.closest('.as-toggle')) {
+                isMini = !isMini;
+                try { localStorage.setItem(MINI_KEY, isMini ? '1' : '0'); } catch (e) { /* ignore */ }
+                applyMini();
+                return;
+            }
             if (target.classList && target.classList.contains('as-grade')) {
                 handleGrade();
                 return;
@@ -219,6 +247,20 @@
 
         // ---- 初始渲染 ----
         renderSelection();
+        applyMini();
+    }
+
+    function updateBodyExpandedState() {
+        if (!document.body) return;
+        const stickySheets = document.querySelectorAll('.hexo-answer-sheet.is-sticky');
+        let expanded = false;
+        for (let i = 0; i < stickySheets.length; i++) {
+            if (!stickySheets[i].classList.contains('is-mini')) {
+                expanded = true;
+                break;
+            }
+        }
+        document.body.classList.toggle('answer-sheet-expanded', expanded);
     }
 
     function init() {
@@ -230,6 +272,7 @@
         }
         if (document.body) {
             document.body.classList.toggle('has-sticky-answer-sheet', hasSticky);
+            updateBodyExpandedState();
         }
     }
 
