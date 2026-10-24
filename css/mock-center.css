@@ -1,0 +1,755 @@
+#mock-center-app {
+    --mock-primary: #4a6ee0;
+    --mock-primary-2: #7c5cf0;
+    --mock-bg: #f6f8fc;
+    --mock-card: #ffffff;
+    --mock-card-2: #f8fafc;
+    --mock-text: #1e293b;
+    --mock-muted: #64748b;
+    --mock-border: #e2e8f0;
+    --mock-success: #16a34a;
+    --mock-warning: #d97706;
+    --mock-danger: #dc2626;
+    --mock-shadow: 0 10px 30px rgba(31, 45, 80, 0.08);
+    max-width: 1080px;
+    margin: 0 auto;
+    color: var(--mock-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+    box-sizing: border-box;
+}
+
+#mock-center-app *,
+#mock-center-app *::before,
+#mock-center-app *::after {
+    box-sizing: border-box;
+}
+
+[data-theme="dark"] #mock-center-app {
+    --mock-bg: #101623;
+    --mock-card: #1a2232;
+    --mock-card-2: #141c2a;
+    --mock-text: #e5eaf3;
+    --mock-muted: #9aa8bd;
+    --mock-border: #2b3850;
+    --mock-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+#mock-center-app .mock-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 240px;
+    color: var(--mock-muted);
+}
+
+#mock-center-app .mock-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
+    gap: 26px;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 30px;
+    border: 1px solid var(--mock-border);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 92% 8%, rgba(124, 92, 240, 0.18), transparent 34%),
+        radial-gradient(circle at 8% 92%, rgba(74, 110, 224, 0.14), transparent 30%),
+        var(--mock-card);
+    box-shadow: var(--mock-shadow);
+}
+
+#mock-center-app .mock-kicker {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: var(--mock-primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+}
+
+#mock-center-app .mock-hero h1 {
+    margin: 0 0 10px;
+    color: var(--mock-text);
+    font-size: 34px;
+    line-height: 1.2;
+}
+
+#mock-center-app .mock-hero p {
+    margin: 0;
+    color: var(--mock-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+#mock-center-app .mock-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+}
+
+#mock-center-app .mock-stat {
+    padding: 14px 10px;
+    border: 1px solid var(--mock-border);
+    border-radius: 14px;
+    background: var(--mock-card-2);
+    text-align: center;
+}
+
+#mock-center-app .mock-stat strong {
+    display: block;
+    color: var(--mock-primary);
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+#mock-center-app .mock-stat span {
+    color: var(--mock-muted);
+    font-size: 11px;
+}
+
+#mock-center-app .mock-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 20px;
+}
+
+#mock-center-app .mock-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border: 1px solid var(--mock-border);
+    border-radius: 999px;
+    background: var(--mock-card);
+    color: var(--mock-muted);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+#mock-center-app .mock-tab:hover {
+    border-color: var(--mock-primary);
+    color: var(--mock-primary);
+}
+
+#mock-center-app .mock-tab.is-active {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--mock-primary), var(--mock-primary-2));
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(74, 110, 224, 0.24);
+}
+
+#mock-center-app .mock-section {
+    margin-bottom: 26px;
+}
+
+#mock-center-app .mock-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+#mock-center-app .mock-section-head h2 {
+    margin: 0;
+    color: var(--mock-text);
+    font-size: 22px;
+}
+
+#mock-center-app .mock-section-head p {
+    margin: 0;
+    color: var(--mock-muted);
+    font-size: 13px;
+}
+
+#mock-center-app .mock-quick-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px;
+    border: 1px solid var(--mock-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(74, 110, 224, 0.08), rgba(124, 92, 240, 0.06)), var(--mock-card);
+}
+
+#mock-center-app .mock-quick-card h3 {
+    margin: 0 0 6px;
+    color: var(--mock-text);
+    font-size: 18px;
+}
+
+#mock-center-app .mock-quick-card p {
+    margin: 0;
+    max-width: 660px;
+    color: var(--mock-muted);
+    font-size: 13.5px;
+    line-height: 1.7;
+}
+
+#mock-center-app .mock-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 17px;
+    border: 1px solid var(--mock-border);
+    border-radius: 11px;
+    background: var(--mock-card);
+    color: var(--mock-text);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+#mock-center-app .mock-btn:hover {
+    border-color: var(--mock-primary);
+    color: var(--mock-primary);
+}
+
+#mock-center-app .mock-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+#mock-center-app .mock-btn-primary {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--mock-primary), var(--mock-primary-2));
+    color: #fff;
+    box-shadow: 0 7px 16px rgba(74, 110, 224, 0.22);
+}
+
+#mock-center-app .mock-btn-primary:hover {
+    color: #fff;
+    filter: brightness(1.05);
+}
+
+#mock-center-app .mock-btn-small {
+    padding: 7px 12px;
+    font-size: 12.5px;
+}
+
+#mock-center-app .mock-paper-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+}
+
+#mock-center-app .mock-paper {
+    display: block;
+    padding: 17px;
+    border: 1px solid var(--mock-border);
+    border-radius: 15px;
+    background: var(--mock-card);
+    color: var(--mock-text);
+    text-decoration: none;
+    transition: all 0.18s ease;
+}
+
+#mock-center-app .mock-paper:hover {
+    border-color: var(--mock-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--mock-shadow);
+}
+
+#mock-center-app .mock-paper-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#mock-center-app .mock-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(74, 110, 224, 0.12);
+    color: var(--mock-primary);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+#mock-center-app .mock-badge-soft {
+    background: var(--mock-card-2);
+    color: var(--mock-muted);
+}
+
+#mock-center-app .mock-paper-time {
+    color: var(--mock-muted);
+    font-size: 11.5px;
+}
+
+#mock-center-app .mock-paper h3 {
+    margin: 0 0 6px;
+    color: var(--mock-text);
+    font-size: 15.5px;
+    line-height: 1.45;
+}
+
+#mock-center-app .mock-paper p {
+    margin: 0 0 13px;
+    color: var(--mock-muted);
+    font-size: 12.5px;
+}
+
+#mock-center-app .mock-paper-link {
+    color: var(--mock-primary);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+#mock-center-app .mock-interview-setup {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px;
+    border: 1px solid var(--mock-border);
+    border-radius: 16px;
+    background: var(--mock-card);
+}
+
+#mock-center-app .mock-interview-setup label {
+    display: grid;
+    gap: 6px;
+    color: var(--mock-muted);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+#mock-center-app .mock-interview-setup select {
+    min-width: 160px;
+    padding: 9px 12px;
+    border: 1px solid var(--mock-border);
+    border-radius: 10px;
+    background: var(--mock-card-2);
+    color: var(--mock-text);
+    font-size: 14px;
+}
+
+#mock-center-app .mock-tips {
+    margin-top: 14px;
+    padding: 17px 19px;
+    border-left: 3px solid var(--mock-primary);
+    border-radius: 0 12px 12px 0;
+    background: var(--mock-card-2);
+}
+
+#mock-center-app .mock-tips h3 {
+    margin: 0 0 5px;
+    font-size: 15px;
+}
+
+#mock-center-app .mock-tips p {
+    margin: 0;
+    color: var(--mock-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+#mock-center-app .mock-quiz-shell,
+#mock-center-app .mock-interview-card,
+#mock-center-app .mock-result {
+    padding: 26px;
+    border: 1px solid var(--mock-border);
+    border-radius: 20px;
+    background: var(--mock-card);
+    box-shadow: var(--mock-shadow);
+}
+
+#mock-center-app .mock-quiz-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+#mock-center-app .mock-progress-text {
+    color: var(--mock-muted);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+#mock-center-app .mock-timer {
+    margin-left: auto;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--mock-card-2);
+    color: var(--mock-danger);
+    font-size: 13px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+#mock-center-app .mock-progress-bar {
+    height: 6px;
+    margin-bottom: 22px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--mock-border);
+}
+
+#mock-center-app .mock-progress-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--mock-primary), var(--mock-primary-2));
+    transition: width 0.2s ease;
+}
+
+#mock-center-app .mock-question {
+    margin: 0 0 18px;
+    color: var(--mock-text);
+    font-size: 22px;
+    line-height: 1.55;
+}
+
+#mock-center-app .mock-question-tip {
+    margin: -8px 0 18px;
+    color: var(--mock-muted);
+    font-size: 13px;
+}
+
+#mock-center-app .mock-options {
+    display: grid;
+    gap: 9px;
+}
+
+#mock-center-app .mock-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 13px 15px;
+    border: 1px solid var(--mock-border);
+    border-radius: 12px;
+    background: var(--mock-card-2);
+    color: var(--mock-text);
+    font-size: 14.5px;
+    line-height: 1.55;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+#mock-center-app .mock-option:hover {
+    border-color: var(--mock-primary);
+    background: rgba(74, 110, 224, 0.06);
+}
+
+#mock-center-app .mock-option.is-selected {
+    border-color: var(--mock-primary);
+    background: rgba(74, 110, 224, 0.12);
+}
+
+#mock-center-app .mock-option-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    margin-top: 1px;
+    border-radius: 7px;
+    background: var(--mock-card);
+    color: var(--mock-primary);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+#mock-center-app .mock-quiz-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#mock-center-app .mock-result {
+    text-align: center;
+}
+
+#mock-center-app .mock-result-score {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    margin-bottom: 12px;
+    color: var(--mock-primary);
+}
+
+#mock-center-app .mock-result-score strong {
+    font-size: 54px;
+    line-height: 1;
+}
+
+#mock-center-app .mock-result-score span {
+    color: var(--mock-muted);
+    font-size: 14px;
+}
+
+#mock-center-app .mock-result h2 {
+    margin: 0 0 8px;
+    color: var(--mock-text);
+    font-size: 22px;
+}
+
+#mock-center-app .mock-result-sub {
+    margin: 0 0 18px;
+    color: var(--mock-muted);
+    font-size: 13.5px;
+}
+
+#mock-center-app .mock-result-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 20px;
+}
+
+#mock-center-app .mock-wrong-list {
+    display: grid;
+    gap: 10px;
+    text-align: left;
+}
+
+#mock-center-app .mock-wrong-item {
+    padding: 14px 16px;
+    border: 1px solid var(--mock-border);
+    border-radius: 12px;
+    background: var(--mock-card-2);
+}
+
+#mock-center-app .mock-wrong-item h4 {
+    margin: 0 0 7px;
+    color: var(--mock-text);
+    font-size: 14.5px;
+    line-height: 1.55;
+}
+
+#mock-center-app .mock-wrong-item p {
+    margin: 4px 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+#mock-center-app .mock-wrong-your {
+    color: var(--mock-danger);
+}
+
+#mock-center-app .mock-wrong-answer {
+    color: var(--mock-success);
+}
+
+#mock-center-app .mock-explain {
+    color: var(--mock-muted);
+}
+
+#mock-center-app .mock-points {
+    margin-top: 16px;
+    padding: 17px 19px;
+    border: 1px solid var(--mock-border);
+    border-radius: 13px;
+    background: var(--mock-card-2);
+}
+
+#mock-center-app .mock-points h3 {
+    margin: 0 0 8px;
+    color: var(--mock-primary);
+    font-size: 14px;
+}
+
+#mock-center-app .mock-points ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+#mock-center-app .mock-points li {
+    margin: 6px 0;
+    color: var(--mock-text);
+    font-size: 13.5px;
+    line-height: 1.7;
+}
+
+#mock-center-app .mock-rate-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+#mock-center-app .mock-rate-row .mock-btn {
+    flex: 1 1 100px;
+}
+
+#mock-center-app .mock-rate-forgot {
+    border-color: transparent;
+    background: var(--mock-danger);
+    color: #fff;
+}
+
+#mock-center-app .mock-rate-fuzzy {
+    border-color: transparent;
+    background: var(--mock-warning);
+    color: #fff;
+}
+
+#mock-center-app .mock-rate-known {
+    border-color: transparent;
+    background: var(--mock-success);
+    color: #fff;
+}
+
+#mock-center-app .mock-history {
+    display: grid;
+    gap: 9px;
+}
+
+#mock-center-app .mock-history-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--mock-border);
+    border-radius: 12px;
+    background: var(--mock-card);
+}
+
+#mock-center-app .mock-history-row strong {
+    display: block;
+    color: var(--mock-text);
+    font-size: 14px;
+}
+
+#mock-center-app .mock-history-row span {
+    color: var(--mock-muted);
+    font-size: 12px;
+}
+
+#mock-center-app .mock-history-row b {
+    color: var(--mock-primary);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+#mock-center-app .mock-empty-line {
+    color: var(--mock-muted);
+    font-size: 13px;
+    text-align: left;
+}
+
+@media (max-width: 860px) {
+    #mock-center-app .mock-hero {
+        grid-template-columns: 1fr;
+        padding: 24px;
+    }
+
+    #mock-center-app .mock-hero h1 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 620px) {
+    #mock-center-app .mock-hero {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    #mock-center-app .mock-hero h1 {
+        font-size: 24px;
+    }
+
+    #mock-center-app .mock-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    #mock-center-app .mock-stat {
+        padding: 10px 6px;
+    }
+
+    #mock-center-app .mock-stat strong {
+        font-size: 18px;
+    }
+
+    #mock-center-app .mock-tabs {
+        gap: 6px;
+    }
+
+    #mock-center-app .mock-tab {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 9px 11px;
+        font-size: 12.5px;
+    }
+
+    #mock-center-app .mock-section-head {
+        display: block;
+    }
+
+    #mock-center-app .mock-section-head p {
+        margin-top: 5px;
+    }
+
+    #mock-center-app .mock-quick-card {
+        display: block;
+        padding: 18px;
+    }
+
+    #mock-center-app .mock-quick-card .mock-btn {
+        width: 100%;
+        margin-top: 14px;
+    }
+
+    #mock-center-app .mock-paper-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #mock-center-app .mock-interview-setup {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #mock-center-app .mock-interview-setup select {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #mock-center-app .mock-interview-setup .mock-btn {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    #mock-center-app .mock-quiz-shell,
+    #mock-center-app .mock-interview-card,
+    #mock-center-app .mock-result {
+        padding: 17px;
+        border-radius: 16px;
+    }
+
+    #mock-center-app .mock-question {
+        font-size: 18px;
+    }
+
+    #mock-center-app .mock-option {
+        padding: 11px 12px;
+        font-size: 13.5px;
+    }
+
+    #mock-center-app .mock-timer {
+        margin-left: 0;
+    }
+
+    #mock-center-app .mock-result-score strong {
+        font-size: 44px;
+    }
+
+    #mock-center-app .mock-history-row {
+        align-items: flex-start;
+    }
+}

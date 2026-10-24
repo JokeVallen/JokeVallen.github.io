@@ -1,3 +1,6 @@
+@import url("/css/mock-center.css");
+@import url("/css/deepseek-pet.css");
+
 /* #region 导航栏 */
 
 /* 确保.site-icon是块级元素，并设置基础尺寸 */

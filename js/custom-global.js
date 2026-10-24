@@ -1,3 +1,42 @@
+// --------------------- 鲸鱼娘桌宠加载 ----------------------
+(function () {
+    function ensurePet() {
+        if (document.getElementById('deepseek-pet-script')) return;
+        const script = document.createElement('script');
+        script.id = 'deepseek-pet-script';
+        script.src = '/js/deepseek-pet.js';
+        script.defer = true;
+        document.body.appendChild(script);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ensurePet);
+    } else {
+        ensurePet();
+    }
+    document.addEventListener('pjax:complete', ensurePet);
+})();
+
+// --------------------- 模拟中心按需加载 ----------------------
+(function () {
+    function ensureMockCenter() {
+        if (window.location.pathname.indexOf('/mock/') === -1) return;
+        if (document.getElementById('mock-center-script')) return;
+        const script = document.createElement('script');
+        script.id = 'mock-center-script';
+        script.src = '/js/mock-center.js';
+        script.defer = true;
+        document.body.appendChild(script);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ensureMockCenter);
+    } else {
+        ensureMockCenter();
+    }
+    document.addEventListener('pjax:complete', ensureMockCenter);
+})();
+
 // --------------------- 导航栏 ----------------------
 
 // 页面加载时立即设置Logo
