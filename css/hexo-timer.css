@@ -269,17 +269,47 @@
 }
 
 /* ============================================================
- * 移动端：全部铺底（!important 覆盖内联）
+ * 移动端：计时器改为右上角紧凑悬浮，避免与底部答题卡重叠
  * ============================================================ */
 @media (max-width: 768px) {
 
   .hexo-timer.is-sticky,
   .hexo-timer.is-sticky[class*="pos-"] {
-    top: auto !important;
-    left: 3vw !important;
-    right: 3vw !important;
-    bottom: 3vh !important;
-    width: auto !important;
+    top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+    left: auto !important;
+    right: 8px !important;
+    bottom: auto !important;
+    width: min(200px, calc(100vw - 16px)) !important;
+    max-height: 38vh;
+    overflow: hidden;
+    padding: 0.65rem 0.75rem;
+    border-radius: 12px;
+    z-index: 9999;
     transform: none !important;
+  }
+  .hexo-timer.is-sticky .timer-header {
+    font-size: 0.72rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .hexo-timer.is-sticky .timer-status {
+    padding: 1px 7px;
+    font-size: 0.68rem;
+  }
+
+  .hexo-timer.is-sticky .timer-display {
+    font-size: 1.35rem;
+    margin: 0.2rem 0;
+  }
+
+  .hexo-timer.is-sticky .timer-controls {
+    gap: 0.25rem;
+    margin-top: 0.35rem;
+  }
+
+  .hexo-timer.is-sticky .timer-btn {
+    flex: 1 1 0;
+    padding: 0.3rem 0.2rem;
+    font-size: 0.7rem;
   }
 }

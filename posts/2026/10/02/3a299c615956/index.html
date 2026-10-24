@@ -1,0 +1,876 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity编辑器开发案例——代码生成 | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="案例视频             前言在 Unity 项目开发中，我们经常需要根据某些资源批量生成代码或配置，例如：  根据 Excel &#x2F; TextAsset 生成配置表代码； 根据 ScriptableObject 生成常量类； 根据 Prefab 生成 UI 绑定代码； 根据资源目录生成清单文件。  如果每次手动创建、复制、修改，不仅效率低，而且容易出错。本文实现一个可扩展的 Un">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity编辑器开发案例——代码生成">
+<meta property="og:url" content="https://jokevallen.github.io/posts/2026/10/02/3a299c615956/index.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="案例视频             前言在 Unity 项目开发中，我们经常需要根据某些资源批量生成代码或配置，例如：  根据 Excel &#x2F; TextAsset 生成配置表代码； 根据 ScriptableObject 生成常量类； 根据 Prefab 生成 UI 绑定代码； 根据资源目录生成清单文件。  如果每次手动创建、复制、修改，不仅效率低，而且容易出错。本文实现一个可扩展的 Un">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-10-02T04:50:12.000Z">
+<meta property="article:modified_time" content="2026-10-02T06:31:07.308Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="编辑器工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Unity编辑器开发案例——代码生成",
+  "url": "https://jokevallen.github.io/posts/2026/10/02/3a299c615956/",
+  "image": "https://jokevallen.github.io/images/head.png",
+  "datePublished": "2026-10-02T04:50:12.000Z",
+  "dateModified": "2026-10-02T06:31:07.308Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "我与岁月的森林",
+      "url": "https://github.com/JokeVallen"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/posts/2026/10/02/3a299c615956/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity编辑器开发案例——代码生成',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><link rel="stylesheet" href="/css/hexo-timer.css"><link rel="stylesheet" href="/css/hexo-answer-sheet.css"><link rel="stylesheet" href="/css/knowledge.css"><link rel="stylesheet" href="/css/algo-review.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">156</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a><a class="nav-page-title" href="/"><span class="site-name">Unity编辑器开发案例——代码生成</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Unity编辑器开发案例——代码生成</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2026-10-02T06:31:07.308Z" title="更新于 2026-10-02 14:31:07">2026-10-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Unity%E5%BC%80%E5%8F%91/">Unity开发</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><h2 id="案例视频"><a href="#案例视频" class="headerlink" title="案例视频"></a>案例视频</h2><div class="bilibili">
+    <iframe
+        src="https://www.acfun.cn/player/ac48886530"
+        scrolling="no"
+        border="0"
+        frameborder="no"
+        framespacing="0"
+        allowfullscreen="true">
+    </iframe>
+</div>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 Unity 项目开发中，我们经常需要根据某些资源批量生成代码或配置，例如：</p>
+<ul>
+<li>根据 Excel &#x2F; TextAsset 生成配置表代码；</li>
+<li>根据 ScriptableObject 生成常量类；</li>
+<li>根据 Prefab 生成 UI 绑定代码；</li>
+<li>根据资源目录生成清单文件。</li>
+</ul>
+<p>如果每次手动创建、复制、修改，不仅效率低，而且容易出错。本文实现一个可扩展的 Unity 编辑器代码生成窗口 <code>CodeGenerateWindow</code>，它支持资源拖拽、生成器扫描、批量生成、进度显示、配置持久化等功能。</p>
+<h2 id="功能概览"><a href="#功能概览" class="headerlink" title="功能概览"></a>功能概览</h2><p>该工具主要包含以下能力：</p>
+<ul>
+<li>通过菜单 <code>Game/CodeGenerator</code> 打开生成窗口；</li>
+<li>在 Project 窗口右键资源，选择 <code>Assets/Open with CodeGenerate Window</code>，将选中资源加入生成列表；</li>
+<li>支持将资源直接拖拽到窗口中；</li>
+<li>每个资源可选择输出文件名和对应的生成器；</li>
+<li>支持批量生成，并显示整体进度与单项进度；</li>
+<li>生成过程中可查看目标资源或生成器的 Inspector 详情；</li>
+<li>支持配置输出目录、刷新间隔；</li>
+<li>支持重新扫描生成器、清除持久化配置；</li>
+<li>使用 <code>EditorPrefs</code> 保存窗口数据，重启 Unity 后仍可恢复。</li>
+</ul>
+<h2 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h2><p>核心脚本如下：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MenuItemExtensions.cs</code></td>
+<td>提供 Project 右键菜单入口</td>
+</tr>
+<tr>
+<td><code>CodeGenerateWindow.cs</code></td>
+<td>代码生成主窗口，管理任务、配置、进度与详情面板</td>
+</tr>
+<tr>
+<td><code>Generator.cs</code></td>
+<td>生成器基类，负责单个&#x2F;批量生成任务的调度与进度</td>
+</tr>
+<tr>
+<td><code>GeneratorAttribute.cs</code></td>
+<td>标记生成器对应的目标资源类型</td>
+</tr>
+<tr>
+<td><code>FilePathAttribute.cs</code></td>
+<td>指定生成器资产路径，便于持久化生成器配置</td>
+</tr>
+<tr>
+<td><code>GeneratorsCache.cs</code></td>
+<td>扫描并缓存所有生成器实例</td>
+</tr>
+</tbody></table>
+<p>整体工作流程如下：</p>
+<ol>
+<li>用户打开 <code>CodeGenerateWindow</code>；</li>
+<li>添加目标资源，每个资源对应一个 <code>Unit</code>；</li>
+<li>为每个 <code>Unit</code> 选择目标类型下可用的 <code>Generator</code>；</li>
+<li>点击 <code>Generate</code>；</li>
+<li>窗口通过 <code>EditorApplication.update</code> 驱动所有 <code>Generator.OnUpdate</code>；</li>
+<li>生成完成后调用 <code>AssetDatabase.Refresh</code> 刷新资源；</li>
+<li>窗口数据通过 <code>EditorPrefs</code> 持久化。</li>
+</ol>
+<h2 id="关键实现解析"><a href="#关键实现解析" class="headerlink" title="关键实现解析"></a>关键实现解析</h2><h3 id="1-生成器扫描与缓存"><a href="#1-生成器扫描与缓存" class="headerlink" title="1. 生成器扫描与缓存"></a>1. 生成器扫描与缓存</h3><p><code>GeneratorsCache</code> 使用 <code>TypeCache.GetTypesWithAttribute&lt;GeneratorAttribute&gt;()</code> 扫描所有标记了 <code>[Generator]</code> 的类：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> type <span class="hljs-keyword">in</span> TypeCache.GetTypesWithAttribute&lt;GeneratorAttribute&gt;())<br>&#123;<br>    <span class="hljs-keyword">var</span> fileAttr = type.GetCustomAttribute&lt;FilePathAttribute&gt;(<span class="hljs-literal">false</span>);<br>    <span class="hljs-keyword">var</span> generatorAttr = type.GetCustomAttribute&lt;GeneratorAttribute&gt;(<span class="hljs-literal">false</span>);<br><br>    Generator generator = <span class="hljs-literal">null</span>;<br>    <span class="hljs-keyword">if</span> (fileAttr != <span class="hljs-literal">null</span> &amp;&amp; !<span class="hljs-built_in">string</span>.IsNullOrWhiteSpace(fileAttr.FilePath))<br>    &#123;<br>        generator = AssetDatabase.LoadAssetAtPath(fileAttr.FilePath, type) <span class="hljs-keyword">as</span> Generator;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (generator == <span class="hljs-literal">null</span>)<br>        generator = ScriptableObject.CreateInstance(type) <span class="hljs-keyword">as</span> Generator;<br><br>    <span class="hljs-comment">// 按 TargetType 分组缓存</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样做的好处是：</p>
+<ul>
+<li>生成器可以通过 <code>[Generator(typeof(TargetType))]</code> 自动声明自己支持哪种资源；</li>
+<li>如果配置了 <code>[FilePath]</code>，生成器会从指定资产加载，修改后的参数可以持久化；</li>
+<li>如果没有配置资产，则创建一个临时 <code>ScriptableObject</code> 实例，适合无配置的生成器。</li>
+</ul>
+<h3 id="2-生成器基类"><a href="#2-生成器基类" class="headerlink" title="2. 生成器基类"></a>2. 生成器基类</h3><p><code>Generator</code> 继承自 <code>ScriptableObject</code>，内部维护待处理队列、活动队列和进度映射：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Generator</span> : <span class="hljs-title">ScriptableObject</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-built_in">string</span> DisplayName &#123; <span class="hljs-keyword">get</span>; &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> Generating &#123; <span class="hljs-keyword">get</span>; &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Generate</span>(<span class="hljs-params">Object target</span>)</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Generate</span>(<span class="hljs-params">IEnumerable&lt;Object&gt; targets</span>)</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Stop</span>()</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">TryGetProgress</span>(<span class="hljs-params">Object target, <span class="hljs-keyword">out</span> <span class="hljs-built_in">float</span> progress</span>)</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnUpdate</span>(<span class="hljs-params"><span class="hljs-built_in">double</span> deltaTime</span>)</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">virtual</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">OnGenerate</span>(<span class="hljs-params">Procedure procedure</span>)</span> =&gt; <span class="hljs-literal">true</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">virtual</span> IEnumerator <span class="hljs-title">OnGenerateCoroutine</span>(<span class="hljs-params">Procedure procedure</span>)</span> =&gt; <span class="hljs-literal">null</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>生成器支持两种模式：</p>
+<ul>
+<li>同步模式：重写 <code>OnGenerate</code>，返回 <code>true</code> 表示完成；</li>
+<li>协程模式：重写 <code>OnGenerateCoroutine</code>，返回非空 <code>IEnumerator</code> 后，基类会逐帧推进。</li>
+</ul>
+<p>同步模式适合小文件生成，协程模式适合耗时较长或需要分帧处理的任务。</p>
+<h3 id="3-窗口任务管理"><a href="#3-窗口任务管理" class="headerlink" title="3. 窗口任务管理"></a>3. 窗口任务管理</h3><p><code>CodeGenerateWindow</code> 中每个待生成资源被封装为 <code>Unit</code>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Unit</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> outputFileName;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> selectedGeneratorIndex;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> targetGuidStr;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> targetTypeStr;<br>    <span class="hljs-keyword">public</span> Object target;<br>    <span class="hljs-keyword">public</span> Type targetType;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">float</span> progress;<br>    <span class="hljs-keyword">public</span> Editor targetEditor;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>窗口通过多个队列处理增删改，避免在 <code>OnGUI</code> 中直接修改列表导致布局错乱：</p>
+<ul>
+<li><code>unitCollectionPendings</code>：处理添加、删除、清空；</li>
+<li><code>detailUnitPendings</code>：处理详情面板的打开与关闭；</li>
+<li><code>activeUnits</code>：当前正在生成的资源；</li>
+<li><code>activeDetailUnits</code>：当前详情面板中显示的对象。</li>
+</ul>
+<p>生成时窗口会锁定程序集重载与自动刷新：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp">AssetDatabase.DisallowAutoRefresh();<br>EditorApplication.LockReloadAssemblies();<br></code></pre></td></tr></table></figure>
+
+<p>生成结束后再恢复：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs csharp">EditorApplication.UnlockReloadAssemblies();<br>AssetDatabase.AllowAutoRefresh();<br>AssetDatabase.Refresh();<br></code></pre></td></tr></table></figure>
+
+<p>这是为了避免生成代码过程中触发编译或资源刷新，导致生成流程被中断。</p>
+<h3 id="4-详情面板"><a href="#4-详情面板" class="headerlink" title="4. 详情面板"></a>4. 详情面板</h3><p>点击 <code>Edit</code> 按钮时，窗口使用 <code>Editor.CreateCachedEditor</code> 创建目标资源或生成器的编辑器：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs csharp">Editor.CreateCachedEditor(unit.target, <span class="hljs-literal">null</span>, <span class="hljs-keyword">ref</span> unit.targetEditor);<br>detailUnitPendings.Enqueue(<span class="hljs-keyword">new</span> DetailUnit()<br>&#123;<br>    foldout = <span class="hljs-literal">false</span>,<br>    editor = unit.targetEditor,<br>    flags = <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">0</span><br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>详情面板支持折叠、关闭，并直接调用 <code>editor.OnInspectorGUI()</code> 绘制 Inspector。这样无需离开生成窗口，就可以查看和修改目标资源或生成器参数。</p>
+<h3 id="5-持久化"><a href="#5-持久化" class="headerlink" title="5. 持久化"></a>5. 持久化</h3><p>窗口在 <code>OnDisable</code> 时保存数据：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">var</span> jsonStr = JsonUtility.ToJson(main);<br>EditorPrefs.SetString(<span class="hljs-string">$&quot;<span class="hljs-subst">&#123;<span class="hljs-keyword">nameof</span>(CodeGenerateWindow)&#125;</span>_Main&quot;</span>, jsonStr);<br><br><span class="hljs-keyword">var</span> configJsonStr = JsonUtility.ToJson(config);<br>EditorPrefs.SetString(<span class="hljs-string">$&quot;<span class="hljs-subst">&#123;<span class="hljs-keyword">nameof</span>(CodeGenerateWindow)&#125;</span>_Config&quot;</span>, configJsonStr);<br></code></pre></td></tr></table></figure>
+
+<p>在 <code>OnEnable</code> 时恢复。这样即使关闭窗口或重启 Unity，生成列表和配置仍然保留。</p>
+<h2 id="如何编写一个生成器"><a href="#如何编写一个生成器" class="headerlink" title="如何编写一个生成器"></a>如何编写一个生成器</h2><p>下面是一个简单的生成器示例：根据 <code>TextAsset</code> 生成一个常量类。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System.IO;<br><span class="hljs-keyword">using</span> UnityEditor;<br><span class="hljs-keyword">using</span> UnityEngine;<br><br>[<span class="hljs-meta">Generator(typeof(TextAsset))</span>]<br>[<span class="hljs-meta">FilePath(<span class="hljs-string">&quot;Assets/Editor/Generators/TextAssetToConstGenerator.asset&quot;</span>)</span>]<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">sealed</span> <span class="hljs-keyword">class</span> <span class="hljs-title">TextAssetToConstGenerator</span> : <span class="hljs-title">Generator</span><br>&#123;<br>    [<span class="hljs-meta">SerializeField</span>] <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> outputDirectory = <span class="hljs-string">&quot;Assets/Generated&quot;</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">string</span> DisplayName =&gt; <span class="hljs-string">&quot;TextAsset -&gt; 常量类&quot;</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">OnGenerate</span>(<span class="hljs-params">Procedure procedure</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (procedure.target <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> TextAsset textAsset)<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br><br>        <span class="hljs-keyword">var</span> assetPath = AssetDatabase.GetAssetPath(textAsset);<br>        <span class="hljs-keyword">var</span> className = Path.GetFileNameWithoutExtension(assetPath);<br>        <span class="hljs-keyword">var</span> outputPath = <span class="hljs-string">$&quot;<span class="hljs-subst">&#123;outputDirectory&#125;</span>/<span class="hljs-subst">&#123;className&#125;</span>Const.cs&quot;</span>;<br><br>        <span class="hljs-keyword">if</span> (!Directory.Exists(outputDirectory))<br>            Directory.CreateDirectory(outputDirectory);<br><br>        <span class="hljs-keyword">var</span> content = <span class="hljs-string">$@&quot;// Auto-generated</span><br><span class="hljs-string">public static class <span class="hljs-subst">&#123;className&#125;</span>Const</span><br><span class="hljs-string">&#123;&#123;</span><br><span class="hljs-string">    public const string Text = @&quot;&quot;<span class="hljs-subst">&#123;textAsset.text.Replace(<span class="hljs-string">&quot;\&quot;&quot;</span>, <span class="hljs-string">&quot;\&quot;\&quot;&quot;</span>)&#125;</span>&quot;&quot;;</span><br><span class="hljs-string">&#125;&#125;&quot;</span>;<br><br>        File.WriteAllText(outputPath, content);<br>        AssetDatabase.ImportAsset(outputPath);<br><br>        procedure.Progress = <span class="hljs-number">1f</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果需要分帧生成，可以改用协程模式：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System.Collections;<br><br><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> IEnumerator <span class="hljs-title">OnGenerateCoroutine</span>(<span class="hljs-params">Procedure procedure</span>)</span><br>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">10</span>; i++)<br>    &#123;<br>        procedure.Progress = i / <span class="hljs-number">10f</span>;<br>        <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意：当 <code>OnGenerateCoroutine</code> 返回非空迭代器时，基类会优先执行协程逻辑。</p>
+<h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><ol>
+<li>将编辑器相关脚本放入 <code>Editor</code> 文件夹，例如 <code>Assets/Editor/CodeGenerate/</code>；</li>
+<li>创建自定义生成器类，继承 <code>Generator</code>；</li>
+<li>使用 <code>[Generator(typeof(目标类型))]</code> 标记生成器；</li>
+<li>可选：使用 <code>[FilePath(&quot;Assets/.../YourGenerator.asset&quot;)]</code> 指定生成器资产路径；</li>
+<li>在 Unity 菜单中打开 <code>Game/CodeGenerator</code>；</li>
+<li>将资源拖入窗口，或通过 Project 右键菜单 <code>Assets/Open with CodeGenerate Window</code> 添加；</li>
+<li>为每个资源选择生成器；</li>
+<li>在 <code>Config</code> 页配置输出目录、刷新间隔；</li>
+<li>点击 <code>Generate</code> 开始生成；</li>
+<li>生成完成后查看输出目录中的文件。</li>
+</ol>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>编辑器脚本建议放在 <code>Editor</code> 文件夹中，避免被打包到运行时；</li>
+<li><code>Generator</code> 基类使用了 <code>#if UNITY_EDITOR</code>，如果生成器定义在运行时程序集，需要注意条件编译；</li>
+<li>输出路径最好位于 <code>Assets</code> 目录下，否则 <code>AssetDatabase</code> 无法正确导入；</li>
+<li>如果使用 <code>[FilePath]</code>，路径必须指向有效的生成器资产，否则会回退为临时实例；</li>
+<li>生成器资产修改后，可以点击 <code>Rescan Generators</code> 重新扫描；</li>
+<li>大量生成时建议使用协程分帧，避免编辑器卡死；</li>
+<li>生成期间工具会锁定程序集重载与自动刷新，生成结束后再统一刷新；</li>
+<li><code>Config</code> 中的 <code>Output Directory Path</code> 是窗口级配置，当前代码没有自动注入到 <code>Generator</code>，生成器可以通过自身字段或扩展上下文获取输出目录。</li>
+</ul>
+<h2 id="可扩展方向"><a href="#可扩展方向" class="headerlink" title="可扩展方向"></a>可扩展方向</h2><p>当前工具已经具备基础框架，后续可以继续扩展：</p>
+<ul>
+<li>为 <code>Generator.Context</code> 增加更多用户参数；</li>
+<li>支持生成前预览、差异对比；</li>
+<li>接入模板引擎，如 T4、Scriban、DotLiquid；</li>
+<li>支持依赖收集，资源变更后自动重新生成；</li>
+<li>支持生成代码格式化；</li>
+<li>支持多选资源批量绑定生成器；</li>
+<li>支持生成日志与失败重试。</li>
+</ul>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>本文实现了一个基于 Unity 编辑器扩展的代码生成工具。它通过 <code>Generator</code> 基类统一生成流程，通过 <code>GeneratorsCache</code> 自动扫描生成器，通过 <code>CodeGenerateWindow</code> 提供可视化操作界面，并通过 <code>EditorPrefs</code> 持久化配置。整体结构清晰，扩展方便，适合作为项目内代码生成、配置生成、资源绑定等自动化工具的基础框架。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/JokeVallen">我与岁月的森林</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://jokevallen.github.io/posts/2026/10/02/3a299c615956/">https://jokevallen.github.io/posts/2026/10/02/3a299c615956/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://jokevallen.github.io" target="_blank">我与岁月的森林的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8%E5%B7%A5%E5%85%B7/">编辑器工具</a></div></div><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2026/02/12/e0415697a626/" title="Unity3D编辑器协程工具"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-09-22</div><div class="info-item-2">Unity3D编辑器协程工具</div></div><div class="info-2"><div class="info-item-1"> 本工具由博主与 AI 共同开发，该版本为轻量版本，未附带过多功能，只覆盖了基础的功能。完全版本将另行发布，敬请期待。  前言协程可以帮助我们在编辑器环境下执行异步任务，例如对于一些编辑器工具需要批量处理大量资源时需要借助异步处理避免编辑器挂起。然而 Unity 官方并没有为编辑器预留类似运行时的协程系统那样的 API。为了满足这一需求，我们开发了一个专门用于 Unity 编辑器的轻量的协程工具。 功能特性核心功能 ✅ 编辑器协程执行 - 在 EditorApplication.update 中运行协程，完全支持 yield return ✅ 泛型返回值 - 通过 EditorCoroutine&lt;T&gt; 获取协程执行结果 ✅ 取消令牌支持 - 使用 EditorCoroutineCancelToken 中止协程 ✅ 嵌套协程 - 自动处理嵌套迭代器，支持复杂的协程链 ✅ 异常捕获 - 内置异常处理机制，避免编辑器崩溃 ✅ 常用的扩展方法 - WaitFrame、WaitSeconds、WaitUntil、Delay 等 ✅ 生命周期管理 - Start&#x2F;Sto...</div></div></div></a><a class="pagination-related" href="/posts/2026/05/06/5e1f9438ec5a/" title="Unity对象工厂"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-09-22</div><div class="info-item-2">Unity对象工厂</div></div><div class="info-2"><div class="info-item-1">本文介绍了一个用于Unity的零GC、可扩展的对象工厂系统，通过统一对象创建入口来解决后期维护难题，并支持自定义工厂注册。</div></div></div></a><a class="pagination-related" href="/posts/2026/04/28/db8014a73ca2/" title="C#相对路径转换"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-04-29</div><div class="info-item-2">C#相对路径转换</div></div><div class="info-2"><div class="info-item-1">本文以 Unity 项目中的 Assets 相对路径转换为例，深入解析了路径规范化、目录遍历防护等核心技术要点，并附有 30+ 个单元测试用例及 100% 通过率的测试结果，为编辑器工具开发中的路径处理提供了可靠参考。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/05/720ec788db37/" title="Unity的碰撞检测（三）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-09-22</div><div class="info-item-2">Unity的碰撞检测（三）</div></div><div class="info-2"><div class="info-item-1"> 温馨提示： ​本文基于前一篇“Unity的碰撞检测(二)”继续探讨两个游戏对象具备刚体的碰撞检测，阅读本文则默认已阅读前文。  前言在基于两个游戏对象都具备碰撞器和刚体且属性一致的条件下，若二者刚体的BodyType有所不同是否会出现不同的测试结果。 本次测试我们约定如此：Player与Enemy都具备碰撞器和刚体，默认属性如图1和图2所示：           图1 碰撞器默认属性             图2 刚体默认属性   测试用例   表 1 Player和Enemy的刚体的BodyType测试用例                                   游戏对象                                  测试用例序号                                  Static                                  Kinematic                                  Dynamic                                 Pla...</div></div></div></a><a class="pagination-related" href="/posts/2026/04/30/0127e98e5f4a/" title="Unity编辑器IMGUI扩展（一）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-09-22</div><div class="info-item-2">Unity编辑器IMGUI扩展（一）</div></div><div class="info-2"><div class="info-item-1">自定义 EditorObjectFieldUtility，提供无选择器及自定义按钮行为的 ObjectField，兼容 Rect 和 Layout 两种模式。</div></div></div></a><a class="pagination-related" href="/posts/2026/01/03/5187e46df20b/" title="Unity3D资源包管理器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-09-22</div><div class="info-item-2">Unity3D资源包管理器</div></div><div class="info-2"><div class="info-item-1">前言在Unity3D引擎中，AB包作为常用的游戏资源存储格式之一。而对于资源管理我们就不得不谈到集中管理的优势了，通过统一的接口加载和卸载AB包及其中的资源将进一步提升我们的编程效率。本文将围绕这个需求进行尝试。 功能描述 AB包的加载包括同步和异步加载方式，AB包中的资源也包括同步和异步加载方式。 ABManager的初始化方式分为三种。第一种是通过ABManagerComponent组件在Inspector面板设置好初始化必要属性；第二种是在运行时设置ABManagerComponent组件的初始化属性，并调用其Init方法；第三种是通过ABManagerPool获取ABManager实例，通过调用其Init方法并传递AB包目录路径和主AB包名称的方式初始化。 可以通过ABManagerTool获取指定绝对目录路径下的AB包名称合集、AB包绝对路径合集，也可以通过AB包绝对路径获取AB包名称，也可以通过AB包目录路径和AB包名称获取AB包的绝对路径。 ABManagerComponent组件将提供快速选择AB包目录路径、选择主AB包名称及自动初始化等功能。  界面展示    ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E8%A7%86%E9%A2%91"><span class="toc-number">1.</span> <span class="toc-text">案例视频</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E6%A6%82%E8%A7%88"><span class="toc-number">3.</span> <span class="toc-text">功能概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">整体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">关键实现解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E6%88%90%E5%99%A8%E6%89%AB%E6%8F%8F%E4%B8%8E%E7%BC%93%E5%AD%98"><span class="toc-number">5.1.</span> <span class="toc-text">1. 生成器扫描与缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%9F%E6%88%90%E5%99%A8%E5%9F%BA%E7%B1%BB"><span class="toc-number">5.2.</span> <span class="toc-text">2. 生成器基类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%AA%97%E5%8F%A3%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-number">5.3.</span> <span class="toc-text">3. 窗口任务管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%AF%A6%E6%83%85%E9%9D%A2%E6%9D%BF"><span class="toc-number">5.4.</span> <span class="toc-text">4. 详情面板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">5.5.</span> <span class="toc-text">5. 持久化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-number">6.</span> <span class="toc-text">如何编写一个生成器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-number">7.</span> <span class="toc-text">使用步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">8.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%96%B9%E5%90%91"><span class="toc-number">9.</span> <span class="toc-text">可扩展方向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">10.</span> <span class="toc-text">结语</span></a></li></ol></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
+
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
+
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      lastPointerX: 0,
+      lastPointerY: 0
+    }
+
+    const onPointerDown = e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (state.pointers.size === 1) {
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = curVb.slice()
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
+        return
+      }
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+      } else if (state.pointers.size === 1) {
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+      }
+    }
+
+    const onWheel = e => {
+      // Prevent event bubbling from triggering external scroll
+      e.preventDefault()
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (init) setCurVb(init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      // Clean up event listeners before removing old SVG
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
+
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
+    })
+  }
+
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (true) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liFAMlBgIqzdY4Or',
+      clientSecret: '532ac8cf9ac326fb9e1be267d08c05043fd3bdb7',
+      repo: 'JokeVallen.github.io',
+      owner: 'JokeVallen',
+      admin: ['JokeVallen'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || 'f6f433e7730a4f0117fdbe3df9b8b944'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="/js/custom-global.js" defer></script><script src="/js/hexo-timer.js" defer></script><script src="/js/hexo-answer-sheet.js" defer></script><script src="/js/knowledge.js"></script><script src="/js/algo-review.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

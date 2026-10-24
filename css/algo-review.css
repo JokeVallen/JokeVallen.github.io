@@ -1,0 +1,1518 @@
+/* ============================================================
+   算法刷题复盘面板
+   命名空间：.algo-*
+   ============================================================ */
+
+#algo-review-app {
+    --algo-text: #1f2937;
+    --algo-muted: #64748b;
+    --algo-card: #ffffff;
+    --algo-card-2: #f8fafc;
+    --algo-border: #e2e8f0;
+    --algo-primary: #4a6ee0;
+    --algo-primary-2: #7c3aed;
+    --algo-primary-soft: #eef2ff;
+    --algo-danger: #dc2626;
+    --algo-danger-soft: #fef2f2;
+    --algo-success: #059669;
+    --algo-success-soft: #ecfdf5;
+    --algo-warning: #d97706;
+    --algo-warning-soft: #fffbeb;
+    --algo-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    --algo-radius: 16px;
+    max-width: 1080px;
+    margin: 0 auto;
+    color: var(--algo-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+}
+
+[data-theme="dark"] #algo-review-app {
+    --algo-text: #e2e8f0;
+    --algo-muted: #94a3b8;
+    --algo-card: #1e293b;
+    --algo-card-2: #0f172a;
+    --algo-border: #334155;
+    --algo-primary: #60a5fa;
+    --algo-primary-2: #a78bfa;
+    --algo-primary-soft: rgba(96, 165, 250, 0.14);
+    --algo-danger: #f87171;
+    --algo-danger-soft: rgba(248, 113, 113, 0.12);
+    --algo-success: #34d399;
+    --algo-success-soft: rgba(52, 211, 153, 0.12);
+    --algo-warning: #fbbf24;
+    --algo-warning-soft: rgba(251, 191, 36, 0.12);
+    --algo-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+#algo-review-app *,
+#algo-review-app *::before,
+#algo-review-app *::after {
+    box-sizing: border-box;
+}
+
+#algo-review-app .algo-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 180px;
+    color: #64748b;
+}
+
+#algo-review-app h2,
+#algo-review-app h3,
+#algo-review-app p {
+    margin-top: 0;
+}
+
+#algo-review-app a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* ---------- 顶部 Hero ---------- */
+
+#algo-review-app .algo-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.75fr);
+    gap: 28px;
+    padding: 34px;
+    border-radius: 24px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.22), transparent 28%),
+        linear-gradient(135deg, #4a6ee0 0%, #6d5bd0 52%, #8b5cf6 100%);
+    box-shadow: 0 18px 48px rgba(74, 110, 224, 0.28);
+    overflow: hidden;
+}
+
+#algo-review-app .algo-hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    bottom: -110px;
+    width: 260px;
+    height: 260px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    box-shadow: 0 0 0 42px rgba(255, 255, 255, 0.05), 0 0 0 84px rgba(255, 255, 255, 0.04);
+    pointer-events: none;
+}
+
+#algo-review-app .algo-kicker {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.72;
+}
+
+#algo-review-app .algo-hero h2 {
+    margin: 0 0 12px;
+    color: #fff;
+    font-size: clamp(25px, 3.2vw, 36px);
+    line-height: 1.25;
+}
+
+#algo-review-app .algo-hero-desc {
+    max-width: 580px;
+    margin-bottom: 22px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 15px;
+}
+
+#algo-review-app .algo-hero-desc strong {
+    color: #fff;
+}
+
+#algo-review-app .algo-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#algo-review-app .algo-stats {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-content: center;
+}
+
+#algo-review-app .algo-stat {
+    padding: 16px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(6px);
+    text-align: center;
+}
+
+#algo-review-app .algo-stat strong {
+    display: block;
+    color: #fff;
+    font-size: 26px;
+    line-height: 1.1;
+}
+
+#algo-review-app .algo-stat span {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 12px;
+}
+
+/* ---------- 按钮 ---------- */
+
+#algo-review-app .algo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 8px 15px;
+    border: 1px solid var(--algo-border);
+    border-radius: 999px;
+    background: var(--algo-card);
+    color: var(--algo-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+}
+
+#algo-review-app .algo-btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--algo-primary);
+    box-shadow: 0 6px 18px rgba(74, 110, 224, 0.16);
+}
+
+#algo-review-app .algo-btn:disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#algo-review-app .algo-btn-primary {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--algo-primary), var(--algo-primary-2));
+    color: #fff;
+}
+
+#algo-review-app .algo-btn-ghost {
+    background: transparent;
+    color: var(--algo-muted);
+}
+
+#algo-review-app .algo-btn-danger {
+    border-color: transparent;
+    background: var(--algo-danger);
+    color: #fff;
+}
+
+#algo-review-app .algo-btn-small {
+    min-height: 32px;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+#algo-review-app .algo-btn-light {
+    border-color: transparent;
+    background: #fff;
+    color: #3b4cb8;
+}
+
+#algo-review-app .algo-btn-ghost-light {
+    border-color: rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+#algo-review-app .algo-btn-ghost-light:hover {
+    border-color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+#algo-review-app .algo-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--algo-border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--algo-muted);
+    cursor: pointer;
+    transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+#algo-review-app .algo-icon-btn:hover {
+    border-color: var(--algo-danger);
+    background: var(--algo-danger-soft);
+    color: var(--algo-danger);
+}
+
+/* ---------- Tabs ---------- */
+
+#algo-review-app .algo-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 24px 0 22px;
+    padding: 6px;
+    border: 1px solid var(--algo-border);
+    border-radius: 999px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-tab {
+    flex: 1 1 auto;
+    min-width: 110px;
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--algo-muted);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+#algo-review-app .algo-tab:hover {
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-tab.is-active {
+    background: linear-gradient(135deg, var(--algo-primary), var(--algo-primary-2));
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(74, 110, 224, 0.24);
+}
+
+/* ---------- 通用区块 ---------- */
+
+#algo-review-app .algo-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+#algo-review-app .algo-section-head h2 {
+    margin: 0 0 4px;
+    color: var(--algo-text);
+    font-size: 22px;
+}
+
+#algo-review-app .algo-section-head p {
+    margin: 0;
+    color: var(--algo-muted);
+    font-size: 14px;
+}
+
+#algo-review-app .algo-inline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+#algo-review-app .algo-card,
+#algo-review-app .algo-info-card {
+    padding: 20px;
+    border: 1px solid var(--algo-border);
+    border-radius: var(--algo-radius);
+    background: var(--algo-card);
+    box-shadow: var(--algo-shadow);
+}
+
+/* ---------- 题目卡片 ---------- */
+
+#algo-review-app .algo-problem-list {
+    display: grid;
+    gap: 14px;
+}
+
+#algo-review-app .algo-problem-card {
+    position: relative;
+    padding: 20px;
+    border: 1px solid var(--algo-border);
+    border-radius: var(--algo-radius);
+    background: var(--algo-card);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+#algo-review-app .algo-problem-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--algo-primary);
+    box-shadow: 0 12px 28px rgba(74, 110, 224, 0.12);
+}
+
+#algo-review-app .algo-problem-card.is-due::before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    left: 0;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: linear-gradient(180deg, var(--algo-warning), var(--algo-danger));
+}
+
+#algo-review-app .algo-problem-card.is-mastered {
+    opacity: 0.86;
+}
+
+#algo-review-app .algo-card-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 9px;
+}
+
+#algo-review-app .algo-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--algo-card-2);
+    color: var(--algo-muted);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#algo-review-app .algo-pill-pattern {
+    background: var(--algo-primary-soft);
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-pill-diff {
+    background: var(--algo-warning-soft);
+    color: var(--algo-warning);
+}
+
+#algo-review-app .algo-pill-due {
+    background: var(--algo-danger-soft);
+    color: var(--algo-danger);
+}
+
+#algo-review-app .algo-pill-ok {
+    background: var(--algo-success-soft);
+    color: var(--algo-success);
+}
+
+#algo-review-app .algo-pill-muted {
+    background: var(--algo-card-2);
+    color: var(--algo-muted);
+}
+
+#algo-review-app .algo-stage {
+    margin-left: auto;
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-card-title {
+    margin: 0 0 8px;
+    color: var(--algo-text);
+    font-size: 18px;
+    line-height: 1.45;
+}
+
+#algo-review-app .algo-card-title a:hover {
+    color: var(--algo-primary);
+    text-decoration: underline;
+}
+
+#algo-review-app .algo-trigger {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin: 0 0 10px;
+    color: var(--algo-warning);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-trigger i {
+    margin-top: 4px;
+}
+
+#algo-review-app .algo-note {
+    margin: 0 0 7px;
+    color: var(--algo-text);
+    font-size: 14px;
+}
+
+#algo-review-app .algo-note span {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 1px 7px;
+    border-radius: 6px;
+    background: var(--algo-primary-soft);
+    color: var(--algo-primary);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#algo-review-app .algo-note-stuck span {
+    background: var(--algo-danger-soft);
+    color: var(--algo-danger);
+}
+
+#algo-review-app .algo-note-empty {
+    color: var(--algo-muted);
+    font-style: italic;
+}
+
+#algo-review-app .algo-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 13px;
+    border-top: 1px dashed var(--algo-border);
+}
+
+#algo-review-app .algo-card-meta {
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+/* ---------- 即将到期 ---------- */
+
+#algo-review-app .algo-upcoming {
+    margin-top: 25px;
+    padding: 18px;
+    border: 1px solid var(--algo-border);
+    border-radius: var(--algo-radius);
+    background: var(--algo-card);
+}
+
+#algo-review-app .algo-upcoming-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#algo-review-app .algo-upcoming-head h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+#algo-review-app .algo-upcoming-head span {
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-upcoming-list {
+    display: grid;
+    gap: 6px;
+}
+
+#algo-review-app .algo-upcoming-item {
+    display: grid;
+    grid-template-columns: 66px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--algo-text);
+    text-align: left;
+    cursor: pointer;
+}
+
+#algo-review-app .algo-upcoming-item:hover {
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-upcoming-date {
+    color: var(--algo-primary);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#algo-review-app .algo-upcoming-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+/* ---------- 空状态 ---------- */
+
+#algo-review-app .algo-empty {
+    padding: 42px 24px;
+    border: 1px dashed var(--algo-border);
+    border-radius: var(--algo-radius);
+    background: var(--algo-card);
+    text-align: center;
+}
+
+#algo-review-app .algo-empty i {
+    color: var(--algo-primary);
+    font-size: 34px;
+}
+
+#algo-review-app .algo-empty h3 {
+    margin: 12px 0 6px;
+    font-size: 18px;
+}
+
+#algo-review-app .algo-empty p {
+    max-width: 560px;
+    margin: 0 auto 16px;
+    color: var(--algo-muted);
+    font-size: 14px;
+}
+
+#algo-review-app .algo-empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+#algo-review-app .algo-empty-ok i {
+    color: var(--algo-success);
+}
+
+#algo-review-app .algo-empty-small {
+    padding: 30px 20px;
+}
+
+/* ---------- 题目本工具栏 ---------- */
+
+#algo-review-app .algo-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 180px 160px;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+#algo-review-app .algo-input,
+#algo-review-app .algo-select,
+#algo-review-app .algo-field input,
+#algo-review-app .algo-field select,
+#algo-review-app .algo-field textarea {
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 12px;
+    border: 1px solid var(--algo-border);
+    border-radius: 10px;
+    outline: none;
+    background: var(--algo-card);
+    color: var(--algo-text);
+    font: inherit;
+    font-size: 14px;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+#algo-review-app .algo-input:focus,
+#algo-review-app .algo-select:focus,
+#algo-review-app .algo-field input:focus,
+#algo-review-app .algo-field select:focus,
+#algo-review-app .algo-field textarea:focus {
+    border-color: var(--algo-primary);
+    box-shadow: 0 0 0 3px var(--algo-primary-soft);
+}
+
+#algo-review-app .algo-field textarea {
+    min-height: 88px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+#algo-review-app .algo-list-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+/* ---------- 模式识别 ---------- */
+
+#algo-review-app .algo-pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+}
+
+#algo-review-app .algo-pattern-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid var(--algo-border);
+    border-radius: var(--algo-radius);
+    background: var(--algo-card);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+    transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+#algo-review-app .algo-pattern-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--algo-primary);
+}
+
+#algo-review-app .algo-pattern-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+#algo-review-app .algo-pattern-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--algo-primary-soft);
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-pattern-head h3 {
+    margin: 0;
+    font-size: 17px;
+}
+
+#algo-review-app .algo-pattern-line {
+    margin: 0 0 8px;
+    color: var(--algo-text);
+    font-size: 13.5px;
+}
+
+#algo-review-app .algo-pattern-line strong {
+    display: inline-block;
+    margin-right: 7px;
+    padding: 1px 7px;
+    border-radius: 6px;
+    background: var(--algo-card-2);
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-pattern-examples {
+    margin: auto 0 12px;
+    padding-top: 4px;
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-pattern-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+/* ---------- 方法论 ---------- */
+
+#algo-review-app .algo-method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+}
+
+#algo-review-app .algo-method-card {
+    position: relative;
+    padding: 20px;
+    border: 1px solid var(--algo-border);
+    border-radius: var(--algo-radius);
+    background: var(--algo-card);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+}
+
+#algo-review-app .algo-method-num {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    color: var(--algo-border);
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+#algo-review-app .algo-method-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 11px;
+    border-radius: 12px;
+    background: var(--algo-primary-soft);
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-method-card h3 {
+    margin: 0 0 7px;
+    font-size: 17px;
+}
+
+#algo-review-app .algo-method-card p {
+    margin: 0;
+    color: var(--algo-muted);
+    font-size: 14px;
+}
+
+#algo-review-app .algo-method-split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+}
+
+#algo-review-app .algo-info-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 14px;
+    font-size: 17px;
+}
+
+#algo-review-app .algo-info-card h3 i {
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-rule-list {
+    display: grid;
+    gap: 10px;
+}
+
+#algo-review-app .algo-rule {
+    display: grid;
+    grid-template-columns: 60px 78px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-rule-stage {
+    color: var(--algo-primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+#algo-review-app .algo-rule-time {
+    color: var(--algo-warning);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#algo-review-app .algo-rule p {
+    margin: 0;
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-bad-list {
+    display: grid;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#algo-review-app .algo-bad-list li {
+    position: relative;
+    padding-left: 24px;
+    color: var(--algo-muted);
+    font-size: 14px;
+}
+
+#algo-review-app .algo-bad-list li::before {
+    content: "×";
+    position: absolute;
+    left: 2px;
+    top: -1px;
+    color: var(--algo-danger);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+#algo-review-app .algo-feynman {
+    margin-top: 14px;
+}
+
+#algo-review-app .algo-feynman-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+#algo-review-app .algo-feynman-grid > div {
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-feynman-grid strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--algo-primary);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-feynman-grid p {
+    margin: 0;
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-feynman-tip {
+    margin: 14px 0 0;
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+/* ---------- 自测 ---------- */
+
+#algo-review-app .algo-quiz-modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 14px;
+}
+
+#algo-review-app .algo-quiz-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border: 1px solid var(--algo-border);
+    border-radius: 999px;
+    background: var(--algo-card);
+    color: var(--algo-muted);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+#algo-review-app .algo-quiz-mode:hover {
+    border-color: var(--algo-primary);
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-quiz-mode.is-active {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--algo-primary), var(--algo-primary-2));
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(74, 110, 224, 0.24);
+}
+
+#algo-review-app .algo-quiz-card {
+    padding: 26px;
+    border: 1px solid var(--algo-border);
+    border-radius: 20px;
+    background: var(--algo-card);
+    box-shadow: var(--algo-shadow);
+}
+
+#algo-review-app .algo-quiz-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+#algo-review-app .algo-quiz-top .algo-btn {
+    margin-left: auto;
+}
+
+#algo-review-app .algo-quiz-title {
+    margin: 0 0 10px;
+    color: var(--algo-text);
+    font-size: 24px;
+    line-height: 1.4;
+}
+
+#algo-review-app .algo-quiz-title a:hover {
+    color: var(--algo-primary);
+    text-decoration: underline;
+}
+
+#algo-review-app .algo-quiz-trigger {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 12px 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--algo-warning-soft);
+    color: var(--algo-warning);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#algo-review-app .algo-quiz-trigger i {
+    margin-top: 3px;
+}
+
+#algo-review-app .algo-quiz-prompt {
+    margin: 0 0 14px;
+    color: var(--algo-muted);
+    font-size: 14px;
+}
+
+#algo-review-app .algo-quiz-hidden {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin: 16px 0;
+    padding: 14px 16px;
+    border: 1px dashed var(--algo-border);
+    border-radius: 13px;
+    background: var(--algo-card-2);
+    color: var(--algo-muted);
+    font-size: 13.5px;
+}
+
+#algo-review-app .algo-quiz-hidden i {
+    margin-top: 4px;
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-quiz-hidden p {
+    margin: 0;
+}
+
+#algo-review-app .algo-quiz-answer {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid var(--algo-border);
+    border-radius: 14px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-quiz-answer-row {
+    display: grid;
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+}
+
+#algo-review-app .algo-quiz-answer-row > span {
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: var(--algo-primary-soft);
+    color: var(--algo-primary);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+#algo-review-app .algo-quiz-answer-row strong,
+#algo-review-app .algo-quiz-answer-row p {
+    margin: 0;
+    color: var(--algo-text);
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+
+#algo-review-app .algo-quiz-answer-row p {
+    color: var(--algo-muted);
+}
+
+#algo-review-app .algo-quiz-template {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 13px !important;
+    font-style: normal !important;
+}
+
+#algo-review-app .algo-quiz-rating {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+#algo-review-app .algo-quiz-rate {
+    flex: 1 1 auto;
+}
+
+#algo-review-app .rate-forgot {
+    border-color: transparent;
+    background: var(--algo-danger);
+    color: #fff;
+}
+
+#algo-review-app .rate-fuzzy {
+    border-color: transparent;
+    background: var(--algo-warning);
+    color: #fff;
+}
+
+#algo-review-app .rate-remember {
+    border-color: transparent;
+    background: var(--algo-success);
+    color: #fff;
+}
+
+#algo-review-app .algo-quiz-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+}
+
+#algo-review-app .algo-quiz-option {
+    padding: 15px 16px;
+    border: 1px solid var(--algo-border);
+    border-radius: 12px;
+    background: var(--algo-card);
+    color: var(--algo-text);
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+#algo-review-app .algo-quiz-option:hover {
+    border-color: var(--algo-primary);
+    background: var(--algo-primary-soft);
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-quiz-option.is-correct {
+    border-color: var(--algo-success);
+    background: var(--algo-success-soft);
+    color: var(--algo-success);
+}
+
+#algo-review-app .algo-quiz-option.is-wrong {
+    border-color: var(--algo-danger);
+    background: var(--algo-danger-soft);
+    color: var(--algo-danger);
+}
+
+#algo-review-app .algo-quiz-feedback {
+    margin: 14px 0;
+    padding: 14px 16px;
+    border-radius: 13px;
+    font-size: 14px;
+}
+
+#algo-review-app .algo-quiz-feedback.is-ok {
+    background: var(--algo-success-soft);
+    color: var(--algo-success);
+}
+
+#algo-review-app .algo-quiz-feedback.is-bad {
+    background: var(--algo-danger-soft);
+    color: var(--algo-danger);
+}
+
+#algo-review-app .algo-quiz-feedback p {
+    margin: 7px 0 0;
+    color: var(--algo-text);
+    font-size: 13.5px;
+}
+
+#algo-review-app .algo-quiz-feedback-pitfall {
+    color: var(--algo-muted) !important;
+}
+
+/* ---------- 弹窗 ---------- */
+
+body.algo-modal-open {
+    overflow: hidden;
+}
+
+#algo-review-app .algo-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.58);
+    backdrop-filter: blur(4px);
+}
+
+#algo-review-app .algo-modal {
+    width: min(780px, 100%);
+    max-height: min(90vh, 900px);
+    overflow-y: auto;
+    border: 1px solid var(--algo-border);
+    border-radius: 22px;
+    background: var(--algo-card);
+    color: var(--algo-text);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+    animation: algo-modal-in 0.2s ease-out;
+}
+
+@keyframes algo-modal-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#algo-review-app .algo-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--algo-border);
+}
+
+#algo-review-app .algo-modal-head h2 {
+    margin: 0;
+    color: var(--algo-text);
+    font-size: 21px;
+    line-height: 1.4;
+}
+
+#algo-review-app .algo-modal-head .algo-kicker {
+    color: var(--algo-primary);
+    opacity: 1;
+}
+
+#algo-review-app .algo-modal-head .algo-icon-btn:hover {
+    border-color: var(--algo-border);
+    background: var(--algo-card-2);
+    color: var(--algo-text);
+}
+
+#algo-review-app .algo-form {
+    padding: 20px 24px 0;
+}
+
+#algo-review-app .algo-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+#algo-review-app .algo-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#algo-review-app .algo-field-full {
+    grid-column: 1 / -1;
+}
+
+#algo-review-app .algo-field > span {
+    color: var(--algo-muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#algo-review-app .algo-field em {
+    color: var(--algo-danger);
+    font-style: normal;
+}
+
+#algo-review-app .algo-form-tip {
+    margin: 14px 0 0;
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-modal-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--algo-border);
+}
+
+/* ---------- 复习弹窗 ---------- */
+
+#algo-review-app .algo-review-sub {
+    margin: 4px 0 0;
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-review-body {
+    padding: 20px 24px 0;
+}
+
+#algo-review-app .algo-review-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 14px 16px;
+    border: 1px solid rgba(217, 119, 6, 0.22);
+    border-radius: 13px;
+    background: var(--algo-warning-soft);
+    color: var(--algo-warning);
+    font-size: 13.5px;
+}
+
+#algo-review-app .algo-review-alert i {
+    margin-top: 3px;
+}
+
+#algo-review-app .algo-review-alert strong {
+    color: var(--algo-warning);
+}
+
+#algo-review-app .algo-timer-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 16px 0;
+    padding: 14px 16px;
+    border: 1px solid var(--algo-border);
+    border-radius: 14px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-timer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#algo-review-app .algo-timer-display {
+    color: var(--algo-primary);
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+#algo-review-app .algo-review-meta {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-review-meta span,
+#algo-review-app .algo-review-meta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+#algo-review-app .algo-review-meta a {
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-review-meta details {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-review-meta summary {
+    cursor: pointer;
+    color: var(--algo-text);
+    font-weight: 600;
+}
+
+#algo-review-app .algo-review-meta details p {
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+}
+
+#algo-review-app .algo-review-notes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+#algo-review-app .algo-review-notes .algo-field {
+    min-width: 0;
+}
+
+#algo-review-app .algo-review-foot {
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* ---------- Toast ---------- */
+
+#algo-review-app .algo-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    z-index: 10000;
+    max-width: calc(100vw - 40px);
+    padding: 11px 20px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.9);
+    color: #fff;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 12px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+#algo-review-app .algo-toast.is-show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 860px) {
+    #algo-review-app .algo-hero {
+        grid-template-columns: 1fr;
+        padding: 26px;
+    }
+
+    #algo-review-app .algo-stats {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    #algo-review-app .algo-toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #algo-review-app .algo-toolbar .algo-input {
+        grid-column: 1 / -1;
+    }
+
+    #algo-review-app .algo-section-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #algo-review-app .algo-inline-actions {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 620px) {
+    #algo-review-app .algo-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #algo-review-app .algo-hero-actions .algo-btn {
+        flex: 1 1 auto;
+    }
+
+    #algo-review-app .algo-tabs {
+        border-radius: 14px;
+    }
+
+    #algo-review-app .algo-tab {
+        min-width: 0;
+        flex: 1 1 40%;
+        padding: 9px 10px;
+        font-size: 13px;
+    }
+
+    #algo-review-app .algo-card-foot {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #algo-review-app .algo-card-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    #algo-review-app .algo-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    #algo-review-app .algo-toolbar .algo-input {
+        grid-column: auto;
+    }
+
+    #algo-review-app .algo-upcoming-item {
+        grid-template-columns: 62px minmax(0, 1fr);
+    }
+
+    #algo-review-app .algo-upcoming-item .algo-pill {
+        display: none;
+    }
+
+    #algo-review-app .algo-timer-box {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #algo-review-app .algo-review-notes,
+    #algo-review-app .algo-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #algo-review-app .algo-modal-backdrop {
+        padding: 10px;
+    }
+
+    #algo-review-app .algo-modal {
+        max-height: 94vh;
+        border-radius: 16px;
+    }
+
+    #algo-review-app .algo-modal-head,
+    #algo-review-app .algo-form,
+    #algo-review-app .algo-review-body,
+    #algo-review-app .algo-modal-foot {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    #algo-review-app .algo-review-foot {
+        flex-direction: column-reverse;
+    }
+
+    #algo-review-app .algo-review-foot .algo-btn {
+        width: 100%;
+    }
+
+    #algo-review-app .algo-rule {
+        grid-template-columns: 56px 72px minmax(0, 1fr);
+    }
+
+    #algo-review-app .algo-quiz-options {
+        grid-template-columns: 1fr;
+    }
+
+    #algo-review-app .algo-quiz-answer-row {
+        grid-template-columns: 1fr;
+    }
+
+    #algo-review-app .algo-quiz-card {
+        padding: 18px;
+    }
+
+    #algo-review-app .algo-quiz-title {
+        font-size: 20px;
+    }
+}

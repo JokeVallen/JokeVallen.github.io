@@ -223,7 +223,14 @@
 
     function init() {
         const nodes = document.querySelectorAll('.hexo-answer-sheet');
-        for (let i = 0; i < nodes.length; i++) initSheet(nodes[i]);
+        let hasSticky = false;
+        for (let i = 0; i < nodes.length; i++) {
+            initSheet(nodes[i]);
+            if (nodes[i].classList.contains('is-sticky')) hasSticky = true;
+        }
+        if (document.body) {
+            document.body.classList.toggle('has-sticky-answer-sheet', hasSticky);
+        }
     }
 
     if (document.readyState === 'loading') {

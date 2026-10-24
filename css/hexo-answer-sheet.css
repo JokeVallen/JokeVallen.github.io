@@ -408,7 +408,7 @@
 }
 
 /* ============================================================
- * 移动端适配（!important 覆盖内联定位）
+ * 移动端适配：答题卡改为底部抽屉，限制高度并与计时器分区
  * ============================================================ */
 @media (max-width: 768px) {
     .hexo-answer-sheet {
@@ -433,11 +433,28 @@
     .hexo-answer-sheet.is-sticky,
     .hexo-answer-sheet.is-sticky[class*="pos-"] {
         top: auto !important;
-        left: 3vw !important;
-        right: 3vw !important;
-        bottom: 3vh !important;
+        left: 8px !important;
+        right: 8px !important;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
         width: auto !important;
+        height: auto !important;
+        max-height: 48vh !important;
+        padding: 0.75rem 0.85rem;
+        border-radius: 14px;
+        z-index: 9998;
         transform: none !important;
+    }
+    .hexo-answer-sheet.is-sticky .as-body {
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .hexo-answer-sheet.is-sticky .as-header {
+        margin-bottom: 0.5rem;
+    }
+
+    body.has-sticky-answer-sheet #article-container {
+        padding-bottom: 54vh;
     }
 
     .hexo-answer-sheet.cols-2 .as-body,
