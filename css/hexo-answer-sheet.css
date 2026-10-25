@@ -69,6 +69,9 @@
 
 /* ---------- Mini 模式：只保留标题、进度与展开按钮 ---------- */
 .hexo-answer-sheet.is-mini {
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
     padding: 0.55rem 0.7rem;
 }
 
@@ -491,6 +494,11 @@
         border-radius: 14px;
         z-index: 9998;
         transform: none !important;
+    }
+    .hexo-answer-sheet.is-sticky.is-mini {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 0 !important;
     }
     .hexo-answer-sheet.is-sticky .as-body {
         overscroll-behavior: contain;

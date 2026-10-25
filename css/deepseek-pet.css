@@ -658,10 +658,14 @@
     outline-offset: 2px;
 }
 
+#deepseek-pet .dp-link {
+    color: #4a90e2;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    word-break: break-all;
+    cursor: pointer;
+}
 
-
-
-
-
-
-
+#deepseek-pet .dp-link:hover {
+    color: #2f6fb8;
+}

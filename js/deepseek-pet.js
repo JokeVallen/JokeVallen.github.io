@@ -192,22 +192,10 @@
             el.onended = once ? handleEnded : null;
             el.playbackRate = once ? 1.22 : 1;
             el.style.transform = mirror ? 'scaleX(-1)' : '';
-            try { el.currentTime = 0; } catch (e) { /* ignore */ }
+            // 只在确实偏离开头时才 seek：seek 会让 readyState 掉回 1，反而引入延迟
+            try { if (el.currentTime > 0.15) { if (el.fastSeek) el.fastSeek(0); else el.currentTime = 0; } } catch (e) { /* ignore */ }
             var pp = el.play();
             if (pp && pp.catch) pp.catch(function () {});
-            // 换层后把空闲屏重新预热成"被抓起"，下一次拖拽仍零等待
-            setTimeout(function () {
-                var free = els[front ^ 1];
-                if (!free || !clipCache["drag"]) return;
-                if (free.getAttribute("data-clip") === "drag") return;
-                free.setAttribute("data-clip", "drag");
-                free.src = clipCache["drag"];
-                free.loop = true;
-                free.load();
-                var wp2 = free.play();
-                if (wp2 && wp2.catch) wp2.catch(function () {});
-                setTimeout(function () { try { free.pause(); } catch (e) { /* ignore */ } }, 220);
-            }, 400);
         }
 
         function play(name, once, done) {
@@ -323,6 +311,7 @@
         var currentAct = '';
         var rollTimer = null;
         var sleeping = false;
+        var dropTimer = null;
 
         function playIdle() {
             currentAct = '';
@@ -336,6 +325,7 @@
 
         function scheduleRoll(delay) {
             clearTimeout(rollTimer);
+            clearTimeout(dropTimer);   // 取消上一次拖拽的安全网，否则它会把正在播的动作顶掉
             // 大部分是 9~21s，偶尔 4~7s 接一个小动作：有起伏才不像节拍器
             var wait;
             if (delay != null) wait = delay;
@@ -366,6 +356,7 @@
         function cue(name, after) {
             if (sleeping) return;
             clearTimeout(rollTimer);
+            clearTimeout(dropTimer);   // 取消上一次拖拽的安全网，否则它会把正在播的动作顶掉
             playAct(name, function () {
                 if (after) after();
                 playIdle();
@@ -377,6 +368,7 @@
             if (sleeping) return;
             sleeping = true;
             clearTimeout(rollTimer);
+            clearTimeout(dropTimer);   // 取消上一次拖拽的安全网，否则它会把正在播的动作顶掉
             currentAct = ANIMATIONS.events.sleep;
             player.play(ANIMATIONS.events.sleep, false);
         }
@@ -390,6 +382,31 @@
 
         return {
             start: function () { playIdle(); scheduleRoll(); },
+            toIdle: function () { clearTimeout(rollTimer); playIdle(); scheduleRoll(); },
+            /** 按住：循环"被拎起"，立刻生效 */
+            hold: function (name) {
+                clearTimeout(rollTimer);
+                clearTimeout(dropTimer);   // 取消上一次拖拽的安全网，否则它会把正在播的动作顶掉
+                currentAct = name;
+                holding = true;
+                // 先播升起，播完接悬空循环；松手后不再进循环
+                player.play(name, true, function () {
+                    if (!holding) return;
+                    player.play('drag-hold', false);
+                });
+                // 循环会重复"升起"的动作，所以只播一次
+            },
+            /** 松手：播一次"落下"，播完回待机 */
+            drop: function (name) {
+                holding = false;
+                clearTimeout(rollTimer);
+                clearTimeout(dropTimer);   // 取消上一次拖拽的安全网，否则它会把正在播的动作顶掉
+                currentAct = name;
+                player.play(name, true, function () { playIdle(); scheduleRoll(); });
+                // 安全网：4 秒内一定回待机，任何情况下都不卡在循环里
+                clearTimeout(dropTimer);
+                dropTimer = setTimeout(function () { playIdle(); scheduleRoll(); }, 3600);
+            },
             pickNext: pickNext,
             cue: cue,
             sleep: sleep,
@@ -402,6 +419,10 @@
     /* ==================== 存档 ==================== */
     var STORE = CONFIG.storageKey;
     var root = null;
+    var holding = false;   // 是否仍按着（拖拽中）
+    var justDragged = 0;      // 拖拽结束时间戳：吞掉随后补发的 click
+    var lastScrollSeen = -1;  // 上次评估的滚动比例：判断回顶
+
     var chatOpen = false;
     var sayTimer = null;
     var sleepTimer = null;
@@ -411,7 +432,7 @@
 
     var state = {
         affinity: 0, fullness: 72, hidden: false,
-        lastVisit: '', chatLog: [], pos: null, petCount: 0
+        lastVisit: '', chatLog: [], pos: null, petCount: 0, seen: false
     };
 
     function load() {
@@ -430,6 +451,8 @@
         } catch (e) { /* 隐私模式忽略 */ }
 
         var today = todayStr();
+        wasSeenBefore = !!state.seen;   // 本次加载之前是否已经见过
+        state.seen = true;
         var gap = daysBetween(state.lastVisit, today);
         state.streak = gap === 1 ? (state.streak || 1) + 1 : (gap === 0 ? (state.streak || 1) : 1);
         if (!state.lastVisit) state.lastVisit = today;
@@ -542,11 +565,153 @@
         { re: /厉害|难|不会|学不动/, list: ['不会才正常，会了就不用学了。挑最小的一步先做。'] }
     ];
 
+    /* ==================== 全站索引检索 ====================
+     * /pet-index.json 由构建期的 scripts/pet-index.js 生成（文章 + 知识卡片 + 页面）。
+     * 懒加载：只有第一次问"有没有关于 X 的"时才拉，首屏不碰它。
+     */
+    var idxRows = null;
+    var idxReq = null;
+    var idxPending = null;   // 索引还没到时先记下问题，加载完自动回答
+
+    function loadPetIndex() {
+        if (idxRows || idxReq) return;
+        try {
+            idxReq = fetch('/pet-index.json', { cache: 'force-cache' })
+                .then(function (r) { return r.json(); })
+                .then(function (j) { idxRows = (j && j.rows) || []; })
+                .catch(function () { idxRows = []; })
+                .then(function () {
+                    // 之前因为索引没加载而搁置的问题，补答一次
+                    if (idxPending) {
+                        var q = idxPending;
+                        idxPending = null;
+                        var ans = indexReply(q);
+                        if (ans) appendMessage('pet', ans);   // 对话框里只回对话，不冒气泡
+                    }
+                });
+        } catch (e) { idxRows = []; }
+    }
+
+    var INDEX_INTENT = /有没有|找一下|帮我找|搜一[下搜]|查一下|关于|相关的|哪篇|哪张|哪些文章|站内/;
+
+function splitTerms(q) {
+        var STOP = /^(有没有|有没|没有|关于|相关|相关的|文章|卡片|知识|一下|帮我|找找|看看|什么|哪些|这个|那个|的|了|吗|呢|和|与)$/;
+        var raw = q.toLowerCase()
+            .replace(/[，。！？、,.!?：:；;（）()「」"']/g, ' ')
+            .split(/\s+/)
+            .filter(function (s) { return s && !STOP.test(s); });
+
+        var out = [];
+        raw.forEach(function (seg) {
+            if (/[\u4e00-\u9fa5]/.test(seg) && seg.length > 2) {
+                // 中文没有空格：用二字滑窗切，再保留整段
+                for (var i = 0; i + 1 < seg.length; i++) out.push(seg.substr(i, 2));
+                out.push(seg);
+            } else if (seg.length >= 2) {
+                out.push(seg);
+            }
+        });
+        // 去重 + 限长
+        var seen = {};
+        var uniq = [];
+        for (var j = 0; j < out.length; j++) {
+            var s = out[j];
+            if (s.length >= 2 && !seen[s]) {
+                seen[s] = 1;
+                uniq.push(s);
+            }
+        }
+        return uniq.slice(0, 10);
+    }
+
+    function indexSearch(q) {
+        if (!idxRows || !idxRows.length) return null;
+        var terms = splitTerms(q);
+        if (!terms.length) return null;
+
+        var scored = [];
+        for (var i = 0; i < idxRows.length; i++) {
+            var r = idxRows[i];
+            var title = (r.t || '').toLowerCase();
+            var tags = (r.g || []).join(' ').toLowerCase();
+            var cats = (r.c || []).join(' ').toLowerCase();
+            var ex = (r.x || '').toLowerCase();
+            var score = 0;
+            for (var k = 0; k < terms.length; k++) {
+                var w = terms[k];
+                if (title.indexOf(w) >= 0) score += 6;
+                if (tags.indexOf(w) >= 0) score += 4;
+                if (cats.indexOf(w) >= 0) score += 3;
+                if (ex.indexOf(w) >= 0) score += 2;
+            }
+            if (score > 0) scored.push({ r: r, s: score });
+        }
+        if (!scored.length) return null;
+        scored.sort(function (a, b) {
+            return b.s - a.s || String(b.r.d || '').localeCompare(String(a.r.d || ''));
+        });
+        return scored;
+    }
+
+    function indexReply(q) {
+        var hits = indexSearch(q);
+        if (hits === null) {
+            if (!idxRows) {
+                idxPending = q;
+                loadPetIndex();
+                return '让我翻一下索引……';
+            }
+            return '没找到相关的内容，换个词试试？';
+        }
+        var top = hits[0].r;
+        var kindName = top.k === 'card' ? '卡片' : (top.k === 'page' ? '页面' : '文章');
+        var more = hits.length > 1 ? '，另外还有 ' + (hits.length - 1) + ' 条' : '';
+        return '最接近的是' + kindName + '「' + top.t + '」' + more + '：' + top.u;
+    }
+
+    /* 先看能不能用"当前页面的信息"来回答，比固定句库更有针对性 */
+    function siteAwareReply(t) {
+        try {
+            var c = siteContext();
+            if (/能做什么|会什么|功能|你能干|会干|帮我做|有什么用/.test(t)) {
+                return '能陪你读文章、记住你来了几天，也会被戳、被拖、被喂。问路也行：算法库 /algorithm/、题库 /questions/、工具 /tools/。';
+            }
+            if (/这篇|讲的什么|说什么|内容/.test(t) && c.page === 'post') {
+                var mins = c.words > 0 ? '，大概 ' + Math.max(1, Math.round(c.words / 400)) + ' 分钟能读完' : '';
+                return '这篇属于「' + (c.tags[0] || '没打标签') + '」' + mins + '。正文我也看不懂，你自己读吧。';
+            }
+            if (/几点|现在时间|几号|星期几/.test(t)) {
+                var d = new Date();
+                var mm = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+                return '现在 ' + d.getHours() + ' 点 ' + mm + ' 分。' + (d.getHours() >= 23 ? '该睡了。' : '');
+            }
+            if (/几个标签|多少标签|什么标签/.test(t)) {
+                return c.tags.length
+                    ? '这页有 ' + c.tags.length + ' 个标签：' + c.tags.slice(0, 3).join('、') + '。'
+                    : '这页没标签，标签总览在 /tags/。';
+            }
+            if (/多久|来了几天|第几天/.test(t) && state.streak) {
+                return '这是你连续来的第 ' + state.streak + ' 天，我记着呢。';
+            }
+        } catch (e) { /* ignore */ }
+        return null;
+    }
+
     function petReply(text) {
         var t = (text || '').trim();
         if (!t) return '你想说什么呀？';
+        var ctxAns = siteAwareReply(t);
+        if (ctxAns) return ctxAns;
+
+        if (INDEX_INTENT.test(t)) {
+            var idxAns = indexReply(t);
+            if (idxAns) return idxAns;
+        }
         for (var i = 0; i < REPLIES.length; i++) {
-            if (REPLIES[i].re.test(t)) return pick(REPLIES[i].list);
+            if (REPLIES[i].re.test(t)) {
+                var ans = pick(REPLIES[i].list);
+                return typeof ans === 'function' ? ans() : ans;
+            }
         }
         return pick([
             '这个问题值得写一张知识卡片。',
@@ -558,13 +723,31 @@
         ]);
     }
 
+    /* 把回复里的站内路径变成可点的链接；其余文字原样输出 */
+    function fillText(el, text) {
+        var str = String(text || '');
+        var re = /(\/[A-Za-z0-9_\-.~#/?=&%+]*[A-Za-z0-9_\-])/g;
+        var last = 0;
+        var m;
+        while ((m = re.exec(str))) {
+            if (m.index > last) el.appendChild(document.createTextNode(str.slice(last, m.index)));
+            var a = document.createElement('a');
+            a.href = m[1];
+            a.className = 'dp-link';
+            a.textContent = m[1];
+            el.appendChild(a);
+            last = m.index + m[1].length;
+        }
+        if (last < str.length) el.appendChild(document.createTextNode(str.slice(last)));
+    }
+
     function appendMessage(role, text) {
         if (!root) return;
         var log = root.querySelector('.dp-chat-log');
         if (!log) return;
         var msg = document.createElement('div');
         msg.className = 'dp-msg ' + (role === 'user' ? 'is-user' : 'is-pet');
-        msg.textContent = text;
+        fillText(msg, text);
         log.appendChild(msg);
         while (log.children.length > 10) log.removeChild(log.firstChild);
         log.scrollTop = log.scrollHeight;
@@ -585,7 +768,7 @@
         list.forEach(function (m) {
             var msg = document.createElement('div');
             msg.className = 'dp-msg ' + (m.role === 'user' ? 'is-user' : 'is-pet');
-            msg.textContent = m.text;
+            fillText(msg, m.text);
             log.appendChild(msg);
         });
         log.scrollTop = log.scrollHeight;
@@ -643,6 +826,11 @@
     }
 
     function greet() {
+        // 同一个会话里只打招呼一次：整页跳转时会重新执行 build()，否则每次都被当成"第一次见"
+        try {
+            if (sessionStorage.getItem('dp-greeted')) return;
+            sessionStorage.setItem('dp-greeted', '1');
+        } catch (e) { /* 隐私模式下忽略 */ }
         if (greeted) return;
         greeted = true;
         var hour = new Date().getHours();
@@ -658,7 +846,7 @@
             line = special[0];
             if (director) setTimeout(function () { director.cue(dayAct[(new Date().getMonth() + 1) + '-' + new Date().getDate()] || special[1]); }, 1600);
         } else if ((state.streak || 1) === 1) {
-            line = '第一次见？我是大肥鱼，住在这个角落里。';
+            line = (wasSeenBefore ? '又见面了。' : '第一次见？我是大肥鱼，住在这个角落里。');
         } else if ((state.streak || 1) >= 7) {
             line = '你来第 ' + state.streak + ' 天啦，我已经认得你了。';
         } else if ((state.streak || 1) >= 3) {
@@ -811,6 +999,7 @@
      */
     var ctxDwellFrom = 0;
     var lastSaid = '';
+    var wasSeenBefore = false;
 
     /* 同句不连说；调试期不做概率过滤，先保证"一定能看见" */
     function sayMaybe(text, ms) {
@@ -879,7 +1068,7 @@
 
     /* 命中的第一条规则当场说话 + 做个动作；每分钟最多一次，避免变吵 */
     function runContext() {
-        if (!director || chatOpen || document.hidden || root.classList.contains('is-hidden')) return;
+        if (!director || chatOpen || document.hidden || root.classList.contains('is-hidden') || root.classList.contains('is-dragging')) return;
         var now = Date.now();
         if (now - lastCtxAt < 25000) return;
 
@@ -942,6 +1131,25 @@
     }
 
     /* 滚动只在停下来 700ms 后算一次，passive，不阻塞滚动 */
+    function watchSelection() {
+        if (watchSelection.done) return;
+        watchSelection.done = true;
+        var lastAt = 0;
+        document.addEventListener('selectionchange', function () {
+            var now = Date.now();
+            if (now - lastAt < 15000) return;
+            if (!director || chatOpen || document.hidden || root.classList.contains('is-dragging')) return;
+            try {
+                var sel = window.getSelection && window.getSelection();
+                var text = sel ? String(sel).trim() : '';
+                if (text.length < 8) return;
+                lastAt = now;
+                say('抄走也没关系，反正我也不会写回去。', 3200);
+                director.cue('look');
+            } catch (e) { /* ignore */ }
+        }, { passive: true });
+    }
+
     function watchScroll() {
         if (watchScroll.done) return;
         watchScroll.done = true;
@@ -958,7 +1166,7 @@
             clearTimeout(timer);
             timer = setTimeout(function () {
                 try {
-                    if (!director || chatOpen || document.hidden) return;
+                    if (!director || chatOpen || document.hidden || root.classList.contains('is-dragging')) return;
                     var r = ratio();
 
                     if (r > 0.92) {
@@ -985,7 +1193,7 @@
     /* 标签 / 分类页：换页后直接说一句，不经过上下文链 */
     function tagPageLine() {
         try {
-            if (!director || chatOpen || document.hidden) return;
+            if (!director || chatOpen || document.hidden || root.classList.contains('is-dragging')) return;
             var path = decodeURIComponent(location.pathname);
             var m = path.match(/\/(?:tags|categories)\/([^/]+?)\/?(?:\.html)?$/);
             if (!m) return;
@@ -1019,7 +1227,7 @@
         ch.addEventListener('pointerdown', function (e) {
             if (e.button != null && e.button !== 0) return;
             // 一按下就换成"被抓起"的姿态；素材已缓存，切源基本无等待
-            if (director) director.cue(ANIMATIONS.drag);
+            if (director) director.hold('drag-up');
             var rect = root.getBoundingClientRect();
             dragging = true;
             moved = false;
@@ -1050,10 +1258,32 @@
             }
         }
         ch.addEventListener('pointerup', function (e) {
-            if (dragging && !moved) { end(e); doPet(zoneAt(ch, e.clientY)); return; }
+            var wasMoved = moved;
+            var y = e.clientY;
             end(e);
+            if (wasMoved) {
+                justDragged = Date.now();   // 拖拽结束：吞掉浏览器补发的 click
+                if (director) director.drop('drag-down');   // 松手播落下，播完自动回待机
+            } else {
+                justDragged = 0;
+                doPet(zoneAt(ch, y));       // 真正的点击在这里判定
+            }
         });
         ch.addEventListener('pointercancel', end);
+
+        // 兜底：指针在角色外松开、切标签页、窗口失焦时，pointerup 不一定回到角色身上。
+        // 少了这条，拖拽状态会卡在"悬空"，只能等那段 7 秒动画自己播完。
+        window.addEventListener('pointerup', function () {
+            if (!dragging) return;
+            var wasMoved = moved;
+            end();
+            if (wasMoved && director) director.drop('drag-down');
+        }, { passive: true });
+        window.addEventListener('blur', function () {
+            if (!dragging) return;
+            end();
+            if (director) director.drop('drag-down');
+        });
         ch.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); doPet('body'); }
         });
@@ -1106,8 +1336,7 @@
             if (action === 'chat') { setChatOpen(!chatOpen); return; }
             if (action === 'feed') { doFeed(); return; }
             if (action === 'pet') {
-                var chEl = root.querySelector('.dp-character');
-                doPet(el.classList.contains('dp-character') ? zoneAt(chEl, e.clientY) : 'body');
+                return;   // 点击统一由 pointerup 判定，这里不处理（否则放下会被当成摸头）
             }
         });
 
@@ -1145,6 +1374,7 @@
 
         watchTheme();
         watchScroll();
+        watchSelection();
 
         // 首次挂载也评估一次：主题若是整页跳转（不走 pjax），换页后走不到 pjax 分支
         setTimeout(function () {
@@ -1154,18 +1384,6 @@
 
         // 鼠标靠近：偶尔抬头看一眼（有冷却，别烦人）
         var lastGlance = 0;
-        document.addEventListener('mousemove', function (e) {
-            if (!director || chatOpen || document.hidden) return;
-            var now = Date.now();
-            if (now - lastGlance < 9000) return;
-            var r = root.getBoundingClientRect();
-            var dx = e.clientX - (r.left + r.width / 2);
-            var dy = e.clientY - (r.top + r.height / 2);
-            if (dx * dx + dy * dy > 150 * 150) return;
-            lastGlance = now;
-            if (Math.random() < 0.55) director.cue('look');
-        }, { passive: true });
-
         resetIdle();
         greet();
     }
@@ -1196,6 +1414,9 @@
             categories: categoriesForNow
         });
         director.start();
+
+        // 首屏之后空闲时预取索引：40KB(gzip)，换来第一次提问就能同步回答
+        setTimeout(function () { try { loadPetIndex(); } catch (e) { /* ignore */ } }, 5000);
         preloadClips();
         setTimeout(function () {
             if (!player) return;
@@ -1223,4 +1444,6 @@
         init();
     }
     document.addEventListener('pjax:complete', init);
+    document.addEventListener('pjax:success', init);   // 有些主题只发这个
+    document.addEventListener('pjax:end', init);
 })();
