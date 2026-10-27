@@ -14,12 +14,28 @@
  * 纯前端，不调用任何外部接口、不需要 API Key。
  * 素材署名见 PET_CREDITS.md。
  */
-(function () {
-    'use strict';
 
     /* ==================== 条目配置（对应 config.jsonc 条目级字段） ==================== */
-    var CONFIG = {
+    import PetConfig from './config.js?v=4db0052b';
+import { PetKernel } from './core.js?v=4db0052b';
+
+/* 同页多实例：每个模块实例自己 new 一个内核，事件总线/动作裁决/存储互不共享。
+   第二个实例加载的是 ?pet=xxx 这样的不同 URL，模块会被重新求值。 */
+var KERNEL = (PetKernel && typeof PetKernel.create === 'function') ? PetKernel.create() : PetKernel;
+import { PetAdapter } from './adapter.js?v=4db0052b';
+import { PetPlayer } from './modules/player.js?v=4db0052b';
+import { PetMachine } from './modules/machine.js?v=4db0052b';
+import { PetActions } from './modules/actions.js?v=4db0052b';
+import { PetSpeech } from './modules/speech.js?v=4db0052b';
+import { PetRenderers } from './modules/renderers.js?v=4db0052b';
+import { PetRules } from './modules/rules.js?v=4db0052b';
+import { PetZones } from './modules/zones.js?v=4db0052b';
+import { PetSearch } from './modules/search.js?v=4db0052b';
+
+var CONFIG = {
         name: '大肥鱼',
+        /* 投影：x 正数向右，角色看起来偏左就把它调大 */
+        shadow: { offsetX: 0, offsetY: 10, blur: 14, color: 'rgba(33, 72, 145, 0.16)' },
         storageKey: 'deepseek-pet-v4',
         animDir: '/images/pet/anim/',
         image: '/images/pet/anim/poster.webp',   // 首帧占位 / 不支持 WebM 时的静帧
@@ -29,26 +45,102 @@
         draggable: true
     };
 
+    /* ---------- 人设：所有台词来自 CONFIG.persona，代码里不再写死角色文案 ----------
+     * 必须在 mergeConfig 之后读取：模块顶层 Capture 会拿到还没合并的默认配置。
+     */
+    function personaSrc() {
+        return (CONFIG && CONFIG.persona) || {};
+    }
+
+    function persona(key, fallback) {
+        var v = personaSrc()[key];
+        return (v === undefined || v === null || v === '') ? fallback : v;
+    }
+
+    /* 台词可以是单条字符串，也可以是数组（随机取一条） */
+    function say_line(key, fallback) {
+        var v = persona(key, fallback);
+        if (Array.isArray(v)) return v.length ? pick(v) : fallback;
+        return v;
+    }
+
+    /* {n} 占位符：用于"你来第 N 天"这类带数字的句子 */
+    function fillNum(str, n) {
+        return String(str == null ? '' : str).replace(/\{n\}/g, String(n));
+    }
+
+    function icon(key, fallback) {
+        var icons = personaSrc().icons || {};
+        return icons[key] || fallback;
+    }
+
+    /* 外部配置优先：modules/config.js 里的同名键会覆盖上面的默认值 */
+    /* 拷贝一份值：对象和数组都要深拷贝
+
+     * 不能直接把 src 里的对象引用塞进 dst——PetConfig 是模块级共享对象，
+     * 两个实例的 CONFIG 会指向同一份 persona，A 改名字 B 跟着变。
+     */
+    function cloneVal(v) {
+        if (Array.isArray(v)) return v.map(cloneVal);
+        if (v && typeof v === 'object') {
+            var o = {};
+            Object.keys(v).forEach(function (k) { o[k] = cloneVal(v[k]); });
+            return o;
+        }
+        return v;
+    }
+
+    /* 深合并：后者的值覆盖前者，对象逐层合并 */
+    function deepMerge(dst, src) {
+        Object.keys(src).forEach(function (k) {
+            var v = src[k];
+            if (v && typeof v === 'object' && !Array.isArray(v) && dst[k] && typeof dst[k] === 'object' && !Array.isArray(dst[k])) {
+                deepMerge(dst[k], v);
+            } else {
+                dst[k] = cloneVal(v);
+            }
+        });
+        return dst;
+    }
+
+    (function mergeConfig() {
+        if (!PetConfig) return;
+        deepMerge(CONFIG, PetConfig);
+        if (PetConfig.animations) ANIMATIONS = PetConfig.animations;
+    })();
+
+    /* 同页多只宠物：模块地址带 ?pet=<名字>，用它去 window.PetProfiles 里找覆盖项。
+     * 不同 URL 的模块会被浏览器当成两个实例分别求值，所以各有一份闭包状态。
+     */
+    (function mergeProfile() {
+        var name = null;
+        try { name = new URL(import.meta.url).searchParams.get('pet'); } catch (e) { /* 老浏览器 */ }
+        if (!name) return;
+        var reg = (typeof window !== 'undefined' && window.PetProfiles) || null;
+        var profile = reg && reg[name];
+        if (!profile) {
+            console.warn('[pet] 未找到 profile: ' + name);
+            return;
+        }
+        deepMerge(CONFIG, profile);
+        if (profile.animations) ANIMATIONS = profile.animations;
+        CONFIG.profileName = name;
+    })();
+
     /* ==================== 动画池（对应 animations.*） ==================== */
     var ANIMATIONS = {
         idle: ['idle'],
         clicks: ['click-happy', 'click-shy', 'click-wave'],
         drag: 'drag',
-        events: { sleep: 'sleep', eat: 'eat' },
-        categories: [
-            { id: '小动作', weight: 60, actions: ['look', 'yawn', 'stretch', 'hum', 'doze'] },
-            { id: '玩耍', weight: 40, actions: ['tail', 'bubbles'] }
-        ],
-        // 夜间：安静一点，打盹和哈欠为主，不闹腾
-        nightCategories: [
-            { id: '打盹', weight: 70, actions: ['doze', 'yawn', 'look'] },
-            { id: '安静', weight: 30, actions: ['hum', 'tail'] }
-        ]
+        events: { sleep: 'sleep', eat: 'eat' }
     };
 
-    /* 顶层权重（对应 animationWeights）。博客里的宠物是"固定"的：
-       不走路、不转向，所以 turn / move 设为 0，份额自然并入 action。 */
-    var WEIGHTS = { idle: 10, turn: 0, move: 0 };
+    /* 掷动作的权重属于站点侧策略，读配置；缺省时退化成"只做小动作"。 */
+    function rollWeights() {
+        var w = (CONFIG.policy && CONFIG.policy.rollWeights) || null;
+        if (w && typeof w === 'object') return w;
+        return { idle: 10, turn: 0, move: 0 };
+    }
 
     /* ==================== 选择逻辑（移植自 src/shared/pickers.ts） ==================== */
     function pick(pool, exclude) {
@@ -121,7 +213,7 @@
             if (i >= order.length) return;
             var name = order[i++];
             if (clipCache[name]) { setTimeout(next, 40); return; }
-            fetch(CONFIG.animDir + name + '.webm', { cache: 'force-cache' })
+            fetch(CONFIG.animDir + name + '.' + (CONFIG.clipExt || 'webm'), { cache: 'force-cache' })
                 .then(function (r) { return r.ok ? r.blob() : null; })
                 .then(function (b) {
                     if (b) {
@@ -140,169 +232,16 @@
 
     /* ==================== 播放器（移植自 src/client/pet.ts） ==================== */
     function createPlayer(stage) {
-        var els = [];
-        var front = 0;      // 当前前台元素下标
-        var token = 0;      // 换代号：过期回调直接丢弃
-        var current = '';   // 当前动画名
-        var mirror = false;
-        var onEnded = null;
-
-        function makeEl() {
-            var v = document.createElement('video');
-            v.className = 'dp-video';
-            v.muted = true;
-            v.defaultMuted = true;
-            v.playsInline = true;
-            v.setAttribute('muted', '');
-            v.setAttribute('playsinline', '');
-            v.setAttribute('webkit-playsinline', '');
-            v.setAttribute('aria-hidden', 'true');
-            v.preload = 'auto';
-            return v;
+        /* 播放器已搬到 modules/player.js，这里只做依赖注入 */
+        if (PetPlayer && PetPlayer.createPlayer) {
+            return PetPlayer.createPlayer(stage, {
+                clips: clipCache,
+                config: CONFIG,
+                pick: pick,
+                randInt: randInt
+            });
         }
-
-        for (var i = 0; i < 2; i++) {
-            els.push(makeEl());
-            stage.appendChild(els[i]);
-        }
-
-        function handleEnded() {
-            if (onEnded) onEnded(current);
-        }
-
-        /**
-         * 换到某个动画。
-         * @param {string} name   动画名
-         * @param {boolean} once  true = 播一遍；false = 循环
-         * @param {Function} [done] 播完后的回调（仅 once 有效）
-         */
-        /** 换层级：两块屏都解码好了，这里只挪 is-front，不重新 load */
-        function promote(el, once) {
-            var old = els[front];
-            if (old && old !== el) {
-                old.onended = null;
-                old.onerror = null;
-                old.classList.remove('is-front');
-                old.pause();
-            }
-            el.classList.add('is-front');
-            stage.classList.add('is-ready');
-            front = els.indexOf(el);
-            el.loop = !once;
-            el.onended = once ? handleEnded : null;
-            el.playbackRate = once ? 1.22 : 1;
-            el.style.transform = mirror ? 'scaleX(-1)' : '';
-            // 只在确实偏离开头时才 seek：seek 会让 readyState 掉回 1，反而引入延迟
-            try { if (el.currentTime > 0.15) { if (el.fastSeek) el.fastSeek(0); else el.currentTime = 0; } } catch (e) { /* ignore */ }
-            var pp = el.play();
-            if (pp && pp.catch) pp.catch(function () {});
-        }
-
-        function play(name, once, done) {
-            if (!name) return;
-
-            // 快速通道：另一块屏上已经备好这一段 → 直接换层，省掉 load + 等首帧
-            for (var qi = 0; qi < els.length; qi++) {
-                if (els[qi].getAttribute('data-clip') === name && els[qi].readyState >= 2) {
-                    current = name;
-                    onEnded = once ? function () { if (done) done(); } : null;
-                    promote(els[qi], once);
-                    return;
-                }
-            }
-
-            var gen = ++token;
-            var el = els[front ^ 1];          // 后台元素
-            var url = CONFIG.animDir + name + '.webm';
-            current = name;
-            el.setAttribute('data-clip', name);
-            onEnded = once ? function () { if (done) done(); } : null;
-
-            // 命中缓存：同步换源，交互没有网络等待
-            if (clipCache[name]) {
-                el.src = clipCache[name];
-                el.load();
-                arm(el, gen, once);
-                return;
-            }
-
-            fetch(url, { cache: 'force-cache' })
-                .then(function (r) {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.blob();
-                })
-                .then(function (blob) {
-                    if (gen !== token) return;
-                    if (!clipCache[name]) clipCache[name] = URL.createObjectURL(blob);
-                    el.src = clipCache[name];
-                    el.load();
-                    arm(el, gen, once);
-                })
-                .catch(function (err) {
-                    if (gen !== token) return;
-                    console.warn('[pet] 动画加载失败：' + name, err);
-                    if (done) done();          // 兜底：别把链断在这儿
-                });
-        }
-
-        function arm(el, gen, once) {
-            function onReady() {
-                el.removeEventListener('loadeddata', onReady);
-                if (gen !== token) return;
-
-                var old = els[front];
-                if (old && old !== el) {
-                    // 拆雷：旧元素上残留的 ended 会在被换下后继续触发切换，形成连环跳切
-                    old.onended = null;
-                    old.onerror = null;
-                    old.classList.remove('is-front');
-                    old.pause();
-                }
-                el.classList.add('is-front');
-                stage.classList.add('is-ready');
-                front = front ^ 1;
-
-                el.loop = !once;
-                // 一次性动作稍微提一点速，抵消素材本身的慢节奏；待机保持 1.0 不动
-                el.playbackRate = once ? 1.22 : 1;
-                el.onended = once ? handleEnded : null;
-                el.style.transform = mirror ? 'scaleX(-1)' : '';
-
-                var p = el.play();
-                if (p && p.catch) p.catch(function () { /* 自动播放被拦：保留首帧 */ });
-            }
-            el.addEventListener('loadeddata', onReady);
-        }
-
-        return {
-            play: play,
-            name: function () { return current; },
-            setMirror: function (v) { mirror = !!v; },
-            /** 预热：把一段动画装到后台屏并停在第一帧，等着被快速通道直接换上来 */
-            warm: function (name) {
-                if (!clipCache[name]) return false;
-                var el = els[front ^ 1];
-                if (!el || el.getAttribute('data-clip') === name) return false;
-                if (el.classList.contains('is-front')) return false;
-                el.setAttribute('data-clip', name);
-                el.src = clipCache[name];
-                el.loop = true;
-                el.load();
-                // 播一下再停：确保解码器真的产出一帧，否则换上来是空白
-                var wp = el.play();
-                if (wp && wp.catch) wp.catch(function () {});
-                setTimeout(function () { try { el.pause(); } catch (e) { /* ignore */ } }, 220);
-                return true;
-            },
-            pause: function () { els.forEach(function (e) { e.pause(); }); },
-            resume: function () {
-                var e = els[front];
-                if (e) {
-                    var p = e.play();
-                    if (p && p.catch) p.catch(function () {});
-                }
-            }
-        };
+        return null;
     }
 
     /* ==================== 导演（移植自 pickNext / handleEnded） ==================== */
@@ -315,7 +254,7 @@
 
         function playIdle() {
             currentAct = '';
-            player.play(ANIMATIONS.idle[0], false);
+            player.play((hooks.idleClip && hooks.idleClip()) || ANIMATIONS.idle[0], false);
         }
 
         function playAct(name, after) {
@@ -339,13 +278,13 @@
 
         function pickNext() {
             if (sleeping) return;
-            var kind = rollKind(Math.random(), WEIGHTS, { fixed: true });
+            var kind = rollKind(Math.random(), rollWeights(), { fixed: true });
             if (kind === 'idle') {
                 playIdle();
                 scheduleRoll();
                 return;
             }
-            var pool = hooks.categories ? hooks.categories() : ANIMATIONS.categories;
+            var pool = hooks.categories ? hooks.categories() : [{ id: 'idle', weight: 1, actions: ANIMATIONS.idle }];
             var act = pickCategoryAction(pool, ANIMATIONS.idle, facing, currentAct);
             playAct(act.name, function () {
                 playIdle();
@@ -369,8 +308,9 @@
             sleeping = true;
             clearTimeout(rollTimer);
             clearTimeout(dropTimer);   // 取消上一次拖拽的安全网，否则它会把正在播的动作顶掉
-            currentAct = ANIMATIONS.events.sleep;
-            player.play(ANIMATIONS.events.sleep, false);
+            var clip = (hooks.sleepyClip && hooks.sleepyClip()) || ANIMATIONS.events.sleep;
+            currentAct = clip;
+            player.play(clip, false);
         }
 
         function wake() {
@@ -394,6 +334,7 @@
                     if (!holding) return;
                     player.play('drag-hold', false);
                 });
+                if (hooks.onState) hooks.onState(name);
                 // 循环会重复"升起"的动作，所以只播一次
             },
             /** 松手：播一次"落下"，播完回待机 */
@@ -426,6 +367,7 @@
     var chatOpen = false;
     var sayTimer = null;
     var sleepTimer = null;
+    var actionsTimer = null;   // 左侧按钮的延迟收起
     var player = null;
     var director = null;
     var greeted = false;
@@ -437,7 +379,7 @@
 
     function load() {
         try {
-            var d = JSON.parse(localStorage.getItem(STORE) || 'null');
+            var d = JSON.parse(PetAdapter.rawGet(STORE) || 'null');
             if (d) {
                 state.affinity = clamp(Number(d.affinity) || 0, 0, 100);
                 var f = Number(d.fullness);
@@ -467,7 +409,7 @@
     }
 
     function save() {
-        try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* ignore */ }
+        try { PetAdapter.rawSet(STORE, JSON.stringify(state)); } catch (e) { /* ignore */ }
     }
 
     /* ==================== 表现 ==================== */
@@ -492,15 +434,80 @@
         root.classList.toggle('is-sleep', !!(director && director.isSleeping()));
     }
 
-    function say(text, duration) {
+    function showBubble(text, duration) {
         if (!root || chatOpen) return;
         var bubble = root.querySelector('.dp-bubble');
         if (!bubble) return;
         bubble.textContent = text;
         bubble.classList.add('is-show');
         clearTimeout(sayTimer);
-        sayTimer = setTimeout(function () { bubble.classList.remove('is-show'); }, duration || 4200);
+        sayTimer = setTimeout(function () {
+            bubble.classList.remove('is-show');
+        }, duration || 4200);
     }
+
+    /* 语言通道：所有台词走 speech.act，由 speech 模块决定投递到气泡还是对话框。
+       没有内核时退化为直接冒气泡，保证单独也能跑。 */
+    function say(text, ttl) {
+        if (!text) return;
+        if (PetKernel) {
+            KERNEL.emit('speech.act', {
+                text: text,
+                ttl: ttl || 3600,
+                channel: 'auto',
+                priority: 'context'
+            });
+            return;
+        }
+        showBubble(text, ttl);
+    }
+
+    var speechMounted = false;
+
+    var actionsMounted = false;
+
+    /* 动作端口：意图 → director。播放器仍在宠物本体里，等搬迁后替换内部实现即可。 */
+    function mountActions() {
+        if (actionsMounted || root === null || !PetKernel || !PetActions) return;
+        if (!director) return;
+
+        KERNEL.register(PetActions.createActionsModule({
+            play: function (act) { if (director) director.cue(act); },
+            hold: function (act) {
+                if (!director || !director.hold) return;
+                director.hold(act === 'drag' ? 'drag-up' : act);
+            },
+            release: function () {
+                if (director && director.drop) director.drop('drag-down');
+            },
+            setState: function (state) {
+                if (PetMachine && PetMachine.set) PetMachine.set(state);
+            }
+        }));
+        KERNEL.start();
+        actionsMounted = true;
+    }
+
+    function mountSpeech() {
+        if (speechMounted || root === null || !PetKernel || !PetSpeech) return;
+        // 渲染交给 renderers 模块；宠物只提供容器与持久化回调
+        var R = PetRenderers || {};
+        var logEl = root.querySelector('.dp-chat-log');
+        var renderBub = R.bubble ? R.bubble(root) : function (txt, ms) { showBubble(txt, ms); };
+        var renderDlg = (R.dialog && logEl)
+            ? R.dialog(logEl, { max: CONFIG.chat.maxMessages, onRendered: function (txt) { pushChatLog('pet', txt); } })
+            : function (txt) { appendMessage('pet', txt); };
+        KERNEL.register(PetSpeech.createSpeechModule({
+            renderBubble: renderBub,
+            renderDialog: renderDlg,
+            isDialogOpen: function () { return chatOpen; },
+            dedupeMs: CONFIG.speech.dedupeMs,
+            maxQueue: CONFIG.speech.maxQueue
+        }));
+        KERNEL.start();
+        speechMounted = true;
+    }
+
 
     function burst(emoji, count) {
         if (!root) return;
@@ -528,7 +535,7 @@
             if (!chatOpen && !document.hidden && director) {
                 director.sleep();
                 updateStats();
-                say('……（大肥鱼靠着鲸鱼尾巴睡着了）', 4200);
+                say(say_line('sleep', '……睡着了。'), 4200);
             }
         }, CONFIG.idleSleepMs);
     }
@@ -569,105 +576,6 @@
      * /pet-index.json 由构建期的 scripts/pet-index.js 生成（文章 + 知识卡片 + 页面）。
      * 懒加载：只有第一次问"有没有关于 X 的"时才拉，首屏不碰它。
      */
-    var idxRows = null;
-    var idxReq = null;
-    var idxPending = null;   // 索引还没到时先记下问题，加载完自动回答
-
-    function loadPetIndex() {
-        if (idxRows || idxReq) return;
-        try {
-            idxReq = fetch('/pet-index.json', { cache: 'force-cache' })
-                .then(function (r) { return r.json(); })
-                .then(function (j) { idxRows = (j && j.rows) || []; })
-                .catch(function () { idxRows = []; })
-                .then(function () {
-                    // 之前因为索引没加载而搁置的问题，补答一次
-                    if (idxPending) {
-                        var q = idxPending;
-                        idxPending = null;
-                        var ans = indexReply(q);
-                        if (ans) appendMessage('pet', ans);   // 对话框里只回对话，不冒气泡
-                    }
-                });
-        } catch (e) { idxRows = []; }
-    }
-
-    var INDEX_INTENT = /有没有|找一下|帮我找|搜一[下搜]|查一下|关于|相关的|哪篇|哪张|哪些文章|站内/;
-
-function splitTerms(q) {
-        var STOP = /^(有没有|有没|没有|关于|相关|相关的|文章|卡片|知识|一下|帮我|找找|看看|什么|哪些|这个|那个|的|了|吗|呢|和|与)$/;
-        var raw = q.toLowerCase()
-            .replace(/[，。！？、,.!?：:；;（）()「」"']/g, ' ')
-            .split(/\s+/)
-            .filter(function (s) { return s && !STOP.test(s); });
-
-        var out = [];
-        raw.forEach(function (seg) {
-            if (/[\u4e00-\u9fa5]/.test(seg) && seg.length > 2) {
-                // 中文没有空格：用二字滑窗切，再保留整段
-                for (var i = 0; i + 1 < seg.length; i++) out.push(seg.substr(i, 2));
-                out.push(seg);
-            } else if (seg.length >= 2) {
-                out.push(seg);
-            }
-        });
-        // 去重 + 限长
-        var seen = {};
-        var uniq = [];
-        for (var j = 0; j < out.length; j++) {
-            var s = out[j];
-            if (s.length >= 2 && !seen[s]) {
-                seen[s] = 1;
-                uniq.push(s);
-            }
-        }
-        return uniq.slice(0, 10);
-    }
-
-    function indexSearch(q) {
-        if (!idxRows || !idxRows.length) return null;
-        var terms = splitTerms(q);
-        if (!terms.length) return null;
-
-        var scored = [];
-        for (var i = 0; i < idxRows.length; i++) {
-            var r = idxRows[i];
-            var title = (r.t || '').toLowerCase();
-            var tags = (r.g || []).join(' ').toLowerCase();
-            var cats = (r.c || []).join(' ').toLowerCase();
-            var ex = (r.x || '').toLowerCase();
-            var score = 0;
-            for (var k = 0; k < terms.length; k++) {
-                var w = terms[k];
-                if (title.indexOf(w) >= 0) score += 6;
-                if (tags.indexOf(w) >= 0) score += 4;
-                if (cats.indexOf(w) >= 0) score += 3;
-                if (ex.indexOf(w) >= 0) score += 2;
-            }
-            if (score > 0) scored.push({ r: r, s: score });
-        }
-        if (!scored.length) return null;
-        scored.sort(function (a, b) {
-            return b.s - a.s || String(b.r.d || '').localeCompare(String(a.r.d || ''));
-        });
-        return scored;
-    }
-
-    function indexReply(q) {
-        var hits = indexSearch(q);
-        if (hits === null) {
-            if (!idxRows) {
-                idxPending = q;
-                loadPetIndex();
-                return '让我翻一下索引……';
-            }
-            return '没找到相关的内容，换个词试试？';
-        }
-        var top = hits[0].r;
-        var kindName = top.k === 'card' ? '卡片' : (top.k === 'page' ? '页面' : '文章');
-        var more = hits.length > 1 ? '，另外还有 ' + (hits.length - 1) + ' 条' : '';
-        return '最接近的是' + kindName + '「' + top.t + '」' + more + '：' + top.u;
-    }
 
     /* 先看能不能用"当前页面的信息"来回答，比固定句库更有针对性 */
     function siteAwareReply(t) {
@@ -697,14 +605,20 @@ function splitTerms(q) {
         return null;
     }
 
+    /* 站内检索：索引由构建期生成，模块负责加载与打分 */
+    var SEARCH = (PetSearch ? PetSearch.createSearch({
+        url: '/pet-index.json',
+        say: function (txt) { try { appendMessage('pet', txt); } catch (e) { /* ignore */ } }
+    }) : null);
+
     function petReply(text) {
         var t = (text || '').trim();
         if (!t) return '你想说什么呀？';
         var ctxAns = siteAwareReply(t);
         if (ctxAns) return ctxAns;
 
-        if (INDEX_INTENT.test(t)) {
-            var idxAns = indexReply(t);
+        if (SEARCH && SEARCH.matches(t)) {
+            var idxAns = SEARCH.answer(t);
             if (idxAns) return idxAns;
         }
         for (var i = 0; i < REPLIES.length; i++) {
@@ -752,8 +666,17 @@ function splitTerms(q) {
         while (log.children.length > 10) log.removeChild(log.firstChild);
         log.scrollTop = log.scrollHeight;
         state.chatLog.push({ role: role, text: text });
-        state.chatLog = state.chatLog.slice(-10);
+        state.chatLog = state.chatLog.slice(-CONFIG.chat.maxMessages);
         save();
+    }
+
+    /* 只做持久化，渲染归 renderers 模块 */
+    function pushChatLog(role, text) {
+        try {
+            state.chatLog.push({ role: role, text: text });
+            state.chatLog = state.chatLog.slice(-CONFIG.chat.maxMessages);
+            save();
+        } catch (e) { /* ignore */ }
     }
 
     function renderChatLog() {
@@ -763,7 +686,7 @@ function splitTerms(q) {
         log.innerHTML = '';
         var list = state.chatLog.length ? state.chatLog : [{
             role: 'pet',
-            text: '我是大肥鱼，一只住在博客里的鲸鱼娘。点我、拖我、喂我白米饭，或者随便和我聊聊～'
+            text: persona('about', '点我、拖我，或者随便和我聊聊～')
         }];
         list.forEach(function (m) {
             var msg = document.createElement('div');
@@ -806,168 +729,212 @@ function splitTerms(q) {
         }
     }
 
-    /* ==================== 互动 ==================== */
-    /* 特殊日子：只读本地日期，零成本 */
-    function specialDay() {
-        var d = new Date();
-        var md = (d.getMonth() + 1) + '-' + d.getDate();
-        var table = {
-            '1-1': ['新年快乐！今年也一起写下去吧。', 'stretch'],
-            '2-14': ['今天……要不要多陪我一会儿？', 'click-shy'],
-            '3-8': ['节日快乐！今天可以少写点代码。', 'click-happy'],
-            '5-1': ['劳动节，但你还是打开博客了。', 'yawn'],
-            '6-1': ['儿童节！我可以多要一碗米饭吗？', 'bubbles'],
-            '10-1': ['假期快乐，出去走走也不错。', 'stretch'],
-            '12-24': ['平安夜，角落里也有点热闹。', 'click-wave'],
-            '12-25': ['圣诞快乐！有我的礼物吗？', 'click-happy'],
-            '12-31': ['今年最后一天了，辛苦啦。', 'hum']
-        };
-        return table[md] || null;
+    /* 左侧动作按钮：鼠标穿过角色与按钮之间的缝隙时不能立刻消失，
+     * 否则"还没点中就没了"。宽限时长与淡入淡出都在 config 的 click 组里。
+     */
+    function bindActionsHover() {
+        if (!root) return;
+        var ui = CONFIG.ui || {};
+        var delay = ui.actionHideDelayMs;
+        if (delay == null) delay = 320;
+
+        root.addEventListener('pointerenter', function () {
+            clearTimeout(actionsTimer);
+            root.classList.add('is-actions');
+        });
+        root.addEventListener('pointerleave', function () {
+            clearTimeout(actionsTimer);
+            actionsTimer = setTimeout(function () {
+                if (!root.classList.contains('is-chatting')) root.classList.remove('is-actions');
+            }, delay);
+        });
     }
 
+    /* ==================== 互动 ==================== */
     function greet() {
         // 同一个会话里只打招呼一次：整页跳转时会重新执行 build()，否则每次都被当成"第一次见"
         try {
-            if (sessionStorage.getItem('dp-greeted')) return;
-            sessionStorage.setItem('dp-greeted', '1');
+            if (PetAdapter.sessionGet('dp-greeted')) return;
+            PetAdapter.sessionSet('dp-greeted', '1');
         } catch (e) { /* 隐私模式下忽略 */ }
         if (greeted) return;
         greeted = true;
         var hour = new Date().getHours();
         var line;
-        if (hour < 6) line = pick(['这么晚还在写代码？要注意休息呀。', '夜深了，我陪你把这最后一点写完。']);
-        else if (hour < 12) line = pick(['早上好，今天先解决最重要的一件事。', '早安，要不要去算法库复习一道？']);
-        else if (hour < 18) line = pick(['下午好，写累了吗？摸摸鱼吧。', '今天也一起把问题拆小一点。']);
-        else line = pick(['晚上好，今天辛苦了。', '晚上适合复盘，把今天的卡点记下来吧。']);
-        var special = specialDay();
-        var dayAct = { '1-1': 'fireworks', '2-14': 'bow', '3-8': 'cheerful', '5-1': 'stretch',
-                       '6-1': 'dance', '10-1': 'fireworks', '12-24': 'santa', '12-25': 'santa', '12-31': 'dance' };
-        if (special) {
-            line = special[0];
-            if (director) setTimeout(function () { director.cue(dayAct[(new Date().getMonth() + 1) + '-' + new Date().getDate()] || special[1]); }, 1600);
+        var greetSlot = hour < 6 ? 'late' : hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+        var greetLines = (personaSrc().greet || {})[greetSlot] || [];
+        line = greetLines.length ? pick(greetLines) : '你好呀。';
+        var special = null;
+        try { special = PetAdapter.holiday && PetAdapter.holiday(); } catch (e) { /* ignore */ }
+        if (special && special.line) {
+            line = special.line;
+            if (director && special.act) setTimeout(function () { director.cue(special.act); }, 1600);
         } else if ((state.streak || 1) === 1) {
-            line = (wasSeenBefore ? '又见面了。' : '第一次见？我是大肥鱼，住在这个角落里。');
+            line = wasSeenBefore ? persona('again', '又见面了。') : persona('firstMeet', '第一次见？');
         } else if ((state.streak || 1) >= 7) {
-            line = '你来第 ' + state.streak + ' 天啦，我已经认得你了。';
+            line = fillNum(persona('streak7', '你来第 {n} 天啦。'), state.streak);
         } else if ((state.streak || 1) >= 3) {
-            line = '又见面了，第 ' + state.streak + ' 天。';
+            line = fillNum(persona('streak3', '又见面了，第 {n} 天。'), state.streak);
         }
         setTimeout(function () { say(line, 5200); }, 1200);
     }
 
     /* 按点击位置分区：脑袋 / 身体 / 尾巴，反应不同 */
-    function zoneAt(el, clientY) {
-        if (!el) return 'body';
-        var r = el.getBoundingClientRect();
-        if (!r.height) return 'body';
-        var y = (clientY - r.top) / r.height;
-        if (y < 0.42) return 'head';
-        if (y > 0.86) return 'tail';
+    /* ==================== 点击分区（几何） ====================
+     * 归一化坐标，与角色图尺寸无关；换图只改这里。
+     * 子分区先命中，父分区兜底。
+     */
+    var ZONES = (PetConfig && PetConfig.zones && PetConfig.zones.length) ? PetConfig.zones : ZONES_DEFAULT;
+    var ZONES_DEFAULT = [
+        { id: 'head', yMin: 0.00, yMax: 0.42 },
+        { id: 'head.crown', yMin: 0.00, yMax: 0.14, parent: 'head' },
+        { id: 'head.cheek', yMin: 0.14, yMax: 0.30, parent: 'head' },
+        { id: 'head.face', yMin: 0.30, yMax: 0.42, parent: 'head' },
+        { id: 'body', yMin: 0.42, yMax: 0.86 },
+        { id: 'body.fin', yMin: 0.55, yMax: 0.74, xMin: 0.00, xMax: 0.35, parent: 'body' },
+        { id: 'body.belly', yMin: 0.60, yMax: 0.86, xMin: 0.35, xMax: 0.70, parent: 'body' },
+        { id: 'tail', yMin: 0.86, yMax: 1.00 }
+    ];
+
+    /* ==================== 分区 → 反应（语义） ====================
+     * 没写的分区自动回落父级；全都没有就落回 body。
+     * say 可写成数组，元素可为 { t: '台词', w: 权重 }。
+     */
+    var ZONE_MAP_DEFAULT = {
+        'head': { act: 'click-shy', say: ['别戳脑袋啦。', '脑袋不能乱摸……'] },
+        'head.crown': { act: 'click-wave', say: ['头上有东西吗？'] },
+        'head.cheek': { act: 'click-shy', say: [{ t: '痒。', w: 2 }, { t: '别捏脸。' }] },
+        'head.face': { act: 'click-shy' },
+        'body': { act: 'click-happy', say: ['干嘛呀。'] },
+        'body.fin': { act: 'spin', say: ['鳍不能拽。'] },
+        'body.belly': { act: 'click-happy', say: [{ t: '肚子软软的。', w: 2 }, { t: '别戳肚子啦。' }] },
+        'tail': { act: 'tail', say: [{ t: '尾巴会痒的。', w: 2 }, { t: '甩你一脸水。' }] }
+    };
+
+    var ZONE_MAP = (PetConfig && PetConfig.zoneReactions) ? PetConfig.zoneReactions : ZONE_MAP_DEFAULT;
+
+    var ZONES_ENGINE = (PetZones ? PetZones.createZones({
+        zones: ZONES, map: ZONE_MAP, fallback: 'body'
+    }) : null);
+
+    var zoneDebug = /(?:^|[?&])pet-zone=1/.test(location.search);
+
+    /* 调试层：把分区边界画在角色上，顺带显示当前指针所在分区 */
+    function mountZoneDebug() {
+        if (!zoneDebug || !root || !ZONES_ENGINE) return;
+        var ch = root.querySelector('.dp-character');
+        if (!ch || ch.querySelector('.dp-zone-debug')) return;
+        var layer = document.createElement('div');
+        layer.className = 'dp-zone-debug';
+        ZONES.forEach(function (z) {
+            var band = document.createElement('div');
+            band.className = 'dp-zone-band';
+            band.dataset.zone = z.id;
+            band.style.top = (z.yMin * 100) + '%';
+            band.style.height = ((z.yMax - z.yMin) * 100) + '%';
+            if (z.xMin != null) { band.style.left = (z.xMin * 100) + '%'; band.style.width = ((z.xMax - z.xMin) * 100) + '%'; }
+            band.title = z.id;
+            layer.appendChild(band);
+        });
+        ch.appendChild(layer);
+        ch.addEventListener('pointermove', function (e) {
+            var r = ch.getBoundingClientRect();
+            var y = (e.clientY - r.top) / r.height;
+            var x = (e.clientX - r.left) / r.width;
+            var id = ZONES_ENGINE.hit(y, x) || '-';
+            root.setAttribute('data-zone', id);
+        });
+    }
+
+    /* 把 CONFIG.shadow 写进 CSS 变量；改这里比改样式表更直观 */
+    function applyShadow() {
+        try {
+            if (!root || !CONFIG.shadow) return;
+            var s = CONFIG.shadow;
+            var sx = (s.offsetX != null ? s.offsetX : (s.x || 0));
+            root.style.setProperty('--dp-shadow-x', sx + 'px');
+            var sy = (s.offsetY != null ? s.offsetY : (s.y == null ? 10 : s.y));
+            root.style.setProperty('--dp-shadow-y', sy + 'px');
+            root.style.setProperty('--dp-shadow-blur', (s.blur == null ? 14 : s.blur) + 'px');
+            if (s.color) root.style.setProperty('--dp-shadow-color', s.color);
+        } catch (e) { /* ignore */ }
+    }
+
+    function zoneAt(el, clientY, clientX) {
+        try {
+            var r = el.getBoundingClientRect();
+            if (!r.height) return 'body';
+            var y = (clientY - r.top) / r.height;
+            var x = clientX == null ? 0.5 : (clientX - r.left) / r.width;
+            if (ZONES_ENGINE) {
+                var id = ZONES_ENGINE.hit(Math.min(0.999, Math.max(0, y)), x);
+                if (id) return id;
+            }
+        } catch (e) { /* ignore */ }
         return 'body';
     }
 
+    /* 点击反应：分区 → 映射 → 动作 + 台词。台词在 ZONE_MAP，改词不用动这里 */
     function doPet(zone) {
-        zone = zone || 'body';
-        state.petCount += 1;
-        save();
-        resetIdle();
-        if (!director) { say('嘿嘿。', 2600); return; }
-
-        var reactDelay = 0;   // 点击要求即时，去掉拟人延迟
-
-        if (state.petCount % 6 === 0) {
-            if (director) director.cue('sad');
-            say('呜……一直戳会痛的。', 3000);
-            return;
-        }
-
-        if (zone === 'head') {
-            setTimeout(function () { burst('💫', 2); }, reactDelay);
-            setTimeout(function () { if (director) director.cue('click-shy'); }, reactDelay);
-            say(pick([
-                '别戳脑袋啦……头发会乱的。',
-                '唔！头、头顶不可以乱摸。',
-                '戳一下会变笨的，真的。',
-                '呜……发饰歪了。'
-            ]), 3200);
-            return;
-        }
-        if (zone === 'tail') {
-            setTimeout(function () { burst('🫧', 3); }, reactDelay);
-            setTimeout(function () { if (director) director.cue('tail'); }, reactDelay);
-            say(pick([
-                '尾巴不是玩具！……不过可以再摸一下。',
-                '鲸鱼的尾巴很有力的，小心哦。',
-                '拍、拍水！'
-            ]), 3200);
-            return;
-        }
-
-        burst('💙', 2);
-        director.cue(pick(ANIMATIONS.clicks));
-        if (Math.random() < 0.7) say(pick(['嘿嘿，再摸一下。', '尾巴会自己摇起来。', '今天也要加油呀。', '喜欢你认真写代码的样子。']), 3200);
+        if (!director) return;
+        var hit = (PetZones && ZONES_ENGINE) ? ZONES_ENGINE.resolve(zone) : null;
+        var rule = hit && hit.rule ? hit.rule : null;
+        var act = (rule && rule.act) || 'click-happy';
+        director.cue(act);
+        var line = rule ? ZONES_ENGINE.pickSay(rule) : null;
+        if (line) say(line, 3400);
+        if (/^head/.test(zone)) burst('\u{1F497}', 3);
+        else if (zone === 'tail') burst('\u{1F4A7}', 3);
+        try { state.petCount = (state.petCount || 0) + 1; save(); } catch (e) { /* ignore */ }
     }
 
     function doFeed() {
         resetIdle();
         burst('🍚', 3);
         if (director) director.cue(ANIMATIONS.events.eat);
-        say(pick(['谢谢！白米饭最香了。', '呜哇，是热腾腾的米饭！好感度上升。', '吃饱了才有力量陪你写代码。']), 3600);
+        say(say_line('feed', '谢谢！'), 3600);
     }
 
-    /* ==================== 状态机 ====================
-     * 状态只描述三件事：能用哪些动作、待多久、什么条件下出去。
-     * 这样动作池之间不会互相串味（sleepy 里永远不会播 click-wave）。
+    /* ==================== 状态 ====================
+     * 宠物只提供"有哪些状态、每个状态播什么"；进入哪个状态由站点层决定。
+     * 词汇表在 config/states，判断在 PetAdapter.pickState。
      */
-    var MACHINE = {
-        state: 'idle',
-        since: 0,
+    var STATES = (PetConfig && PetConfig.states && Object.keys(PetConfig.states).length)
+        ? PetConfig.states
+        : { idle: { clip: 'idle', pool: ['look'] } };
 
-        pools: {
-            // 平时：有点闲，东张西望、哼歌、甩尾、吐泡泡
-            idle: ['look', 'hum', 'tail', 'bubbles', 'stretch', 'cheerful', 'magic', 'puzzle'],
-            // 你在读文章：陪着，不打扰，偶尔抬头
-            reading: ['hum', 'look', 'doze', 'think', 'code'],
-            // 深夜：安静、困
-            sleepy: ['yawn', 'doze', 'look', 'sad']
-        },
+    function stateId() {
+        var ctx = null;
+        try { ctx = siteContext(); } catch (e) { /* ignore */ }
+        try { return (PetAdapter && PetAdapter.pickState && PetAdapter.pickState(ctx)) || 'idle'; }
+        catch (e) { return 'idle'; }
+    }
 
-        /** 根据一次上下文快照决定"应该是哪个状态" */
-        want: function (ctx) {
-            if (!ctx) return 'idle';
-            if (ctx.dark && ctx.hour >= 22) return 'sleepy';
-            if (ctx.hour < 6) return 'sleepy';
-            if (ctx.page === 'post' && ctx.scroll > 0.12 && ctx.scroll < 0.92) return 'reading';
-            return 'idle';
-        },
+    function stateClips(id) {
+        var s = STATES[id] || STATES.idle;
+        var pool = (s && s.pool) || [];
+        return pool.length ? pool : (STATES.idle.pool || ['look']);
+    }
 
-        set: function (name) {
-            if (!this.pools[name] || name === this.state) return this.state;
-            this.state = name;
-            this.since = Date.now();
-            return name;
-        },
+    function idleClip() {
+        var s = STATES.idle;
+        return (s && s.clip) || 'idle';
+    }
 
-        /** 当前状态可用的动作 */
-        actions: function () {
-            return this.pools[this.state] || this.pools.idle;
-        }
-    };
+    function sleepyClip() {
+        var s = STATES.sleepy || STATES.idle;
+        return (s && s.clip) || 'sleep';
+    }
 
     /* ==================== 昼夜 ==================== */
     function isDark() {
-        var el = document.documentElement;
-        var theme = el.getAttribute('data-theme') || el.getAttribute('data-color');
-        if (theme) return theme === 'dark';
-        return el.classList.contains('dark') || document.body.classList.contains('dark');
+        return PetAdapter.isDark();
     }
 
     function categoriesForNow() {
-        // 每次掷动作前先按当前页面/时段校正状态，再返回该状态的动作池
-        var ctx = null;
-        try { ctx = siteContext(); } catch (e) { /* ignore */ }
-        MACHINE.set(MACHINE.want(ctx));
-        return [{ id: MACHINE.state, weight: 1, actions: MACHINE.actions() }];
+        // 状态由站点层挑，宠物只把该状态的片段池交回去
+        var id = stateId();
+        return [{ id: id, weight: 1, actions: stateClips(id) }];
     }
 
     function watchTheme() {
@@ -1019,41 +986,16 @@ function splitTerms(q) {
     var lastCtxAt = 0;
 
     function siteContext() {
-        var path = location.pathname;
-        var href = location.href;
-        var page = 'other';
-        if (/^\/\d{4}\/\d{2}\/\d{2}\//.test(path) || /\/archives\/\d+/.test(href)) page = 'post';
-        else if (path === '/' || path === '/index.html') page = 'home';
-
-        var tags = [];
-        try {
-            var nodes = document.querySelectorAll('.post-categories a, .post-tags a, .category a, .tag-cloud a, #article-container .tag a');
-            for (var i = 0; i < nodes.length && tags.length < 12; i++) {
-                var txt = (nodes[i].textContent || '').trim();
-                if (txt) tags.push(txt);
-            }
-        } catch (e) { /* ignore */ }
-
-        var scroll = 0;
-        try {
-            var h = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-            scroll = clamp((window.scrollY || 0) / h, 0, 1);
-        } catch (e) { /* ignore */ }
-
-        var words = 0;
-        try {
-            var body = document.querySelector('#article-container') || document.querySelector('.post-content');
-            if (body) words = (body.textContent || '').replace(/\s/g, '').length;
-        } catch (e) { /* ignore */ }
-
-        var comments = 0;
-        try {
-            comments = document.querySelectorAll('#post-comment .comment, #post-comment .vcomment, .comment-list > li').length;
-        } catch (e) { /* ignore */ }
-
+        var type = PetAdapter.pageType();
         return {
-            page: page, tags: tags, scroll: scroll, words: words, comments: comments,
-            dark: isDark(), hour: new Date().getHours()
+            page: type === 'post' ? 'post' : (type === 'home' ? 'home' : 'other'),
+            type: type,
+            tags: PetAdapter.tags(),
+            words: PetAdapter.wordCount(),
+            comments: PetAdapter.commentCount(),
+            scroll: PetAdapter.scrollRatio(),
+            dark: PetAdapter.isDark(),
+            hour: new Date().getHours()
         };
     }
 
@@ -1067,67 +1009,30 @@ function splitTerms(q) {
     }
 
     /* 命中的第一条规则当场说话 + 做个动作；每分钟最多一次，避免变吵 */
+    /* ==================== 上下文规则（数据） ====================
+     * 顺序即优先级；when/say/act 可以是值，也可以是 (ctx, env) => 值。
+     * 站点相关的判断全部通过 PetAdapter 提供的字段进行，宠物不认识 DOM。
+     */
+    /* 规则表属于站点层：见 adapter.js 的 CTX_RULES */
+    var CTX_RULES = (PetAdapter && PetAdapter.rules) || [];
+
+    var ctxEngine = (PetRules ? PetRules.createEngine(CTX_RULES, { cooldown: CONFIG.rules.defaultCooldown }) : null);
+
     function runContext() {
         if (!director || chatOpen || document.hidden || root.classList.contains('is-hidden') || root.classList.contains('is-dragging')) return;
-        var now = Date.now();
-        if (now - lastCtxAt < 25000) return;
+        if (!ctxEngine) return;
 
         var c;
         try { c = siteContext(); } catch (e) { return; }
-        var sayLine = null, actName = null;
+        if (!c) return;
 
-        if (c.page === 'post' && matchTag(c.tags, ['unity', 'c#', 'csharp'])) {
-            sayLine = '这篇和 Unity 有关……题库里有对应的知识点。';
-        } else if (c.page === 'post' && matchTag(c.tags, ['算法', 'leetcode', '数据结构'])) {
-            sayLine = '算法文！要不要顺便去复习一道？';
-        } else if (c.page === 'post' && c.scroll > 0.85) {
-            sayLine = pick(['读完了呀，辛苦了。', '看到底了，有收获吗？']);
-            actName = 'look';
-        } else if (c.page === 'post' && c.words > 4000) {
-            sayLine = pick(['这篇够看一阵的，慢慢读。', '长文，我先趴着陪你。']);
-            actName = pick(['think', 'doze']);
-        } else if (c.page === 'post' && c.words > 0 && c.words < 600) {
-            sayLine = pick(['很短的一篇，一下就看完了吧。', '这种长度刚好，一口气读完。']);
-            actName = 'look';
-        } else if (c.page === 'post' && c.comments === 0 && c.scroll > 0.5) {
-            sayLine = '还没人说话……我可以先当第一个。';
-        } else if (c.page === 'post' && c.comments >= 3) {
-            sayLine = '这么热闹，看来这篇戳到大家了。';
-            actName = 'hum';
-        } else if (c.page === 'home' && c.dark && c.hour >= 23) {
-            sayLine = '这么晚还在首页翻……早点睡吧。';
-            actName = 'doze';
-        } else if (c.page === 'home' && (state.streak || 1) >= 3) {
-            sayLine = '又见面了，第 ' + state.streak + ' 天。';
-        }
-
-        // 从底部滚回顶部：一次"重新开始读"的动作
-        if (!sayLine && c.page === 'post' && lastScrollSeen > 0.8 && c.scroll < 0.25) {
-            sayLine = pick(['回到开头了，要再读一遍吗？', '又回到上面了。']);
-            actName = 'stretch';
-        }
+        var env = { streak: state.streak, lastScroll: lastScrollSeen, adapter: PetAdapter };
         lastScrollSeen = c.scroll;
 
-        // 标签 / 分类页：读标题接一句
-        if (!sayLine && /^\/(tags|categories)\//.test(window.location.pathname)) {
-            var h1 = document.querySelector('#page h1, .page-title, #article-container h1');
-            var name = h1 ? (h1.textContent || '').trim().slice(0, 20) : ''; if (!name) { var mm = decodeURIComponent(location.pathname).match(/\/(?:tags|categories)\/([^/]+)\/?$/); if (mm) name = mm[1].replace(/\.html$/, ''); }
-            if (name) {
-                sayLine = pick(['「' + name + '」这个标签下的东西不少。', '在翻「' + name + '」相关的内容呀。']);
-                actName = 'hum';
-            }
-        }
-
-        // 404：站内唯一能确定"她找不到东西"的页面
-        if (!sayLine && (c.page === 'other') && /404/.test(window.location.pathname)) {
-            sayLine = pick(['这里什么都没有……你是不是点错链接了？', '迷路了？首页在这边。']);
-            actName = pick(['puzzle', 'angry']);
-        }
-
-        if (!sayLine) return;
-        lastCtxAt = now;
-        say(sayLine, 4200);
-        if (actName) director.cue(actName);
+        var hit = ctxEngine.evaluate(c, env);
+        if (!hit || !hit.say) return;
+        say(hit.say, 4200);
+        if (hit.act) director.cue(hit.act);
     }
 
     /* 滚动只在停下来 700ms 后算一次，passive，不阻塞滚动 */
@@ -1158,8 +1063,7 @@ function splitTerms(q) {
         var wasBottom = false;
 
         function ratio() {
-            var h = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-            return clamp((window.scrollY || 0) / h, 0, 1);
+            return PetAdapter.scrollRatio();
         }
 
         window.addEventListener('scroll', function () {
@@ -1193,11 +1097,8 @@ function splitTerms(q) {
     /* 标签 / 分类页：换页后直接说一句，不经过上下文链 */
     function tagPageLine() {
         try {
-            if (!director || chatOpen || document.hidden || root.classList.contains('is-dragging')) return;
-            var path = decodeURIComponent(location.pathname);
-            var m = path.match(/\/(?:tags|categories)\/([^/]+?)\/?(?:\.html)?$/);
-            if (!m) return;
-            var name = m[1].replace(/\.html$/, '');
+            if (!director || chatOpen || document.hidden) return;
+            var name = PetAdapter.tagFromPath();
             if (!name) return;
             say('在翻「' + name + '」相关的内容呀。', 3600);
             director.cue('hum');
@@ -1239,7 +1140,7 @@ function splitTerms(q) {
         ch.addEventListener('pointermove', function (e) {
             if (!dragging) return;
             var dx = e.clientX - start.x, dy = e.clientY - start.y;
-            if (!moved && Math.abs(dx) + Math.abs(dy) < 6) return;
+            if (!moved && Math.abs(dx) + Math.abs(dy) < CONFIG.drag.thresholdPx) return;
             moved = true;
             root.style.left = (start.left + dx) + 'px';
             root.style.top = (start.top + dy) + 'px';
@@ -1291,37 +1192,59 @@ function splitTerms(q) {
         window.addEventListener('orientationchange', applyPos);
     }
 
+    /* 把配置里的尺寸和配色写到 CSS 变量上，样式表只负责默认值 */
+    function applyTheme() {
+        if (!root) return;
+        var size = CONFIG.size || {};
+        if (size.width) root.style.setProperty('--dp-w', size.width + 'px');
+        if (size.height) root.style.setProperty('--dp-h', size.height + 'px');
+        var ui = CONFIG.ui || {};
+        if (ui.actionFadeMs) root.style.setProperty('--dp-actions-fade', ui.actionFadeMs + 'ms');
+        var off = CONFIG.offset || {};
+        if (off.x) root.style.setProperty('--dp-ox', off.x + 'px');
+        if (off.y) root.style.setProperty('--dp-oy', off.y + 'px');
+        var accent = CONFIG.accent || {};
+        if (accent.primary) root.style.setProperty('--dp-primary', accent.primary);
+        if (accent.primary2) root.style.setProperty('--dp-primary-2', accent.primary2);
+        if (accent.cyan) root.style.setProperty('--dp-cyan', accent.cyan);
+    }
+
     /* ==================== 构建 ==================== */
     function build() {
-        if (document.getElementById('deepseek-pet')) return;
+        var hostId = CONFIG.hostId || 'deepseek-pet';
+        if (document.getElementById(hostId)) return;
         root = document.createElement('div');
-        root.id = 'deepseek-pet';
+        root.id = hostId;
+        root.className = 'dp-root';
+        applyTheme();
+        var petName = persona('name', CONFIG.name || '宠物');
         root.innerHTML = [
             '<div class="dp-bubble" role="status" aria-live="polite"></div>',
-            '<div class="dp-chat" role="dialog" aria-label="和大肥鱼聊天">',
-            '  <div class="dp-chat-head"><span>大肥鱼</span><button type="button" class="dp-chat-close" data-dp-action="chat" aria-label="关闭对话">×</button></div>',
+            '<div class="dp-chat" role="dialog" aria-label="和' + petName + '聊天">',
+            '  <div class="dp-chat-head"><span>' + petName + '</span><button type="button" class="dp-chat-close" data-dp-action="chat" aria-label="关闭对话">×</button></div>',
             '  <div class="dp-chat-log"></div>',
             '  <form class="dp-chat-form">',
-            '    <input type="text" class="dp-chat-input" maxlength="60" placeholder="和大肥鱼说点什么…" aria-label="输入消息">',
+            '    <input type="text" class="dp-chat-input" maxlength="60" placeholder="和' + petName + '说点什么…" aria-label="输入消息">',
             '    <button type="submit" class="dp-chat-send">发送</button>',
             '  </form>',
-            '  <p class="dp-credit">动画素材 <a href="https://github.com/PC2005-cloud/dsh-pet" target="_blank" rel="noopener nofollow">dsh-pet</a> · 角色 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener nofollow">CC BY-NC-SA 4.0</a></p>',
+            '  <p class="dp-credit">' + persona('credit', '动画素材 <a href="https://github.com/PC2005-cloud/dsh-pet" target="_blank" rel="noopener nofollow">dsh-pet</a> · 角色 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener nofollow">CC BY-NC-SA 4.0</a>') + '</p>',
             '</div>',
             '<div class="dp-actions">',
-            '  <button type="button" class="dp-action" data-dp-action="feed" title="喂白米饭" aria-label="喂白米饭">🍚</button>',
+            '  <button type="button" class="dp-action" data-dp-action="feed" title="投喂" aria-label="投喂">' + icon('feed', '🍚') + '</button>',
             '  <button type="button" class="dp-action" data-dp-action="chat" title="聊天" aria-label="聊天">💬</button>',
-            '  <button type="button" class="dp-action" data-dp-action="hide" title="隐藏" aria-label="隐藏大肥鱼">×</button>',
+            '  <button type="button" class="dp-action" data-dp-action="hide" title="隐藏" aria-label="隐藏' + petName + '">×</button>',
             '</div>',
-            '<div class="dp-character" data-dp-action="pet" role="button" tabindex="0" aria-label="摸摸大肥鱼">',
+            '<div class="dp-character" data-dp-action="pet" role="button" tabindex="0" aria-label="摸摸' + petName + '">',
             '  <div class="dp-shadow"></div>',
             '  <div class="dp-body">',
-            '    <div class="dp-stage"><img class="dp-art" src="' + CONFIG.image + '" alt="鲸鱼娘大肥鱼" draggable="false"></div>',
+            '    <div class="dp-stage"><img class="dp-art" src="' + CONFIG.image + '" alt="' + persona('alt', petName) + '" draggable="false"></div>',
             '  </div>',
             '</div>',
-            '<div class="dp-restore" data-dp-action="restore" title="召回大肥鱼" role="button" tabindex="0">🐳</div>'
+            '<div class="dp-restore" data-dp-action="restore" title="召回' + petName + '" role="button" tabindex="0">' + icon('restore', '🐳') + '</div>'
         ].join('');
         document.body.appendChild(root);
 
+        bindActionsHover();
         root.classList.toggle('is-hidden', state.hidden);
         applyPos();
         updateStats();
@@ -1384,6 +1307,39 @@ function splitTerms(q) {
 
         // 鼠标靠近：偶尔抬头看一眼（有冷却，别烦人）
         var lastGlance = 0;
+
+        /* 首帧闸：换上前台后要等视频真的开始出帧，静帧才让位。
+           否则用户会看到"抓起来一动不动"——素材首帧与待机几乎一样，
+           视频还没解码完时看起来就像没反应。 */
+        var frameTimer = null;
+        function gateStatic() {
+            var st = root && root.querySelector('.dp-stage');
+            if (!st || !player || !player.ready) return;
+            if (frameTimer) { clearTimeout(frameTimer); frameTimer = null; }
+
+            function check() {
+                frameTimer = null;
+                if (!player || !player.ready()) {
+                    st.classList.add('is-static');
+                    frameTimer = setTimeout(check, 60);
+                    return;
+                }
+                st.classList.remove('is-static');
+            }
+
+            if (!player.ready()) st.classList.add('is-static');
+            check();
+        }
+
+        if (player) {
+            var rawPlay = player.play;
+            player.play = function () {
+                var r = rawPlay.apply(player, arguments);
+                gateStatic();
+                return r;
+            };
+        }
+
         resetIdle();
         greet();
     }
@@ -1411,12 +1367,19 @@ function splitTerms(q) {
         player = createPlayer(stage);
         director = createDirector(player, {
             isPaused: function () { return chatOpen || document.hidden || root.classList.contains('is-dragging'); },
-            categories: categoriesForNow
+            onState: function (name) {
+                if (name === 'drag-up') {
+                    try { player.warm('drag-hold'); } catch (e) { /* ignore */ }
+                }
+            },
+            categories: categoriesForNow,
+            idleClip: idleClip,
+            sleepyClip: sleepyClip
         });
         director.start();
 
         // 首屏之后空闲时预取索引：40KB(gzip)，换来第一次提问就能同步回答
-        setTimeout(function () { try { loadPetIndex(); } catch (e) { /* ignore */ } }, 5000);
+        setTimeout(function () { try { if (SEARCH) SEARCH.ensure(); } catch (e) { /* ignore */ } }, CONFIG.search.preloadDelayMs);
         preloadClips();
         setTimeout(function () {
             if (!player) return;
@@ -1425,7 +1388,7 @@ function splitTerms(q) {
     }
 
     function init() {
-        if (root && document.getElementById('deepseek-pet')) {
+        if (root && document.getElementById(CONFIG.hostId || 'deepseek-pet')) {
             applyPos();
             lastCtxAt = 0;                       // 换页了，重置冷却
             setTimeout(function () {
@@ -1436,6 +1399,10 @@ function splitTerms(q) {
         }
         load();
         build();
+        mountSpeech();
+        mountActions();
+        mountZoneDebug();
+        applyShadow();
     }
 
     if (document.readyState === 'loading') {
@@ -1446,4 +1413,16 @@ function splitTerms(q) {
     document.addEventListener('pjax:complete', init);
     document.addEventListener('pjax:success', init);   // 有些主题只发这个
     document.addEventListener('pjax:end', init);
-})();
+
+    /* 内核装配：脚本在 body 末尾，此时 DOM 已就绪 */
+    try { mountSpeech(); }
+    catch (e) { window.__petBootErr = String((e && e.stack) || e); console.error('[pet] mountSpeech failed', e); }
+
+/* 调试入口：控制台与冒烟测试用；其余模块保持在模块作用域内 */
+window.PetKernel = window.PetKernel || PetKernel;
+window.PetSearch = PetSearch;
+window.PetZones = PetZones;
+window.PetDebug = window.PetDebug || {};
+window.PetDebug[CONFIG.hostId || 'deepseek-pet'] = {
+    kernel: KERNEL, search: PetSearch, zones: PetZones, adapter: PetAdapter, config: CONFIG
+};

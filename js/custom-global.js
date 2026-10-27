@@ -1,12 +1,13 @@
 // --------------------- 鲸鱼娘桌宠加载 ----------------------
 (function () {
     function ensurePet() {
-        if (document.getElementById('deepseek-pet-script')) return;
-        const script = document.createElement('script');
-        script.id = 'deepseek-pet-script';
-        script.src = '/js/deepseek-pet.js';
-        script.defer = true;
-        document.body.appendChild(script);
+        // 宠物是一个 ES 模块入口，内部依赖由 import 自动解析
+        if (document.querySelector('script[data-pet-module]')) return;
+        const s = document.createElement('script');
+        s.type = 'module';
+        s.src = '/js/pet/index.js?v=4db0052b';
+        s.dataset.petModule = '1';
+        document.body.appendChild(s);
     }
 
     if (document.readyState === 'loading') {
