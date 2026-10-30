@@ -1,0 +1,976 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity客户端高级笔试题卷（一）· 数据驱动版 | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="倒计时就绪             01:00:00             设置计时时长时分秒取消确定             开始暂停重置                               1-59 题（单选&#x2F;多选）已完成 0&#x2F;59             1ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9A">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unity客户端高级笔试题卷（一）· 数据驱动版">
+<meta property="og:url" content="https://jokevallen.github.io/questions/UnityClient/Senior/senior1_data_v1.0.0.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="倒计时就绪             01:00:00             设置计时时长时分秒取消确定             开始暂停重置                               1-59 题（单选&#x2F;多选）已完成 0&#x2F;59             1ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-09-28T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-28T12:58:31.711Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="编程,学习,生活,哲理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/questions/UnityClient/Senior/senior1_data_v1.0.0.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity客户端高级笔试题卷（一）· 数据驱动版',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><link rel="stylesheet" href="/css/hexo-timer.css"><link rel="stylesheet" href="/css/hexo-answer-sheet.css"><link rel="stylesheet" href="/css/knowledge.css"><link rel="stylesheet" href="/css/algo-review.css"><link rel="stylesheet" href="/css/deepseek-pet.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">156</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/mock/"><i class="fa-fw fas fa-user-tie"></i><span> 求职模拟</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div><div class="menus_item"><a class="site-page" href="/stats/"><i class="fa-fw fas fa-chart-line"></i><span> 统计</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/mock/"><i class="fa-fw fas fa-user-tie"></i><span> 求职模拟</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div><div class="menus_item"><a class="site-page" href="/stats/"><i class="fa-fw fas fa-chart-line"></i><span> 统计</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">Unity客户端高级笔试题卷（一）· 数据驱动版</h1></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="page-title">Unity客户端高级笔试题卷（一）· 数据驱动版</div><div class="container" id="article-container"><div class="exam-paper" id="exam-paper-legacy-senior1_v1.0.0" data-shuffle-questions="true" data-shuffle-options="true">
+        <div class="hexo-timer is-sticky pos-middle-left" id="exam-timer-legacy-senior1_v1.0.0" data-mode="down" data-initial="3600" data-persist="false" data-auto="false" data-custom="true" style="position:fixed;z-index:9999;top:50%;left:2vw;transform:translateY(-50%);">
+            <div class="timer-header"><span class="timer-label">倒计时</span><div class="timer-header-right"><span class="timer-status">就绪</span><button class="timer-settings" type="button" title="设置时间"><i class="fas fa-cog"></i></button><button class="timer-toggle" type="button" aria-expanded="true" title="收起/展开"><i class="fas fa-chevron-down"></i></button></div></div>
+            <div class="timer-display">01:00:00</div>
+            <div class="timer-settings-panel" hidden><div class="timer-settings-title">设置计时时长</div><div class="timer-settings-row"><label>时<input class="timer-set-h" type="number" min="0" max="99" inputmode="numeric" value="1"></label><label>分<input class="timer-set-m" type="number" min="0" max="59" inputmode="numeric" value="0"></label><label>秒<input class="timer-set-s" type="number" min="0" max="59" inputmode="numeric" value="0"></label></div><div class="timer-settings-actions"><button type="button" class="timer-btn timer-settings-cancel">取消</button><button type="button" class="timer-btn timer-settings-apply">确定</button></div></div>
+            <div class="timer-controls"><button class="timer-btn timer-start" type="button">开始</button><button class="timer-btn timer-pause" type="button" disabled>暂停</button><button class="timer-btn timer-reset" type="button">重置</button></div>
+        </div>
+        <div class="hexo-answer-sheet is-sticky pos-middle-right cols-1" id="exam-sheet-legacy-senior1_v1.0.0" data-answers="B|C|A|D|B|A|C|B|D|A|C|B|A|D|B|A|C|D|A|B|D|C|A|B|D|C|A|B|C|A|D|B|C|A|D|B|A|C|B|D|A|C|B|D|C|A|D|B|C|A|D|B|C|D|A|B|C|D|A" data-multiple="00000000000000000000000000000000000000000000000000000000000" data-persist="false" data-opts="ABCD" style="width:15%;height:60%;position:fixed;z-index:9999;top:50%;right:2vw;transform:translateY(-50%);">
+            <div class="as-header"><div class="as-header-top"><span class="as-label">1-59 题（单选/多选）</span><button type="button" class="as-toggle" aria-expanded="true" title="收起/展开"><i class="fas fa-chevron-down"></i></button></div><div class="as-header-bottom"><span class="as-progress">已完成 0/59</span></div></div>
+            <div class="as-body"><div class="as-row" data-index="0" data-original-index="0" data-multiple="0"><span class="as-num">1</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="1" data-original-index="1" data-multiple="0"><span class="as-num">2</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="2" data-original-index="2" data-multiple="0"><span class="as-num">3</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="3" data-original-index="3" data-multiple="0"><span class="as-num">4</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="4" data-original-index="4" data-multiple="0"><span class="as-num">5</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="5" data-original-index="5" data-multiple="0"><span class="as-num">6</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="6" data-original-index="6" data-multiple="0"><span class="as-num">7</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="7" data-original-index="7" data-multiple="0"><span class="as-num">8</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="8" data-original-index="8" data-multiple="0"><span class="as-num">9</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="9" data-original-index="9" data-multiple="0"><span class="as-num">10</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="10" data-original-index="10" data-multiple="0"><span class="as-num">11</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="11" data-original-index="11" data-multiple="0"><span class="as-num">12</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="12" data-original-index="12" data-multiple="0"><span class="as-num">13</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="13" data-original-index="13" data-multiple="0"><span class="as-num">14</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="14" data-original-index="14" data-multiple="0"><span class="as-num">15</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="15" data-original-index="15" data-multiple="0"><span class="as-num">16</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="16" data-original-index="16" data-multiple="0"><span class="as-num">17</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="17" data-original-index="17" data-multiple="0"><span class="as-num">18</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="18" data-original-index="18" data-multiple="0"><span class="as-num">19</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="19" data-original-index="19" data-multiple="0"><span class="as-num">20</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="20" data-original-index="20" data-multiple="0"><span class="as-num">21</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="21" data-original-index="21" data-multiple="0"><span class="as-num">22</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="22" data-original-index="22" data-multiple="0"><span class="as-num">23</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="23" data-original-index="23" data-multiple="0"><span class="as-num">24</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="24" data-original-index="24" data-multiple="0"><span class="as-num">25</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="25" data-original-index="25" data-multiple="0"><span class="as-num">26</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="26" data-original-index="26" data-multiple="0"><span class="as-num">27</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="27" data-original-index="27" data-multiple="0"><span class="as-num">28</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="28" data-original-index="28" data-multiple="0"><span class="as-num">29</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="29" data-original-index="29" data-multiple="0"><span class="as-num">30</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="30" data-original-index="30" data-multiple="0"><span class="as-num">31</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="31" data-original-index="31" data-multiple="0"><span class="as-num">32</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="32" data-original-index="32" data-multiple="0"><span class="as-num">33</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="33" data-original-index="33" data-multiple="0"><span class="as-num">34</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="34" data-original-index="34" data-multiple="0"><span class="as-num">35</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="35" data-original-index="35" data-multiple="0"><span class="as-num">36</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="36" data-original-index="36" data-multiple="0"><span class="as-num">37</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="37" data-original-index="37" data-multiple="0"><span class="as-num">38</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="38" data-original-index="38" data-multiple="0"><span class="as-num">39</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="39" data-original-index="39" data-multiple="0"><span class="as-num">40</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="40" data-original-index="40" data-multiple="0"><span class="as-num">41</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="41" data-original-index="41" data-multiple="0"><span class="as-num">42</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="42" data-original-index="42" data-multiple="0"><span class="as-num">43</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="43" data-original-index="43" data-multiple="0"><span class="as-num">44</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="44" data-original-index="44" data-multiple="0"><span class="as-num">45</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="45" data-original-index="45" data-multiple="0"><span class="as-num">46</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="46" data-original-index="46" data-multiple="0"><span class="as-num">47</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="47" data-original-index="47" data-multiple="0"><span class="as-num">48</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="48" data-original-index="48" data-multiple="0"><span class="as-num">49</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="49" data-original-index="49" data-multiple="0"><span class="as-num">50</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="50" data-original-index="50" data-multiple="0"><span class="as-num">51</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="51" data-original-index="51" data-multiple="0"><span class="as-num">52</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="52" data-original-index="52" data-multiple="0"><span class="as-num">53</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="53" data-original-index="53" data-multiple="0"><span class="as-num">54</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="54" data-original-index="54" data-multiple="0"><span class="as-num">55</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="55" data-original-index="55" data-multiple="0"><span class="as-num">56</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="56" data-original-index="56" data-multiple="0"><span class="as-num">57</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="57" data-original-index="57" data-multiple="0"><span class="as-num">58</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="58" data-original-index="58" data-multiple="0"><span class="as-num">59</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div></div>
+            <div class="as-controls"><button type="button" class="as-btn as-grade">批卷</button><button type="button" class="as-btn as-reset">重置</button></div>
+            <div class="as-result" style="display:none;"></div>
+        </div>
+        <div class="ep-head"><p class="ep-kicker">_v1.0.0.</p><h1>Unity客户端高级笔试题卷（一）</h1><p>由旧 Markdown 试卷自动迁移生成</p></div>
+        <section class="ep-stats" id="ep-stats-legacy-senior1_v1.0.0" data-paper-id="legacy-senior1_v1.0.0">
+            <div class="ep-stats-head"><h3>答题记录</h3><button type="button" class="ep-stats-clear">清空记录</button></div>
+            <div class="ep-stats-body">暂无记录，完成一次批卷后会生成。</div>
+        </section>
+        <h2 class="ep-section-title">一、客观题</h2><article class="ep-question" data-q-index="0" data-question-id="q1" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q1"><h3><span class="ep-number">1.</span> 在 Unity 中使用 `async void` 的主要风险是？
+A. 一定无法编译　B. 异常无法被外层 try/catch 捕获　C. 只能用于 UI 事件　D. 不支持 await</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一定无法编译</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">异常无法被外层 try/catch 捕获</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只能用于 UI 事件</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不支持 await</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">`async void` 没有可等待的 Task，异常会直接抛到 SynchronizationContext，调用方无法用普通 try/catch 捕获。Unity 中应优先使用 `async UniTaskVoid` 或 `async Task`。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq1&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq1%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%9C%A8%20Unity%20%E4%B8%AD%E4%BD%BF%E7%94%A8%20%60async%20void%60%20%E7%9A%84%E4%B8%BB%E8%A6%81%E9%A3%8E%E9%99%A9%E6%98%AF%EF%BC%9F%0AA.%20%E4%B8%80%E5%AE%9A%E6%97%A0%E6%B3%95%E7%BC%96%E8%AF%91%E3%80%80B.%20%E5%BC%82%E5%B8%B8%E6%97%A0%E6%B3%95%E8%A2%AB%E5%A4%96%E5%B1%82%20try%2Fcatch%20%E6%8D%95%E8%8E%B7%E3%80%80C.%20%E5%8F%AA%E8%83%BD%E7%94%A8%E4%BA%8E%20UI%20%E4%BA%8B%E4%BB%B6%E3%80%80D.%20%E4%B8%8D%E6%94%AF%E6%8C%81%20await%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="1" data-question-id="q2" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q2"><h3><span class="ep-number">2.</span> 关于 `Span&lt;T&gt;`，下列说法正确的是？
+A. 可以存入 `List&lt;Span&lt;int&gt;&gt;`　B. 可以跨 `await` 保存　C. 是 ref struct，不能装箱、不能作为类字段　D. 只能用于只读字符串</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">可以存入 `List&lt;Span&lt;int&gt;&gt;`</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">可以跨 `await` 保存</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">是 ref struct，不能装箱、不能作为类字段</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只能用于只读字符串</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">`Span&lt;T&gt;` 是 `ref struct`，只能存在于栈上，不能装箱、不能作为类字段、不能跨 `await` 保留。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq2&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq2%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%20%60Span%3CT%3E%60%EF%BC%8C%E4%B8%8B%E5%88%97%E8%AF%B4%E6%B3%95%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%98%AF%EF%BC%9F%0AA.%20%E5%8F%AF%E4%BB%A5%E5%AD%98%E5%85%A5%20%60List%3CSpan%3Cint%3E%3E%60%E3%80%80B.%20%E5%8F%AF%E4%BB%A5%E8%B7%A8%20%60await%60%20%E4%BF%9D%E5%AD%98%E3%80%80C.%20%E6%98%AF%20ref%20struct%EF%BC%8C%E4%B8%8D%E8%83%BD%E8%A3%85%E7%AE%B1%E3%80%81%E4%B8%8D%E8%83%BD%E4%BD%9C%E4%B8%BA%E7%B1%BB%E5%AD%97%E6%AE%B5%E3%80%80D.%20%E5%8F%AA%E8%83%BD%E7%94%A8%E4%BA%8E%E5%8F%AA%E8%AF%BB%E5%AD%97%E7%AC%A6%E4%B8%B2%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="2" data-question-id="q3" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q3"><h3><span class="ep-number">3.</span> 把一个可变对象作为 `Dictionary` 的 key 后修改了参与 `GetHashCode` 的字段，最可能发生什么？
+A. 通常再也找不到该项　B. Dictionary 自动重新哈希　C. 一定立即抛异常　D. Dictionary 自动重新排序</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">通常再也找不到该项</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Dictionary 自动重新哈希</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">一定立即抛异常</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">Dictionary 自动重新排序</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">Dictionary 用哈希值定位桶。key 的哈希变化后，查找会去错误的桶，导致找不到原项。key 应使用不可变对象或稳定哈希。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq3&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq3%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%8A%8A%E4%B8%80%E4%B8%AA%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1%E4%BD%9C%E4%B8%BA%20%60Dictionary%60%20%E7%9A%84%20key%20%E5%90%8E%E4%BF%AE%E6%94%B9%E4%BA%86%E5%8F%82%E4%B8%8E%20%60GetHashCode%60%20%E7%9A%84%E5%AD%97%E6%AE%B5%EF%BC%8C%E6%9C%80%E5%8F%AF%E8%83%BD%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F%0AA.%20%E9%80%9A%E5%B8%B8%E5%86%8D%E4%B9%9F%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%A5%E9%A1%B9%E3%80%80B.%20Dictionary%20%E8%87%AA%E5%8A%A8%E9%87%8D%E6%96%B0%E5%93%88%E5%B8%8C%E3%80%80C.%20%E4%B8%80%E5%AE%9A%E7%AB%8B%E5%8D%B3%E6%8A%9B%E5%BC%82%E5%B8%B8%E3%80%80D.%20Dictionary%20%E8%87%AA%E5%8A%A8%E9%87%8D%E6%96%B0%E6%8E%92%E5%BA%8F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="3" data-question-id="q4" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q4"><h3><span class="ep-number">4.</span> 关于 `GC.Collect`，正确的做法是？
+A. 每帧调用　B. 只回收非托管内存　C. 会立刻释放所有引用对象　D. 强制回收可能造成卡顿，不应滥用</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">每帧调用</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只回收非托管内存</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">会立刻释放所有引用对象</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">强制回收可能造成卡顿，不应滥用</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">`GC.Collect` 触发完整回收，可能造成明显卡顿，且不会释放仍有引用的对象。应通过减少分配和对象池解决问题。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq4&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq4%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%20%60GC.Collect%60%EF%BC%8C%E6%AD%A3%E7%A1%AE%E7%9A%84%E5%81%9A%E6%B3%95%E6%98%AF%EF%BC%9F%0AA.%20%E6%AF%8F%E5%B8%A7%E8%B0%83%E7%94%A8%E3%80%80B.%20%E5%8F%AA%E5%9B%9E%E6%94%B6%E9%9D%9E%E6%89%98%E7%AE%A1%E5%86%85%E5%AD%98%E3%80%80C.%20%E4%BC%9A%E7%AB%8B%E5%88%BB%E9%87%8A%E6%94%BE%E6%89%80%E6%9C%89%E5%BC%95%E7%94%A8%E5%AF%B9%E8%B1%A1%E3%80%80D.%20%E5%BC%BA%E5%88%B6%E5%9B%9E%E6%94%B6%E5%8F%AF%E8%83%BD%E9%80%A0%E6%88%90%E5%8D%A1%E9%A1%BF%EF%BC%8C%E4%B8%8D%E5%BA%94%E6%BB%A5%E7%94%A8%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="4" data-question-id="q5" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q5"><h3><span class="ep-number">5.</span> 关于 `ValueTask`，下列说法正确的是？
+A. 可以任意多次 await　B. 一般只能消费一次，重复 await 可能异常　C. 不能返回结果　D. 一定比 Task 慢</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">可以任意多次 await</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">一般只能消费一次，重复 await 可能异常</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不能返回结果</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">一定比 Task 慢</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">`ValueTask` 是为减少分配设计的，通常只能 await 一次；多次 await 或保存后重复消费可能触发未定义行为。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq5&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq5%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%20%60ValueTask%60%EF%BC%8C%E4%B8%8B%E5%88%97%E8%AF%B4%E6%B3%95%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%98%AF%EF%BC%9F%0AA.%20%E5%8F%AF%E4%BB%A5%E4%BB%BB%E6%84%8F%E5%A4%9A%E6%AC%A1%20await%E3%80%80B.%20%E4%B8%80%E8%88%AC%E5%8F%AA%E8%83%BD%E6%B6%88%E8%B4%B9%E4%B8%80%E6%AC%A1%EF%BC%8C%E9%87%8D%E5%A4%8D%20await%20%E5%8F%AF%E8%83%BD%E5%BC%82%E5%B8%B8%E3%80%80C.%20%E4%B8%8D%E8%83%BD%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E3%80%80D.%20%E4%B8%80%E5%AE%9A%E6%AF%94%20Task%20%E6%85%A2%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="5" data-question-id="q6" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q6"><h3><span class="ep-number">6.</span> 将 `Expression&lt;Func&lt;int&gt;&gt;` 编译成委托后反复调用，与每次 `MethodInfo.Invoke` 相比通常？
+A. 编译后的委托调用更快　B. 一定更慢　C. 不支持参数　D. 不再依赖反射</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">编译后的委托调用更快</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">一定更慢</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不支持参数</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不再依赖反射</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">表达式树编译后生成委托，后续调用避免每次反射参数打包与安全检查，通常更快；但编译本身有成本，应缓存。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq6&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq6%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%B0%86%20%60Expression%3CFunc%3Cint%3E%3E%60%20%E7%BC%96%E8%AF%91%E6%88%90%E5%A7%94%E6%89%98%E5%90%8E%E5%8F%8D%E5%A4%8D%E8%B0%83%E7%94%A8%EF%BC%8C%E4%B8%8E%E6%AF%8F%E6%AC%A1%20%60MethodInfo.Invoke%60%20%E7%9B%B8%E6%AF%94%E9%80%9A%E5%B8%B8%EF%BC%9F%0AA.%20%E7%BC%96%E8%AF%91%E5%90%8E%E7%9A%84%E5%A7%94%E6%89%98%E8%B0%83%E7%94%A8%E6%9B%B4%E5%BF%AB%E3%80%80B.%20%E4%B8%80%E5%AE%9A%E6%9B%B4%E6%85%A2%E3%80%80C.%20%E4%B8%8D%E6%94%AF%E6%8C%81%E5%8F%82%E6%95%B0%E3%80%80D.%20%E4%B8%8D%E5%86%8D%E4%BE%9D%E8%B5%96%E5%8F%8D%E5%B0%84%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="6" data-question-id="q7" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q7"><h3><span class="ep-number">7.</span> `WeakReference&lt;T&gt;` 的主要用途是？
+A. 阻止对象被 GC 回收　B. 提供线程安全集合　C. 允许对象被回收并可检查是否存活　D. 存储值类型</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">阻止对象被 GC 回收</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">提供线程安全集合</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">允许对象被回收并可检查是否存活</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">存储值类型</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">弱引用不阻止 GC 回收目标对象，适合缓存、监听器表等场景；使用前需检查 `TryGetTarget`。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq7&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq7%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60WeakReference%3CT%3E%60%20%E7%9A%84%E4%B8%BB%E8%A6%81%E7%94%A8%E9%80%94%E6%98%AF%EF%BC%9F%0AA.%20%E9%98%BB%E6%AD%A2%E5%AF%B9%E8%B1%A1%E8%A2%AB%20GC%20%E5%9B%9E%E6%94%B6%E3%80%80B.%20%E6%8F%90%E4%BE%9B%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%9B%86%E5%90%88%E3%80%80C.%20%E5%85%81%E8%AE%B8%E5%AF%B9%E8%B1%A1%E8%A2%AB%E5%9B%9E%E6%94%B6%E5%B9%B6%E5%8F%AF%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%AD%98%E6%B4%BB%E3%80%80D.%20%E5%AD%98%E5%82%A8%E5%80%BC%E7%B1%BB%E5%9E%8B%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="7" data-question-id="q8" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q8"><h3><span class="ep-number">8.</span> `Interlocked.Increment` 的作用是？
+A. 加线程锁　B. 原子自增　C. 序列化对象　D. 反射调用</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">加线程锁</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">原子自增</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">序列化对象</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">反射调用</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">`Interlocked` 提供原子操作，适合无锁计数；它不能替代复杂临界区的锁。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq8&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq8%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60Interlocked.Increment%60%20%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%EF%BC%9F%0AA.%20%E5%8A%A0%E7%BA%BF%E7%A8%8B%E9%94%81%E3%80%80B.%20%E5%8E%9F%E5%AD%90%E8%87%AA%E5%A2%9E%E3%80%80C.%20%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%B9%E8%B1%A1%E3%80%80D.%20%E5%8F%8D%E5%B0%84%E8%B0%83%E7%94%A8%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="8" data-question-id="q9" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q9"><h3><span class="ep-number">9.</span> 一个类型实现了 `IAsyncDisposable`，正确释放方式是？
+A. 只能调用 `Dispose`　B. 必须阻塞等待　C. 不支持异步　D. 使用 `await using`</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">只能调用 `Dispose`</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">必须阻塞等待</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不支持异步</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">使用 `await using`</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">`await using` 会调用 `DisposeAsync`，适合异步释放资源；同步 `using` 只适用于 `IDisposable`。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq9&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq9%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%B8%80%E4%B8%AA%E7%B1%BB%E5%9E%8B%E5%AE%9E%E7%8E%B0%E4%BA%86%20%60IAsyncDisposable%60%EF%BC%8C%E6%AD%A3%E7%A1%AE%E9%87%8A%E6%94%BE%E6%96%B9%E5%BC%8F%E6%98%AF%EF%BC%9F%0AA.%20%E5%8F%AA%E8%83%BD%E8%B0%83%E7%94%A8%20%60Dispose%60%E3%80%80B.%20%E5%BF%85%E9%A1%BB%E9%98%BB%E5%A1%9E%E7%AD%89%E5%BE%85%E3%80%80C.%20%E4%B8%8D%E6%94%AF%E6%8C%81%E5%BC%82%E6%AD%A5%E3%80%80D.%20%E4%BD%BF%E7%94%A8%20%60await%20using%60%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="9" data-question-id="q10" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q10"><h3><span class="ep-number">10.</span> `string.Intern` 的作用是？
+A. 把字符串放入驻留池　B. 压缩字符串内容　C. 深拷贝字符串　D. 线程安全拼接</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">把字符串放入驻留池</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">压缩字符串内容</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">深拷贝字符串</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">线程安全拼接</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">`Intern` 返回驻留池中的字符串引用，适合少量高频固定字符串；滥用会增加驻留池压力且字符串永不回收。
+{% endhideBlock %}
+
+### Unity 引擎</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq10&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq10%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60string.Intern%60%20%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%EF%BC%9F%0AA.%20%E6%8A%8A%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%94%BE%E5%85%A5%E9%A9%BB%E7%95%99%E6%B1%A0%E3%80%80B.%20%E5%8E%8B%E7%BC%A9%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%86%85%E5%AE%B9%E3%80%80C.%20%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%80D.%20%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%8B%BC%E6%8E%A5%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="10" data-question-id="q11" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q11"><h3><span class="ep-number">11.</span> `Awake` 与 `OnEnable` 的通常执行顺序是？
+A. 随机　B. `OnEnable` 先于 `Awake`　C. `Awake` 先于 `OnEnable`　D. 只在 `Start` 之后</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">随机</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">`OnEnable` 先于 `Awake`</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">`Awake` 先于 `OnEnable`</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只在 `Start` 之后</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">对象激活时先调用 `Awake`，再调用 `OnEnable`；`Start` 在第一次 Update 前执行。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq11&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq11%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60Awake%60%20%E4%B8%8E%20%60OnEnable%60%20%E7%9A%84%E9%80%9A%E5%B8%B8%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E6%98%AF%EF%BC%9F%0AA.%20%E9%9A%8F%E6%9C%BA%E3%80%80B.%20%60OnEnable%60%20%E5%85%88%E4%BA%8E%20%60Awake%60%E3%80%80C.%20%60Awake%60%20%E5%85%88%E4%BA%8E%20%60OnEnable%60%E3%80%80D.%20%E5%8F%AA%E5%9C%A8%20%60Start%60%20%E4%B9%8B%E5%90%8E%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="11" data-question-id="q12" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q12"><h3><span class="ep-number">12.</span> `FixedUpdate` 的调用特点是？
+A. 每帧调用一次　B. 按固定时间步长调用，适合物理　C. 只在移动端调用　D. 专门用于 UI</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">每帧调用一次</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">按固定时间步长调用，适合物理</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只在移动端调用</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">专门用于 UI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">`FixedUpdate` 按 `fixedDeltaTime` 调用，物理计算应放在这里；渲染帧更新用 `Update`。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq12&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq12%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60FixedUpdate%60%20%E7%9A%84%E8%B0%83%E7%94%A8%E7%89%B9%E7%82%B9%E6%98%AF%EF%BC%9F%0AA.%20%E6%AF%8F%E5%B8%A7%E8%B0%83%E7%94%A8%E4%B8%80%E6%AC%A1%E3%80%80B.%20%E6%8C%89%E5%9B%BA%E5%AE%9A%E6%97%B6%E9%97%B4%E6%AD%A5%E9%95%BF%E8%B0%83%E7%94%A8%EF%BC%8C%E9%80%82%E5%90%88%E7%89%A9%E7%90%86%E3%80%80C.%20%E5%8F%AA%E5%9C%A8%E7%A7%BB%E5%8A%A8%E7%AB%AF%E8%B0%83%E7%94%A8%E3%80%80D.%20%E4%B8%93%E9%97%A8%E7%94%A8%E4%BA%8E%20UI%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="12" data-question-id="q13" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q13"><h3><span class="ep-number">13.</span> `DontDestroyOnLoad` 的作用是？
+A. 切换场景时保留对象　B. 立即销毁对象　C. 只保留一帧　D. 只对 UI 有效</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">切换场景时保留对象</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">立即销毁对象</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只保留一帧</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只对 UI 有效</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">该对象在场景切换时不会被销毁，常用于管理器、音频源等；需要自己处理重复实例和生命周期。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq13&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq13%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60DontDestroyOnLoad%60%20%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%EF%BC%9F%0AA.%20%E5%88%87%E6%8D%A2%E5%9C%BA%E6%99%AF%E6%97%B6%E4%BF%9D%E7%95%99%E5%AF%B9%E8%B1%A1%E3%80%80B.%20%E7%AB%8B%E5%8D%B3%E9%94%80%E6%AF%81%E5%AF%B9%E8%B1%A1%E3%80%80C.%20%E5%8F%AA%E4%BF%9D%E7%95%99%E4%B8%80%E5%B8%A7%E3%80%80D.%20%E5%8F%AA%E5%AF%B9%20UI%20%E6%9C%89%E6%95%88%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="13" data-question-id="q14" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q14"><h3><span class="ep-number">14.</span> 运行时直接修改 `ScriptableObject` 资产可能带来什么问题？
+A. 每次运行自动重置　B. 不能存数据　C. 只能存字符串　D. 在 Editor 中可能污染资产，需要运行时副本</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">每次运行自动重置</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">不能存数据</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只能存字符串</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">在 Editor 中可能污染资产，需要运行时副本</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">ScriptableObject 是资产，运行时修改可能写回 Editor 中的资产。需要只读配置时可在运行时 `Instantiate` 一份副本。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq14&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq14%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9%20%60ScriptableObject%60%20%E8%B5%84%E4%BA%A7%E5%8F%AF%E8%83%BD%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0AA.%20%E6%AF%8F%E6%AC%A1%E8%BF%90%E8%A1%8C%E8%87%AA%E5%8A%A8%E9%87%8D%E7%BD%AE%E3%80%80B.%20%E4%B8%8D%E8%83%BD%E5%AD%98%E6%95%B0%E6%8D%AE%E3%80%80C.%20%E5%8F%AA%E8%83%BD%E5%AD%98%E5%AD%97%E7%AC%A6%E4%B8%B2%E3%80%80D.%20%E5%9C%A8%20Editor%20%E4%B8%AD%E5%8F%AF%E8%83%BD%E6%B1%A1%E6%9F%93%E8%B5%84%E4%BA%A7%EF%BC%8C%E9%9C%80%E8%A6%81%E8%BF%90%E8%A1%8C%E6%97%B6%E5%89%AF%E6%9C%AC%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="14" data-question-id="q15" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q15"><h3><span class="ep-number">15.</span> 使用 Additive 加载场景后，`SetActiveScene` 主要影响什么？
+A. 自动卸载旧场景　B. 新实例化对象归属和光照设置　C. 不能同时加载多个场景　D. 只影响 UI</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">自动卸载旧场景</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">新实例化对象归属和光照设置</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不能同时加载多个场景</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只影响 UI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">活动场景决定新对象默认属于哪个场景，也影响光照与天空盒等设置；不会自动卸载其他场景。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq15&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq15%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BD%BF%E7%94%A8%20Additive%20%E5%8A%A0%E8%BD%BD%E5%9C%BA%E6%99%AF%E5%90%8E%EF%BC%8C%60SetActiveScene%60%20%E4%B8%BB%E8%A6%81%E5%BD%B1%E5%93%8D%E4%BB%80%E4%B9%88%EF%BC%9F%0AA.%20%E8%87%AA%E5%8A%A8%E5%8D%B8%E8%BD%BD%E6%97%A7%E5%9C%BA%E6%99%AF%E3%80%80B.%20%E6%96%B0%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%AF%B9%E8%B1%A1%E5%BD%92%E5%B1%9E%E5%92%8C%E5%85%89%E7%85%A7%E8%AE%BE%E7%BD%AE%E3%80%80C.%20%E4%B8%8D%E8%83%BD%E5%90%8C%E6%97%B6%E5%8A%A0%E8%BD%BD%E5%A4%9A%E4%B8%AA%E5%9C%BA%E6%99%AF%E3%80%80D.%20%E5%8F%AA%E5%BD%B1%E5%93%8D%20UI%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="15" data-question-id="q16" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q16"><h3><span class="ep-number">16.</span> `Physics.OverlapSphereNonAlloc` 相比 `OverlapSphere` 的优势是？
+A. 避免每次调用分配数组　B. 一定更快　C. 只能用于 2D　D. 不能指定 LayerMask</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">避免每次调用分配数组</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">一定更快</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只能用于 2D</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不能指定 LayerMask</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">NonAlloc 版本复用调用方传入的数组，减少 GC；结果数量以返回值表示，数组可能保留旧数据。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq16&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq16%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60Physics.OverlapSphereNonAlloc%60%20%E7%9B%B8%E6%AF%94%20%60OverlapSphere%60%20%E7%9A%84%E4%BC%98%E5%8A%BF%E6%98%AF%EF%BC%9F%0AA.%20%E9%81%BF%E5%85%8D%E6%AF%8F%E6%AC%A1%E8%B0%83%E7%94%A8%E5%88%86%E9%85%8D%E6%95%B0%E7%BB%84%E3%80%80B.%20%E4%B8%80%E5%AE%9A%E6%9B%B4%E5%BF%AB%E3%80%80C.%20%E5%8F%AA%E8%83%BD%E7%94%A8%E4%BA%8E%202D%E3%80%80D.%20%E4%B8%8D%E8%83%BD%E6%8C%87%E5%AE%9A%20LayerMask%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="16" data-question-id="q17" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q17"><h3><span class="ep-number">17.</span> Animator 的 `Culling Mode` 设置为 `Cull Completely` 时？
+A. 不可见时仍每帧更新　B. 只剔除阴影　C. 不可见时完全停止更新　D. 只对 UI 有效</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">不可见时仍每帧更新</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只剔除阴影</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不可见时完全停止更新</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只对 UI 有效</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">`Cull Completely` 会在不可见时完全停止动画更新，适合远处角色；但重新可见时需要正确恢复状态。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq17&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq17%0A%E9%A2%98%E5%B9%B2%EF%BC%9AAnimator%20%E7%9A%84%20%60Culling%20Mode%60%20%E8%AE%BE%E7%BD%AE%E4%B8%BA%20%60Cull%20Completely%60%20%E6%97%B6%EF%BC%9F%0AA.%20%E4%B8%8D%E5%8F%AF%E8%A7%81%E6%97%B6%E4%BB%8D%E6%AF%8F%E5%B8%A7%E6%9B%B4%E6%96%B0%E3%80%80B.%20%E5%8F%AA%E5%89%94%E9%99%A4%E9%98%B4%E5%BD%B1%E3%80%80C.%20%E4%B8%8D%E5%8F%AF%E8%A7%81%E6%97%B6%E5%AE%8C%E5%85%A8%E5%81%9C%E6%AD%A2%E6%9B%B4%E6%96%B0%E3%80%80D.%20%E5%8F%AA%E5%AF%B9%20UI%20%E6%9C%89%E6%95%88%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="17" data-question-id="q18" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q18"><h3><span class="ep-number">18.</span> `SceneManager.LoadSceneAsync` 设置 `allowSceneActivation = false` 后？
+A. 立即激活场景　B. 无法加载　C. 只加载 UI　D. 加载到约 0.9 后等待激活</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">立即激活场景</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">无法加载</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只加载 UI</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">加载到约 0.9 后等待激活</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">异步加载进度到约 0.9 后会停住，等待 `allowSceneActivation = true`；常用于加载界面与进度条。
+{% endhideBlock %}
+
+### UI / UGUI</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq18&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq18%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60SceneManager.LoadSceneAsync%60%20%E8%AE%BE%E7%BD%AE%20%60allowSceneActivation%20%3D%20false%60%20%E5%90%8E%EF%BC%9F%0AA.%20%E7%AB%8B%E5%8D%B3%E6%BF%80%E6%B4%BB%E5%9C%BA%E6%99%AF%E3%80%80B.%20%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E3%80%80C.%20%E5%8F%AA%E5%8A%A0%E8%BD%BD%20UI%E3%80%80D.%20%E5%8A%A0%E8%BD%BD%E5%88%B0%E7%BA%A6%200.9%20%E5%90%8E%E7%AD%89%E5%BE%85%E6%BF%80%E6%B4%BB%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="18" data-question-id="q19" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q19"><h3><span class="ep-number">19.</span> 关于 Canvas 重建，下列说法正确的是？
+A. 一个 Canvas 下图形变化可能触发批次重建　B. 只重建单个 Image　C. 不影响性能　D. 只影响布局</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一个 Canvas 下图形变化可能触发批次重建</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只重建单个 Image</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不影响性能</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只影响布局</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">Canvas 负责管理批次，子元素脏标记会触发 Canvas 批次重建；把动态 UI 拆到独立 Canvas 可缩小影响范围。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq19&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq19%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%20Canvas%20%E9%87%8D%E5%BB%BA%EF%BC%8C%E4%B8%8B%E5%88%97%E8%AF%B4%E6%B3%95%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%98%AF%EF%BC%9F%0AA.%20%E4%B8%80%E4%B8%AA%20Canvas%20%E4%B8%8B%E5%9B%BE%E5%BD%A2%E5%8F%98%E5%8C%96%E5%8F%AF%E8%83%BD%E8%A7%A6%E5%8F%91%E6%89%B9%E6%AC%A1%E9%87%8D%E5%BB%BA%E3%80%80B.%20%E5%8F%AA%E9%87%8D%E5%BB%BA%E5%8D%95%E4%B8%AA%20Image%E3%80%80C.%20%E4%B8%8D%E5%BD%B1%E5%93%8D%E6%80%A7%E8%83%BD%E3%80%80D.%20%E5%8F%AA%E5%BD%B1%E5%93%8D%E5%B8%83%E5%B1%80%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="19" data-question-id="q20" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q20"><h3><span class="ep-number">20.</span> 大量静态 UI 与频繁变化的动态 UI 应如何组织？
+A. 放在同一个 Canvas　B. 拆分到不同 Canvas　C. 增加更多 Mask　D. 每帧 SetActive</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">放在同一个 Canvas</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">拆分到不同 Canvas</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">增加更多 Mask</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">每帧 SetActive</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">独立 Canvas 可以把重建范围限制在动态部分，避免静态 UI 被反复重建。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq20&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq20%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%A4%A7%E9%87%8F%E9%9D%99%E6%80%81%20UI%20%E4%B8%8E%E9%A2%91%E7%B9%81%E5%8F%98%E5%8C%96%E7%9A%84%E5%8A%A8%E6%80%81%20UI%20%E5%BA%94%E5%A6%82%E4%BD%95%E7%BB%84%E7%BB%87%EF%BC%9F%0AA.%20%E6%94%BE%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%20Canvas%E3%80%80B.%20%E6%8B%86%E5%88%86%E5%88%B0%E4%B8%8D%E5%90%8C%20Canvas%E3%80%80C.%20%E5%A2%9E%E5%8A%A0%E6%9B%B4%E5%A4%9A%20Mask%E3%80%80D.%20%E6%AF%8F%E5%B8%A7%20SetActive%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="20" data-question-id="q21" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q21"><h3><span class="ep-number">21.</span> `RectMask2D` 与 `Mask` 的性能关系通常是？
+A. Mask 更轻　B. 完全一样　C. RectMask2D 支持异形裁剪　D. RectMask2D 通常更轻，只支持矩形</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Mask 更轻</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">完全一样</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">RectMask2D 支持异形裁剪</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">RectMask2D 通常更轻，只支持矩形</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">RectMask2D 不依赖 Stencil，通常更轻；Mask 支持 Sprite Alpha 异形裁剪，但会增加渲染状态切换。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq21&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq21%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60RectMask2D%60%20%E4%B8%8E%20%60Mask%60%20%E7%9A%84%E6%80%A7%E8%83%BD%E5%85%B3%E7%B3%BB%E9%80%9A%E5%B8%B8%E6%98%AF%EF%BC%9F%0AA.%20Mask%20%E6%9B%B4%E8%BD%BB%E3%80%80B.%20%E5%AE%8C%E5%85%A8%E4%B8%80%E6%A0%B7%E3%80%80C.%20RectMask2D%20%E6%94%AF%E6%8C%81%E5%BC%82%E5%BD%A2%E8%A3%81%E5%89%AA%E3%80%80D.%20RectMask2D%20%E9%80%9A%E5%B8%B8%E6%9B%B4%E8%BD%BB%EF%BC%8C%E5%8F%AA%E6%94%AF%E6%8C%81%E7%9F%A9%E5%BD%A2%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="21" data-question-id="q22" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q22"><h3><span class="ep-number">22.</span> `ContentSizeFitter` 与 `LayoutGroup` 互相依赖时最可能出现？
+A. 自动优化　B. 性能提升　C. 反复布局重建　D. 只影响文本</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">自动优化</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">性能提升</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">反复布局重建</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只影响文本</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">父物体根据子物体尺寸撑开，子物体又依赖父物体排列，容易形成多轮 Layout Rebuild，甚至抖动。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq22&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq22%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60ContentSizeFitter%60%20%E4%B8%8E%20%60LayoutGroup%60%20%E4%BA%92%E7%9B%B8%E4%BE%9D%E8%B5%96%E6%97%B6%E6%9C%80%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%EF%BC%9F%0AA.%20%E8%87%AA%E5%8A%A8%E4%BC%98%E5%8C%96%E3%80%80B.%20%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87%E3%80%80C.%20%E5%8F%8D%E5%A4%8D%E5%B8%83%E5%B1%80%E9%87%8D%E5%BB%BA%E3%80%80D.%20%E5%8F%AA%E5%BD%B1%E5%93%8D%E6%96%87%E6%9C%AC%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="22" data-question-id="q23" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q23"><h3><span class="ep-number">23.</span> 数据量很大的 ScrollRect 列表应优先采用？
+A. 虚拟滚动与对象池　B. 一次性实例化全部 Item　C. 每帧重建布局　D. 禁用 Mask</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">虚拟滚动与对象池</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">一次性实例化全部 Item</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每帧重建布局</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">禁用 Mask</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">虚拟滚动只创建可视区域附近的单元格，滚动时复用，避免大量 GameObject 与布局计算。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq23&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq23%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%95%B0%E6%8D%AE%E9%87%8F%E5%BE%88%E5%A4%A7%E7%9A%84%20ScrollRect%20%E5%88%97%E8%A1%A8%E5%BA%94%E4%BC%98%E5%85%88%E9%87%87%E7%94%A8%EF%BC%9F%0AA.%20%E8%99%9A%E6%8B%9F%E6%BB%9A%E5%8A%A8%E4%B8%8E%E5%AF%B9%E8%B1%A1%E6%B1%A0%E3%80%80B.%20%E4%B8%80%E6%AC%A1%E6%80%A7%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%85%A8%E9%83%A8%20Item%E3%80%80C.%20%E6%AF%8F%E5%B8%A7%E9%87%8D%E5%BB%BA%E5%B8%83%E5%B1%80%E3%80%80D.%20%E7%A6%81%E7%94%A8%20Mask%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="23" data-question-id="q24" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q24"><h3><span class="ep-number">24.</span> TMP 动态字体图集扩容时可能带来？
+A. 无成本　B. CPU 峰值和图集重建　C. 只在 Editor 发生　D. 只影响音频</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">无成本</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">CPU 峰值和图集重建</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只在 Editor 发生</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只影响音频</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">新增字形会触发图集纹理扩容与重建，可能造成尖峰。应预生成常用字符集并配置 Fallback。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq24&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq24%0A%E9%A2%98%E5%B9%B2%EF%BC%9ATMP%20%E5%8A%A8%E6%80%81%E5%AD%97%E4%BD%93%E5%9B%BE%E9%9B%86%E6%89%A9%E5%AE%B9%E6%97%B6%E5%8F%AF%E8%83%BD%E5%B8%A6%E6%9D%A5%EF%BC%9F%0AA.%20%E6%97%A0%E6%88%90%E6%9C%AC%E3%80%80B.%20CPU%20%E5%B3%B0%E5%80%BC%E5%92%8C%E5%9B%BE%E9%9B%86%E9%87%8D%E5%BB%BA%E3%80%80C.%20%E5%8F%AA%E5%9C%A8%20Editor%20%E5%8F%91%E7%94%9F%E3%80%80D.%20%E5%8F%AA%E5%BD%B1%E5%93%8D%E9%9F%B3%E9%A2%91%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="24" data-question-id="q25" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q25"><h3><span class="ep-number">25.</span> CanvasScaler 的 `Scale With Screen Size` 模式主要用于？
+A. 固定物理尺寸　B. 完全不缩放　C. 只处理刘海屏　D. 按参考分辨率缩放 UI</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">固定物理尺寸</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">完全不缩放</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只处理刘海屏</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">按参考分辨率缩放 UI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">该模式根据参考分辨率和 Match 参数缩放 Canvas，适合多数移动端 UI；刘海屏仍需 SafeArea。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq25&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq25%0A%E9%A2%98%E5%B9%B2%EF%BC%9ACanvasScaler%20%E7%9A%84%20%60Scale%20With%20Screen%20Size%60%20%E6%A8%A1%E5%BC%8F%E4%B8%BB%E8%A6%81%E7%94%A8%E4%BA%8E%EF%BC%9F%0AA.%20%E5%9B%BA%E5%AE%9A%E7%89%A9%E7%90%86%E5%B0%BA%E5%AF%B8%E3%80%80B.%20%E5%AE%8C%E5%85%A8%E4%B8%8D%E7%BC%A9%E6%94%BE%E3%80%80C.%20%E5%8F%AA%E5%A4%84%E7%90%86%E5%88%98%E6%B5%B7%E5%B1%8F%E3%80%80D.%20%E6%8C%89%E5%8F%82%E8%80%83%E5%88%86%E8%BE%A8%E7%8E%87%E7%BC%A9%E6%94%BE%20UI%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="25" data-question-id="q26" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q26"><h3><span class="ep-number">26.</span> 优化 GraphicRaycaster 的常见做法是？
+A. 所有元素开启 raycastTarget　B. 增加更多 Canvas　C. 关闭装饰元素的 raycastTarget　D. 每帧重建布局</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">所有元素开启 raycastTarget</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">增加更多 Canvas</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">关闭装饰元素的 raycastTarget</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">每帧重建布局</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">只有真正需要响应点击的 UI 才开启 raycastTarget，可显著减少射线检测与排序开销。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq26&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq26%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BC%98%E5%8C%96%20GraphicRaycaster%20%E7%9A%84%E5%B8%B8%E8%A7%81%E5%81%9A%E6%B3%95%E6%98%AF%EF%BC%9F%0AA.%20%E6%89%80%E6%9C%89%E5%85%83%E7%B4%A0%E5%BC%80%E5%90%AF%20raycastTarget%E3%80%80B.%20%E5%A2%9E%E5%8A%A0%E6%9B%B4%E5%A4%9A%20Canvas%E3%80%80C.%20%E5%85%B3%E9%97%AD%E8%A3%85%E9%A5%B0%E5%85%83%E7%B4%A0%E7%9A%84%20raycastTarget%E3%80%80D.%20%E6%AF%8F%E5%B8%A7%E9%87%8D%E5%BB%BA%E5%B8%83%E5%B1%80%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="26" data-question-id="q27" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q27"><h3><span class="ep-number">27.</span> `CanvasGroup.blocksRaycasts = false` 的效果是？
+A. 组内元素不接收射线　B. 视觉上隐藏　C. 禁用动画　D. 销毁对象</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">组内元素不接收射线</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">视觉上隐藏</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">禁用动画</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">销毁对象</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">它只控制射线检测，不改变显示；隐藏需要改 alpha 或 SetActive。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq27&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq27%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%60CanvasGroup.blocksRaycasts%20%3D%20false%60%20%E7%9A%84%E6%95%88%E6%9E%9C%E6%98%AF%EF%BC%9F%0AA.%20%E7%BB%84%E5%86%85%E5%85%83%E7%B4%A0%E4%B8%8D%E6%8E%A5%E6%94%B6%E5%B0%84%E7%BA%BF%E3%80%80B.%20%E8%A7%86%E8%A7%89%E4%B8%8A%E9%9A%90%E8%97%8F%E3%80%80C.%20%E7%A6%81%E7%94%A8%E5%8A%A8%E7%94%BB%E3%80%80D.%20%E9%94%80%E6%AF%81%E5%AF%B9%E8%B1%A1%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="27" data-question-id="q28" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q28"><h3><span class="ep-number">28.</span> EventSystem 当前选中对象丢失时，较合理的处理是？
+A. 重启场景　B. 检查并重新 `SetSelectedGameObject`　C. 清空 Canvas　D. 关闭 Raycaster</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">重启场景</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">检查并重新 `SetSelectedGameObject`</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">清空 Canvas</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">关闭 Raycaster</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">选中对象可能因销毁或失活丢失，应在界面切换后显式设置默认选中项，保证手柄/键盘导航。
+{% endhideBlock %}
+
+### 资源与热更</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq28&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq28%0A%E9%A2%98%E5%B9%B2%EF%BC%9AEventSystem%20%E5%BD%93%E5%89%8D%E9%80%89%E4%B8%AD%E5%AF%B9%E8%B1%A1%E4%B8%A2%E5%A4%B1%E6%97%B6%EF%BC%8C%E8%BE%83%E5%90%88%E7%90%86%E7%9A%84%E5%A4%84%E7%90%86%E6%98%AF%EF%BC%9F%0AA.%20%E9%87%8D%E5%90%AF%E5%9C%BA%E6%99%AF%E3%80%80B.%20%E6%A3%80%E6%9F%A5%E5%B9%B6%E9%87%8D%E6%96%B0%20%60SetSelectedGameObject%60%E3%80%80C.%20%E6%B8%85%E7%A9%BA%20Canvas%E3%80%80D.%20%E5%85%B3%E9%97%AD%20Raycaster%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="28" data-question-id="q29" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q29"><h3><span class="ep-number">29.</span> Addressables 释放资源句柄应使用？
+A. `Destroy(handle)`　B. 只调用 `Resources.UnloadUnusedAssets`　C. `Addressables.Release(handle)`　D. `GC.Collect`</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">`Destroy(handle)`</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只调用 `Resources.UnloadUnusedAssets`</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">`Addressables.Release(handle)`</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">`GC.Collect`</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">`Addressables.Release` 减少引用计数；计数归零后资源才可能卸载。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq29&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq29%0A%E9%A2%98%E5%B9%B2%EF%BC%9AAddressables%20%E9%87%8A%E6%94%BE%E8%B5%84%E6%BA%90%E5%8F%A5%E6%9F%84%E5%BA%94%E4%BD%BF%E7%94%A8%EF%BC%9F%0AA.%20%60Destroy(handle)%60%E3%80%80B.%20%E5%8F%AA%E8%B0%83%E7%94%A8%20%60Resources.UnloadUnusedAssets%60%E3%80%80C.%20%60Addressables.Release(handle)%60%E3%80%80D.%20%60GC.Collect%60%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="29" data-question-id="q30" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q30"><h3><span class="ep-number">30.</span> 通过 `Addressables.InstantiateAsync` 创建的实例应如何释放？
+A. `Addressables.ReleaseInstance(go)`　B. 只 `Destroy(go)`　C. 只 `Release(handle)` 就足够　D. 不需要释放</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">`Addressables.ReleaseInstance(go)`</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只 `Destroy(go)`</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只 `Release(handle)` 就足够</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不需要释放</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">实例需要 `ReleaseInstance` 才能正确归还实例与引用计数；只 Destroy 可能造成计数残留。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq30&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq30%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E9%80%9A%E8%BF%87%20%60Addressables.InstantiateAsync%60%20%E5%88%9B%E5%BB%BA%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%BA%94%E5%A6%82%E4%BD%95%E9%87%8A%E6%94%BE%EF%BC%9F%0AA.%20%60Addressables.ReleaseInstance(go)%60%E3%80%80B.%20%E5%8F%AA%20%60Destroy(go)%60%E3%80%80C.%20%E5%8F%AA%20%60Release(handle)%60%20%E5%B0%B1%E8%B6%B3%E5%A4%9F%E3%80%80D.%20%E4%B8%8D%E9%9C%80%E8%A6%81%E9%87%8A%E6%94%BE%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="30" data-question-id="q31" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q31"><h3><span class="ep-number">31.</span> AssetBundle 调用 `Unload(true)` 的风险是？
+A. 一定安全　B. 只卸载依赖　C. 不释放内存　D. 可能卸载正在使用的资源</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一定安全</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只卸载依赖</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不释放内存</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">可能卸载正在使用的资源</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">`Unload(true)` 会销毁已从该包加载的 Asset 对象，若仍被场景引用会变成 Missing。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq31&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq31%0A%E9%A2%98%E5%B9%B2%EF%BC%9AAssetBundle%20%E8%B0%83%E7%94%A8%20%60Unload(true)%60%20%E7%9A%84%E9%A3%8E%E9%99%A9%E6%98%AF%EF%BC%9F%0AA.%20%E4%B8%80%E5%AE%9A%E5%AE%89%E5%85%A8%E3%80%80B.%20%E5%8F%AA%E5%8D%B8%E8%BD%BD%E4%BE%9D%E8%B5%96%E3%80%80C.%20%E4%B8%8D%E9%87%8A%E6%94%BE%E5%86%85%E5%AD%98%E3%80%80D.%20%E5%8F%AF%E8%83%BD%E5%8D%B8%E8%BD%BD%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8%E7%9A%84%E8%B5%84%E6%BA%90%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="31" data-question-id="q32" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q32"><h3><span class="ep-number">32.</span> Sprite 被重复打包进多个 AssetBundle 的常见原因是？
+A. 图集太大　B. 精灵同时被单独引用又被图集包含　C. 没有 Mipmap　D. 使用 ASTC</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">图集太大</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">精灵同时被单独引用又被图集包含</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">没有 Mipmap</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">使用 ASTC</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">资源同时被单独引用和图集包含时，打包器可能在不同包中各打一份，造成冗余。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq32&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq32%0A%E9%A2%98%E5%B9%B2%EF%BC%9ASprite%20%E8%A2%AB%E9%87%8D%E5%A4%8D%E6%89%93%E5%8C%85%E8%BF%9B%E5%A4%9A%E4%B8%AA%20AssetBundle%20%E7%9A%84%E5%B8%B8%E8%A7%81%E5%8E%9F%E5%9B%A0%E6%98%AF%EF%BC%9F%0AA.%20%E5%9B%BE%E9%9B%86%E5%A4%AA%E5%A4%A7%E3%80%80B.%20%E7%B2%BE%E7%81%B5%E5%90%8C%E6%97%B6%E8%A2%AB%E5%8D%95%E7%8B%AC%E5%BC%95%E7%94%A8%E5%8F%88%E8%A2%AB%E5%9B%BE%E9%9B%86%E5%8C%85%E5%90%AB%E3%80%80C.%20%E6%B2%A1%E6%9C%89%20Mipmap%E3%80%80D.%20%E4%BD%BF%E7%94%A8%20ASTC%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="32" data-question-id="q33" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q33"><h3><span class="ep-number">33.</span> 纹理开启 `Read/Write` 的主要影响是？
+A. 减少内存　B. 提升压缩率　C. 增加一份 CPU 内存副本　D. 只影响 UI</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">减少内存</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">提升压缩率</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">增加一份 CPU 内存副本</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只影响 UI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">Read/Write 允许 CPU 访问纹理，但会保留额外内存副本；不需要时关闭。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq33&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq33%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E7%BA%B9%E7%90%86%E5%BC%80%E5%90%AF%20%60Read%2FWrite%60%20%E7%9A%84%E4%B8%BB%E8%A6%81%E5%BD%B1%E5%93%8D%E6%98%AF%EF%BC%9F%0AA.%20%E5%87%8F%E5%B0%91%E5%86%85%E5%AD%98%E3%80%80B.%20%E6%8F%90%E5%8D%87%E5%8E%8B%E7%BC%A9%E7%8E%87%E3%80%80C.%20%E5%A2%9E%E5%8A%A0%E4%B8%80%E4%BB%BD%20CPU%20%E5%86%85%E5%AD%98%E5%89%AF%E6%9C%AC%E3%80%80D.%20%E5%8F%AA%E5%BD%B1%E5%93%8D%20UI%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="33" data-question-id="q34" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q34"><h3><span class="ep-number">34.</span> 短促、高频的 UI 音效最适合的 Load Type 是？
+A. Decompress On Load　B. Streaming　C. Compressed In Memory　D. 三者无差别</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Decompress On Load</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Streaming</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">Compressed In Memory</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">三者无差别</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">短音效解压后常驻内存，播放时 CPU 开销低；长音乐才用 Streaming。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq34&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq34%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E7%9F%AD%E4%BF%83%E3%80%81%E9%AB%98%E9%A2%91%E7%9A%84%20UI%20%E9%9F%B3%E6%95%88%E6%9C%80%E9%80%82%E5%90%88%E7%9A%84%20Load%20Type%20%E6%98%AF%EF%BC%9F%0AA.%20Decompress%20On%20Load%E3%80%80B.%20Streaming%E3%80%80C.%20Compressed%20In%20Memory%E3%80%80D.%20%E4%B8%89%E8%80%85%E6%97%A0%E5%B7%AE%E5%88%AB%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="34" data-question-id="q35" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q35"><h3><span class="ep-number">35.</span> HybridCLR 主要解决什么问题？
+A. 资源压缩　B. UI 合批　C. 网络同步　D. C# 热更与 AOT 泛型</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">资源压缩</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">UI 合批</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">网络同步</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">C# 热更与 AOT 泛型</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">HybridCLR 通过 AOT + 解释器混合方案支持 C# 热更，补足纯 AOT 下泛型与动态代码限制。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq35&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq35%0A%E9%A2%98%E5%B9%B2%EF%BC%9AHybridCLR%20%E4%B8%BB%E8%A6%81%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0AA.%20%E8%B5%84%E6%BA%90%E5%8E%8B%E7%BC%A9%E3%80%80B.%20UI%20%E5%90%88%E6%89%B9%E3%80%80C.%20%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5%E3%80%80D.%20C%23%20%E7%83%AD%E6%9B%B4%E4%B8%8E%20AOT%20%E6%B3%9B%E5%9E%8B%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="35" data-question-id="q36" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q36"><h3><span class="ep-number">36.</span> 排查资源泄漏时，首要查看的是？
+A. 显卡型号　B. 引用链　C. 屏幕分辨率　D. 当前帧率</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">显卡型号</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">引用链</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">屏幕分辨率</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">当前帧率</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">资源无法释放通常是因为仍有静态字段、事件、协程或句柄持有引用。
+{% endhideBlock %}
+
+### 性能优化</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq36&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq36%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%8E%92%E6%9F%A5%E8%B5%84%E6%BA%90%E6%B3%84%E6%BC%8F%E6%97%B6%EF%BC%8C%E9%A6%96%E8%A6%81%E6%9F%A5%E7%9C%8B%E7%9A%84%E6%98%AF%EF%BC%9F%0AA.%20%E6%98%BE%E5%8D%A1%E5%9E%8B%E5%8F%B7%E3%80%80B.%20%E5%BC%95%E7%94%A8%E9%93%BE%E3%80%80C.%20%E5%B1%8F%E5%B9%95%E5%88%86%E8%BE%A8%E7%8E%87%E3%80%80D.%20%E5%BD%93%E5%89%8D%E5%B8%A7%E7%8E%87%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="36" data-question-id="q37" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q37"><h3><span class="ep-number">37.</span> DrawCall 与 SetPass 的关系是？
+A. 一个 SetPass 可能对应多个 DrawCall，状态切换是主要开销　B. 两者完全相等　C. SetPass 越多越好　D. 只和 UI 有关</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一个 SetPass 可能对应多个 DrawCall，状态切换是主要开销</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">两者完全相等</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">SetPass 越多越好</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只和 UI 有关</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">SetPass 表示切换渲染状态，多个 DrawCall 可能共享一个 SetPass；优化目标是减少状态切换与 DrawCall。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq37&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq37%0A%E9%A2%98%E5%B9%B2%EF%BC%9ADrawCall%20%E4%B8%8E%20SetPass%20%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF%EF%BC%9F%0AA.%20%E4%B8%80%E4%B8%AA%20SetPass%20%E5%8F%AF%E8%83%BD%E5%AF%B9%E5%BA%94%E5%A4%9A%E4%B8%AA%20DrawCall%EF%BC%8C%E7%8A%B6%E6%80%81%E5%88%87%E6%8D%A2%E6%98%AF%E4%B8%BB%E8%A6%81%E5%BC%80%E9%94%80%E3%80%80B.%20%E4%B8%A4%E8%80%85%E5%AE%8C%E5%85%A8%E7%9B%B8%E7%AD%89%E3%80%80C.%20SetPass%20%E8%B6%8A%E5%A4%9A%E8%B6%8A%E5%A5%BD%E3%80%80D.%20%E5%8F%AA%E5%92%8C%20UI%20%E6%9C%89%E5%85%B3%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="37" data-question-id="q38" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q38"><h3><span class="ep-number">38.</span> 静态合批的限制是？
+A. 任意物体都能合　B. 只对 UI 有效　C. 物体不能移动，并受材质、顶点数、平台限制　D. 不需要相同材质</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">任意物体都能合</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只对 UI 有效</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">物体不能移动，并受材质、顶点数、平台限制</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不需要相同材质</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">静态合批把静态网格合并成大网格，移动物体不适用，并有顶点上限和材质要求。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq38&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq38%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E9%9D%99%E6%80%81%E5%90%88%E6%89%B9%E7%9A%84%E9%99%90%E5%88%B6%E6%98%AF%EF%BC%9F%0AA.%20%E4%BB%BB%E6%84%8F%E7%89%A9%E4%BD%93%E9%83%BD%E8%83%BD%E5%90%88%E3%80%80B.%20%E5%8F%AA%E5%AF%B9%20UI%20%E6%9C%89%E6%95%88%E3%80%80C.%20%E7%89%A9%E4%BD%93%E4%B8%8D%E8%83%BD%E7%A7%BB%E5%8A%A8%EF%BC%8C%E5%B9%B6%E5%8F%97%E6%9D%90%E8%B4%A8%E3%80%81%E9%A1%B6%E7%82%B9%E6%95%B0%E3%80%81%E5%B9%B3%E5%8F%B0%E9%99%90%E5%88%B6%E3%80%80D.%20%E4%B8%8D%E9%9C%80%E8%A6%81%E7%9B%B8%E5%90%8C%E6%9D%90%E8%B4%A8%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="38" data-question-id="q39" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q39"><h3><span class="ep-number">39.</span> Overdraw 指的是？
+A. 顶点过多　B. 同一像素被多次绘制　C. 内存不足　D. 网络延迟</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">顶点过多</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">同一像素被多次绘制</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">内存不足</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">网络延迟</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">半透明 UI、粒子、重叠模型都会造成 Overdraw，移动端 GPU 填充率容易成为瓶颈。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq39&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq39%0A%E9%A2%98%E5%B9%B2%EF%BC%9AOverdraw%20%E6%8C%87%E7%9A%84%E6%98%AF%EF%BC%9F%0AA.%20%E9%A1%B6%E7%82%B9%E8%BF%87%E5%A4%9A%E3%80%80B.%20%E5%90%8C%E4%B8%80%E5%83%8F%E7%B4%A0%E8%A2%AB%E5%A4%9A%E6%AC%A1%E7%BB%98%E5%88%B6%E3%80%80C.%20%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%E3%80%80D.%20%E7%BD%91%E7%BB%9C%E5%BB%B6%E8%BF%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="39" data-question-id="q40" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q40"><h3><span class="ep-number">40.</span> 以下哪些是 Unity 中常见的 GC 分配来源？
+A. 仅 `new GameObject`　B. 仅 `Resources.Load`　C. 仅网络消息　D. string 拼接、LINQ、闭包、装箱</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">仅 `new GameObject`</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">仅 `Resources.Load`</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">仅网络消息</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">string 拼接、LINQ、闭包、装箱</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">字符串、LINQ、闭包、装箱、协程迭代器、params 数组等都可能产生托管堆分配。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq40&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq40%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BB%A5%E4%B8%8B%E5%93%AA%E4%BA%9B%E6%98%AF%20Unity%20%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%20GC%20%E5%88%86%E9%85%8D%E6%9D%A5%E6%BA%90%EF%BC%9F%0AA.%20%E4%BB%85%20%60new%20GameObject%60%E3%80%80B.%20%E4%BB%85%20%60Resources.Load%60%E3%80%80C.%20%E4%BB%85%E7%BD%91%E7%BB%9C%E6%B6%88%E6%81%AF%E3%80%80D.%20string%20%E6%8B%BC%E6%8E%A5%E3%80%81LINQ%E3%80%81%E9%97%AD%E5%8C%85%E3%80%81%E8%A3%85%E7%AE%B1%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="40" data-question-id="q41" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q41"><h3><span class="ep-number">41.</span> Memory Profiler 主要用于？
+A. 分析内存快照与引用链　B. 分析帧率　C. 分析网络包　D. 编译 Shader</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">分析内存快照与引用链</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">分析帧率</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">分析网络包</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">编译 Shader</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">Memory Profiler 可抓取快照、对比差异并查看对象引用关系，是定位泄漏的核心工具。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq41&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq41%0A%E9%A2%98%E5%B9%B2%EF%BC%9AMemory%20Profiler%20%E4%B8%BB%E8%A6%81%E7%94%A8%E4%BA%8E%EF%BC%9F%0AA.%20%E5%88%86%E6%9E%90%E5%86%85%E5%AD%98%E5%BF%AB%E7%85%A7%E4%B8%8E%E5%BC%95%E7%94%A8%E9%93%BE%E3%80%80B.%20%E5%88%86%E6%9E%90%E5%B8%A7%E7%8E%87%E3%80%80C.%20%E5%88%86%E6%9E%90%E7%BD%91%E7%BB%9C%E5%8C%85%E3%80%80D.%20%E7%BC%96%E8%AF%91%20Shader%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="41" data-question-id="q42" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q42"><h3><span class="ep-number">42.</span> Frame Debugger 主要用于？
+A. 查看 C# 调用栈　B. 查看网络包　C. 查看每个 DrawCall/Batch　D. 查看 GC</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">查看 C# 调用栈</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">查看网络包</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">查看每个 DrawCall/Batch</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">查看 GC</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">Frame Debugger 可逐 DrawCall 查看渲染过程、批次被打断的位置和渲染状态。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq42&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq42%0A%E9%A2%98%E5%B9%B2%EF%BC%9AFrame%20Debugger%20%E4%B8%BB%E8%A6%81%E7%94%A8%E4%BA%8E%EF%BC%9F%0AA.%20%E6%9F%A5%E7%9C%8B%20C%23%20%E8%B0%83%E7%94%A8%E6%A0%88%E3%80%80B.%20%E6%9F%A5%E7%9C%8B%E7%BD%91%E7%BB%9C%E5%8C%85%E3%80%80C.%20%E6%9F%A5%E7%9C%8B%E6%AF%8F%E4%B8%AA%20DrawCall%2FBatch%E3%80%80D.%20%E6%9F%A5%E7%9C%8B%20GC%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="42" data-question-id="q43" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q43"><h3><span class="ep-number">43.</span> 启动优化的合理方向是？
+A. 每帧调用 GC　B. 延迟加载、资源拆包、异步初始化　C. 增加粒子特效　D. 全部改用 Resources</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">每帧调用 GC</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">延迟加载、资源拆包、异步初始化</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">增加粒子特效</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">全部改用 Resources</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">启动阶段应减少首屏依赖、并行异步加载、把非必要系统延后初始化。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq43&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq43%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96%E7%9A%84%E5%90%88%E7%90%86%E6%96%B9%E5%90%91%E6%98%AF%EF%BC%9F%0AA.%20%E6%AF%8F%E5%B8%A7%E8%B0%83%E7%94%A8%20GC%E3%80%80B.%20%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%E3%80%81%E8%B5%84%E6%BA%90%E6%8B%86%E5%8C%85%E3%80%81%E5%BC%82%E6%AD%A5%E5%88%9D%E5%A7%8B%E5%8C%96%E3%80%80C.%20%E5%A2%9E%E5%8A%A0%E7%B2%92%E5%AD%90%E7%89%B9%E6%95%88%E3%80%80D.%20%E5%85%A8%E9%83%A8%E6%94%B9%E7%94%A8%20Resources%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="43" data-question-id="q44" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q44"><h3><span class="ep-number">44.</span> 为什么必须做真机 Profiling？
+A. 不需要　B. Editor 与真机完全一致　C. 只用于 UI　D. 真机性能、发热和降频与 Editor 差异很大</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">不需要</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Editor 与真机完全一致</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只用于 UI</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">真机性能、发热和降频与 Editor 差异很大</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">Editor 不能代表移动端 CPU/GPU、内存带宽和热降频表现，性能问题必须在目标机型验证。
+{% endhideBlock %}
+
+### 渲染</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq44&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq44%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%85%E9%A1%BB%E5%81%9A%E7%9C%9F%E6%9C%BA%20Profiling%EF%BC%9F%0AA.%20%E4%B8%8D%E9%9C%80%E8%A6%81%E3%80%80B.%20Editor%20%E4%B8%8E%E7%9C%9F%E6%9C%BA%E5%AE%8C%E5%85%A8%E4%B8%80%E8%87%B4%E3%80%80C.%20%E5%8F%AA%E7%94%A8%E4%BA%8E%20UI%E3%80%80D.%20%E7%9C%9F%E6%9C%BA%E6%80%A7%E8%83%BD%E3%80%81%E5%8F%91%E7%83%AD%E5%92%8C%E9%99%8D%E9%A2%91%E4%B8%8E%20Editor%20%E5%B7%AE%E5%BC%82%E5%BE%88%E5%A4%A7%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="44" data-question-id="q45" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q45"><h3><span class="ep-number">45.</span> URP 中 SRP Batcher 主要减少？
+A. 纹理内存　B. 顶点数量　C. 材质相关的 CPU 设置开销　D. 网络延迟</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">纹理内存</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">顶点数量</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">材质相关的 CPU 设置开销</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">网络延迟</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">SRP Batcher 通过持久化材质属性减少每 DrawCall 的 CPU 设置成本，但要求 Shader 兼容。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq45&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq45%0A%E9%A2%98%E5%B9%B2%EF%BC%9AURP%20%E4%B8%AD%20SRP%20Batcher%20%E4%B8%BB%E8%A6%81%E5%87%8F%E5%B0%91%EF%BC%9F%0AA.%20%E7%BA%B9%E7%90%86%E5%86%85%E5%AD%98%E3%80%80B.%20%E9%A1%B6%E7%82%B9%E6%95%B0%E9%87%8F%E3%80%80C.%20%E6%9D%90%E8%B4%A8%E7%9B%B8%E5%85%B3%E7%9A%84%20CPU%20%E8%AE%BE%E7%BD%AE%E5%BC%80%E9%94%80%E3%80%80D.%20%E7%BD%91%E7%BB%9C%E5%BB%B6%E8%BF%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="45" data-question-id="q46" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q46"><h3><span class="ep-number">46.</span> GPU Instancing 的典型要求是？
+A. 相同 Mesh/Material，通过实例化数据批量绘制　B. 任意不同 Mesh 都可合　C. 只支持 UI　D. 不需要 Shader 支持</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">相同 Mesh/Material，通过实例化数据批量绘制</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">任意不同 Mesh 都可合</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只支持 UI</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不需要 Shader 支持</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">Instancing 适合大量相同网格与材质，通过每实例属性批量提交，减少 DrawCall。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq46&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq46%0A%E9%A2%98%E5%B9%B2%EF%BC%9AGPU%20Instancing%20%E7%9A%84%E5%85%B8%E5%9E%8B%E8%A6%81%E6%B1%82%E6%98%AF%EF%BC%9F%0AA.%20%E7%9B%B8%E5%90%8C%20Mesh%2FMaterial%EF%BC%8C%E9%80%9A%E8%BF%87%E5%AE%9E%E4%BE%8B%E5%8C%96%E6%95%B0%E6%8D%AE%E6%89%B9%E9%87%8F%E7%BB%98%E5%88%B6%E3%80%80B.%20%E4%BB%BB%E6%84%8F%E4%B8%8D%E5%90%8C%20Mesh%20%E9%83%BD%E5%8F%AF%E5%90%88%E3%80%80C.%20%E5%8F%AA%E6%94%AF%E6%8C%81%20UI%E3%80%80D.%20%E4%B8%8D%E9%9C%80%E8%A6%81%20Shader%20%E6%94%AF%E6%8C%81%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="46" data-question-id="q47" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q47"><h3><span class="ep-number">47.</span> MaterialPropertyBlock 的作用是？
+A. 压缩纹理　B. 生成图集　C. 网络同步　D. 每实例覆盖材质属性而不复制材质</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">压缩纹理</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">生成图集</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">网络同步</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">每实例覆盖材质属性而不复制材质</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">MaterialPropertyBlock 可给单个 Renderer 设置属性，避免为每个实例创建材质副本，但可能影响 SRP Batcher。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq47&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq47%0A%E9%A2%98%E5%B9%B2%EF%BC%9AMaterialPropertyBlock%20%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%EF%BC%9F%0AA.%20%E5%8E%8B%E7%BC%A9%E7%BA%B9%E7%90%86%E3%80%80B.%20%E7%94%9F%E6%88%90%E5%9B%BE%E9%9B%86%E3%80%80C.%20%E7%BD%91%E7%BB%9C%E5%90%8C%E6%AD%A5%E3%80%80D.%20%E6%AF%8F%E5%AE%9E%E4%BE%8B%E8%A6%86%E7%9B%96%E6%9D%90%E8%B4%A8%E5%B1%9E%E6%80%A7%E8%80%8C%E4%B8%8D%E5%A4%8D%E5%88%B6%E6%9D%90%E8%B4%A8%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="47" data-question-id="q48" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q48"><h3><span class="ep-number">48.</span> Shader Variants 过多会带来？
+A. 减少包体　B. 增加构建时间、包体和加载开销　C. 提升帧率　D. 没有影响</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">减少包体</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">增加构建时间、包体和加载开销</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">提升帧率</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">没有影响</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">变体数量膨胀会增加构建时间、包体和运行时加载成本，应通过关键字裁剪和 Stripping 控制。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq48&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq48%0A%E9%A2%98%E5%B9%B2%EF%BC%9AShader%20Variants%20%E8%BF%87%E5%A4%9A%E4%BC%9A%E5%B8%A6%E6%9D%A5%EF%BC%9F%0AA.%20%E5%87%8F%E5%B0%91%E5%8C%85%E4%BD%93%E3%80%80B.%20%E5%A2%9E%E5%8A%A0%E6%9E%84%E5%BB%BA%E6%97%B6%E9%97%B4%E3%80%81%E5%8C%85%E4%BD%93%E5%92%8C%E5%8A%A0%E8%BD%BD%E5%BC%80%E9%94%80%E3%80%80C.%20%E6%8F%90%E5%8D%87%E5%B8%A7%E7%8E%87%E3%80%80D.%20%E6%B2%A1%E6%9C%89%E5%BD%B1%E5%93%8D%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="48" data-question-id="q49" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q49"><h3><span class="ep-number">49.</span> 透明物体的常见渲染顺序是？
+A. 从近到远　B. 随机　C. 通常从远到近，并依赖排序　D. 与相机无关</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">从近到远</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">随机</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">通常从远到近，并依赖排序</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">与相机无关</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">透明物体通常按相机距离从远到近绘制，依赖排序保证混合结果；排序错误会出现穿插。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq49&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq49%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E9%80%8F%E6%98%8E%E7%89%A9%E4%BD%93%E7%9A%84%E5%B8%B8%E8%A7%81%E6%B8%B2%E6%9F%93%E9%A1%BA%E5%BA%8F%E6%98%AF%EF%BC%9F%0AA.%20%E4%BB%8E%E8%BF%91%E5%88%B0%E8%BF%9C%E3%80%80B.%20%E9%9A%8F%E6%9C%BA%E3%80%80C.%20%E9%80%9A%E5%B8%B8%E4%BB%8E%E8%BF%9C%E5%88%B0%E8%BF%91%EF%BC%8C%E5%B9%B6%E4%BE%9D%E8%B5%96%E6%8E%92%E5%BA%8F%E3%80%80D.%20%E4%B8%8E%E7%9B%B8%E6%9C%BA%E6%97%A0%E5%85%B3%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="49" data-question-id="q50" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q50"><h3><span class="ep-number">50.</span> ASTC 主要用于？
+A. 移动端纹理压缩　B. 音频压缩　C. 网络协议　D. UI 布局</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">移动端纹理压缩</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">音频压缩</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">网络协议</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">UI 布局</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">ASTC 是移动端常用纹理压缩格式，可在质量与体积之间按块大小取舍。
+{% endhideBlock %}
+
+### 网络</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq50&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq50%0A%E9%A2%98%E5%B9%B2%EF%BC%9AASTC%20%E4%B8%BB%E8%A6%81%E7%94%A8%E4%BA%8E%EF%BC%9F%0AA.%20%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9%E3%80%80B.%20%E9%9F%B3%E9%A2%91%E5%8E%8B%E7%BC%A9%E3%80%80C.%20%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%80D.%20UI%20%E5%B8%83%E5%B1%80%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="50" data-question-id="q51" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q51"><h3><span class="ep-number">51.</span> TCP 粘包的常见处理方式是？
+A. 增加睡眠　B. 关闭 Nagle　C. 改用 UDP 一定解决　D. 长度前缀、分隔符或固定长度</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">增加睡眠</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">关闭 Nagle</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">改用 UDP 一定解决</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">长度前缀、分隔符或固定长度</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">TCP 是字节流，必须由应用层定义消息边界；长度前缀是最常用方案。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq51&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq51%0A%E9%A2%98%E5%B9%B2%EF%BC%9ATCP%20%E7%B2%98%E5%8C%85%E7%9A%84%E5%B8%B8%E8%A7%81%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%E6%98%AF%EF%BC%9F%0AA.%20%E5%A2%9E%E5%8A%A0%E7%9D%A1%E7%9C%A0%E3%80%80B.%20%E5%85%B3%E9%97%AD%20Nagle%E3%80%80C.%20%E6%94%B9%E7%94%A8%20UDP%20%E4%B8%80%E5%AE%9A%E8%A7%A3%E5%86%B3%E3%80%80D.%20%E9%95%BF%E5%BA%A6%E5%89%8D%E7%BC%80%E3%80%81%E5%88%86%E9%9A%94%E7%AC%A6%E6%88%96%E5%9B%BA%E5%AE%9A%E9%95%BF%E5%BA%A6%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="51" data-question-id="q52" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q52"><h3><span class="ep-number">52.</span> 帧同步与状态同步的主要区别是？
+A. 完全一样　B. 帧同步传输入，状态同步传状态　C. 帧同步适合所有游戏　D. 状态同步不需要服务器</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">完全一样</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">帧同步传输入，状态同步传状态</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">帧同步适合所有游戏</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">状态同步不需要服务器</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">帧同步同步玩家输入并由客户端确定性演算；状态同步由服务器下发权威状态。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq52&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq52%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%B8%A7%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB%E6%98%AF%EF%BC%9F%0AA.%20%E5%AE%8C%E5%85%A8%E4%B8%80%E6%A0%B7%E3%80%80B.%20%E5%B8%A7%E5%90%8C%E6%AD%A5%E4%BC%A0%E8%BE%93%E5%85%A5%EF%BC%8C%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E4%BC%A0%E7%8A%B6%E6%80%81%E3%80%80C.%20%E5%B8%A7%E5%90%8C%E6%AD%A5%E9%80%82%E5%90%88%E6%89%80%E6%9C%89%E6%B8%B8%E6%88%8F%E3%80%80D.%20%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E4%B8%8D%E9%9C%80%E8%A6%81%E6%9C%8D%E5%8A%A1%E5%99%A8%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="52" data-question-id="q54" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q54"><h3><span class="ep-number">53.</span> Protobuf 的主要优势是？
+A. 人类可读　B. 不需要 schema　C. 体积小、序列化快、跨语言　D. 只能用于 C#</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">人类可读</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">不需要 schema</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">体积小、序列化快、跨语言</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只能用于 C#</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">Protobuf 使用二进制编码和 schema，体积小、跨语言，适合网络协议；可读性不如 JSON。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq54&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq54%0A%E9%A2%98%E5%B9%B2%EF%BC%9AProtobuf%20%E7%9A%84%E4%B8%BB%E8%A6%81%E4%BC%98%E5%8A%BF%E6%98%AF%EF%BC%9F%0AA.%20%E4%BA%BA%E7%B1%BB%E5%8F%AF%E8%AF%BB%E3%80%80B.%20%E4%B8%8D%E9%9C%80%E8%A6%81%20schema%E3%80%80C.%20%E4%BD%93%E7%A7%AF%E5%B0%8F%E3%80%81%E5%BA%8F%E5%88%97%E5%8C%96%E5%BF%AB%E3%80%81%E8%B7%A8%E8%AF%AD%E8%A8%80%E3%80%80D.%20%E5%8F%AA%E8%83%BD%E7%94%A8%E4%BA%8E%20C%23%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="53" data-question-id="q55" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q55"><h3><span class="ep-number">54.</span> 断线重连设计的关键是？
+A. 直接重启客户端　B. 清空存档　C. 关闭心跳　D. 会话恢复、状态同步、幂等重发</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">直接重启客户端</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">清空存档</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">关闭心跳</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">会话恢复、状态同步、幂等重发</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">重连需要恢复会话、补齐状态，并保证重复请求不会造成副作用。
+{% endhideBlock %}
+
+### 架构与工程</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq55&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq55%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%96%AD%E7%BA%BF%E9%87%8D%E8%BF%9E%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%85%B3%E9%94%AE%E6%98%AF%EF%BC%9F%0AA.%20%E7%9B%B4%E6%8E%A5%E9%87%8D%E5%90%AF%E5%AE%A2%E6%88%B7%E7%AB%AF%E3%80%80B.%20%E6%B8%85%E7%A9%BA%E5%AD%98%E6%A1%A3%E3%80%80C.%20%E5%85%B3%E9%97%AD%E5%BF%83%E8%B7%B3%E3%80%80D.%20%E4%BC%9A%E8%AF%9D%E6%81%A2%E5%A4%8D%E3%80%81%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E3%80%81%E5%B9%82%E7%AD%89%E9%87%8D%E5%8F%91%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="54" data-question-id="q56" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q56"><h3><span class="ep-number">55.</span> 事件总线最常见的问题是？
+A. 订阅未退订导致泄漏或重复回调　B. 线程安全　C. 不能传参　D. 只能用于 UI</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">订阅未退订导致泄漏或重复回调</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">线程安全</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不能传参</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只能用于 UI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">订阅者销毁后未反注册，事件中心仍持有引用，造成泄漏和空回调；应统一生命周期管理。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq56&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq56%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84%E9%97%AE%E9%A2%98%E6%98%AF%EF%BC%9F%0AA.%20%E8%AE%A2%E9%98%85%E6%9C%AA%E9%80%80%E8%AE%A2%E5%AF%BC%E8%87%B4%E6%B3%84%E6%BC%8F%E6%88%96%E9%87%8D%E5%A4%8D%E5%9B%9E%E8%B0%83%E3%80%80B.%20%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E3%80%80C.%20%E4%B8%8D%E8%83%BD%E4%BC%A0%E5%8F%82%E3%80%80D.%20%E5%8F%AA%E8%83%BD%E7%94%A8%E4%BA%8E%20UI%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="55" data-question-id="q57" data-paper-id="legacy-senior1_v1.0.0" data-answer="B" data-section="一、客观题" id="q57"><h3><span class="ep-number">56.</span> 对象池设计的关键是？
+A. 无限增长　B. 重置对象状态并设置容量上限　C. 每次重新 new　D. 只用于 UI</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">无限增长</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">重置对象状态并设置容量上限</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每次重新 new</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只用于 UI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">对象复用时必须重置状态、取消订阅、清理计时器，并设置上限避免内存无限增长。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq57&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq57%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%AF%B9%E8%B1%A1%E6%B1%A0%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%85%B3%E9%94%AE%E6%98%AF%EF%BC%9F%0AA.%20%E6%97%A0%E9%99%90%E5%A2%9E%E9%95%BF%E3%80%80B.%20%E9%87%8D%E7%BD%AE%E5%AF%B9%E8%B1%A1%E7%8A%B6%E6%80%81%E5%B9%B6%E8%AE%BE%E7%BD%AE%E5%AE%B9%E9%87%8F%E4%B8%8A%E9%99%90%E3%80%80C.%20%E6%AF%8F%E6%AC%A1%E9%87%8D%E6%96%B0%20new%E3%80%80D.%20%E5%8F%AA%E7%94%A8%E4%BA%8E%20UI%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="56" data-question-id="q58" data-paper-id="legacy-senior1_v1.0.0" data-answer="C" data-section="一、客观题" id="q58"><h3><span class="ep-number">57.</span> UI 框架分层的合理做法是？
+A. 所有逻辑写在按钮回调里　B. 每个 UI 都做成单例　C. 视图、逻辑、数据分离，统一弹窗与生命周期　D. 完全不做管理</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">所有逻辑写在按钮回调里</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">每个 UI 都做成单例</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">视图、逻辑、数据分离，统一弹窗与生命周期</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">完全不做管理</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">分层能降低耦合，统一管理打开、关闭、缓存、遮罩和异步加载。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq58&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq58%0A%E9%A2%98%E5%B9%B2%EF%BC%9AUI%20%E6%A1%86%E6%9E%B6%E5%88%86%E5%B1%82%E7%9A%84%E5%90%88%E7%90%86%E5%81%9A%E6%B3%95%E6%98%AF%EF%BC%9F%0AA.%20%E6%89%80%E6%9C%89%E9%80%BB%E8%BE%91%E5%86%99%E5%9C%A8%E6%8C%89%E9%92%AE%E5%9B%9E%E8%B0%83%E9%87%8C%E3%80%80B.%20%E6%AF%8F%E4%B8%AA%20UI%20%E9%83%BD%E5%81%9A%E6%88%90%E5%8D%95%E4%BE%8B%E3%80%80C.%20%E8%A7%86%E5%9B%BE%E3%80%81%E9%80%BB%E8%BE%91%E3%80%81%E6%95%B0%E6%8D%AE%E5%88%86%E7%A6%BB%EF%BC%8C%E7%BB%9F%E4%B8%80%E5%BC%B9%E7%AA%97%E4%B8%8E%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E3%80%80D.%20%E5%AE%8C%E5%85%A8%E4%B8%8D%E5%81%9A%E7%AE%A1%E7%90%86%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="57" data-question-id="q59" data-paper-id="legacy-senior1_v1.0.0" data-answer="D" data-section="一、客观题" id="q59"><h3><span class="ep-number">58.</span> 热更新版本管理的关键是？
+A. 只更新客户端　B. 不需要 CDN　C. 不需要校验　D. 资源与代码版本一致且可回滚</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">只更新客户端</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">不需要 CDN</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不需要校验</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">资源与代码版本一致且可回滚</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">热更必须保证程序集、资源、配置版本匹配，并提供下载校验、灰度与回滚能力。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq59&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq59%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E7%83%AD%E6%9B%B4%E6%96%B0%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E7%9A%84%E5%85%B3%E9%94%AE%E6%98%AF%EF%BC%9F%0AA.%20%E5%8F%AA%E6%9B%B4%E6%96%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E3%80%80B.%20%E4%B8%8D%E9%9C%80%E8%A6%81%20CDN%E3%80%80C.%20%E4%B8%8D%E9%9C%80%E8%A6%81%E6%A0%A1%E9%AA%8C%E3%80%80D.%20%E8%B5%84%E6%BA%90%E4%B8%8E%E4%BB%A3%E7%A0%81%E7%89%88%E6%9C%AC%E4%B8%80%E8%87%B4%E4%B8%94%E5%8F%AF%E5%9B%9E%E6%BB%9A%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="58" data-question-id="q60" data-paper-id="legacy-senior1_v1.0.0" data-answer="A" data-section="一、客观题" id="q60"><h3><span class="ep-number">59.</span> 技术方案评审最应关注？
+A. 性能、维护性、风险与回滚　B. 只选最新技术　C. 代码行数　D. 个人偏好</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">性能、维护性、风险与回滚</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只选最新技术</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">代码行数</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">个人偏好</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">高级工程师的方案评审要综合性能、可维护性、上线风险和失败回滚，而不是追求技术新颖。
+{% endhideBlock %}</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20legacy-senior1_v1.0.0%3Aq60&body=%E8%AF%95%E5%8D%B7%EF%BC%9Alegacy-senior1_v1.0.0%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq60%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E8%AF%84%E5%AE%A1%E6%9C%80%E5%BA%94%E5%85%B3%E6%B3%A8%EF%BC%9F%0AA.%20%E6%80%A7%E8%83%BD%E3%80%81%E7%BB%B4%E6%8A%A4%E6%80%A7%E3%80%81%E9%A3%8E%E9%99%A9%E4%B8%8E%E5%9B%9E%E6%BB%9A%E3%80%80B.%20%E5%8F%AA%E9%80%89%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF%E3%80%80C.%20%E4%BB%A3%E7%A0%81%E8%A1%8C%E6%95%B0%E3%80%80D.%20%E4%B8%AA%E4%BA%BA%E5%81%8F%E5%A5%BD%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article>
+        <h2 class="ep-section-title">主观题</h2><article class="ep-question ep-subjective" id="s1"><h3><span class="ep-number">1.</span> 设计一个支持异步加载、缓存、防重复打开和生命周期管理的 UI 框架。</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>UIManager 分层</li><li>打开/关闭栈</li><li>异步加载句柄</li><li>缓存策略</li><li>遮罩与层级</li><li>OnOpen/OnClose</li><li>防重复请求</li><li>返回键</li><li>异常回滚。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s2"><h3><span class="ep-number">2.</span> Addressables 资源泄漏如何定位和治理？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>Memory Profiler 快照对比</li><li>引用链</li><li>句柄计数</li><li>`Release/ReleaseInstance`</li><li>共享资源修改</li><li>场景切换清理</li><li>定期资源审计。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s3"><h3><span class="ep-number">3.</span> 如何设计大列表虚拟滚动？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>可视区间计算</li><li>对象池</li><li>前缀和/二分定位</li><li>可变高度</li><li>回收重置</li><li>滚动事件节流</li><li>RectMask2D</li><li>避免 LayoutGroup 全量重建。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s4"><h3><span class="ep-number">4.</span> 真机掉帧如何系统排查？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>先确认 CPU/GPU/内存/发热</li><li>Profiler 分线程</li><li>Frame Debugger 看 DrawCall</li><li>Memory Profiler 看 GC</li><li>对比机型与场景</li><li>定位热点后做 AB 测试。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s5"><h3><span class="ep-number">5.</span> TMP 中文动态字体如何优化？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>预生成常用字符集</li><li>Fallback</li><li>字体图集尺寸</li><li>动态图集扩容</li><li>低分配 SetText</li><li>避免每帧改文本</li><li>按语言拆分字体资产。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s6"><h3><span class="ep-number">6.</span> 设计一个健壮的事件总线。</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>泛型事件</li><li>订阅/退订</li><li>弱引用或生命周期绑定</li><li>重复订阅</li><li>异常隔离</li><li>线程安全</li><li>调试面板</li><li>事件命名规范。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s7"><h3><span class="ep-number">7.</span> 如何做热更新版本管理与回滚？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>版本清单</li><li>资源与代码一致性</li><li>CDN</li><li>增量下载</li><li>校验</li><li>灰度</li><li>回滚策略</li><li>失败降级</li><li>本地缓存。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s8"><h3><span class="ep-number">8.</span> 如何设计可维护的 UI 红点系统？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>树形依赖</li><li>事件驱动</li><li>叶子节点计数</li><li>路径注册</li><li>批量刷新</li><li>避免每帧遍历</li><li>与配置表解耦。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s9"><h3><span class="ep-number">9.</span> 线上 UI 点击穿透如何排查？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>EventSystem 当前射线结果</li><li>raycastTarget</li><li>CanvasGroup</li><li>遮罩层级</li><li>Sorting Order</li><li>GraphicRaycaster</li><li>点击日志</li><li>最小复现。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s10"><h3><span class="ep-number">10.</span> 如何做包体优化和资源分包？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>资源审计</li><li>纹理/音频压缩</li><li>图集</li><li>重复资源</li><li>首包最小化</li><li>按场景/模块分包</li><li>远程资源</li><li>构建报告</li><li>版本增量。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s11"><h3><span class="ep-number">11.</span> 设计一个跨平台 SDK 接入方案。</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>统一接口层</li><li>平台实现分离</li><li>Android JNI/iOS OC 桥接</li><li>回调线程</li><li>生命周期</li><li>权限</li><li>异常降级</li><li>Editor Mock。</li></ul></div></details></article><article class="ep-question ep-subjective" id="s12"><h3><span class="ep-number">12.</span> 如何制定团队 UI 性能规范？</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>Canvas 拆分</li><li>图集规范</li><li>raycastTarget 规范</li><li>TMP 字符集</li><li>布局重建限制</li><li>列表虚拟化</li><li>Overdraw 预算</li><li>真机验收指标</li><li>CI 检查。</li></ul></div></details></article>
+    </div>
+</div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
+
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
+
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      lastPointerX: 0,
+      lastPointerY: 0
+    }
+
+    const onPointerDown = e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (state.pointers.size === 1) {
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = curVb.slice()
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
+        return
+      }
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+      } else if (state.pointers.size === 1) {
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+      }
+    }
+
+    const onWheel = e => {
+      // Prevent event bubbling from triggering external scroll
+      e.preventDefault()
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (init) setCurVb(init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      // Clean up event listeners before removing old SVG
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
+
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
+    })
+  }
+
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (true) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="/js/content-db.js" defer></script><script src="/js/content-db-sql.js" defer></script><script src="/js/question-index.js" defer></script><script src="/js/site-content-api.js" defer></script><script src="/js/site-events.js" defer></script><script src="/js/site-navigation-api.js" defer></script><script src="/js/site-action-api.js" defer></script><script src="/js/site-api.js" defer></script><script src="/js/site-bookmarks.js" defer></script><script src="/js/site-reading-position.js" defer></script><script src="/js/site-search-api.js" defer></script><script src="/js/site-context.js" defer></script><script src="/js/site-history.js" defer></script><script src="/js/site-notes.js" defer></script><script src="/js/site-quiz-api.js" defer></script><script src="/js/site-recommend-api.js" defer></script><script src="/js/site-data-api.js" defer></script><script src="/js/theme-sync.js" defer></script><script src="/js/privacy-notice.js" defer></script><script src="/js/custom-global.js?v=35249d8d" defer></script><script src="/js/hexo-timer.js" defer></script><script src="/js/exam-paper.js" defer></script><script src="/js/hexo-answer-sheet.js" defer></script><script src="/js/stats-center.js" defer></script><script src="/js/exam-paper-stats-v2.js" defer></script><script src="/js/exam-paper-actions.js" defer></script><script src="/js/stats-center-page.js" defer></script><script src="/js/knowledge.js"></script><script src="/js/algo-review.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

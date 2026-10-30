@@ -181,6 +181,20 @@
             graded = true;
             gradeBtn.disabled = true;
             renderGraded();
+            try {
+                document.dispatchEvent(new CustomEvent('hexo-answer-sheet:graded', {
+                    detail: {
+                        sheetId: sheet.id,
+                        answers: answers.map(a => a.slice()),
+                        userAnswers: userAnswers.map(a => a.slice()),
+                        correctCount: answers.reduce((n, correct, i) => {
+                            const user = userAnswers[i].slice().sort();
+                            return n + (user.length > 0 && user.join('') === correct.slice().sort().join('') ? 1 : 0);
+                        }, 0),
+                        total: answers.length
+                    }
+                }));
+            } catch (e) { /* ignore */ }
         }
 
         function handleReset() {

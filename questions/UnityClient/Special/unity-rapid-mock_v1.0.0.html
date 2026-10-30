@@ -1,0 +1,757 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity 客户端面试快问快答模拟卷 | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="倒计时就绪             00:15:00             设置计时时长时分秒取消确定             开始暂停重置                               1-30 题（单选&#x2F;多选）已完成 0&#x2F;30             1ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9A">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unity 客户端面试快问快答模拟卷">
+<meta property="og:url" content="https://jokevallen.github.io/questions/UnityClient/Special/unity-rapid-mock_v1.0.0.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="倒计时就绪             00:15:00             设置计时时长时分秒取消确定             开始暂停重置                               1-30 题（单选&#x2F;多选）已完成 0&#x2F;30             1ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-09-29T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-28T12:57:57.694Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="编程,学习,生活,哲理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/questions/UnityClient/Special/unity-rapid-mock_v1.0.0.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity 客户端面试快问快答模拟卷',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><link rel="stylesheet" href="/css/hexo-timer.css"><link rel="stylesheet" href="/css/hexo-answer-sheet.css"><link rel="stylesheet" href="/css/knowledge.css"><link rel="stylesheet" href="/css/algo-review.css"><link rel="stylesheet" href="/css/deepseek-pet.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">156</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/mock/"><i class="fa-fw fas fa-user-tie"></i><span> 求职模拟</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div><div class="menus_item"><a class="site-page" href="/stats/"><i class="fa-fw fas fa-chart-line"></i><span> 统计</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/mock/"><i class="fa-fw fas fa-user-tie"></i><span> 求职模拟</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div><div class="menus_item"><a class="site-page" href="/stats/"><i class="fa-fw fas fa-chart-line"></i><span> 统计</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">Unity 客户端面试快问快答模拟卷</h1></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="page-title">Unity 客户端面试快问快答模拟卷</div><div class="container" id="article-container"><div class="exam-paper" id="exam-paper-unity-rapid-mock" data-shuffle-questions="true" data-shuffle-options="true">
+        <div class="hexo-timer is-sticky pos-middle-left" id="exam-timer-unity-rapid-mock" data-mode="down" data-initial="900" data-persist="false" data-auto="false" data-custom="true" style="position:fixed;z-index:9999;top:50%;left:2vw;transform:translateY(-50%);">
+            <div class="timer-header"><span class="timer-label">倒计时</span><div class="timer-header-right"><span class="timer-status">就绪</span><button class="timer-settings" type="button" title="设置时间"><i class="fas fa-cog"></i></button><button class="timer-toggle" type="button" aria-expanded="true" title="收起/展开"><i class="fas fa-chevron-down"></i></button></div></div>
+            <div class="timer-display">00:15:00</div>
+            <div class="timer-settings-panel" hidden><div class="timer-settings-title">设置计时时长</div><div class="timer-settings-row"><label>时<input class="timer-set-h" type="number" min="0" max="99" inputmode="numeric" value="0"></label><label>分<input class="timer-set-m" type="number" min="0" max="59" inputmode="numeric" value="15"></label><label>秒<input class="timer-set-s" type="number" min="0" max="59" inputmode="numeric" value="0"></label></div><div class="timer-settings-actions"><button type="button" class="timer-btn timer-settings-cancel">取消</button><button type="button" class="timer-btn timer-settings-apply">确定</button></div></div>
+            <div class="timer-controls"><button class="timer-btn timer-start" type="button">开始</button><button class="timer-btn timer-pause" type="button" disabled>暂停</button><button class="timer-btn timer-reset" type="button">重置</button></div>
+        </div>
+        <div class="hexo-answer-sheet is-sticky pos-middle-right cols-1" id="exam-sheet-unity-rapid-mock" data-answers="B|C|D|A|B|C|D|A|B|C|D|A|B|C|D|A|B|C|D|A|B|C|D|A|B|C|D|A|D|C" data-multiple="000000000000000000000000000000" data-persist="false" data-opts="ABCD" style="width:15%;height:60%;position:fixed;z-index:9999;top:50%;right:2vw;transform:translateY(-50%);">
+            <div class="as-header"><div class="as-header-top"><span class="as-label">1-30 题（单选/多选）</span><button type="button" class="as-toggle" aria-expanded="true" title="收起/展开"><i class="fas fa-chevron-down"></i></button></div><div class="as-header-bottom"><span class="as-progress">已完成 0/30</span></div></div>
+            <div class="as-body"><div class="as-row" data-index="0" data-original-index="0" data-multiple="0"><span class="as-num">1</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="1" data-original-index="1" data-multiple="0"><span class="as-num">2</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="2" data-original-index="2" data-multiple="0"><span class="as-num">3</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="3" data-original-index="3" data-multiple="0"><span class="as-num">4</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="4" data-original-index="4" data-multiple="0"><span class="as-num">5</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="5" data-original-index="5" data-multiple="0"><span class="as-num">6</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="6" data-original-index="6" data-multiple="0"><span class="as-num">7</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="7" data-original-index="7" data-multiple="0"><span class="as-num">8</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="8" data-original-index="8" data-multiple="0"><span class="as-num">9</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="9" data-original-index="9" data-multiple="0"><span class="as-num">10</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="10" data-original-index="10" data-multiple="0"><span class="as-num">11</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="11" data-original-index="11" data-multiple="0"><span class="as-num">12</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="12" data-original-index="12" data-multiple="0"><span class="as-num">13</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="13" data-original-index="13" data-multiple="0"><span class="as-num">14</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="14" data-original-index="14" data-multiple="0"><span class="as-num">15</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="15" data-original-index="15" data-multiple="0"><span class="as-num">16</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="16" data-original-index="16" data-multiple="0"><span class="as-num">17</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="17" data-original-index="17" data-multiple="0"><span class="as-num">18</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="18" data-original-index="18" data-multiple="0"><span class="as-num">19</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="19" data-original-index="19" data-multiple="0"><span class="as-num">20</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="20" data-original-index="20" data-multiple="0"><span class="as-num">21</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="21" data-original-index="21" data-multiple="0"><span class="as-num">22</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="22" data-original-index="22" data-multiple="0"><span class="as-num">23</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="23" data-original-index="23" data-multiple="0"><span class="as-num">24</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="24" data-original-index="24" data-multiple="0"><span class="as-num">25</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="25" data-original-index="25" data-multiple="0"><span class="as-num">26</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="26" data-original-index="26" data-multiple="0"><span class="as-num">27</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="27" data-original-index="27" data-multiple="0"><span class="as-num">28</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="28" data-original-index="28" data-multiple="0"><span class="as-num">29</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="29" data-original-index="29" data-multiple="0"><span class="as-num">30</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div></div>
+            <div class="as-controls"><button type="button" class="as-btn as-grade">批卷</button><button type="button" class="as-btn as-reset">重置</button></div>
+            <div class="as-result" style="display:none;"></div>
+        </div>
+        <div class="ep-head"><p class="ep-kicker">v1.1.0</p><h1>Unity 客户端面试快问快答模拟卷</h1><p>30 道高频快问快答，适合面试前 15 分钟热身。</p></div>
+        <section class="ep-stats" id="ep-stats-unity-rapid-mock" data-paper-id="unity-rapid-mock">
+            <div class="ep-stats-head"><h3>答题记录</h3><button type="button" class="ep-stats-clear">清空记录</button></div>
+            <div class="ep-stats-body">暂无记录，完成一次批卷后会生成。</div>
+        </section>
+        <h2 class="ep-section-title">一、快问快答</h2><article class="ep-question" data-q-index="0" data-question-id="q1" data-paper-id="unity-rapid-mock" data-answer="B" data-section="一、快问快答" id="q1"><h3><span class="ep-number">1.</span> 关于 string，正确的说法是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">可变引用类型</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">不可变引用类型</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">固定长度值类型</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只能存储 ASCII</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">string 不可变，每次修改都会产生新的字符串对象。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq1&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq1%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%20string%EF%BC%8C%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%AF%B4%E6%B3%95%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="1" data-question-id="q2" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q2"><h3><span class="ep-number">2.</span> 接口与抽象类的主要区别是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">接口可以实例化</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">抽象类可以多继承</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">一个类可实现多个接口</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">接口不能有方法</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">C# 单继承类，多实现接口。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq2&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq2%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%8E%A5%E5%8F%A3%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="2" data-question-id="q3" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q3"><h3><span class="ep-number">3.</span> 关于 GC.Collect，正确的说法是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">应每帧主动调用</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只回收非托管内存</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">会立即释放所有对象</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">强制回收可能造成卡顿</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">强制完整回收可能造成明显卡顿，且不会释放仍有引用的对象。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq3&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq3%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%20GC.Collect%EF%BC%8C%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%AF%B4%E6%B3%95%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="3" data-question-id="q4" data-paper-id="unity-rapid-mock" data-answer="A" data-section="一、快问快答" id="q4"><h3><span class="ep-number">4.</span> async void 的主要风险是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">异常无法被调用方捕获</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">一定编译失败</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">不能使用 await</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只能用于 UI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">异常会直接抛到同步上下文，调用方无法 try/catch。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq4&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq4%0A%E9%A2%98%E5%B9%B2%EF%BC%9Aasync%20void%20%E7%9A%84%E4%B8%BB%E8%A6%81%E9%A3%8E%E9%99%A9%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="4" data-question-id="q5" data-paper-id="unity-rapid-mock" data-answer="B" data-section="一、快问快答" id="q5"><h3><span class="ep-number">5.</span> Awake 与 Start 的执行时机是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Start 先于 Awake</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Awake 先于 Start</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">两者完全同时执行</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">执行顺序完全随机</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">Awake 用于初始化自身引用，Start 在第一帧 Update 前执行。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq5&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq5%0A%E9%A2%98%E5%B9%B2%EF%BC%9AAwake%20%E4%B8%8E%20Start%20%E7%9A%84%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="5" data-question-id="q6" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q6"><h3><span class="ep-number">6.</span> 物理计算应优先放在哪个回调？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Update</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">LateUpdate</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">FixedUpdate</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">OnGUI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">FixedUpdate 按固定时间步长调用，适合物理计算。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq6&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq6%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E7%89%A9%E7%90%86%E8%AE%A1%E7%AE%97%E5%BA%94%E4%BC%98%E5%85%88%E6%94%BE%E5%9C%A8%E5%93%AA%E4%B8%AA%E5%9B%9E%E8%B0%83%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="6" data-question-id="q7" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q7"><h3><span class="ep-number">7.</span> 对象销毁后，协程通常会怎样？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">继续正常执行</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">自动转为线程</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">自动保存状态</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">无法正常执行</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">协程宿主销毁后无法正常执行，清理逻辑应直接执行。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq7&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq7%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%AF%B9%E8%B1%A1%E9%94%80%E6%AF%81%E5%90%8E%EF%BC%8C%E5%8D%8F%E7%A8%8B%E9%80%9A%E5%B8%B8%E4%BC%9A%E6%80%8E%E6%A0%B7%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="7" data-question-id="q8" data-paper-id="unity-rapid-mock" data-answer="A" data-section="一、快问快答" id="q8"><h3><span class="ep-number">8.</span> 大量静态 UI 与频繁变化的动态 UI 应？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">拆到不同 Canvas</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">放在同一个 Canvas</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">增加更多 Mask</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">每帧强制重建</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">拆分 Canvas 可缩小批次重建范围。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq8&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq8%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%A4%A7%E9%87%8F%E9%9D%99%E6%80%81%20UI%20%E4%B8%8E%E9%A2%91%E7%B9%81%E5%8F%98%E5%8C%96%E7%9A%84%E5%8A%A8%E6%80%81%20UI%20%E5%BA%94%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="8" data-question-id="q9" data-paper-id="unity-rapid-mock" data-answer="B" data-section="一、快问快答" id="q9"><h3><span class="ep-number">9.</span> 装饰性图片和文本通常应该？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">全部开启 raycastTarget</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">关闭 raycastTarget</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每帧刷新材质</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">强制使用 Mask</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">只有需要响应点击的元素才开启 raycastTarget。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq9&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq9%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E8%A3%85%E9%A5%B0%E6%80%A7%E5%9B%BE%E7%89%87%E5%92%8C%E6%96%87%E6%9C%AC%E9%80%9A%E5%B8%B8%E5%BA%94%E8%AF%A5%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="9" data-question-id="q10" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q10"><h3><span class="ep-number">10.</span> 滚动列表矩形裁剪应优先使用？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Mask</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">CanvasGroup</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">RectMask2D</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">GraphicRaycaster</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">RectMask2D 只做矩形裁剪，通常比 Mask 更轻。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq10&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq10%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%BB%9A%E5%8A%A8%E5%88%97%E8%A1%A8%E7%9F%A9%E5%BD%A2%E8%A3%81%E5%89%AA%E5%BA%94%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="10" data-question-id="q11" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q11"><h3><span class="ep-number">11.</span> 大列表使用 ScrollRect 时推荐？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一次性实例化全部 Item</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">每帧重建布局</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每个 Item 独立 Canvas</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">虚拟滚动加对象池</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">只创建可视区附近的单元格，滚动时复用。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq11&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq11%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%A4%A7%E5%88%97%E8%A1%A8%E4%BD%BF%E7%94%A8%20ScrollRect%20%E6%97%B6%E6%8E%A8%E8%8D%90%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="11" data-question-id="q12" data-paper-id="unity-rapid-mock" data-answer="A" data-section="一、快问快答" id="q12"><h3><span class="ep-number">12.</span> Addressables 释放资源应使用？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Addressables.Release(handle)</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Destroy(handle)</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">GC.Collect()</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只调用 UnloadUnusedAssets</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">Release 减少引用计数，计数归零后才可能卸载。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq12&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq12%0A%E9%A2%98%E5%B9%B2%EF%BC%9AAddressables%20%E9%87%8A%E6%94%BE%E8%B5%84%E6%BA%90%E5%BA%94%E4%BD%BF%E7%94%A8%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="12" data-question-id="q13" data-paper-id="unity-rapid-mock" data-answer="B" data-section="一、快问快答" id="q13"><h3><span class="ep-number">13.</span> AssetBundle 调用 Unload(true) 的风险是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一定安全无风险</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">可能卸载正在使用的资源</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只卸载依赖包</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">完全不释放内存</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">会销毁已加载 Asset，场景中仍在使用的资源会变成 Missing。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq13&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq13%0A%E9%A2%98%E5%B9%B2%EF%BC%9AAssetBundle%20%E8%B0%83%E7%94%A8%20Unload(true)%20%E7%9A%84%E9%A3%8E%E9%99%A9%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="13" data-question-id="q14" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q14"><h3><span class="ep-number">14.</span> 大量使用 Resources.Load 的主要问题是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">加载太快</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">自动热更</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">无法热更且资源常驻包体</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不能加载 Prefab</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">Resources 资源全部打进安装包，无法热更，且引用不透明。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq14&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq14%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%A4%A7%E9%87%8F%E4%BD%BF%E7%94%A8%20Resources.Load%20%E7%9A%84%E4%B8%BB%E8%A6%81%E9%97%AE%E9%A2%98%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="14" data-question-id="q15" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q15"><h3><span class="ep-number">15.</span> Profiler 中定位 GC 分配应重点看？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">当前屏幕分辨率</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">实时网络延迟</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">显卡型号参数</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">GC 分配列</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">GC Alloc 能定位热点路径上的托管堆分配。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq15&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq15%0A%E9%A2%98%E5%B9%B2%EF%BC%9AProfiler%20%E4%B8%AD%E5%AE%9A%E4%BD%8D%20GC%20%E5%88%86%E9%85%8D%E5%BA%94%E9%87%8D%E7%82%B9%E7%9C%8B%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="15" data-question-id="q16" data-paper-id="unity-rapid-mock" data-answer="A" data-section="一、快问快答" id="q16"><h3><span class="ep-number">16.</span> List&lt;T&gt; 扩容时通常如何处理？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">按近似翻倍扩容并复制</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">容量保持不变</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每次只增加一个</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">自动按值排序</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">List 容量不足时会分配更大的数组并复制元素。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq16&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq16%0A%E9%A2%98%E5%B9%B2%EF%BC%9AList%3CT%3E%20%E6%89%A9%E5%AE%B9%E6%97%B6%E9%80%9A%E5%B8%B8%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="16" data-question-id="q17" data-paper-id="unity-rapid-mock" data-answer="B" data-section="一、快问快答" id="q17"><h3><span class="ep-number">17.</span> Dictionary 平均查找复杂度是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">O(n)</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">O(1)</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">O(log n)</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">O(n log n)</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">哈希表平均 O(1)，最坏情况可能退化。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq17&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq17%0A%E9%A2%98%E5%B9%B2%EF%BC%9ADictionary%20%E5%B9%B3%E5%9D%87%E6%9F%A5%E6%89%BE%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="17" data-question-id="q18" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q18"><h3><span class="ep-number">18.</span> struct 的默认值特点是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">所有字段为 null</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">自动调用有参构造</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">字段为各自类型的零值</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不能作为字段</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">struct 默认值会把字段初始化为零值。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq18&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq18%0A%E9%A2%98%E5%B9%B2%EF%BC%9Astruct%20%E7%9A%84%E9%BB%98%E8%AE%A4%E5%80%BC%E7%89%B9%E7%82%B9%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="18" data-question-id="q19" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q19"><h3><span class="ep-number">19.</span> lock 语句底层主要基于？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Mutex</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Semaphore</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">ThreadPool</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">Monitor</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">C# lock 编译为 Monitor.Enter/Exit。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq19&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq19%0A%E9%A2%98%E5%B9%B2%EF%BC%9Alock%20%E8%AF%AD%E5%8F%A5%E5%BA%95%E5%B1%82%E4%B8%BB%E8%A6%81%E5%9F%BA%E4%BA%8E%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="19" data-question-id="q20" data-paper-id="unity-rapid-mock" data-answer="A" data-section="一、快问快答" id="q20"><h3><span class="ep-number">20.</span> 两个 string 使用 == 比较时？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">比较字符串内容</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">比较引用地址</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">总是返回 false</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">一定编译失败</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">string 重载了 ==，比较的是字符串内容。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq20&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq20%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%B8%A4%E4%B8%AA%20string%20%E4%BD%BF%E7%94%A8%20%3D%3D%20%E6%AF%94%E8%BE%83%E6%97%B6%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="20" data-question-id="q21" data-paper-id="unity-rapid-mock" data-answer="B" data-section="一、快问快答" id="q21"><h3><span class="ep-number">21.</span> 相机跟随通常放在哪个回调？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Update</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">LateUpdate</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">FixedUpdate</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">OnGUI</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">LateUpdate 在 Update 后执行，适合相机跟随。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq21&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq21%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E7%9B%B8%E6%9C%BA%E8%B7%9F%E9%9A%8F%E9%80%9A%E5%B8%B8%E6%94%BE%E5%9C%A8%E5%93%AA%E4%B8%AA%E5%9B%9E%E8%B0%83%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="21" data-question-id="q22" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q22"><h3><span class="ep-number">22.</span> OnEnable 的调用时机是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">只在第一次激活时</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只在销毁时</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每次启用时</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">每帧固定调用</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">OnEnable 在对象或组件每次被启用时调用。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq22&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq22%0A%E9%A2%98%E5%B9%B2%EF%BC%9AOnEnable%20%E7%9A%84%E8%B0%83%E7%94%A8%E6%97%B6%E6%9C%BA%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="22" data-question-id="q23" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q23"><h3><span class="ep-number">23.</span> DontDestroyOnLoad 的作用是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">自动销毁对象</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只保留一帧</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只对 UI 有效</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">切场景时保留对象</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">对象在场景切换时不会被销毁。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq23&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq23%0A%E9%A2%98%E5%B9%B2%EF%BC%9ADontDestroyOnLoad%20%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="23" data-question-id="q24" data-paper-id="unity-rapid-mock" data-answer="A" data-section="一、快问快答" id="q24"><h3><span class="ep-number">24.</span> 停止指定协程应使用？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">StopCoroutine</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Destroy</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">StopAllCoroutines 一定</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">外部调用 yield break</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">StopCoroutine 可停止指定协程；StopAllCoroutines 会停止全部。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq24&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq24%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%81%9C%E6%AD%A2%E6%8C%87%E5%AE%9A%E5%8D%8F%E7%A8%8B%E5%BA%94%E4%BD%BF%E7%94%A8%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="24" data-question-id="q25" data-paper-id="unity-rapid-mock" data-answer="B" data-section="一、快问快答" id="q25"><h3><span class="ep-number">25.</span> Physics.OverlapSphereNonAlloc 的优势是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一定更快</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">复用数组减少 GC</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只能用于 2D</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不会返回结果</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">NonAlloc 版本由调用方传入数组，避免每次分配。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq25&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq25%0A%E9%A2%98%E5%B9%B2%EF%BC%9APhysics.OverlapSphereNonAlloc%20%E7%9A%84%E4%BC%98%E5%8A%BF%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="25" data-question-id="q26" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q26"><h3><span class="ep-number">26.</span> ContentSizeFitter 与 LayoutGroup 互相依赖容易导致？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">自动合批</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">纹理压缩</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">反复布局重建</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">网络延迟</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">父子尺寸互相依赖时容易形成布局循环和多次 Rebuild。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq26&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq26%0A%E9%A2%98%E5%B9%B2%EF%BC%9AContentSizeFitter%20%E4%B8%8E%20LayoutGroup%20%E4%BA%92%E7%9B%B8%E4%BE%9D%E8%B5%96%E5%AE%B9%E6%98%93%E5%AF%BC%E8%87%B4%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="26" data-question-id="q27" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q27"><h3><span class="ep-number">27.</span> CanvasGroup.alpha 的主要用途是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">减少 DrawCall</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">裁剪矩形</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">处理点击</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">统一控制透明度</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">CanvasGroup.alpha 可统一控制组内 UI 透明度。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq27&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq27%0A%E9%A2%98%E5%B9%B2%EF%BC%9ACanvasGroup.alpha%20%E7%9A%84%E4%B8%BB%E8%A6%81%E7%94%A8%E9%80%94%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="27" data-question-id="q28" data-paper-id="unity-rapid-mock" data-answer="A" data-section="一、快问快答" id="q28"><h3><span class="ep-number">28.</span> 以下哪项不是减少 GC 的常见做法？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">在 Update 中拼接字符串</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">缓存组件引用</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">使用对象池</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">使用 NonAlloc API</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">字符串拼接会产生新的字符串对象，增加托管堆分配。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq28&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq28%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BB%A5%E4%B8%8B%E5%93%AA%E9%A1%B9%E4%B8%8D%E6%98%AF%E5%87%8F%E5%B0%91%20GC%20%E7%9A%84%E5%B8%B8%E8%A7%81%E5%81%9A%E6%B3%95%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="28" data-question-id="q29" data-paper-id="unity-rapid-mock" data-answer="D" data-section="一、快问快答" id="q29"><h3><span class="ep-number">29.</span> 以下哪项不属于 Unity 生命周期方法？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">Awake 初始化方法</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">Start 启动方法</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">Update 更新方法</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">Constructor 构造方法</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">构造函数不属于 Unity 生命周期回调。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq29&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq29%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BB%A5%E4%B8%8B%E5%93%AA%E9%A1%B9%E4%B8%8D%E5%B1%9E%E4%BA%8E%20Unity%20%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%96%B9%E6%B3%95%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="29" data-question-id="q30" data-paper-id="unity-rapid-mock" data-answer="C" data-section="一、快问快答" id="q30"><h3><span class="ep-number">30.</span> 以下哪项不是合理的资源分包原则？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">按模块划分</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">按更新频率划分</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每个文件单独一个包</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">兼顾加载与依赖</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">每个文件单独打包会带来大量包和依赖管理成本。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-rapid-mock%3Aq30&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-rapid-mock%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq30%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BB%A5%E4%B8%8B%E5%93%AA%E9%A1%B9%E4%B8%8D%E6%98%AF%E5%90%88%E7%90%86%E7%9A%84%E8%B5%84%E6%BA%90%E5%88%86%E5%8C%85%E5%8E%9F%E5%88%99%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article>
+        
+    </div>
+</div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
+
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
+
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      lastPointerX: 0,
+      lastPointerY: 0
+    }
+
+    const onPointerDown = e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (state.pointers.size === 1) {
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = curVb.slice()
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
+        return
+      }
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+      } else if (state.pointers.size === 1) {
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+      }
+    }
+
+    const onWheel = e => {
+      // Prevent event bubbling from triggering external scroll
+      e.preventDefault()
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (init) setCurVb(init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      // Clean up event listeners before removing old SVG
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
+
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
+    })
+  }
+
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (true) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="/js/content-db.js" defer></script><script src="/js/content-db-sql.js" defer></script><script src="/js/question-index.js" defer></script><script src="/js/site-content-api.js" defer></script><script src="/js/site-events.js" defer></script><script src="/js/site-navigation-api.js" defer></script><script src="/js/site-action-api.js" defer></script><script src="/js/site-api.js" defer></script><script src="/js/site-bookmarks.js" defer></script><script src="/js/site-reading-position.js" defer></script><script src="/js/site-search-api.js" defer></script><script src="/js/site-context.js" defer></script><script src="/js/site-history.js" defer></script><script src="/js/site-notes.js" defer></script><script src="/js/site-quiz-api.js" defer></script><script src="/js/site-recommend-api.js" defer></script><script src="/js/site-data-api.js" defer></script><script src="/js/theme-sync.js" defer></script><script src="/js/privacy-notice.js" defer></script><script src="/js/custom-global.js?v=35249d8d" defer></script><script src="/js/hexo-timer.js" defer></script><script src="/js/exam-paper.js" defer></script><script src="/js/hexo-answer-sheet.js" defer></script><script src="/js/stats-center.js" defer></script><script src="/js/exam-paper-stats-v2.js" defer></script><script src="/js/exam-paper-actions.js" defer></script><script src="/js/stats-center-page.js" defer></script><script src="/js/knowledge.js"></script><script src="/js/algo-review.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

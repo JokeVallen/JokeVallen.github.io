@@ -1,0 +1,347 @@
+/* ============================================================
+ * 数据驱动笔试卷
+ * 配合 scripts/exam-paper.js 使用
+ * ============================================================ */
+
+.exam-paper {
+    max-width: 880px;
+}
+
+.exam-paper .ep-head {
+    margin: 10px 0 26px;
+    padding: 18px 20px;
+    border: 1px solid #dbe8f7;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f7fbff, #eef5ff);
+}
+
+.exam-paper .ep-kicker {
+    margin: 0 0 4px;
+    color: #4a8cf7;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.exam-paper .ep-head h1 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    line-height: 1.35;
+}
+
+.exam-paper .ep-head p:last-child {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.exam-paper .ep-section-title {
+    margin: 30px 0 14px;
+    padding-left: 10px;
+    border-left: 4px solid #4a8cf7;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.exam-paper .ep-question {
+    margin: 0 0 16px;
+    padding: 16px 18px;
+    border: 1px solid #e1ebf7;
+    border-radius: 13px;
+    background: #fff;
+}
+
+.exam-paper .ep-question h3 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.exam-paper .ep-number {
+    color: #3f74d8;
+    font-weight: 800;
+}
+
+.exam-paper .ep-options {
+    display: grid;
+    gap: 7px;
+    margin: 0 0 12px;
+}
+
+.exam-paper .ep-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 9px;
+    background: #f7faff;
+    color: #334155;
+    font-size: 13.5px;
+    line-height: 1.65;
+}
+
+.exam-paper .ep-option-key {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e3efff;
+    color: #2f64c8;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.exam-paper .ep-answer {
+    margin-top: 8px;
+    border-top: 1px dashed #dbe8f7;
+    padding-top: 8px;
+}
+
+.exam-paper .ep-answer summary {
+    color: #3f74d8;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+}
+
+.exam-paper .ep-answer-body {
+    margin-top: 8px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: #f8fbff;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.75;
+}
+
+.exam-paper .ep-answer-body p {
+    margin: 0 0 6px;
+}
+
+.exam-paper .ep-answer-body p:last-child {
+    margin-bottom: 0;
+}
+
+.exam-paper .ep-answer-body ul {
+    margin: 4px 0 0;
+    padding-left: 20px;
+}
+
+.exam-paper .ep-answer-body li {
+    margin: 3px 0;
+}
+
+.exam-paper .ep-subjective-tip {
+    margin: -4px 0 10px;
+    color: #94a3b8;
+    font-size: 12.5px;
+}
+
+.exam-paper .ep-muted {
+    color: #94a3b8;
+}
+
+.hexo-answer-sheet .as-multi-tag {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 0 4px;
+    border-radius: 4px;
+    background: #e8f0ff;
+    color: #4a8cf7;
+    font-size: 9px;
+    font-weight: 700;
+    vertical-align: 1px;
+}
+
+[data-theme="dark"] .exam-paper .ep-head {
+    border-color: #2d3d5c;
+    background: linear-gradient(135deg, #182337, #141c2a);
+}
+
+[data-theme="dark"] .exam-paper .ep-question {
+    border-color: #2d3d5c;
+    background: #1a2333;
+}
+
+[data-theme="dark"] .exam-paper .ep-option {
+    background: #141c2a;
+    color: #dbe7ff;
+}
+
+[data-theme="dark"] .exam-paper .ep-option-key {
+    background: #223657;
+    color: #9cc4ff;
+}
+
+[data-theme="dark"] .exam-paper .ep-answer {
+    border-top-color: #2d3d5c;
+}
+
+[data-theme="dark"] .exam-paper .ep-answer-body {
+    background: #141c2a;
+    color: #b8c8e4;
+}
+
+[data-theme="dark"] .exam-paper .ep-head p:last-child,
+[data-theme="dark"] .exam-paper .ep-subjective-tip {
+    color: #8fa2c2;
+}
+
+@media (max-width: 768px) {
+    .exam-paper .ep-head {
+        padding: 14px;
+    }
+
+    .exam-paper .ep-head h1 {
+        font-size: 20px;
+    }
+
+    .exam-paper .ep-question {
+        padding: 13px 14px;
+    }
+
+    .exam-paper .ep-option {
+        font-size: 13px;
+    }
+}
+
+
+/* ---------- 答题记录 ---------- */
+.exam-paper .ep-stats {
+    margin: 0 0 22px;
+    padding: 14px 16px;
+    border: 1px solid #dbe8f7;
+    border-radius: 13px;
+    background: #f8fbff;
+}
+
+.exam-paper .ep-stats-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.exam-paper .ep-stats-head h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.exam-paper .ep-stats-clear {
+    padding: 4px 9px;
+    border: 0;
+    border-radius: 7px;
+    background: #e8f0fc;
+    color: #3f74d8;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.exam-paper .ep-stats-body {
+    color: #64748b;
+    font-size: 12.5px;
+    line-height: 1.8;
+}
+
+.exam-paper .ep-stats-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px dashed #e1ebf7;
+}
+
+.exam-paper .ep-stats-item:last-child {
+    border-bottom: 0;
+}
+
+.exam-paper .ep-stats-item strong {
+    color: #2456a6;
+}
+
+.exam-paper .ep-stats-item em {
+    margin-left: auto;
+    color: #7c8da8;
+    font-style: normal;
+}
+
+.exam-paper .ep-stats-weak {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e1ebf7;
+}
+
+.exam-paper .ep-stats-weak h4 {
+    margin: 0 0 6px;
+    font-size: 13px;
+}
+
+.exam-paper .ep-question.ep-question-focus {
+    border-color: #4a8cf7;
+    box-shadow: 0 0 0 3px rgba(74, 140, 247, 0.14);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exam-paper .ep-feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.55rem;
+    color: #64748b;
+    font-size: 0.78rem;
+    text-decoration: none;
+}
+
+.exam-paper .ep-feedback:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.exam-paper .ep-stats-weak ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.exam-paper .ep-stats-weak li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 0;
+}
+
+.exam-paper .ep-stats-weak li b {
+    flex: 0 0 auto;
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.exam-paper .ep-stats-good {
+    margin: 8px 0 0;
+    color: #16a34a;
+}
+
+[data-theme="dark"] .exam-paper .ep-stats {
+    background: #101827;
+    border-color: #24344e;
+}
+
+[data-theme="dark"] .exam-paper .ep-stats-item {
+    border-bottom-color: #24344e;
+}
+
+[data-theme="dark"] .exam-paper .ep-stats-clear {
+    background: #1b2b45;
+    color: #8fb6ff;
+}
+
+[data-theme="dark"] .exam-paper .ep-stats-item strong {
+    color: #8fb6ff;
+}

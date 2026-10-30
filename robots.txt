@@ -1,0 +1,47 @@
+# robots.txt for https://jokevallen.github.io
+# 本站内容采用 CC BY-NC-SA 4.0，代码保留所有权利。
+# 未经许可禁止商业性批量抓取、模型训练数据再分发或去除署名。
+
+User-agent: *
+Allow: /
+Disallow: /stats/
+Disallow: /privacy/
+Disallow: /404.html
+Disallow: /*?*
+
+# 通用 AI 爬虫：默认不允许抓取
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+# 搜索引擎正常收录
+User-agent: Googlebot
+Allow: /
+Disallow: /stats/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /stats/
+
+# 站点地图（如已启用 sitemap 插件可取消注释）
+# Sitemap: https://jokevallen.github.io/sitemap.xml

@@ -1,5 +1,61 @@
 @import url("/css/mock-center.css");
+@import url("/css/stats-center.css");
 @import url("/css/deepseek-pet.css");
+@import url("/css/exam-paper.css");
+
+/* ---------- 数据加载状态 ---------- */
+.algo-loading,
+.mock-loading {
+    padding: 48px 20px;
+    color: #64748b;
+    text-align: center;
+    font-size: 14px;
+}
+
+[data-theme="dark"] .algo-loading,
+[data-theme="dark"] .mock-loading {
+    color: #9fb0ce;
+}
+
+/* ---------- 隐私声明 ---------- */
+.site-privacy-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 34px 0 10px;
+    padding: 14px 16px;
+    border: 1px solid #dbe8f7;
+    border-radius: 12px;
+    background: #f7faff;
+    color: #64748b;
+    font-size: 12.5px;
+    line-height: 1.75;
+}
+
+.site-privacy-notice i {
+    margin-top: 4px;
+    color: #4a8cf7;
+}
+
+.site-privacy-notice a {
+    color: #3f74d8;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.site-privacy-notice a:hover {
+    text-decoration: underline;
+}
+
+[data-theme="dark"] .site-privacy-notice {
+    border-color: #2d3d5c;
+    background: #141c2a;
+    color: #9fb0ce;
+}
+
+[data-theme="dark"] .site-privacy-notice a {
+    color: #8ab8ff;
+}
 
 /* #region 导航栏 */
 
@@ -728,6 +784,51 @@
     .post-image-caption {
         font-size: 12px;
     }
+}
+
+
+/* =========================================================
+   十一、深色主题兜底
+   避免第三方/新页面组件在深色模式下保持亮色背景
+   ========================================================= */
+[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .exam-paper .ep-question,
+[data-theme="dark"] .exam-paper .ep-option,
+[data-theme="dark"] .exam-paper .ep-stats,
+[data-theme="dark"] .hexo-answer-sheet,
+[data-theme="dark"] .hexo-answer-sheet .as-row,
+[data-theme="dark"] .hexo-answer-sheet .as-opt,
+[data-theme="dark"] .knowledge-card,
+[data-theme="dark"] .mock-panel,
+[data-theme="dark"] .mock-card,
+[data-theme="dark"] .algo-card,
+[data-theme="dark"] .algo-panel,
+[data-theme="dark"] .algo-modal {
+    background: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .exam-paper .ep-option-key,
+[data-theme="dark"] .hexo-answer-sheet .as-opt {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .site-privacy-notice {
+    background: #141c2a;
+    border-color: #2d3d5c;
+    color: #9fb0ce;
 }
 
 /* #endregion */

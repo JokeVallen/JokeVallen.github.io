@@ -9,21 +9,16 @@
         exam: null,
         interview: null
     };
-    var store = { history: [] };
+    var store = { history: [], recentExamIds: [] };
 
     var PAPERS = [
-        { title: '初级笔试题卷（一）', level: '初级', meta: '60 客观 + 12 主观', time: '60 分钟', href: '/questions/UnityClient/Junior/junior1_v3.0.0.html' },
-        { title: '初级笔试题卷（二）', level: '初级', meta: '60 客观 + 12 主观', time: '60 分钟', href: '/questions/UnityClient/Junior/junior2_v2.0.0.html' },
-        { title: '初级笔试题卷（三）', level: '初级', meta: '60 客观 + 12 主观', time: '60 分钟', href: '/questions/UnityClient/Junior/junior3_v2.0.0.html' },
-        { title: '中级笔试题卷（一）', level: '中级', meta: '60 客观 + 12 主观', time: '60 分钟', href: '/questions/UnityClient/MidLevel/midlevel1_v2.0.0.html' },
-        { title: '高级笔试题卷（一）', level: '高级', meta: '60 客观 + 12 主观', time: '60 分钟', href: '/questions/UnityClient/Senior/senior1_v1.0.0.html' },
-        { title: '高级笔试题卷（二）', level: '高级', meta: '60 客观 + 12 主观', time: '60 分钟', href: '/questions/UnityClient/Senior/senior2_v1.0.0.html' },
-        { title: 'UGUI 性能专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/ugui-performance_v1.0.0.html' },
-        { title: 'Addressables / AssetBundle 专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/addressables_v1.0.0.html' },
-        { title: 'C# / GC / 异步专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/csharp-gc-async_v1.0.0.html' },
-        { title: '渲染与 URP 专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/rendering-urp_v1.0.0.html' },
-        { title: '网络同步与弱网专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/network-sync_v1.0.0.html' },
-        { title: '资深笔试题卷（一）', level: '资深', meta: '50 客观 + 10 主观', time: '60 分钟', href: '/questions/UnityClient/Principal/principal1_v1.0.0.html' }
+        { title: '初级综合模拟卷（一）', level: '初级', meta: '30 客观 + 3 主观', time: '30 分钟', href: '/questions/UnityClient/Junior/unity-junior-comprehensive_v1.0.0.html' },
+        { title: '中级综合模拟卷（一）', level: '中级', meta: '30 客观 + 3 主观', time: '35 分钟', href: '/questions/UnityClient/MidLevel/unity-mid-comprehensive_v1.0.0.html' },
+        { title: '高级综合模拟卷（一）', level: '高级', meta: '30 客观 + 3 主观', time: '40 分钟', href: '/questions/UnityClient/Senior/unity-senior-comprehensive_v1.0.0.html' },
+        { title: '面试快问快答模拟卷', level: '模拟', meta: '30 客观快问快答', time: '20 分钟', href: '/questions/UnityClient/Special/unity-rapid-mock_v1.0.0.html' },
+        { title: 'UGUI 性能专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/ugui-performance_v2.0.0.html' },
+        { title: 'Addressables / AssetBundle 专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/addressables_v2.0.0.html' },
+        { title: 'C# / GC / 异步专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/csharp-gc-async_v2.0.0.html' }
     ];
 
     var QUICK_QUIZ = [
@@ -41,7 +36,37 @@
         { category: '资源', q: 'Addressables 释放资源应使用？', options: ['Destroy(handle)', 'GC.Collect()', 'Addressables.Release(handle)', '只调用 UnloadUnusedAssets'], answer: 2, explain: 'Release 减少引用计数，计数归零后才可能卸载。' },
         { category: '资源', q: 'AssetBundle 调用 Unload(true) 的风险是？', options: ['一定安全', '只卸载依赖', '不释放内存', '可能卸载正在使用的资源'], answer: 3, explain: '会销毁已加载 Asset，场景中仍在使用的资源会变成 Missing。' },
         { category: '资源', q: '大量使用 Resources.Load 的主要问题是？', options: ['加载太快', '自动热更', '无法热更且资源常驻包体', '不能加载 Prefab'], answer: 2, explain: 'Resources 资源全部打进安装包，无法热更，且引用不透明。' },
-        { category: '性能', q: 'Profiler 中定位 GC 分配应重点看？', options: ['CPU 的 GC Alloc 列', '屏幕分辨率', '网络延迟', '显卡型号'], answer: 0, explain: 'GC Alloc 能定位热点路径上的托管堆分配。' }
+        { category: '性能', q: 'Profiler 中定位 GC 分配应重点看？', options: ['CPU 的 GC Alloc 列', '屏幕分辨率', '网络延迟', '显卡型号'], answer: 0, explain: 'GC Alloc 能定位热点路径上的托管堆分配。' },
+        { category: 'C#', q: 'List<T> 扩容时通常如何处理？', options: ['容量不变', '按近似翻倍扩容并复制元素', '每次只增加 1', '自动排序'], answer: 1, explain: 'List 容量不足时会分配更大的数组并复制元素，近似翻倍以摊还插入成本。' },
+        { category: 'C#', q: 'Dictionary 平均查找复杂度是？', options: ['O(n)', 'O(log n)', 'O(1)', 'O(n log n)'], answer: 2, explain: '哈希表平均 O(1)，最坏情况可能退化。' },
+        { category: 'C#', q: 'struct 的默认值特点是？', options: ['字段为各自类型的零值', '所有字段为 null', '自动调用有参构造', '不能作为字段'], answer: 0, explain: 'struct 默认值会把字段初始化为零值。' },
+        { category: 'C#', q: 'lock 语句底层主要基于？', options: ['Mutex', 'Semaphore', 'Monitor', 'ThreadPool'], answer: 2, explain: 'C# lock 编译为 Monitor.Enter/Exit。' },
+        { category: 'C#', q: '两个 string 使用 == 比较时？', options: ['比较引用地址', '比较字符串值', '总是 false', '编译失败'], answer: 1, explain: 'string 重载了 ==，比较的是字符串内容。' },
+        { category: 'Unity', q: '相机跟随通常放在哪个回调？', options: ['Update', 'FixedUpdate', 'LateUpdate', 'OnGUI'], answer: 2, explain: 'LateUpdate 在 Update 后执行，适合相机跟随。' },
+        { category: 'Unity', q: 'OnEnable 的调用时机是？', options: ['只在第一次激活时', '每次组件/对象启用时', '只在销毁时', '每帧'], answer: 1, explain: 'OnEnable 在对象或组件每次被启用时调用。' },
+        { category: 'Unity', q: 'DontDestroyOnLoad 的作用是？', options: ['切场景时保留对象', '自动销毁对象', '只保留一帧', '只对 UI 有效'], answer: 0, explain: '对象在场景切换时不会被销毁。' },
+        { category: 'Unity', q: '停止指定协程应使用？', options: ['StopAllCoroutines 一定', 'Destroy', 'StopCoroutine', 'yield break 外部调用'], answer: 2, explain: 'StopCoroutine 可停止指定协程；StopAllCoroutines 会停止全部。' },
+        { category: 'Unity', q: 'Physics.OverlapSphereNonAlloc 的优势是？', options: ['一定更快', '只能用于 2D', '不会返回结果', '复用数组减少 GC'], answer: 3, explain: 'NonAlloc 版本由调用方传入数组，避免每次分配。' },
+        { category: 'UGUI', q: 'ContentSizeFitter 与 LayoutGroup 互相依赖容易导致？', options: ['自动合批', '反复布局重建', '纹理压缩', '网络延迟'], answer: 1, explain: '父子尺寸互相依赖时容易形成布局循环和多次 Rebuild。' },
+        { category: 'UGUI', q: 'CanvasGroup.alpha 的主要用途是？', options: ['统一控制一组 UI 的透明度', '减少 DrawCall', '裁剪矩形', '处理点击'], answer: 0, explain: 'CanvasGroup.alpha 可统一控制组内 UI 透明度。' },
+        { category: 'UGUI', q: '矩形裁剪应优先使用？', options: ['Mask', 'CanvasGroup', 'RectMask2D', 'GraphicRaycaster'], answer: 2, explain: 'RectMask2D 只做矩形裁剪，通常比 Mask 更轻。' },
+        { category: 'UGUI', q: 'UGUI 点击事件最终由谁派发？', options: ['Animator', 'EventSystem', 'Physics', 'CanvasScaler'], answer: 1, explain: 'EventSystem 结合 Raycaster 收集命中并派发事件。' },
+        { category: '资源', q: 'Addressables.InstantiateAsync 创建的实例应如何释放？', options: ['只 Destroy', '只 GC.Collect', '不需要释放', 'Addressables.ReleaseInstance'], answer: 3, explain: 'ReleaseInstance 会正确归还实例与引用计数。' },
+        { category: '资源', q: '加载 AssetBundle 资源前应先？', options: ['清空缓存', '通过 Manifest 加载依赖', '调用 GC', '关闭网络'], answer: 1, explain: '先加载依赖包，否则可能出现资源缺失或材质丢失。' },
+        { category: '资源', q: '纹理开启 Read/Write 的主要影响是？', options: ['增加 CPU 内存副本', '减少内存', '提升压缩率', '只影响音频'], answer: 0, explain: '需要 CPU 访问纹理时会保留额外内存副本。' },
+        { category: '资源', q: '短促高频音效适合的 Load Type 是？', options: ['Streaming', 'Compressed In Memory', 'Decompress On Load', '无差别'], answer: 2, explain: '短音效解压常驻内存，播放 CPU 开销低。' },
+        { category: '性能', q: 'DrawCall 指的是？', options: ['纹理尺寸', 'GC 次数', '网络包数量', 'CPU 向 GPU 提交一次绘制'], answer: 3, explain: 'DrawCall 是 CPU 提交绘制命令的次数。' },
+        { category: '性能', q: 'Overdraw 主要消耗？', options: ['磁盘 IO', '网络带宽', 'GPU 填充率', 'CPU 主线程'], answer: 2, explain: '同一像素被多次绘制会增加 GPU 填充率压力。' },
+        { category: '性能', q: '以下哪项是常见 GC 分配来源？', options: ['缓存组件', '字符串拼接与闭包', '使用对象池', '复用数组'], answer: 1, explain: '字符串拼接、闭包、装箱等都会产生托管堆分配。' },
+        { category: '性能', q: '查看每个 DrawCall 的渲染状态应使用？', options: ['Frame Debugger', 'Memory Profiler', 'Network Profiler', 'Animator'], answer: 0, explain: 'Frame Debugger 按渲染顺序展示 DrawCall 与状态。' },
+        { category: '网络', q: 'TCP 与 UDP 的主要区别是？', options: ['TCP 无连接', 'UDP 一定更快', 'TCP 可靠有序，UDP 不保证', '两者完全一样'], answer: 2, explain: 'TCP 提供可靠有序字节流，UDP 更轻量但不保证可靠与顺序。' },
+        { category: '网络', q: 'TCP 粘包的处理方式是？', options: ['增加睡眠', '关闭 Nagle 一定解决', '改用 UDP 一定解决', '长度前缀或分隔符划分消息边界'], answer: 3, explain: 'TCP 是字节流，应用层必须定义消息边界。' },
+        { category: '网络', q: 'Protobuf 的主要优势是？', options: ['人类可读', '体积小、序列化快、跨语言', '不需要 schema', '只能用于 C#'], answer: 1, explain: 'Protobuf 使用二进制编码和 schema，适合网络协议。' },
+        { category: '架构', q: '事件总线最常见的问题是？', options: ['订阅未退订导致泄漏或重复回调', '线程安全', '不能传参', '只能用于 UI'], answer: 0, explain: '订阅者销毁后未反注册，事件中心仍持有引用。' },
+        { category: '架构', q: '对象池设计的关键是？', options: ['无限增长', '每次重新 new', '重置状态并设置容量上限', '只用于 UI'], answer: 2, explain: '复用必须清理状态并限制容量，避免内存持续增长。' },
+        { category: '架构', q: 'MVC 中 View 的主要职责是？', options: ['业务规则', '显示与控件引用', '数据库访问', '网络同步'], answer: 1, explain: 'View 负责显示和控件引用，业务逻辑放在 Model/Presenter。' },
+        { category: '架构', q: '热更新版本管理的关键是？', options: ['只更新客户端', '不需要 CDN', '不需要校验', '资源与代码版本一致且可回滚'], answer: 3, explain: '必须保证程序集、资源、配置版本匹配，并支持校验与回滚。' },
+        { category: '算法', q: '二分查找的前提通常是？', options: ['数据无序', '数据有序或答案具有单调性', '数据必须是链表', '只能查最大值'], answer: 1, explain: '二分依赖有序性或可判定的单调性。' }
     ];
 
     var INTERVIEW_QUESTIONS = [
@@ -78,6 +103,42 @@
         { category: '算法', difficulty: '进阶', q: '动态规划解题步骤是什么？', points: ['定义状态与含义', '推导转移方程', '确定初始化与遍历顺序', '处理边界并考虑空间压缩'] },
         { category: '项目', difficulty: '行为', q: '讲一个你解决过的最有挑战的技术问题。', points: ['背景与目标', '你的排查过程与关键判断', '方案取舍与落地结果', '复盘与可复用经验'] }
     ];
+    // 优先从 ContentDB 读取；JS 内数组仅作为离线兜底
+    function loadContentData() {
+        if (!window.ContentDB || typeof window.ContentDB.ensure !== 'function') {
+            return Promise.resolve(false);
+        }
+        return window.ContentDB.ensure().then(function (db) {
+            var t = db && db.tables ? db.tables : {};
+            var quiz = Array.isArray(t.mock_quiz) ? t.mock_quiz : [];
+            var interview = Array.isArray(t.interview_questions) ? t.interview_questions : [];
+            if (quiz.length) {
+                QUICK_QUIZ = quiz.map(function (q) {
+                    return {
+                        id: q.id,
+                        category: q.category,
+                        q: q.stem,
+                        options: q.options || [],
+                        answer: q.answer,
+                        explain: q.explanation || ''
+                    };
+                });
+            }
+            if (interview.length) {
+                INTERVIEW_QUESTIONS = interview.map(function (q) {
+                    return {
+                        id: q.id,
+                        category: q.category,
+                        difficulty: q.difficulty,
+                        q: q.question,
+                        points: q.points || []
+                    };
+                });
+            }
+            return true;
+        }).catch(function () { return false; });
+    }
+
 
     function escapeHtml(value) {
         return String(value == null ? '' : value)
@@ -110,8 +171,13 @@
         try {
             var raw = localStorage.getItem(STORAGE_KEY);
             var data = raw ? JSON.parse(raw) : null;
-            if (data && Array.isArray(data.history)) store = { history: data.history.slice(0, 80) };
-        } catch (e) { store = { history: [] }; }
+            if (data) {
+                store = {
+                    history: Array.isArray(data.history) ? data.history.slice(0, 80) : [],
+                    recentExamIds: Array.isArray(data.recentExamIds) ? data.recentExamIds.slice(-40) : []
+                };
+            }
+        } catch (e) { store = { history: [], recentExamIds: [] }; }
     }
 
     function saveStore() {
@@ -373,8 +439,80 @@
         ].join('');
     }
 
+    function statsCenter() {
+        return window.StatsCenter || null;
+    }
+
+    function recordExamStats(exam, score) {
+        try {
+            var sc = statsCenter();
+            if (!sc) return;
+            sc.register({ id: 'mock-center', label: '求职模拟', maxRecords: 200 });
+            var wrong = [];
+            exam.questions.forEach(function (q, i) {
+                if (exam.answers[i] === q.answer) return;
+                wrong.push({
+                    questionId: q.id || '',
+                    stem: q.q,
+                    userAnswer: exam.answers[i] == null ? '' : String.fromCharCode(65 + exam.answers[i]),
+                    correctAnswer: String.fromCharCode(65 + q.answer)
+                });
+            });
+            sc.add('mock-center', {
+                key: 'quick-quiz',
+                title: '快速笔试自测',
+                type: 'exam',
+                metrics: {
+                    score: score,
+                    total: exam.questions.length,
+                    rate: exam.questions.length ? Math.round(score / exam.questions.length * 100) : 0,
+                    durationSec: exam.usedSeconds || 0
+                },
+                detail: { wrong: wrong }
+            });
+        } catch (e) { /* ignore stats errors */ }
+    }
+
+    function recordInterviewStats(data) {
+        try {
+            var sc = statsCenter();
+            if (!sc) return;
+            sc.register({ id: 'mock-center', label: '求职模拟', maxRecords: 200 });
+            var known = data.ratings.filter(function (r) { return r === 'known'; }).length;
+            var fuzzy = data.ratings.filter(function (r) { return r === 'fuzzy'; }).length;
+            var forgot = data.ratings.filter(function (r) { return r === 'forgot'; }).length;
+            sc.add('mock-center', {
+                key: 'interview-drill',
+                title: '面试随机抽题',
+                type: 'interview',
+                metrics: {
+                    score: known,
+                    total: data.questions.length,
+                    rate: data.questions.length ? Math.round(known / data.questions.length * 100) : 0,
+                    durationSec: 0
+                },
+                detail: { known: known, fuzzy: fuzzy, forgot: forgot }
+            });
+        } catch (e) { /* ignore stats errors */ }
+    }
+
     function startExam() {
-        var questions = shuffle(QUICK_QUIZ).slice(0, Math.min(10, QUICK_QUIZ.length));
+        var count = Math.min(10, QUICK_QUIZ.length);
+        var pool = QUICK_QUIZ.map(function (q, i) { return { id: q.id || ('q' + i), q: q }; });
+        var recent = store.recentExamIds || [];
+        var fresh = pool.filter(function (item) { return recent.indexOf(item.id) === -1; });
+
+        // 最近做过的题先冷却，避免连续两次大量重复
+        if (fresh.length < count) fresh = pool.slice();
+        var picked = shuffle(fresh).slice(0, count);
+        var pickedIds = picked.map(function (item) { return item.id; });
+
+        // 只保留最近的 N-count 条，保证下一轮至少有 count 道新题可选
+        var keep = Math.max(0, pool.length - count);
+        store.recentExamIds = recent.concat(pickedIds).slice(-keep);
+        saveStore();
+
+        var questions = picked.map(function (item) { return item.q; });
         state.exam = {
             questions: questions,
             index: 0,
@@ -399,6 +537,7 @@
         e.usedSeconds = 600 - Math.max(0, e.secondsLeft);
         e.finished = true;
         addHistory({ type: 'exam', title: '快速笔试自测', score: score, total: e.questions.length });
+        recordExamStats(e, score);
         render();
     }
 
@@ -442,6 +581,7 @@
         var data = state.interview;
         data.finished = true;
         var known = data.ratings.filter(function (r) { return r === 'known'; }).length;
+        recordInterviewStats(data);
         addHistory({
             type: 'interview',
             title: '面试模拟 · ' + (data.questions[0] ? data.questions[0].category : '综合'),
@@ -535,7 +675,17 @@
         stopTimer();
         state.exam = null;
         state.interview = null;
-        render();
+
+        if (!root.dataset.dataLoaded) {
+            root.dataset.dataLoaded = 'loading';
+            root.innerHTML = '<div class="mock-loading">正在加载题库数据...</div>';
+            loadContentData().then(function () {
+                root.dataset.dataLoaded = 'true';
+                render();
+            });
+        } else {
+            render();
+        }
     }
 
     if (document.readyState === 'loading') {

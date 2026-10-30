@@ -1516,3 +1516,298 @@ body.algo-modal-open {
         font-size: 20px;
     }
 }
+
+/* ---------- C# Playground 嵌入 ---------- */
+
+#algo-review-app .algo-playground {
+    display: grid;
+    gap: 14px;
+}
+
+#algo-review-app .algo-playground-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--algo-border);
+    border-radius: 10px;
+    background: var(--algo-card-2);
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-playground iframe {
+    width: 100%;
+    min-height: 720px;
+    background: #fff;
+    box-shadow: var(--algo-shadow);
+}
+
+[data-theme="dark"] #algo-review-app .algo-playground iframe {
+    background: #0f172a;
+}
+
+#algo-review-app .algo-workbench {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+}
+
+#algo-review-app .algo-workbench-left,
+#algo-review-app .algo-workbench-right {
+    min-width: 0;
+}
+#algo-review-app .algo-workbench-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#algo-review-app .algo-workbench-left.is-collapsed {
+    display: none;
+}
+
+#algo-review-app .algo-problem-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px auto;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+#algo-review-app .algo-problem-filter-count {
+    color: var(--algo-muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+
+
+#algo-review-app .algo-workbench-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+}
+
+#algo-review-app .algo-workbench-item {
+    flex: 0 0 190px;
+    display: grid;
+    gap: 4px;
+    padding: 10px 12px;
+    border: 1px solid var(--algo-border);
+    border-radius: 10px;
+    background: var(--algo-card);
+    color: var(--algo-text);
+    text-align: left;
+    cursor: pointer;
+}
+
+#algo-review-app .algo-workbench-item:hover,
+#algo-review-app .algo-workbench-item.is-active {
+    border-color: var(--algo-primary);
+    box-shadow: 0 0 0 2px var(--algo-primary-soft);
+}
+
+#algo-review-app .algo-workbench-item strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+#algo-review-app .algo-workbench-pattern {
+    color: var(--algo-muted);
+    font-size: 11px;
+}
+
+#algo-review-app .algo-workbench-detail {
+    padding: 14px 16px;
+    border: 1px solid var(--algo-border);
+    border-radius: 12px;
+    background: var(--algo-card);
+}
+
+#algo-review-app .algo-workbench-detail-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+#algo-review-app .algo-workbench-detail h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+}
+
+#algo-review-app .algo-workbench-meta {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 8px 10px;
+    margin: 0 0 12px;
+    font-size: 13px;
+}
+
+#algo-review-app .algo-workbench-meta dt {
+    color: var(--algo-muted);
+}
+
+#algo-review-app .algo-workbench-meta dd {
+    margin: 0;
+    min-width: 0;
+}
+
+#algo-review-app .algo-workbench-meta dt,
+#algo-review-app .algo-workbench-meta dd {
+    align-self: start;
+}
+
+#algo-review-app .algo-workbench-meta pre,
+#algo-review-app .algo-template-text {
+    margin: 0;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: var(--algo-card-2);
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+#algo-review-app .algo-workbench-right iframe {
+    position: static;
+    min-height: 820px;
+    background: #fff;
+    box-shadow: var(--algo-shadow);
+}
+
+#algo-review-app .algo-problem-fold {
+    margin: 0 0 10px;
+    border: 1px solid var(--algo-border);
+    border-radius: 10px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-problem-fold > summary {
+    padding: 10px 14px;
+    color: var(--algo-text);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+}
+
+#algo-review-app .algo-problem-fold[open] > summary {
+    border-bottom: 1px solid var(--algo-border);
+}
+
+#algo-review-app .algo-problem-fold > p,
+#algo-review-app .algo-problem-fold > ul,
+#algo-review-app .algo-problem-fold > div,
+#algo-review-app .algo-problem-fold > dl {
+    margin: 12px 14px;
+}
+
+#algo-review-app .algo-problem-example {
+    padding: 10px 12px;
+    margin: 10px 14px;
+    border-left: 3px solid var(--algo-primary);
+    border-radius: 8px;
+    background: var(--algo-card);
+}
+
+#algo-review-app .algo-problem-example-title {
+    margin-bottom: 6px;
+    color: var(--algo-muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#algo-review-app .algo-problem-example pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--algo-text);
+    font-size: 12.5px;
+    line-height: 1.7;
+}
+
+#algo-review-app .algo-problem-example span {
+    color: var(--algo-muted);
+    font-weight: 700;
+}
+
+#algo-review-app .algo-problem-constraints {
+    padding-left: 20px;
+    color: var(--algo-text);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-problem-constraints li {
+    margin: 4px 0;
+}
+
+#algo-review-app .algo-problem-muted {
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+
+
+[data-theme="dark"] #algo-review-app .algo-workbench-right iframe {
+    background: #0f172a;
+}
+
+[data-theme="dark"] #algo-review-app .algo-hero {
+    background:
+        radial-gradient(circle at 88% 12%, rgba(129, 140, 248, 0.18), transparent 30%),
+        linear-gradient(135deg, #172554 0%, #312e81 52%, #4c1d95 100%);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+}
+
+#algo-review-app.is-playground {
+    /* 保持在原有内容宽度内，不再突破主题布局 */
+}
+
+@media (max-width: 1100px) {
+    #algo-review-app .algo-workbench {
+        grid-template-columns: 1fr;
+    }
+
+    #algo-review-app .algo-workbench-right iframe {
+        position: static;
+        min-height: 680px;
+    }
+}
+
+@media (max-width: 700px) {
+    #algo-review-app.is-playground {
+        max-width: none;
+    }
+
+    #algo-review-app .algo-workbench-item {
+        flex-basis: 150px;
+    }
+
+    #algo-review-app .algo-workbench-right iframe {
+        min-height: 560px;
+    }
+
+    #algo-review-app .algo-workbench-meta {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+
+    #algo-review-app .algo-workbench-meta dt {
+        margin-top: 6px;
+    }
+
+    #algo-review-app .algo-problem-filters {
+        grid-template-columns: 1fr;
+    }
+}
+
+

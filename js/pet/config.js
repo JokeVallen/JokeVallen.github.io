@@ -16,7 +16,7 @@ export default {
     ],
     "idleSleepMs": 150000,
     "drag": {
-        "enabled": true,
+        "enabled": false,
         "thresholdPx": 6
     },
     "click": {
@@ -178,8 +178,6 @@ export default {
         ]
     },
     "search": {
-        "url": "/pet-index.json",
-        "preloadDelayMs": 5000,
         "maxResults": 3
     },
     "animations": {
@@ -330,6 +328,10 @@ export default {
         },
         "sleepy": {
             "clip": "sleep",
+            "loop": {
+                "intro": 4.65,
+                "end": 6.85
+            },
             "pool": [
                 "yawn",
                 "doze",

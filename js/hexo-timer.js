@@ -21,7 +21,7 @@
 
         // 一次性读取 data-* 并缓存
         const mode = (timer.dataset.mode || 'up').toLowerCase();
-        const initial = Math.max(0, parseInt(timer.dataset.initial, 10) || 0);
+        let initial = Math.max(0, parseInt(timer.dataset.initial, 10) || 0);
         const persist = timer.dataset.persist !== 'false';
         const auto = timer.dataset.auto === 'true';
 
@@ -34,6 +34,15 @@
         const pauseBtn = timer.querySelector('.timer-pause');
         const resetBtn = timer.querySelector('.timer-reset');
         const toggleBtn = timer.querySelector('.timer-toggle');
+        const customInput = timer.querySelector('.timer-custom-input');
+        const customSet = timer.querySelector('.timer-custom-set');
+        const settingsBtn = timer.querySelector('.timer-settings');
+        const settingsPanel = timer.querySelector('.timer-settings-panel');
+        const setH = timer.querySelector('.timer-set-h');
+        const setM = timer.querySelector('.timer-set-m');
+        const setS = timer.querySelector('.timer-set-s');
+        const settingsApply = timer.querySelector('.timer-settings-apply');
+        const settingsCancel = timer.querySelector('.timer-settings-cancel');
         const MINI_KEY = 'hexo-timer-mini';
         let isMini = false;
         try {
@@ -75,6 +84,10 @@
                 const saved = JSON.parse(localStorage.getItem(key) || 'null');
                 if (saved && typeof saved.seconds === 'number') {
                     displaySeconds = Math.max(0, saved.seconds);
+                    if (typeof saved.initial === 'number' && saved.initial > 0) {
+                        initial = saved.initial;
+                        timer.dataset.initial = String(initial);
+                    }
                 }
             } catch (e) { /* ignore */ }
         }
@@ -147,6 +160,7 @@
             try {
                 localStorage.setItem(key, JSON.stringify({
                     seconds: computeCurrent(),
+                    initial: initial,
                     ts: now
                 }));
             } catch (e) { /* ignore */ }
@@ -222,7 +236,87 @@
             save(true);
         }
 
+        function setCustom() {
+            if (!customInput) return;
+            const mins = parseInt(customInput.value, 10);
+            if (!mins || mins < 1) {
+                customInput.focus();
+                return;
+            }
+            const safe = Math.max(1, Math.min(300, mins));
+            initial = safe * 60;
+            displaySeconds = initial;
+            isRunning = false;
+            if (tickTimerId !== null) {
+                clearTimeout(tickTimerId);
+                tickTimerId = null;
+            }
+            stopAlarm();
+            timer.dataset.initial = String(initial);
+            renderTime();
+            renderStatus('ready');
+            save(true);
+        }
+
         // ---- 事件绑定 ----
+        function setSeconds(total) {
+            initial = Math.max(1, Math.min(99 * 3600 + 59 * 60 + 59, Math.floor(total || 0)));
+            displaySeconds = initial;
+            isRunning = false;
+            if (tickTimerId !== null) {
+                clearTimeout(tickTimerId);
+                tickTimerId = null;
+            }
+            stopAlarm();
+            timer.dataset.initial = String(initial);
+            renderTime();
+            renderStatus('ready');
+            save(true);
+        }
+
+        function openSettings() {
+            if (!settingsPanel) return;
+            const total = mode === 'down' ? initial : computeCurrent();
+            if (setH) setH.value = String(Math.floor(total / 3600));
+            if (setM) setM.value = String(Math.floor((total % 3600) / 60));
+            if (setS) setS.value = String(total % 60);
+            settingsPanel.hidden = false;
+            timer.classList.add('is-setting');
+            if (setH) setTimeout(function () { setH.focus(); }, 0);
+        }
+
+        function closeSettings() {
+            if (settingsPanel) settingsPanel.hidden = true;
+            timer.classList.remove('is-setting');
+        }
+
+        function applySettings() {
+            const h = Math.max(0, Math.min(99, parseInt(setH && setH.value, 10) || 0));
+            const m = Math.max(0, Math.min(59, parseInt(setM && setM.value, 10) || 0));
+            const s = Math.max(0, Math.min(59, parseInt(setS && setS.value, 10) || 0));
+            if (h + m + s <= 0) {
+                if (setS) setS.focus();
+                return;
+            }
+            setSeconds(h * 3600 + m * 60 + s);
+            closeSettings();
+        }
+
+        if (settingsBtn) settingsBtn.addEventListener('click', openSettings);
+        if (settingsCancel) settingsCancel.addEventListener('click', closeSettings);
+        if (settingsApply) settingsApply.addEventListener('click', applySettings);
+        if (settingsPanel) {
+            settingsPanel.addEventListener('click', function (e) {
+                if (e.target === settingsPanel) closeSettings();
+            });
+        }
+
+        if (customSet) customSet.addEventListener('click', setCustom);
+        if (customInput) {
+            customInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') setCustom();
+            });
+        }
         startBtn.addEventListener('click', start);
         pauseBtn.addEventListener('click', pause);
         resetBtn.addEventListener('click', reset);
@@ -253,6 +347,22 @@
         window.addEventListener('pagehide', function () { save(true); });
         applyMini();
 
+        timer.__hexoTimer = {
+            elapsed: function () {
+                return mode === 'down' ? Math.max(0, initial - computeCurrent()) : computeCurrent();
+            },
+            remaining: function () {
+                return mode === 'down' ? computeCurrent() : 0;
+            },
+            state: function () {
+                return isRunning ? 'running' : 'paused';
+            },
+            setMinutes: function (mins) {
+                setSeconds(Math.max(1, Number(mins) || 0) * 60);
+            },
+            setSeconds: setSeconds
+        };
+
         // ---- 初始渲染 ----
         if (mode === 'down' && displaySeconds === 0 && initial > 0) {
             // 恢复时倒计时已到 0
@@ -269,6 +379,13 @@
             requestAnimationFrame(start);
         }
     }
+
+    window.HexoTimer = {
+        get: function (id) {
+            const el = document.getElementById(id);
+            return el && el.__hexoTimer ? el.__hexoTimer : null;
+        }
+    };
 
     // ---- 全局初始化 ----
     function init() {

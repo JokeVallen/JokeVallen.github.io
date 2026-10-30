@@ -44,7 +44,50 @@
 .as-header-right {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.45rem;
+    width: 100%;
+}
+.as-header {
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+}
+
+.as-label {
+    flex: 1 1 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.as-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+}
+
+.as-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    width: 100%;
+}
+
+.as-header-bottom {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.as-header .as-label {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.as-header .as-toggle {
+    flex: 0 0 auto;
+    margin-left: auto;
 }
 
 .as-toggle {
@@ -76,14 +119,21 @@
 }
 
 .hexo-answer-sheet.is-mini .as-header {
+    flex-wrap: nowrap;
     margin-bottom: 0;
 }
 
 .hexo-answer-sheet.is-mini .as-label {
+    flex: 1 1 auto;
     max-width: 58%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.hexo-answer-sheet.is-mini .as-header-right {
+    width: auto;
+    margin-left: auto;
 }
 
 .hexo-answer-sheet.is-mini .as-body,

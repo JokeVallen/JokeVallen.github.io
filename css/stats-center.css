@@ -1,0 +1,348 @@
+.stats-center-page {
+    max-width: 880px;
+}
+
+.stats-center-app {
+    display: grid;
+    gap: 18px;
+}
+
+.stats-module {
+    padding: 16px 18px;
+    border: 1px solid #dbe8f7;
+    border-radius: 14px;
+    background: #f8fbff;
+}
+
+.stats-module h3 {
+    margin: 0 0 12px;
+    font-size: 17px;
+}
+
+.stats-record {
+    padding: 10px 0;
+    border-bottom: 1px dashed #dbe8f7;
+}
+
+.stats-record:last-child {
+    border-bottom: 0;
+}
+
+.stats-record-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: #64748b;
+    font-size: 12.5px;
+}
+
+.stats-record-top strong {
+    color: #2456a6;
+    font-weight: 600;
+}
+
+.stats-record-metrics {
+    margin-top: 4px;
+    color: #2456a6;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.stats-wrong-list {
+    margin: 7px 0 0;
+    padding: 0;
+    list-style: none;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.stats-wrong-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 2px 0;
+}
+
+.stats-wrong-list b {
+    flex: 0 0 auto;
+    color: #dc2626;
+}
+
+.stats-more {
+    color: #94a3b8;
+}
+
+.stats-good {
+    margin: 6px 0 0;
+    color: #16a34a;
+    font-size: 12px;
+}
+
+[data-theme="dark"] .stats-module {
+    background: #101827;
+    border-color: #24344e;
+}
+
+[data-theme="dark"] .stats-record {
+    border-bottom-color: #24344e;
+}
+
+[data-theme="dark"] .stats-record-top strong,
+[data-theme="dark"] .stats-record-metrics {
+    color: #8fb6ff;
+}
+
+
+.stats-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 1px solid #dbe8f7;
+    border-radius: 12px;
+    background: #fff;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.stats-toolbar label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stats-toolbar select {
+    padding: 5px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+    color: #334155;
+}
+
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+}
+
+.stats-summary-card {
+    padding: 12px 14px;
+    border: 1px solid #dbe8f7;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.stats-summary-card span {
+    display: block;
+    color: #7c8da8;
+    font-size: 12px;
+}
+
+.stats-summary-card strong {
+    display: block;
+    margin-top: 4px;
+    color: #2456a6;
+    font-size: 22px;
+}
+
+.stats-chart-card {
+    padding: 14px 16px;
+    border: 1px solid #dbe8f7;
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.stats-chart-card h3 {
+    margin: 0 0 12px;
+    font-size: 15px;
+}
+
+.stats-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 170px;
+    padding: 8px 2px 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.stats-chart::-webkit-scrollbar {
+    height: 6px;
+}
+
+.stats-chart::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #cbd5e1;
+}
+
+.stats-chart::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.stats-chart-col {
+    flex: 0 0 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 4px;
+}
+
+.stats-chart-bar {
+    position: relative;
+    width: 100%;
+    min-height: 18px;
+    max-height: calc(100% - 18px);
+    border-radius: 5px 5px 0 0;
+    background: linear-gradient(180deg, #60a5fa, #2563eb);
+}
+
+.stats-chart-bar span {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+}
+
+.stats-chart-col small {
+    color: #94a3b8;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.stats-chart-empty,
+.stats-empty {
+    padding: 18px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.stats-module h3 small {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+[data-theme="dark"] .stats-toolbar,
+[data-theme="dark"] .stats-summary-card,
+[data-theme="dark"] .stats-chart-card {
+    background: #101827;
+    border-color: #24344e;
+}
+
+[data-theme="dark"] .stats-toolbar select {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+.stats-modules {
+    display: grid;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.stats-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.stats-chart-wide {
+    grid-column: 1 / -1;
+}
+
+.stats-bar-row {
+    display: grid;
+    grid-template-columns: minmax(90px, 120px) minmax(0, 1fr) 36px;
+    align-items: center;
+    gap: 10px;
+    margin: 9px 0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.stats-bar-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stats-bar-track {
+    height: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e2e8f0;
+}
+
+.stats-bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #60a5fa, #2563eb);
+}
+
+.stats-bar-row strong {
+    color: #2456a6;
+    text-align: right;
+}
+
+.stats-activity {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 150px;
+    padding-top: 8px;
+}
+
+.stats-activity-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 6px;
+}
+
+.stats-activity-bar {
+    width: 100%;
+    min-height: 6px;
+    border-radius: 5px 5px 0 0;
+    background: linear-gradient(180deg, #34d399, #059669);
+}
+
+.stats-activity-col small {
+    color: #94a3b8;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+[data-theme="dark"] .stats-bar-track {
+    background: #24344e;
+}
+
+[data-theme="dark"] .stats-bar-row strong {
+    color: #8fb6ff;
+}
+
+@media (max-width: 720px) {
+    .stats-chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-chart-wide {
+        grid-column: auto;
+    }
+}
+

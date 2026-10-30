@@ -5,7 +5,7 @@
         if (document.querySelector('script[data-pet-module]')) return;
         const s = document.createElement('script');
         s.type = 'module';
-        s.src = '/js/pet/index.js?v=4db0052b';
+        s.src = '/js/pet/index.js?v=35249d8d';
         s.dataset.petModule = '1';
         document.body.appendChild(s);
     }
@@ -16,6 +16,32 @@
         ensurePet();
     }
     document.addEventListener('pjax:complete', ensurePet);
+})();
+
+// --------------------- 隐私声明 ----------------------
+(function () {
+    function addPrivacyNotice() {
+        return; // privacy notice moved to privacy-notice.js
+
+        const old = document.querySelectorAll('.site-privacy-notice');
+        for (let i = 0; i < old.length; i++) old[i].remove();
+
+        const container = document.getElementById('article-container') || document.querySelector('#page');
+        if (!container) return;
+
+        const notice = document.createElement('div');
+        notice.className = 'site-privacy-notice';
+        notice.innerHTML = '<i class="fas fa-shield-alt"></i><div>隐私说明：本页互动输入与模拟记录默认只保存在你的浏览器本地，不会自动上传；面试模拟不录音、不采集麦克风。' +
+            '<a href="/privacy/">查看完整数据与权限说明</a></div>';
+        container.appendChild(notice);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', addPrivacyNotice);
+    } else {
+        addPrivacyNotice();
+    }
+    document.addEventListener('pjax:complete', addPrivacyNotice);
 })();
 
 // --------------------- 模拟中心按需加载 ----------------------

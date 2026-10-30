@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-30T15:46:29.229Z",
+  "files": {
+    "content": {
+      "raw": 5335713,
+      "gz": 1478639,
+      "hash": "b5af26bb078ac3cf"
+    },
+    "search": {
+      "raw": 1221857,
+      "gz": 323990,
+      "hash": "e714f6e442103f13"
+    }
+  }
+}

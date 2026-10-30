@@ -295,6 +295,115 @@
         }
     ];
 
+    var PROBLEM_DETAILS = {
+        'default-sort-insertion': {
+            description: '给定一个整数数组 nums，使用插入排序将其按升序排列。要求原地排序，不额外申请与 n 同规模的数组。',
+            examples: [
+                { input: 'nums = [5,2,4,6,1,3]', output: '[1,2,3,4,5,6]', explain: '把每个元素插入前面已经有序的区间。' },
+                { input: 'nums = [2,1]', output: '[1,2]', explain: '只有一个逆序对，交换一次即可。' }
+            ],
+            constraints: ['1 <= nums.length <= 5000', '-10000 <= nums[i] <= 10000', '要求稳定排序']
+        },
+        'default-sort-bubble': {
+            description: '给定一个整数数组 nums，使用冒泡排序将其按升序排列。每轮比较相邻元素，把当前最大值冒到未排序区末尾。',
+            examples: [
+                { input: 'nums = [5,2,4,6,1,3]', output: '[1,2,3,4,5,6]', explain: '相邻逆序就交换，直到整轮没有交换。' },
+                { input: 'nums = [1,2,3]', output: '[1,2,3]', explain: '已经有序时可通过 swapped 优化提前结束。' }
+            ],
+            constraints: ['1 <= nums.length <= 5000', '-10000 <= nums[i] <= 10000', '最好情况 O(n)，最坏 O(n²)']
+        },
+        'default-sort-selection': {
+            description: '给定一个整数数组 nums，使用选择排序将其按升序排列。每轮从未排序区选择最小值，放到已排序区末尾。',
+            examples: [
+                { input: 'nums = [64,25,12,22,11]', output: '[11,12,22,25,64]', explain: '每轮记录最小元素下标，再与当前位置交换。' },
+                { input: 'nums = [3,3,1]', output: '[1,3,3]', explain: '选择排序不稳定，但结果仍然升序。' }
+            ],
+            constraints: ['1 <= nums.length <= 5000', '-10000 <= nums[i] <= 10000', '交换次数最多 n-1 次']
+        },
+        'default-sort-merge': {
+            description: '给定一个整数数组 nums，使用归并排序将其按升序排列。要求稳定排序，并分析递归深度与额外空间。',
+            examples: [
+                { input: 'nums = [5,2,4,6,1,3]', output: '[1,2,3,4,5,6]', explain: '递归排序左右两半，再合并两个有序区间。' },
+                { input: 'nums = [4,1,3,2]', output: '[1,2,3,4]', explain: '合并时相等元素优先取左边，保证稳定性。' }
+            ],
+            constraints: ['1 <= nums.length <= 100000', '-10^9 <= nums[i] <= 10^9', '时间复杂度 O(n log n)，空间 O(n)']
+        },
+        'default-sort-quick': {
+            description: '给定一个整数数组 nums，使用快速排序将其按升序排列。要求原地 partition，并说明重复元素很多时如何避免退化。',
+            examples: [
+                { input: 'nums = [3,2,1,5,6,4]', output: '[1,2,3,4,5,6]', explain: '以末尾元素为 pivot，分成小于区和大于区。' },
+                { input: 'nums = [2,2,2,1]', output: '[1,2,2,2]', explain: '重复元素多时可用三路 partition 或随机 pivot。' }
+            ],
+            constraints: ['1 <= nums.length <= 100000', '-10^9 <= nums[i] <= 10^9', '平均 O(n log n)，最坏 O(n²)']
+        },
+        'default-sort-heap': {
+            description: '给定整数数组 nums 和整数 k，返回数组中第 k 大的元素。要求使用堆，并说明为什么求第 k 大要维护小顶堆。',
+            examples: [
+                { input: 'nums = [3,2,1,5,6,4], k = 2', output: '5', explain: '维护大小为 2 的小顶堆，堆顶就是第 2 大。' },
+                { input: 'nums = [3,2,3,1,2,4,5,5,6], k = 4', output: '4', explain: '重复元素按出现次数参与排序。' }
+            ],
+            constraints: ['1 <= k <= nums.length <= 100000', '-10000 <= nums[i] <= 10000', '优先使用 O(n log k) 解法']
+        },
+        'default-binary-search': {
+            description: '给定一个升序整数数组 nums 和目标值 target，返回 target 的下标；不存在时返回 -1。要求写出明确的区间语义。',
+            examples: [
+                { input: 'nums = [-1,0,3,5,9,12], target = 9', output: '4', explain: '9 出现在下标 4。' },
+                { input: 'nums = [-1,0,3,5,9,12], target = 2', output: '-1', explain: '数组中不存在 2。' }
+            ],
+            constraints: ['1 <= nums.length <= 10000', 'nums 严格递增', '-10000 <= nums[i], target <= 10000']
+        },
+        'default-two-sum': {
+            description: '给定整数数组 nums 和整数 target，在数组中找出和为目标值的两个整数，返回它们的下标。假设每个输入只对应一个答案，且不能重复使用同一元素。',
+            examples: [
+                { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explain: 'nums[0] + nums[1] = 2 + 7 = 9。' },
+                { input: 'nums = [3,2,4], target = 6', output: '[1,2]', explain: '不能使用同一个 3 两次。' }
+            ],
+            constraints: ['2 <= nums.length <= 100000', '-10^9 <= nums[i], target <= 10^9', '只存在一个有效答案']
+        },
+        'default-longest-no-repeat': {
+            description: '给定一个字符串 s，找出其中不含重复字符的最长子串长度。注意是子串，不是子序列。',
+            examples: [
+                { input: 's = "abcabcbb"', output: '3', explain: '最长无重复子串是 "abc"。' },
+                { input: 's = "bbbbb"', output: '1', explain: '最长无重复子串是 "b"。' },
+                { input: 's = "pwwkew"', output: '3', explain: '最长子串是 "wke"，"pwke" 是子序列不是子串。' }
+            ],
+            constraints: ['0 <= s.length <= 100000', 's 由英文字母、数字、符号和空格组成', '要求 O(n) 滑动窗口']
+        },
+        'default-binary-tree-level-order': {
+            description: '给定二叉树的根节点 root，返回其节点值的层序遍历结果，即逐层从左到右访问所有节点。',
+            examples: [
+                { input: 'root = [3,9,20,null,null,15,7]', output: '[[3],[9,20],[15,7]]', explain: '第一层 3，第二层 9/20，第三层 15/7。' },
+                { input: 'root = []', output: '[]', explain: '空树返回空数组。' }
+            ],
+            constraints: ['树中节点数在 [0, 2000] 范围内', '-1000 <= Node.val <= 1000', '使用队列，每层固定 size']
+        },
+        'default-climb-stairs': {
+            description: '假设你正在爬楼梯，需要 n 阶才能到达楼顶。每次可以爬 1 或 2 个台阶，问有多少种不同的方法可以爬到楼顶。',
+            examples: [
+                { input: 'n = 2', output: '2', explain: '1+1 或 2。' },
+                { input: 'n = 3', output: '3', explain: '1+1+1、1+2、2+1。' }
+            ],
+            constraints: ['1 <= n <= 45', '结果在 int 范围内', '可压缩为 O(1) 空间']
+        },
+        'default-coin-change': {
+            description: '给定不同面额的硬币 coins 和总金额 amount，计算凑成总金额所需的最少硬币个数。如果无法凑成，返回 -1。每种硬币数量无限。',
+            examples: [
+                { input: 'coins = [1,2,5], amount = 11', output: '3', explain: '11 = 5 + 5 + 1。' },
+                { input: 'coins = [2], amount = 3', output: '-1', explain: '面额 2 无法凑出 3。' },
+                { input: 'coins = [1], amount = 0', output: '0', explain: '金额为 0 时不需要硬币。' }
+            ],
+            constraints: ['1 <= coins.length <= 12', '1 <= coins[i] <= 2^31 - 1', '0 <= amount <= 10000']
+        },
+        'default-merge-two-lists': {
+            description: '给定两个升序链表 list1 和 list2，将它们合并为一个新的升序链表并返回头节点。新链表由拼接给定两个链表的所有节点组成。',
+            examples: [
+                { input: 'list1 = [1,2,4], list2 = [1,3,4]', output: '[1,1,2,3,4,4]', explain: '按大小依次接上较小节点。' },
+                { input: 'list1 = [], list2 = [0]', output: '[0]', explain: '空链表直接返回另一个链表。' }
+            ],
+            constraints: ['两个链表的节点数在 [0, 50] 范围内', '-100 <= Node.val <= 100', '两个链表均按升序排列']
+        }
+    };
+
     var METHOD_STEPS = [
         { icon: 'fas fa-hourglass-half', title: '先想 15 分钟', text: '卡住也不要立刻看题解。把能想到的暴力解、数据结构、边界写下来，记录卡点。' },
         { icon: 'fas fa-pen', title: '合上题解重写', text: '看懂不等于会写。看完题解后必须关掉页面，从空白重写一遍；写不出来说明还没掌握。' },
@@ -324,6 +433,10 @@
 
     var root = null;
     var ui = {
+        playgroundProblemId: null,
+        playgroundSearch: '',
+        playgroundPattern: '',
+        problemPanelCollapsed: false,
         tab: 'today',
         search: '',
         pattern: '',
@@ -332,6 +445,8 @@
         queueIndex: 0,
         currentReviewId: null,
         timerInterval: null,
+        recentRandomIds: [],
+        quizRecentIds: [],
         quiz: {
             mode: 'recall',
             problemId: null,
@@ -416,6 +531,8 @@
         return DEFAULT_PROBLEM_SEEDS.map(function (seed) {
             var item = {};
             Object.keys(seed).forEach(function (key) { item[key] = seed[key]; });
+            var detail = PROBLEM_DETAILS[seed.id] || {};
+            Object.keys(detail).forEach(function (key) { item[key] = detail[key]; });
             item.createdAt = today;
             item.nextReview = addDays(today, seed.offset || 0);
             item.stage = 0;
@@ -427,6 +544,21 @@
 
     function defaultStore() {
         return { version: 1, seeded: true, problems: createDefaultProblems() };
+    }
+
+    function parseExampleInput(text) {
+        var raw = String(text || '').trim();
+        if (!raw) return [];
+        try {
+            var parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) return parsed;
+            if (parsed && typeof parsed === 'object') return [parsed];
+        } catch (e) {
+            return raw.split('\n').map(function (line) {
+                try { return JSON.parse(line); } catch (err) { return null; }
+            }).filter(Boolean);
+        }
+        return [];
     }
 
     function normalizeProblem(p) {
@@ -445,6 +577,17 @@
             link: String(p.link || '').trim(),
             pattern: String(p.pattern || '未分类').trim() || '未分类',
             difficulty: Math.max(1, Math.min(parseInt(p.difficulty, 10) || 2, 3)),
+            description: String(p.description || '').trim(),
+            examples: Array.isArray(p.examples) ? p.examples.slice(0, 6).map(function (ex) {
+                return {
+                    input: String(ex.input || '').trim(),
+                    output: String(ex.output || '').trim(),
+                    explain: String(ex.explain || '').trim()
+                };
+            }).filter(function (ex) { return ex.input || ex.output; }) : [],
+            constraints: Array.isArray(p.constraints) ? p.constraints.slice(0, 12).map(function (c) {
+                return String(c).trim();
+            }).filter(Boolean) : [],
             trigger: String(p.trigger || '').trim(),
             insight: String(p.insight || '').trim(),
             stuck: String(p.stuck || '').trim(),
@@ -472,6 +615,13 @@
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
                 } catch (e) { /* ignore */ }
             }
+            data.problems.forEach(function (p) {
+                if (p && !p.description && PROBLEM_DETAILS[p.id]) {
+                    Object.keys(PROBLEM_DETAILS[p.id]).forEach(function (key) {
+                        p[key] = PROBLEM_DETAILS[p.id][key];
+                    });
+                }
+            });
             return {
                 version: 1,
                 seeded: true,
@@ -522,17 +672,115 @@
     }
 
     /* ===================== 渲染：骨架 ===================== */
+    function hydrateDefaultProblems() {
+        if (!window.ContentDB || typeof window.ContentDB.ensure !== 'function') {
+            return Promise.resolve(false);
+        }
+        return window.ContentDB.ensure().then(function (db) {
+            var list = db && db.tables ? db.tables.algorithms : null;
+            if (Array.isArray(list) && list.length) {
+                DEFAULT_PROBLEM_SEEDS = list.map(function (a) {
+                    return {
+                        id: a.id,
+                        title: a.title,
+                        pattern: a.pattern,
+                        difficulty: a.difficulty,
+                        offset: 0,
+                        trigger: a.trigger,
+                        insight: a.insight,
+                        stuck: a.stuck,
+                        template: a.template,
+                        link: a.link
+                    };
+                });
+                return true;
+            }
+            return false;
+        }).catch(function () { return false; });
+    }
+
 
     function init() {
         var el = document.getElementById('algo-review-app');
         if (!el) return;
         if (el.dataset.ready === '1') return;
-        el.dataset.ready = '1';
+        if (el.dataset.booted === '1') el.dataset.ready = '1';
         root = el;
+        if (el.dataset.booted !== '1') {
+            el.dataset.booted = '1';
+            el.innerHTML = '<div class="algo-loading">正在加载算法数据...</div>';
+            hydrateDefaultProblems().then(function () { init(); });
+            return;
+        }
         store = loadStore();
         buildShell();
         bindEvents();
+        registerSiteActions();
         render();
+    }
+
+    function openWorkbench(problemId) {
+        if (problemId && findProblem(problemId)) ui.playgroundProblemId = problemId;
+        ui.tab = 'playground';
+        render();
+        return true;
+    }
+
+    function selectPlaygroundProblem(problemId) {
+        if (!findProblem(problemId)) return false;
+        ui.playgroundProblemId = problemId;
+        var left = root && root.querySelector('.algo-workbench-left');
+        if (left) {
+            left.innerHTML = workbenchLeftHtml();
+        } else {
+            renderTab();
+        }
+        return true;
+    }
+
+    function copyPlaygroundTemplate(problemId) {
+        var p = findProblem(problemId || ui.playgroundProblemId);
+        if (!p || !p.template || !navigator.clipboard) return Promise.resolve(false);
+        return navigator.clipboard.writeText(p.template).then(function () { return true; }).catch(function () { return false; });
+    }
+
+    function currentPlaygroundProblem() {
+        var p = findProblem(ui.playgroundProblemId) || store.problems[0] || null;
+        if (!p) return null;
+        return {
+            id: p.id,
+            title: p.title,
+            pattern: p.pattern,
+            difficulty: p.difficulty,
+            description: p.description,
+            examples: p.examples,
+            constraints: p.constraints,
+            trigger: p.trigger,
+            insight: p.insight,
+            stuck: p.stuck,
+            template: p.template,
+            link: p.link
+        };
+    }
+
+    function registerSiteActions() {
+        if (!window.SiteActionAPI || window.__algoSiteActionsRegistered) return;
+        window.__algoSiteActionsRegistered = true;
+        window.SiteAlgorithm = {
+            openWorkbench: openWorkbench,
+            selectProblem: selectPlaygroundProblem,
+            copyTemplate: copyPlaygroundTemplate,
+            currentProblem: currentPlaygroundProblem
+        };
+        window.SiteActionAPI.register('algorithm.openWorkbench', function (payload) {
+            return openWorkbench(payload && payload.problemId);
+        }, { label: '打开算法工作台', scope: 'read', description: '打开算法库 C# 刷题工作台' });
+        window.SiteActionAPI.register('algorithm.selectProblem', function (payload) {
+            return selectPlaygroundProblem(payload && payload.problemId);
+        }, { label: '选择算法题', scope: 'read', description: '在工作台选择指定题目' });
+        window.SiteActionAPI.register('algorithm.copyTemplate', function (payload) {
+            return copyPlaygroundTemplate(payload && payload.problemId);
+        }, { label: '复制算法模板', scope: 'read-local', description: '复制当前算法题模板到剪贴板' });
     }
 
     function buildShell() {
@@ -560,7 +808,8 @@
             '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="quiz">自测</button>',
             '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="problems">题目本</button>',
             '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="patterns">模式识别</button>',
-            '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="method">方法论</button>',
+            '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="playground">C# 实验</button>',
+              '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="method">方法论</button>',
             '</nav>',
             '<div id="algo-tab-content" class="algo-tab-content"></div>',
             '<div id="algo-modal-root"></div>',
@@ -607,6 +856,7 @@
     function renderTab() {
         var content = root.querySelector('#algo-tab-content');
         if (!content) return;
+        root.classList.toggle('is-playground', ui.tab === 'playground');
 
         if (ui.tab === 'today') {
             content.innerHTML = todayHtml();
@@ -618,6 +868,8 @@
             renderProblemList();
         } else if (ui.tab === 'patterns') {
             content.innerHTML = patternsHtml();
+        } else if (ui.tab === 'playground') {
+            content.innerHTML = playgroundHtml();
         } else {
             content.innerHTML = methodHtml();
         }
@@ -743,6 +995,7 @@
             '    <span class="algo-card-meta">' + (p.lastReview ? '上次复习：' + escapeHtml(p.lastReview) : '尚未复习') + (p.lapses ? ' · 卡壳 ' + p.lapses + ' 次' : '') + '</span>',
             '    <div class="algo-card-actions">',
             '      <button type="button" class="algo-btn algo-btn-small" data-action="review" data-id="' + escapeHtml(p.id) + '"><i class="fas fa-redo"></i> ' + (p.stage >= 3 ? '再复习' : '复习') + '</button>',
+              '      <button type="button" class="algo-btn algo-btn-small algo-btn-ghost" data-action="open-playground" data-id="' + escapeHtml(p.id) + '"><i class="fas fa-code"></i> C# 实验</button>',
             '      <button type="button" class="algo-btn algo-btn-small algo-btn-ghost" data-action="edit" data-id="' + escapeHtml(p.id) + '"><i class="fas fa-pen"></i> 编辑</button>',
             '      <button type="button" class="algo-icon-btn" data-action="delete" data-id="' + escapeHtml(p.id) + '" title="删除"><i class="fas fa-trash"></i></button>',
             '    </div>',
@@ -854,9 +1107,14 @@
             var pool = dueProblems();
             if (!pool.length) pool = store.problems;
             if (pool.length) {
-                var pick = pool[Math.floor(Math.random() * pool.length)];
+                var recent = ui.quizRecentIds || [];
+                var fresh = pool.filter(function (p) { return recent.indexOf(p.id) === -1; });
+                if (!fresh.length) fresh = pool.slice();
+                var pick = fresh[Math.floor(Math.random() * fresh.length)];
                 ui.quiz.problemId = pick.id;
                 ui.quiz.revealed = false;
+                var keep = Math.max(0, store.problems.length - 1);
+                ui.quizRecentIds = recent.concat([pick.id]).slice(-keep);
             }
         }
     }
@@ -868,7 +1126,13 @@
         }
         if (!pool.length) pool = store.problems;
         if (pool.length) {
-            ui.quiz.problemId = pool[Math.floor(Math.random() * pool.length)].id;
+            var recent = ui.quizRecentIds || [];
+            var fresh = pool.filter(function (p) { return recent.indexOf(p.id) === -1; });
+            if (!fresh.length) fresh = pool.slice();
+            var pick = fresh[Math.floor(Math.random() * fresh.length)];
+            ui.quiz.problemId = pick.id;
+            var keep = Math.max(0, store.problems.length - 1);
+            ui.quizRecentIds = recent.concat([pick.id]).slice(-keep);
         } else {
             ui.quiz.problemId = null;
         }
@@ -1003,6 +1267,120 @@
         ].join('');
     }
 
+    function workbenchLeftHtml() {
+        var selected = findProblem(ui.playgroundProblemId) || store.problems[0] || null;
+        var keyword = ui.playgroundSearch.trim().toLowerCase();
+        var list = store.problems.filter(function (p) {
+            if (ui.playgroundPattern && p.pattern !== ui.playgroundPattern) return false;
+            if (!keyword) return true;
+            return [p.title, p.pattern, p.trigger, p.insight, p.stuck, p.template, p.description]
+                .join(' ').toLowerCase().indexOf(keyword) !== -1;
+        }).sort(function (a, b) {
+            return String(a.pattern || '').localeCompare(String(b.pattern || '')) || String(a.title || '').localeCompare(String(b.title || ''));
+        });
+        var listHtml = list.map(function (p) {
+            var active = selected && p.id === selected.id;
+            return '<button type="button" class="algo-workbench-item' + (active ? ' is-active' : '') + '" data-action="select-playground" data-id="' + escapeHtml(p.id) + '">' +
+                '<span class="algo-workbench-pattern">' + escapeHtml(p.pattern || '未分类') + '</span>' +
+                '<strong>' + escapeHtml(p.title || '未命名题目') + '</strong>' +
+                '</button>';
+        }).join('');
+
+        var examplesHtml = selected && selected.examples && selected.examples.length
+            ? selected.examples.map(function (ex, index) {
+                return '<div class="algo-problem-example">' +
+                    '<div class="algo-problem-example-title">示例 ' + (index + 1) + '</div>' +
+                    '<pre><span>输入：</span>' + escapeHtml(ex.input || '') + '\n<span>输出：</span>' + escapeHtml(ex.output || '') +
+                    (ex.explain ? '\n<span>解释：</span>' + escapeHtml(ex.explain) : '') + '</pre>' +
+                    '</div>';
+            }).join('')
+            : '<p class="algo-problem-muted">这道题还没有录入示例，可以在题目本中补充。</p>';
+
+        var constraintsHtml = selected && selected.constraints && selected.constraints.length
+            ? '<ul class="algo-problem-constraints">' + selected.constraints.map(function (c) {
+                return '<li>' + escapeHtml(c) + '</li>';
+            }).join('') + '</ul>'
+            : '<p class="algo-problem-muted">暂无约束说明。</p>';
+
+        var detail = selected ? [
+            '<div class="algo-workbench-detail">',
+            '  <div class="algo-workbench-detail-top"><span class="algo-pill algo-pill-pattern">' + escapeHtml(selected.pattern || '未分类') + '</span>',
+            selected.link ? '  <a class="algo-btn algo-btn-small" href="' + escapeHtml(selected.link) + '" target="_blank" rel="noopener noreferrer">原题链接</a>' : '',
+            '</div>',
+            '  <h3>' + escapeHtml(selected.title || '未命名题目') + '</h3>',
+            '  <details class="algo-problem-fold" open>',
+            '    <summary>题目描述</summary>',
+            '    <p>' + escapeHtml(selected.description || selected.insight || selected.trigger || '暂无题目描述。') + '</p>',
+            '  </details>',
+            '  <details class="algo-problem-fold" open>',
+            '    <summary>示例</summary>',
+            examplesHtml,
+            '  </details>',
+            '  <details class="algo-problem-fold">',
+            '    <summary>约束</summary>',
+            constraintsHtml,
+            '  </details>',
+            '  <details class="algo-problem-fold">',
+            '    <summary>复盘笔记</summary>',
+            '    <dl class="algo-workbench-meta">',
+            '      <dt>触发词</dt><dd>' + escapeHtml(selected.trigger || '待补充') + '</dd>',
+            '      <dt>关键洞察</dt><dd>' + escapeHtml(selected.insight || '待补充') + '</dd>',
+            '      <dt>我卡在哪</dt><dd>' + escapeHtml(selected.stuck || '待补充') + '</dd>',
+            '      <dt>模板 / 步骤</dt><dd><div class="algo-template-text">' + escapeHtml(selected.template || '暂无模板') + '</div></dd>',
+            '    </dl>',
+            '  </details>',
+            '  <button type="button" class="algo-btn algo-btn-primary" data-action="copy-playground-template" data-id="' + escapeHtml(selected.id) + '"><i class="fas fa-copy"></i> 复制模板（粘贴到下方编辑器）</button>',
+            '</div>'
+        ].join('') : '<div class="algo-workbench-empty">题目本为空，请先在“题目本”录入一道题。</div>';
+
+        var patternOptions = ['<option value="">全部专题</option>'].concat(getPatternNames().map(function (name) {
+            return '<option value="' + escapeHtml(name) + '"' + (ui.playgroundPattern === name ? ' selected' : '') + '>' + escapeHtml(name) + '</option>';
+        })).join('');
+
+        return [
+            '<div class="algo-problem-filters">',
+            '  <input id="algo-workbench-search" class="algo-input" type="search" placeholder="搜索题目 / 专题 / 触发词" value="' + escapeHtml(ui.playgroundSearch) + '">',
+            '  <select id="algo-workbench-pattern" class="algo-select">' + patternOptions + '</select>',
+            '  <span class="algo-problem-filter-count">' + list.length + ' / ' + store.problems.length + ' 题</span>',
+            '</div>',
+            '<div class="algo-workbench-list">' + (listHtml || '<div class="algo-workbench-empty">没有匹配题目</div>') + '</div>',
+            detail
+        ].join('');
+    }
+
+    function playgroundHtml() {
+        return [
+            '<section class="algo-playground">',
+            '  <div class="algo-section-head">',
+            '    <div>',
+            '      <h2>刷题工作台</h2>',
+            '      <p>上方阅读题目与示例，下方直接编译运行 C#。代码只在浏览器本地 Web Worker 中运行。</p>',
+            '    </div>',
+            '    <div class="algo-workbench-actions">',
+            '      <button type="button" class="algo-btn algo-btn-small" data-action="toggle-problem-panel"><i class="fas fa-chevron-up"></i> ' + (ui.problemPanelCollapsed ? '展开题目区' : '收起题目区') + '</button>',
+            '      <a class="algo-btn algo-btn-small" href="https://csharp-roslyn-wasm-playground.pages.dev/" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i> 独立页面</a>',
+            '    </div>',
+            '  </div>',
+            '  <div class="algo-playground-tip"><i class="fas fa-info-circle"></i> 首次加载需要下载 .NET 运行时，可能需要 10~30 秒。复制模板后粘贴到下方编辑器即可运行。</div>',
+            '  <div class="algo-workbench">',
+            '    <aside class="algo-workbench-left' + (ui.problemPanelCollapsed ? ' is-collapsed' : '') + '">' + workbenchLeftHtml() + '</aside>',
+            '    <div class="algo-workbench-right">',
+            '      <iframe',
+            '        id="algo-csharp-playground"',
+            '        src="https://csharp-roslyn-wasm-playground.pages.dev/?theme=auto&accent=indigo&layout=stacked&chrome=minimal&completion=manual"',
+            '        width="100%"',
+            '        height="820"',
+            '        style="border:0;border-radius:12px;overflow:hidden;"',
+            '        loading="lazy"',
+            '        allow="clipboard-write"',
+            '        title="C# Playground"',
+            '      ></iframe>',
+            '    </div>',
+            '  </div>',
+            '</section>'
+        ].join('');
+    }
+
     function applyQuizRating(rating) {
         var p = findProblem(ui.quiz.problemId);
         if (!p) return;
@@ -1024,6 +1402,7 @@
             p.nextReview = addDays(today, 1);
         }
         p.reviewLog.push({ date: today, result: rating });
+        recordAlgoStats(p, rating, 'quiz');
         saveStore();
         ui.quiz.problemId = null;
         ui.quiz.revealed = false;
@@ -1124,6 +1503,7 @@
         var isEdit = !!p;
         var data = p || {
             title: '', link: '', pattern: presetPattern || '', difficulty: 2,
+            description: '', examples: [], constraints: [],
             trigger: '', insight: '', stuck: '', template: ''
         };
         var patternOptions = getPatternNames().map(function (name) {
@@ -1142,6 +1522,9 @@
             '      <div class="algo-form-grid">',
             '        <label class="algo-field algo-field-full"><span>题目 <em>*</em></span><input name="title" required maxlength="120" value="' + escapeHtml(data.title) + '" placeholder="例如：LC 34. 在排序数组中查找元素的第一个和最后一个位置"></label>',
             '        <label class="algo-field algo-field-full"><span>题目链接</span><input name="link" type="url" value="' + escapeHtml(data.link) + '" placeholder="https://leetcode.cn/problems/..."></label>',
+            '        <label class="algo-field algo-field-full"><span>题目描述</span><textarea name="description" rows="3" maxlength="1600" placeholder="完整题面，例如：给定升序数组和目标值，返回下标...">' + escapeHtml(data.description || '') + '</textarea></label>',
+            '        <label class="algo-field algo-field-full"><span>示例数据（每行一个 JSON）</span><textarea name="examples" rows="4" placeholder=\'{"input":"nums = [1,2,3], target = 2","output":"1","explain":"2 在下标 1"}\'>' + escapeHtml(JSON.stringify(data.examples || [], null, 2)) + '</textarea></label>',
+            '        <label class="algo-field algo-field-full"><span>约束（每行一条）</span><textarea name="constraints" rows="3" placeholder="1 <= nums.length <= 10000">' + escapeHtml((data.constraints || []).join('\n')) + '</textarea></label>',
             '        <label class="algo-field"><span>题型</span><input name="pattern" list="algo-pattern-options" value="' + escapeHtml(data.pattern) + '" placeholder="二分查找"></label>',
             '        <label class="algo-field"><span>难度</span><select name="difficulty">',
             '          <option value="1"' + (data.difficulty === 1 ? ' selected' : '') + '>入门</option>',
@@ -1177,6 +1560,11 @@
             link: String(fd.get('link') || '').trim(),
             pattern: String(fd.get('pattern') || '').trim() || '未分类',
             difficulty: parseInt(fd.get('difficulty'), 10) || 2,
+            description: String(fd.get('description') || '').trim(),
+            examples: parseExampleInput(String(fd.get('examples') || '')),
+            constraints: String(fd.get('constraints') || '').split('\n').map(function (line) {
+                return line.trim();
+            }).filter(Boolean),
             trigger: String(fd.get('trigger') || '').trim(),
             insight: String(fd.get('insight') || '').trim(),
             stuck: String(fd.get('stuck') || '').trim(),
@@ -1194,6 +1582,9 @@
                 p.link = data.link;
                 p.pattern = data.pattern;
                 p.difficulty = data.difficulty;
+                p.description = data.description;
+                p.examples = data.examples;
+                p.constraints = data.constraints;
                 p.trigger = data.trigger;
                 p.insight = data.insight;
                 p.stuck = data.stuck;
@@ -1207,6 +1598,9 @@
                 link: data.link,
                 pattern: data.pattern,
                 difficulty: data.difficulty,
+                description: data.description,
+                examples: data.examples,
+                constraints: data.constraints,
                 trigger: data.trigger,
                 insight: data.insight,
                 stuck: data.stuck,
@@ -1305,6 +1699,31 @@
         document.body.classList.remove('algo-modal-open');
     }
 
+    function recordAlgoStats(problem, result, source) {
+        try {
+            if (!window.StatsCenter) return;
+            window.StatsCenter.register({ id: 'algorithm-review', label: '算法库', maxRecords: 300 });
+            var passed = result === 'pass' || result === 'remember';
+            window.StatsCenter.add('algorithm-review', {
+                key: problem.id,
+                title: problem.title,
+                metrics: {
+                    score: passed ? 1 : 0,
+                    total: 1,
+                    rate: passed ? 100 : 0,
+                    durationSec: 0
+                },
+                detail: {
+                    result: result,
+                    source: source,
+                    pattern: problem.pattern,
+                    stage: problem.stage,
+                    lapses: problem.lapses
+                }
+            });
+        } catch (e) { /* ignore stats errors */ }
+    }
+
     function completeReview(pass) {
         var p = findProblem(ui.currentReviewId);
         if (!p) return;
@@ -1317,6 +1736,7 @@
         var today = todayStr();
         p.lastReview = today;
         p.reviewLog.push({ date: today, result: pass ? 'pass' : 'fail' });
+        recordAlgoStats(p, pass ? 'pass' : 'fail', 'review');
 
         if (pass) {
             if (p.stage >= 2) {
@@ -1567,6 +1987,48 @@
                 openProblemModal(null, actionEl.dataset.pattern || '');
                 return;
             }
+            if (action === 'open-playground') {
+                var pgProblem = findProblem(actionEl.dataset.id);
+                ui.playgroundProblemId = pgProblem ? pgProblem.id : null;
+                if (pgProblem && pgProblem.template && navigator.clipboard) {
+                    navigator.clipboard.writeText(pgProblem.template).then(function () {
+                        toast('模板已复制，粘贴到 C# 编辑器即可运行');
+                    }).catch(function () { /* clipboard may be unavailable */ });
+                }
+                ui.tab = 'playground';
+                render();
+                setTimeout(function () {
+                    var pg = root.querySelector('#algo-csharp-playground');
+                    if (pg) pg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 80);
+                return;
+            }
+            if (action === 'toggle-problem-panel') {
+                ui.problemPanelCollapsed = !ui.problemPanelCollapsed;
+                var panel = root.querySelector('.algo-workbench-left');
+                if (panel) panel.classList.toggle('is-collapsed', ui.problemPanelCollapsed);
+                actionEl.innerHTML = '<i class="fas fa-chevron-up"></i> ' + (ui.problemPanelCollapsed ? '展开题目区' : '收起题目区');
+                return;
+            }
+            if (action === 'select-playground') {
+                ui.playgroundProblemId = actionEl.dataset.id || null;
+                var left = root.querySelector('.algo-workbench-left');
+                if (left) {
+                    left.innerHTML = workbenchLeftHtml();
+                } else {
+                    renderTab();
+                }
+                return;
+            }
+            if (action === 'copy-playground-template') {
+                var copyProblem = findProblem(actionEl.dataset.id);
+                if (copyProblem && copyProblem.template && navigator.clipboard) {
+                    navigator.clipboard.writeText(copyProblem.template).then(function () {
+                        toast('模板已复制，粘贴到下方 C# 编辑器');
+                    }).catch(function () { toast('复制失败，请手动选择模板'); });
+                }
+                return;
+            }
             if (action === 'edit') {
                 openProblemModal(actionEl.dataset.id);
                 return;
@@ -1631,6 +2093,17 @@
             if (e.target && e.target.id === 'algo-search') {
                 ui.search = e.target.value;
                 renderProblemList();
+            } else if (e.target && e.target.id === 'algo-workbench-search') {
+                ui.playgroundSearch = e.target.value;
+                var panel = root.querySelector('.algo-workbench-left');
+                if (panel) {
+                    panel.innerHTML = workbenchLeftHtml();
+                    var search = panel.querySelector('#algo-workbench-search');
+                    if (search) {
+                        search.focus();
+                        search.setSelectionRange(search.value.length, search.value.length);
+                    }
+                }
             }
         });
 
@@ -1639,6 +2112,10 @@
             if (e.target.id === 'algo-filter-pattern') {
                 ui.pattern = e.target.value;
                 renderProblemList();
+            } else if (e.target.id === 'algo-workbench-pattern') {
+                ui.playgroundPattern = e.target.value;
+                var panel = root.querySelector('.algo-workbench-left');
+                if (panel) panel.innerHTML = workbenchLeftHtml();
             } else if (e.target.id === 'algo-filter-status') {
                 ui.status = e.target.value;
                 renderProblemList();
@@ -1684,7 +2161,13 @@
             toast('先录入几道题再练习');
             return;
         }
-        pool = shuffle(pool).slice(0, 5);
+        var count = Math.min(5, pool.length);
+        var recent = ui.recentRandomIds || [];
+        var fresh = pool.filter(function (p) { return recent.indexOf(p.id) === -1; });
+        if (fresh.length < count) fresh = pool.slice();
+        pool = shuffle(fresh).slice(0, count);
+        ui.recentRandomIds = recent.concat(pool.map(function (p) { return p.id; }))
+            .slice(-Math.max(0, store.problems.length - count));
         ui.queue = pool.map(function (p) { return p.id; });
         ui.queueIndex = 0;
         openReviewModal(ui.queue[0]);
