@@ -1,12 +1,17 @@
 // --------------------- 鲸鱼娘桌宠加载 ----------------------
 (function () {
+    var PET_VERSION = '1.0.3';
+    // 发行包运行时；jsDelivr 固定到 release tag，避免加载 main 开发分支。
+    var PET_ENTRY = 'https://cdn.jsdelivr.net/gh/JokeVallen/pet-lab@v1.0.3/js/pet/index.js?v=' + PET_VERSION;
+
     function ensurePet() {
         // 宠物是一个 ES 模块入口，内部依赖由 import 自动解析
         if (document.querySelector('script[data-pet-module]')) return;
         const s = document.createElement('script');
         s.type = 'module';
-        s.src = '/js/pet/index.js?v=35249d8d';
+        s.src = PET_ENTRY;
         s.dataset.petModule = '1';
+        s.dataset.petVersion = PET_VERSION;
         document.body.appendChild(s);
     }
 

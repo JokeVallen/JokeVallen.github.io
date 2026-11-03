@@ -10,6 +10,12 @@
  * 各业务模块负责提供：
  * - 自己的记录数据
  * - 可选的 renderRecord 渲染函数
+ *
+ * 设计要点：
+ * - register() 是幂等的，可重复调用（注册模块展示配置，不产生记录）
+ * - peek() 只读已存数据，不隐式创建空模块，
+ *   避免统计页刷新时把每个模块都写成「0 条」并在筛选器里堆出空模块
+ * - 所有对外报错保留原有语义，兼容 SiteAPI.stats() / mock-center.js 等既有调用方
  */
 (function (global) {
     'use strict';
@@ -26,7 +32,7 @@
     function load() {
         try {
             var raw = JSON.parse(localStorage.getItem(KEY) || 'null');
-            if (!raw || raw.version !== VERSION || typeof raw.modules !== 'object') return emptyStore();
+            if (!raw || raw.version !== VERSION || typeof raw.modules !== 'object' || raw.modules === null) return emptyStore();
             return raw;
         } catch (e) {
             return emptyStore();
@@ -56,11 +62,40 @@
             renderRecord: typeof config.renderRecord === 'function' ? config.renderRecord : null,
             maxRecords: Math.max(1, Number(config.maxRecords) || 100)
         };
+        // 只在模块已存在时同步 label，不为注册动作新建空模块。
         var store = load();
-        ensureModule(store, config.id);
-        if (store.modules[config.id]) store.modules[config.id].label = registry[config.id].label;
-        save(store);
+        if (store.modules[config.id]) {
+            store.modules[config.id].label = registry[config.id].label;
+            save(store);
+        }
         return registry[config.id];
+    }
+
+    /**
+     * 只读查询：不写 localStorage，也不创建空模块。
+     * 供统计页在渲染前判断「有没有数据」。
+     */
+    function peek(moduleId) {
+        var store = load();
+        var mod = store.modules[moduleId];
+        if (!mod) {
+            var conf = registry[moduleId];
+            return {
+                id: moduleId,
+                label: (conf && conf.label) || moduleId,
+                description: (conf && conf.description) || '',
+                registered: !!conf,
+                records: []
+            };
+        }
+        var conf2 = registry[moduleId];
+        return {
+            id: moduleId,
+            label: mod.label || (conf2 && conf2.label) || moduleId,
+            description: (conf2 && conf2.description) || '',
+            registered: !!conf2,
+            records: Array.isArray(mod.records) ? mod.records.slice() : []
+        };
     }
 
     function add(moduleId, record, options) {
@@ -107,20 +142,32 @@
         return result;
     }
 
+    /**
+     * 已注册模块 + 已存模块的合并列表。
+     * 只读：不会为注册模块创建空记录。
+     */
     function modules() {
         var store = load();
-        return Object.keys(store.modules).map(function (id) {
+        var ids = Object.keys(registry);
+        Object.keys(store.modules).forEach(function (id) {
+            if (ids.indexOf(id) === -1) ids.push(id);
+        });
+        return ids.map(function (id) {
+            var stored = store.modules[id];
+            var conf = registry[id];
             return {
                 id: id,
-                label: store.modules[id].label || id,
-                count: store.modules[id].records.length
+                label: (stored && stored.label) || (conf && conf.label) || id,
+                description: (conf && conf.description) || '',
+                registered: !!conf,
+                count: stored && Array.isArray(stored.records) ? stored.records.length : 0
             };
         });
     }
 
     function getModule(moduleId) {
-        var mod = load().modules[moduleId];
-        return mod ? { label: mod.label, records: mod.records.slice() } : { label: moduleId, records: [] };
+        var mod = peek(moduleId);
+        return { label: mod.label, records: mod.records.slice() };
     }
 
     function clear(moduleId) {
@@ -131,10 +178,13 @@
     }
 
     function clearWhere(moduleId, predicate) {
+        if (typeof predicate !== 'function') return;
         var store = load();
         var mod = store.modules[moduleId];
         if (!mod) return;
         mod.records = mod.records.filter(function (r) { return !predicate(r); });
+        // 条件清空后如果记录为空，连模块一起移除，避免筛选器留下 0 条的空模块。
+        if (!mod.records.length) delete store.modules[moduleId];
         save(store);
     }
 
@@ -194,22 +244,20 @@
 
     function renderAll(container) {
         if (!container) return;
-        var store = load();
-        var ids = Object.keys(store.modules);
-        if (!ids.length) {
+        var visible = modules().filter(function (m) { return m.count > 0; });
+        if (!visible.length) {
             container.innerHTML = '暂无统计数据。';
             return;
         }
-        container.innerHTML = ids.map(function (id) {
-            var conf = registry[id] || { label: store.modules[id].label || id };
-            return '<section class="stats-module" data-module="' + escapeHtml(id) + '">' +
-                '<h3>' + escapeHtml(conf.label) + '</h3>' +
-                '<div class="stats-module-body" data-stats-module="' + escapeHtml(id) + '"></div>' +
+        container.innerHTML = visible.map(function (m) {
+            return '<section class="stats-module" data-module="' + escapeHtml(m.id) + '">' +
+                '<h3>' + escapeHtml(m.label) + '</h3>' +
+                '<div class="stats-module-body" data-stats-module="' + escapeHtml(m.id) + '"></div>' +
                 '</section>';
         }).join('');
-        ids.forEach(function (id) {
-            var body = container.querySelector('[data-stats-module="' + id + '"]');
-            render(id, body, { limit: 10 });
+        visible.forEach(function (m) {
+            var body = container.querySelector('[data-stats-module="' + m.id + '"]');
+            render(m.id, body, { limit: 10 });
         });
     }
 
@@ -233,6 +281,7 @@
         summary: summary,
         modules: modules,
         getModule: getModule,
+        peek: peek,
         clear: clear,
         clearWhere: clearWhere,
         render: render,

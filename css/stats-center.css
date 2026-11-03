@@ -1,10 +1,388 @@
+/* ============================================================
+ * 统计中心 /stats/
+ * - 浅色为默认，深色走 [data-theme="dark"]
+ * - 断点：900px（双列 → 单列）、640px（手机）、420px（窄屏收紧）
+ * - 正确率趋势默认横向滚动，柱状图内容不溢出覆盖下方模块
+ * ============================================================ */
+
 .stats-center-page {
-    max-width: 880px;
+    max-width: 980px;
 }
 
 .stats-center-app {
     display: grid;
     gap: 18px;
+    min-width: 0;
+}
+
+/* ---------------- 筛选工具条 ---------------- */
+
+.stats-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 18px;
+    padding: 12px 14px;
+    border: 1px solid #dbe8f7;
+    border-radius: 12px;
+    background: #fff;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.stats-toolbar-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.stats-toolbar-field > span {
+    flex: 0 0 auto;
+    color: #64748b;
+}
+
+.stats-toolbar select {
+    max-width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #334155;
+    /* 16px 防止 iOS 聚焦时自动放大 */
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.stats-toolbar select:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+}
+
+.stats-toolbar-meta {
+    margin-left: auto;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* ---------------- 指标卡 ---------------- */
+
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(124px, 1fr));
+    gap: 10px;
+}
+
+.stats-summary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #dbe8f7;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.stats-summary-card span {
+    color: #7c8da8;
+    font-size: 12px;
+}
+
+.stats-summary-card strong {
+    color: #2456a6;
+    font-size: 22px;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+}
+
+.stats-summary-card small {
+    color: #a3b1c6;
+    font-size: 11px;
+}
+
+/* ---------------- 图表区 ---------------- */
+
+.stats-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.stats-chart-card {
+    /* 防止图表撑破网格把下方模块顶开 */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid #dbe8f7;
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.stats-chart-wide {
+    grid-column: 1 / -1;
+}
+
+.stats-chart-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.stats-chart-head h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.stats-chart-head small {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+/* 横向滚动容器：内层承担内容宽度，外层负责滚动条 */
+.stats-chart-scroll {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.stats-chart-scroll:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.stats-chart-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.stats-chart-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #cbd5e1;
+}
+
+.stats-chart-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.stats-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    width: max-content;
+    min-width: 100%;
+    height: 180px;
+    padding: 6px 2px 2px;
+}
+
+.stats-chart-col {
+    flex: 0 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    height: 100%;
+    min-width: 0;
+}
+
+/* 数值标签放在柱子外面，避免被柱高遮罩 */
+.stats-chart-value {
+    flex: 0 0 auto;
+    color: #64748b;
+    font-size: 10px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 柱高由行内 style 的百分比给出；轨道负责剩余空间，避免柱体压住标签 */
+.stats-chart-track {
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    /* 显式高度 = 图高 - 数值标签 - 日期标签 */
+    height: 140px;
+    min-height: 0;
+}
+
+.stats-chart-bar {
+    width: 100%;
+    min-height: 3px;
+    border-radius: 5px 5px 0 0;
+    background: linear-gradient(180deg, #60a5fa, #2563eb);
+}
+
+.stats-chart-bar.is-pass {
+    background: linear-gradient(180deg, #60a5fa, #2563eb);
+}
+
+.stats-chart-bar.is-fail {
+    background: linear-gradient(180deg, #fca5a5, #ef4444);
+}
+
+.stats-chart-col small {
+    flex: 0 0 auto;
+    color: #94a3b8;
+    font-size: 10px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* 模块分布条形 */
+
+.stats-bars {
+    display: grid;
+    gap: 10px;
+}
+
+.stats-bar-row {
+    display: grid;
+    grid-template-columns: minmax(72px, 120px) minmax(0, 1fr) 40px;
+    align-items: center;
+    gap: 10px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.stats-bar-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stats-bar-track {
+    display: block;
+    height: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e2e8f0;
+}
+
+.stats-bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #60a5fa, #2563eb);
+}
+
+.stats-bar-row strong {
+    color: #2456a6;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 近 14 天活跃度 */
+
+.stats-activity {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 170px;
+    padding: 8px 2px 4px;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.stats-activity-col {
+    flex: 0 0 42px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* 柱体轨道：为 percentage 高度提供确定参照，标签占位不再挤压柱体 */
+.stats-activity-track {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+}
+
+.stats-activity-bar {
+    display: block;
+    width: 100%;
+    max-width: 26px;
+    min-height: 2px;
+    border-radius: 5px 5px 0 0;
+    background: linear-gradient(180deg, #34d399, #059669);
+}
+
+.stats-activity-bar.is-empty {
+    min-height: 2px;
+    background: #e2e8f0;
+}
+
+.stats-activity-col small {
+    flex: 0 0 auto;
+    color: #94a3b8;
+    font-size: 10px;
+    line-height: 1.2;
+    white-space: nowrap;
+    writing-mode: horizontal-tb;
+}
+
+/* ---------------- 空状态 ---------------- */
+
+.stats-chart-empty,
+.stats-empty {
+    padding: 16px 4px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.stats-empty-page {
+    display: grid;
+    gap: 6px;
+    padding: 28px 20px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+    background: #fff;
+    text-align: center;
+}
+
+.stats-empty-page strong {
+    color: #334155;
+    font-size: 15px;
+}
+
+.stats-empty-page p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.stats-empty-tip {
+    color: #a3b1c6;
+    font-size: 12px;
+}
+
+/* ---------------- 模块记录区 ---------------- */
+
+.stats-modules {
+    display: grid;
+    gap: 16px;
+    margin-top: 4px;
 }
 
 .stats-module {
@@ -12,11 +390,56 @@
     border: 1px solid #dbe8f7;
     border-radius: 14px;
     background: #f8fbff;
+    min-width: 0;
 }
 
-.stats-module h3 {
-    margin: 0 0 12px;
+.stats-module-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.stats-module-head h3 {
+    margin: 0;
     font-size: 17px;
+}
+
+.stats-module h3 small {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.stats-module-desc {
+    margin: -4px 0 10px;
+    color: #7c8da8;
+    font-size: 12px;
+}
+
+.stats-module-body {
+    min-width: 0;
+}
+
+.stats-clear-btn {
+    padding: 5px 12px;
+    border: 1px solid #fca5a5;
+    border-radius: 999px;
+    background: #fff;
+    color: #dc2626;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.stats-clear-btn:hover {
+    background: #fef2f2;
+}
+
+.stats-clear-btn:focus-visible {
+    outline: 2px solid #dc2626;
+    outline-offset: 2px;
 }
 
 .stats-record {
@@ -41,6 +464,7 @@
 .stats-record-top strong {
     color: #2456a6;
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .stats-record-metrics {
@@ -80,164 +504,23 @@
     font-size: 12px;
 }
 
-[data-theme="dark"] .stats-module {
-    background: #101827;
-    border-color: #24344e;
-}
-
-[data-theme="dark"] .stats-record {
-    border-bottom-color: #24344e;
-}
-
-[data-theme="dark"] .stats-record-top strong,
-[data-theme="dark"] .stats-record-metrics {
-    color: #8fb6ff;
-}
-
-
-.stats-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    padding: 12px 14px;
-    border: 1px solid #dbe8f7;
-    border-radius: 12px;
-    background: #fff;
-    color: #64748b;
-    font-size: 13px;
-}
-
-.stats-toolbar label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.stats-toolbar select {
-    padding: 5px 8px;
-    border: 1px solid #cbd5e1;
-    border-radius: 7px;
-    background: #fff;
-    color: #334155;
-}
-
-.stats-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 10px;
-}
-
-.stats-summary-card {
-    padding: 12px 14px;
-    border: 1px solid #dbe8f7;
-    border-radius: 12px;
-    background: #fff;
-}
-
-.stats-summary-card span {
-    display: block;
-    color: #7c8da8;
-    font-size: 12px;
-}
-
-.stats-summary-card strong {
-    display: block;
-    margin-top: 4px;
-    color: #2456a6;
-    font-size: 22px;
-}
-
-.stats-chart-card {
-    padding: 14px 16px;
-    border: 1px solid #dbe8f7;
-    border-radius: 14px;
-    background: #fff;
-    overflow: hidden;
-}
-
-.stats-chart-card h3 {
-    margin: 0 0 12px;
-    font-size: 15px;
-}
-
-.stats-chart {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-    height: 170px;
-    padding: 8px 2px 4px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-}
-
-.stats-chart::-webkit-scrollbar {
-    height: 6px;
-}
-
-.stats-chart::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background: #cbd5e1;
-}
-
-.stats-chart::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.stats-chart-col {
-    flex: 0 0 34px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    height: 100%;
-    gap: 4px;
-}
-
-.stats-chart-bar {
-    position: relative;
-    width: 100%;
-    min-height: 18px;
-    max-height: calc(100% - 18px);
-    border-radius: 5px 5px 0 0;
-    background: linear-gradient(180deg, #60a5fa, #2563eb);
-}
-
-.stats-chart-bar span {
-    position: absolute;
-    top: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #fff;
-    font-size: 10px;
-    line-height: 1;
-}
-
-.stats-chart-col small {
-    color: #94a3b8;
-    font-size: 10px;
-    white-space: nowrap;
-}
-
-.stats-chart-empty,
-.stats-empty {
-    padding: 18px;
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-.stats-module h3 small {
-    color: #94a3b8;
-    font-size: 12px;
-    font-weight: normal;
-}
+/* ---------------- 深色主题 ---------------- */
 
 [data-theme="dark"] .stats-toolbar,
 [data-theme="dark"] .stats-summary-card,
-[data-theme="dark"] .stats-chart-card {
+[data-theme="dark"] .stats-chart-card,
+[data-theme="dark"] .stats-empty-page {
     background: #101827;
     border-color: #24344e;
+}
+
+[data-theme="dark"] .stats-toolbar {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .stats-toolbar-field > span,
+[data-theme="dark"] .stats-toolbar-meta {
+    color: #8ea0bb;
 }
 
 [data-theme="dark"] .stats-toolbar select {
@@ -246,86 +529,38 @@
     color: #e2e8f0;
 }
 
-.stats-modules {
-    display: grid;
-    gap: 16px;
-    margin-top: 8px;
+[data-theme="dark"] .stats-summary-card span {
+    color: #93a4bd;
 }
 
-.stats-chart-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+[data-theme="dark"] .stats-summary-card strong {
+    color: #8fb6ff;
 }
 
-.stats-chart-wide {
-    grid-column: 1 / -1;
+[data-theme="dark"] .stats-summary-card small,
+[data-theme="dark"] .stats-chart-head small,
+[data-theme="dark"] .stats-chart-col small,
+[data-theme="dark"] .stats-chart-value,
+[data-theme="dark"] .stats-activity-col small,
+[data-theme="dark"] .stats-chart-empty,
+[data-theme="dark"] .stats-empty {
+    color: #8ea0bb;
 }
 
-.stats-bar-row {
-    display: grid;
-    grid-template-columns: minmax(90px, 120px) minmax(0, 1fr) 36px;
-    align-items: center;
-    gap: 10px;
-    margin: 9px 0;
-    color: #64748b;
-    font-size: 12px;
+[data-theme="dark"] .stats-chart-bar {
+    background: linear-gradient(180deg, #3b82f6, #1d4ed8);
 }
 
-.stats-bar-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+[data-theme="dark"] .stats-chart-bar.is-pass {
+    background: linear-gradient(180deg, #3b82f6, #1d4ed8);
 }
 
-.stats-bar-track {
-    height: 10px;
-    overflow: hidden;
-    border-radius: 999px;
-    background: #e2e8f0;
+[data-theme="dark"] .stats-chart-bar.is-fail {
+    background: linear-gradient(180deg, #b91c1c, #7f1d1d);
 }
 
-.stats-bar-fill {
-    display: block;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #60a5fa, #2563eb);
-}
-
-.stats-bar-row strong {
-    color: #2456a6;
-    text-align: right;
-}
-
-.stats-activity {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-    height: 150px;
-    padding-top: 8px;
-}
-
-.stats-activity-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    height: 100%;
-    gap: 6px;
-}
-
-.stats-activity-bar {
-    width: 100%;
-    min-height: 6px;
-    border-radius: 5px 5px 0 0;
-    background: linear-gradient(180deg, #34d399, #059669);
-}
-
-.stats-activity-col small {
-    color: #94a3b8;
-    font-size: 10px;
-    white-space: nowrap;
+[data-theme="dark"] .stats-chart-scroll::-webkit-scrollbar-thumb {
+    background: #334155;
 }
 
 [data-theme="dark"] .stats-bar-track {
@@ -336,13 +571,176 @@
     color: #8fb6ff;
 }
 
-@media (max-width: 720px) {
+[data-theme="dark"] .stats-activity-bar {
+    background: linear-gradient(180deg, #10b981, #047857);
+}
+
+[data-theme="dark"] .stats-activity-bar.is-empty {
+    background: #24344e;
+}
+
+[data-theme="dark"] .stats-module {
+    background: #0b1220;
+    border-color: #24344e;
+}
+
+[data-theme="dark"] .stats-module h3 small,
+[data-theme="dark"] .stats-module-desc {
+    color: #8ea0bb;
+}
+
+[data-theme="dark"] .stats-record {
+    border-bottom-color: #24344e;
+}
+
+[data-theme="dark"] .stats-record-top {
+    color: #93a4bd;
+}
+
+[data-theme="dark"] .stats-record-top strong,
+[data-theme="dark"] .stats-record-metrics {
+    color: #8fb6ff;
+}
+
+[data-theme="dark"] .stats-wrong-list {
+    color: #93a4bd;
+}
+
+[data-theme="dark"] .stats-wrong-list b {
+    color: #f87171;
+}
+
+[data-theme="dark"] .stats-good {
+    color: #4ade80;
+}
+
+[data-theme="dark"] .stats-clear-btn {
+    background: transparent;
+    border-color: #7f1d1d;
+    color: #f87171;
+}
+
+[data-theme="dark"] .stats-clear-btn:hover {
+    background: rgba(248, 113, 113, 0.12);
+}
+
+[data-theme="dark"] .stats-empty-page {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .stats-empty-page strong {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .stats-empty-tip {
+    color: #7c8da8;
+}
+
+/* ---------------- 响应式 ---------------- */
+
+@media (max-width: 900px) {
     .stats-chart-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .stats-chart-wide {
         grid-column: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-toolbar {
+        gap: 10px;
+    }
+
+    .stats-toolbar-field {
+        flex: 1 1 100%;
+        justify-content: space-between;
+    }
+
+    .stats-toolbar select {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .stats-toolbar-meta {
+        margin-left: 0;
+        flex: 1 1 100%;
+    }
+
+    .stats-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stats-summary-card strong {
+        font-size: 19px;
+    }
+
+    .stats-chart-card {
+        padding: 12px;
+    }
+
+    .stats-chart {
+        height: 160px;
+        gap: 6px;
+    }
+
+    .stats-chart-track {
+        height: 122px;
+    }
+
+    .stats-chart-col {
+        flex: 0 0 34px;
+    }
+
+    .stats-bar-row {
+        grid-template-columns: minmax(64px, 40%) minmax(0, 1fr) 34px;
+    }
+
+    .stats-activity {
+        gap: 3px;
+        height: 150px;
+    }
+
+    .stats-module {
+        padding: 14px;
+    }
+}
+
+@media (max-width: 420px) {
+    .stats-summary {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .stats-activity {
+        gap: 2px;
+        height: 140px;
+    }
+
+    .stats-activity-col small {
+        font-size: 9px;
+        height: 30px;
+    }
+
+    .stats-clear-btn {
+        padding: 4px 10px;
+    }
+}
+
+/* 触屏设备不保留 hover 效果，避免点击后样式残留 */
+@media (hover: none) {
+    .stats-clear-btn:hover {
+        background: #fff;
+    }
+
+    [data-theme="dark"] .stats-clear-btn:hover {
+        background: transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stats-chart-scroll {
+        scroll-behavior: auto;
     }
 }
 

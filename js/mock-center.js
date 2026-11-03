@@ -10,16 +10,104 @@
         interview: null
     };
     var store = { history: [], recentExamIds: [] };
+    var dbRetryId = null;      // 内容库就绪重试定时器
+    var dbRetryCount = 0;      // 已重试次数（有上限，避免无限轮询）
 
-    var PAPERS = [
-        { title: '初级综合模拟卷（一）', level: '初级', meta: '30 客观 + 3 主观', time: '30 分钟', href: '/questions/UnityClient/Junior/unity-junior-comprehensive_v1.0.0.html' },
-        { title: '中级综合模拟卷（一）', level: '中级', meta: '30 客观 + 3 主观', time: '35 分钟', href: '/questions/UnityClient/MidLevel/unity-mid-comprehensive_v1.0.0.html' },
-        { title: '高级综合模拟卷（一）', level: '高级', meta: '30 客观 + 3 主观', time: '40 分钟', href: '/questions/UnityClient/Senior/unity-senior-comprehensive_v1.0.0.html' },
-        { title: '面试快问快答模拟卷', level: '模拟', meta: '30 客观快问快答', time: '20 分钟', href: '/questions/UnityClient/Special/unity-rapid-mock_v1.0.0.html' },
-        { title: 'UGUI 性能专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/ugui-performance_v2.0.0.html' },
-        { title: 'Addressables / AssetBundle 专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/addressables_v2.0.0.html' },
-        { title: 'C# / GC / 异步专项卷', level: '专项', meta: '30 客观 + 5 主观', time: '30 分钟', href: '/questions/UnityClient/Special/csharp-gc-async_v2.0.0.html' }
+    /*
+     * 题卷页面路径唯一来源。
+     * 键 = question-bank YAML 的 paper.id；值 = 对应题目页面的绝对路径。
+     * 新增题卷时只需同时在 source/_data/question-bank/ 与这里登记，
+     * `完整试卷模拟` 会自动从 content-db 的 papers 表读取标题/题量/时长。
+     */
+    var PAPER_HREFS = {
+        'unity-junior-comprehensive': '/questions/UnityClient/Junior/unity-junior-comprehensive_v1.0.0.html',
+        'unity-mid-comprehensive': '/questions/UnityClient/MidLevel/unity-mid-comprehensive_v1.0.0.html',
+        'unity-senior-comprehensive': '/questions/UnityClient/Senior/unity-senior-comprehensive_v1.0.0.html',
+        'unity-principal-comprehensive': '/questions/UnityClient/Principal/unity-principal-comprehensive_v1.0.0.html',
+        'unity-junior-practice': '/questions/UnityClient/Junior/unity-junior-practice_v1.0.0.html',
+        'unity-rapid-mock': '/questions/UnityClient/Special/unity-rapid-mock_v1.0.0.html',
+        'ugui-performance': '/questions/UnityClient/Special/ugui-performance_v2.0.0.html',
+        'addressables': '/questions/UnityClient/Special/addressables_v2.0.0.html',
+        'csharp-gc-async': '/questions/UnityClient/Special/csharp-gc-async_v2.0.0.html',
+        'network-sync': '/questions/UnityClient/Special/network-sync_v2.0.0.html',
+        'unity-foundation': '/questions/UnityClient/Special/unity-foundation_v2.0.0.html',
+        'rendering-urp': '/questions/UnityClient/Special/rendering-urp_v2.0.0.html',
+        'unity-extra-practice': '/questions/UnityClient/Special/unity-extra-practice_v1.0.0.html'
+    };
+
+    /* 未在 PAPER_HREFS 登记的新题卷，按 level 猜所在目录（避免链接回落到 Special 造成 404） */
+    var LEVEL_DIRS = {
+        junior: '/questions/UnityClient/Junior/',
+        mid: '/questions/UnityClient/MidLevel/',
+        senior: '/questions/UnityClient/Senior/',
+        principal: '/questions/UnityClient/Principal/',
+        special: '/questions/UnityClient/Special/',
+        mixed: '/questions/UnityClient/Special/'
+    };
+
+    /* 题库 level 枚举 → 展示用中文标签 */
+    var LEVEL_LABELS = {
+        junior: '初级',
+        mid: '中级',
+        senior: '高级',
+        principal: '资深',
+        special: '专项',
+        mixed: '模拟'
+    };
+
+    /**
+     * 显式登记优先（最可靠）；未登记的按 level 猜目录 + 约定文件名。
+     * 注意：本函数被顶层 `var PAPERS = buildFallbackPapers()` 调用，
+     * 必须定义在它之前，且只能依赖 LEVEL_DIRS / PAPER_HREFS 这类先行声明的变量。
+     */
+    function paperHref(id, level) {
+        if (PAPER_HREFS[id]) return PAPER_HREFS[id];
+        var dir = LEVEL_DIRS[String(level || '').toLowerCase()] || '/questions/UnityClient/Special/';
+        return dir + id + '_v1.0.0.html';
+    }
+
+    /*
+     * 静态兜底列表：仅在 content-db 不可用时使用（离线 / 内容库加载失败）。
+     * 正常路径由 loadContentData() 按 content-db 的 papers 表重建整份列表。
+     * level 使用题库原始值（junior/mid/...），用于 paperHref 猜目录；展示标签由 LEVEL_LABELS 转换。
+     */
+    var FALLBACK_PAPERS = [
+        { id: 'unity-junior-comprehensive', title: 'Unity 客户端初级综合模拟卷（一）', level: 'junior', meta: '30 客观 + 3 主观', time: '30 分钟' },
+        { id: 'unity-mid-comprehensive', title: 'Unity 客户端中级综合模拟卷（一）', level: 'mid', meta: '30 客观 + 3 主观', time: '30 分钟' },
+        { id: 'unity-senior-comprehensive', title: 'Unity 客户端高级综合模拟卷（一）', level: 'senior', meta: '30 客观 + 3 主观', time: '30 分钟' },
+        { id: 'unity-principal-comprehensive', title: 'Unity 客户端资深综合模拟卷（一）', level: 'principal', meta: '30 客观 + 4 主观', time: '40 分钟' },
+        { id: 'unity-junior-practice', title: 'Unity 客户端初级补强练习卷（一）', level: 'junior', meta: '30 客观 + 3 主观', time: '25 分钟' },
+        { id: 'unity-rapid-mock', title: 'Unity 客户端面试快问快答模拟卷', level: 'mixed', meta: '30 客观快问快答', time: '15 分钟' },
+        { id: 'ugui-performance', title: 'UGUI 性能专项卷（一）', level: 'special', meta: '30 客观 + 5 主观', time: '30 分钟' },
+        { id: 'addressables', title: 'Addressables / AssetBundle 专项卷（一）', level: 'special', meta: '30 客观 + 5 主观', time: '30 分钟' },
+        { id: 'csharp-gc-async', title: 'C# / GC / 异步专项卷（一）', level: 'special', meta: '30 客观 + 5 主观', time: '30 分钟' },
+        { id: 'network-sync', title: '网络同步与弱网专项卷（一）', level: 'special', meta: '30 客观 + 5 主观', time: '30 分钟' },
+        { id: 'unity-foundation', title: 'Unity 基础与生命周期专项卷（一）', level: 'junior', meta: '30 客观 + 3 主观', time: '30 分钟' },
+        { id: 'rendering-urp', title: '渲染与 URP 专项卷（一）', level: 'special', meta: '30 客观 + 3 主观', time: '30 分钟' },
+        { id: 'unity-extra-practice', title: 'Unity 高频细节补强卷（一）', level: 'mid', meta: '30 客观 + 3 主观', time: '30 分钟' }
     ];
+
+    /**
+     * 静态兜底列表 → 展示结构（纯函数）。
+     * 依赖 LEVEL_LABELS / paperHref，二者必须声明在本函数之前；
+     * 顶层 `var PAPERS = buildFallbackPapers()` 会立即执行一次。
+     */
+    function buildFallbackPapers() {
+        return FALLBACK_PAPERS.map(function (p) {
+            var levelKey = String(p.level || '').toLowerCase();
+            return {
+                id: p.id,
+                title: p.title,
+                level: LEVEL_LABELS[levelKey] || p.level || '专项',
+                meta: p.meta,
+                time: p.time,
+                href: paperHref(p.id, p.level)
+            };
+        });
+    }
+
+    /** 当前展示用题卷列表：content-db 可用时为动态列表，否则为静态兜底副本 */
+    var PAPERS = buildFallbackPapers();
 
     var QUICK_QUIZ = [
         { category: 'C#', q: '关于 string，正确的说法是？', options: ['可变引用类型', '不可变引用类型', '值类型', '只能存 ASCII'], answer: 1, explain: 'string 是不可变引用类型，每次修改都会产生新对象。' },
@@ -103,12 +191,81 @@
         { category: '算法', difficulty: '进阶', q: '动态规划解题步骤是什么？', points: ['定义状态与含义', '推导转移方程', '确定初始化与遍历顺序', '处理边界并考虑空间压缩'] },
         { category: '项目', difficulty: '行为', q: '讲一个你解决过的最有挑战的技术问题。', points: ['背景与目标', '你的排查过程与关键判断', '方案取舍与落地结果', '复盘与可复用经验'] }
     ];
-    // 优先从 ContentDB 读取；JS 内数组仅作为离线兜底
+    // 优先从 SiteAPI 的内容能力读取；JS 内数组仅作为离线兜底
+    function contentDb() {
+        if (window.SiteAPI && typeof window.SiteAPI.content === 'function') {
+            var contentApi = window.SiteAPI.content();
+            if (contentApi && typeof contentApi.content === 'function') return contentApi.content();
+        }
+        return window.ContentDB || null;
+    }
+
+    /**
+     * 由 content-db 的 papers / questions 表重建题卷列表。
+     * - 纯函数式重建：每次调用都从零生成，不会累积，重复 PJAX 进入也不会重复追加
+     * - 不再用静态列表做 seen 去重，因此新题卷不会再被误杀
+     * - 无可用 page 时返回 null，由调用方决定是否回退到 FALLBACK_PAPERS
+     */
+    function buildPapersFromDb(tables) {
+        var papers = (tables && Array.isArray(tables.papers)) ? tables.papers : [];
+        if (!papers.length) return null;
+
+        var counts = {};
+        (Array.isArray(tables.questions) ? tables.questions : []).forEach(function (q) {
+            if (!q || !q.paper_id) return;
+            var c = counts[q.paper_id] || (counts[q.paper_id] = { objective: 0, subjective: 0 });
+            var type = String(q.type || '').toLowerCase();
+            if (type === 'subjective' || (!q.options && q.answer == null)) c.subjective++;
+            else c.objective++;
+        });
+
+        var out = [];
+        var used = {};
+        papers.forEach(function (p) {
+            if (!p || !p.id || p.deprecated) return;
+            var id = String(p.id);
+            if (used[id]) return;
+            used[id] = true;
+
+            var c = counts[id];
+            var meta;
+            if (c && (c.objective || c.subjective)) {
+                meta = c.objective + ' 客观';
+                if (c.subjective) meta += ' + ' + c.subjective + ' 主观';
+            } else if (p.description) {
+                meta = String(p.description).split('，')[0];
+            } else {
+                meta = '题量待同步';
+            }
+
+            var duration = Number(p.duration) || 0;
+            out.push({
+                id: id,
+                title: p.title || id,
+                level: LEVEL_LABELS[String(p.level || '').toLowerCase()] || p.level || '专项',
+                meta: meta,
+                time: duration ? Math.round(duration / 60) + ' 分钟' : '不限时',
+                href: paperHref(id, p.level)
+            });
+        });
+
+        return out.length ? out : null;
+    }
+
+    /** content-db 是否已经就绪（用于判断是否还需要重试加载） */
+    function isDbReady() {
+        var dbApi = contentDb();
+        return !!(dbApi && typeof dbApi.ensure === 'function');
+    }
+
     function loadContentData() {
-        if (!window.ContentDB || typeof window.ContentDB.ensure !== 'function') {
+        var dbApi = contentDb();
+        if (!dbApi || typeof dbApi.ensure !== 'function') {
+            // 统配脚本还没就绪：保持兜底列表，但返回 false 让调用方知道可以稍后重试
+            PAPERS = buildFallbackPapers();
             return Promise.resolve(false);
         }
-        return window.ContentDB.ensure().then(function (db) {
+        return dbApi.ensure().then(function (db) {
             var t = db && db.tables ? db.tables : {};
             var quiz = Array.isArray(t.mock_quiz) ? t.mock_quiz : [];
             var interview = Array.isArray(t.interview_questions) ? t.interview_questions : [];
@@ -135,8 +292,19 @@
                     };
                 });
             }
-            return true;
-        }).catch(function () { return false; });
+            // 完整试卷与题库同步：用 content-db 的 papers 表整体重建列表（幂等，不会重复追加）
+            var fromDb = buildPapersFromDb(t);
+            if (fromDb) {
+                PAPERS = fromDb;
+                return true;   // true = 已拿到题库数据
+            }
+            // 内容库加载成功但还没有 papers 表：退回静态列表，稍后仍会重试
+            PAPERS = buildFallbackPapers();
+            return false;
+        }).catch(function () {
+            PAPERS = buildFallbackPapers();
+            return false;
+        });
     }
 
 
@@ -270,14 +438,14 @@
         }
         var paperHtml = PAPERS.map(function (p) {
             return [
-                '<a class="mock-paper" href="' + escapeHtml(p.href) + '">',
+                '<a class="mock-paper" href="' + escapeHtml(p.href) + '" data-paper-id="' + escapeHtml(p.id) + '">',
                 '  <div class="mock-paper-top"><span class="mock-badge">' + escapeHtml(p.level) + '</span><span class="mock-paper-time"><i class="far fa-clock"></i> ' + escapeHtml(p.time) + '</span></div>',
                 '  <h3>' + escapeHtml(p.title) + '</h3>',
                 '  <p>' + escapeHtml(p.meta) + '</p>',
                 '  <span class="mock-paper-link">进入试卷 <i class="fas fa-arrow-right"></i></span>',
                 '</a>'
             ].join('');
-        }).join('');
+        }).join('') || '<p class="mock-empty-line">题库暂未加载到试卷，请稍后刷新重试。</p>';
 
         return [
             '<section class="mock-section">',
@@ -288,7 +456,7 @@
             '  </div>',
             '</section>',
             '<section class="mock-section">',
-            '  <div class="mock-section-head"><div><span class="mock-kicker">FULL PAPER</span><h2>完整试卷模拟</h2></div><p>进入原试卷，使用计时器和答题卡完成整卷</p></div>',
+            '  <div class="mock-section-head"><div><span class="mock-kicker">FULL PAPER</span><h2>完整试卷模拟</h2></div><p>共 ' + PAPERS.length + ' 套 · 进入原试卷，使用计时器和答题卡完成整卷</p></div>',
             '  <div class="mock-paper-grid">' + paperHtml + '</div>',
             '</section>'
         ].join('');
@@ -440,6 +608,9 @@
     }
 
     function statsCenter() {
+        if (window.SiteAPI && typeof window.SiteAPI.stats === 'function') {
+            try { return window.SiteAPI.stats(); } catch (e) { /* ignore */ }
+        }
         return window.StatsCenter || null;
     }
 
@@ -466,7 +637,8 @@
                     score: score,
                     total: exam.questions.length,
                     rate: exam.questions.length ? Math.round(score / exam.questions.length * 100) : 0,
-                    durationSec: exam.usedSeconds || 0
+                    durationSec: exam.usedSeconds || 0,
+                    wrongCount: wrong.length
                 },
                 detail: { wrong: wrong }
             });
@@ -489,7 +661,7 @@
                     score: known,
                     total: data.questions.length,
                     rate: data.questions.length ? Math.round(known / data.questions.length * 100) : 0,
-                    durationSec: 0
+                    durationSec: data.durationSec || 0
                 },
                 detail: { known: known, fuzzy: fuzzy, forgot: forgot }
             });
@@ -554,6 +726,7 @@
             index: 0,
             revealed: false,
             secondsLeft: 60,
+            startedAt: Date.now(),
             ratings: [],
             finished: false
         };
@@ -573,6 +746,7 @@
         state.interview.revealed = false;
         state.interview.secondsLeft = 60;
         render();
+        startTimer('interview');
     }
 
     function finishInterview() {
@@ -580,6 +754,7 @@
         stopTimer();
         var data = state.interview;
         data.finished = true;
+        data.durationSec = Math.max(0, Math.round((Date.now() - (data.startedAt || Date.now())) / 1000));
         var known = data.ratings.filter(function (r) { return r === 'known'; }).length;
         recordInterviewStats(data);
         addHistory({
@@ -642,7 +817,11 @@
                 return;
             }
             if (action === 'interview-reveal') {
-                if (state.interview) { state.interview.revealed = true; render(); }
+                if (state.interview) {
+                    stopTimer();
+                    state.interview.revealed = true;
+                    render();
+                }
                 return;
             }
             if (action === 'interview-rate') {
@@ -657,7 +836,15 @@
             if (action === 'history-clear') {
                 if (window.confirm('确定清空所有模拟记录吗？')) {
                     store.history = [];
+                    store.recentExamIds = [];
                     saveStore();
+                    var stats = statsCenter();
+                    if (stats && typeof stats.clear === 'function') {
+                        stats.clear('mock-center');
+                    }
+                    try {
+                        document.dispatchEvent(new CustomEvent('stats-center:updated', { detail: { moduleId: 'mock-center', cleared: true } }));
+                    } catch (e) { /* ignore */ }
                     render();
                 }
             }
@@ -667,6 +854,23 @@
     function init() {
         root = document.getElementById('mock-center-app');
         if (!root) return;
+
+        // 页面脚本可能早于底部统配脚本执行，等 DOMContentLoaded 后再读取 SiteAPI/ContentDB。
+        if (!window.SiteAPI && !window.ContentDB && !root.dataset.waitingForCore) {
+            root.dataset.waitingForCore = 'true';
+            if (document.readyState === 'complete') {
+                root.removeAttribute('data-waiting-for-core');
+                init();
+            } else {
+                document.addEventListener('DOMContentLoaded', function () {
+                    root.removeAttribute('data-waiting-for-core');
+                    init();
+                }, { once: true });
+            }
+            return;
+        }
+        root.removeAttribute('data-waiting-for-core');
+
         loadStore();
         if (!root.dataset.bound) {
             root.dataset.bound = 'true';
@@ -676,16 +880,70 @@
         state.exam = null;
         state.interview = null;
 
-        if (!root.dataset.dataLoaded) {
-            root.dataset.dataLoaded = 'loading';
-            root.innerHTML = '<div class="mock-loading">正在加载题库数据...</div>';
-            loadContentData().then(function () {
-                root.dataset.dataLoaded = 'true';
-                render();
-            });
-        } else {
+        // 只有真正拿到 content-db 的 papers 后才标记 dataReady，
+        // 否则（首次进入内容库还没加载完）下次 init 或 pjax 回来仍会重试，
+        // 避免出现「首次 8 套、再次 13 套」。
+        if (root.dataset.dataReady === 'true') {
             render();
+            return;
         }
+
+        if (root.dataset.dataLoading === 'true') {
+            // 已有一次加载在飞行中，等它完成即可，不要重复发起
+            return;
+        }
+
+        root.dataset.dataLoading = 'true';
+        root.innerHTML = '<div class="mock-loading">正在加载题库数据...</div>';
+        loadContentData().then(function (ok) {
+            root.dataset.dataLoading = 'false';
+            if (ok) {
+                root.dataset.dataReady = 'true';
+                render();
+                return;
+            }
+            // 还没拿到题库：先渲染兜底列表保证页面可用，同时排队等统配脚本就绪后自动重试
+            render();
+            scheduleDbRetry();
+        }).catch(function () {
+            root.dataset.dataLoading = 'false';
+            render();
+            scheduleDbRetry();
+        });
+    }
+
+    /**
+     * 统配脚本（SiteAPI / ContentDB）加载晚于本脚本时，首次进入只能拿到兜底列表。
+     * 这里做有限次轮询，一旦内容库可用就重新加载并重渲染，
+     * 保证首次进入和二次进入显示一致（不再出现 8 套 / 13 套不一致）。
+     */
+    function scheduleDbRetry() {
+        if (dbRetryId !== null) return;
+        if (!root || !document.getElementById('mock-center-app')) return;
+        if (dbRetryCount >= 40) return; // 约 20 秒后放弃，避免无限轮询
+
+        dbRetryId = setTimeout(function () {
+            dbRetryId = null;
+            dbRetryCount++;
+            if (!root || !document.body.contains(root)) return;
+            if (root.dataset.dataReady === 'true') return;
+
+            if (!isDbReady()) {
+                scheduleDbRetry();
+                return;
+            }
+            root.dataset.dataLoading = 'true';
+            loadContentData().then(function (ok) {
+                root.dataset.dataLoading = 'false';
+                if (ok) root.dataset.dataReady = 'true';
+                render();
+                if (!ok) scheduleDbRetry();
+            }).catch(function () {
+                root.dataset.dataLoading = 'false';
+                render();
+                scheduleDbRetry();
+            });
+        }, 500);
     }
 
     if (document.readyState === 'loading') {
@@ -693,7 +951,17 @@
     } else {
         init();
     }
+    function stopDbRetry() {
+        if (dbRetryId !== null) {
+            clearTimeout(dbRetryId);
+            dbRetryId = null;
+        }
+    }
+
     document.addEventListener('pjax:complete', init);
     document.addEventListener('pjax:end', init);
-    document.addEventListener('pjax:send', stopTimer);
+    document.addEventListener('pjax:send', function () {
+        stopTimer();
+        stopDbRetry();
+    });
 })();

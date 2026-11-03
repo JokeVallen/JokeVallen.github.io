@@ -437,6 +437,17 @@
         playgroundSearch: '',
         playgroundPattern: '',
         problemPanelCollapsed: false,
+        selfCheck: {
+            problemId: null,
+            startedAt: 0,
+            opened: []
+        },
+        playgroundObservation: {
+            state: 'idle',
+            loadMs: 0,
+            reloads: 0,
+            everObserved: false
+        },
         tab: 'today',
         search: '',
         pattern: '',
@@ -538,12 +549,13 @@
             item.stage = 0;
             item.lapses = 0;
             item.reviewLog = [];
+            item.selfCheckLog = [];
             return normalizeProblem(item);
         }).filter(Boolean);
     }
 
     function defaultStore() {
-        return { version: 1, seeded: true, problems: createDefaultProblems() };
+        return { version: 1, seeded: true, defaultsVersion: 2, problems: createDefaultProblems() };
     }
 
     function parseExampleInput(text) {
@@ -597,7 +609,16 @@
             stage: stage,
             lapses: parseInt(p.lapses, 10) || 0,
             lastReview: String(p.lastReview || ''),
-            reviewLog: Array.isArray(p.reviewLog) ? p.reviewLog.slice(-100) : []
+            reviewLog: Array.isArray(p.reviewLog) ? p.reviewLog.slice(-100) : [],
+            selfCheckLog: Array.isArray(p.selfCheckLog) ? p.selfCheckLog.slice(-20).map(function (log) {
+                return {
+                    at: String(log && log.at || ''),
+                    durationMs: Math.max(0, parseInt(log && log.durationMs, 10) || 0),
+                    opened: Array.isArray(log && log.opened) ? log.opened.slice(0, 4).map(function (key) {
+                        return String(key || '');
+                    }).filter(Boolean) : []
+                };
+            }) : []
         };
     }
 
@@ -622,9 +643,20 @@
                     });
                 }
             });
+            // 一次性迁移：旧 localStorage 可能只缓存了少量默认题，补齐丢失的默认题
+            if (data.seeded && data.defaultsVersion !== 2) {
+                var existing = {};
+                data.problems.forEach(function (p) { if (p && p.id) existing[p.id] = true; });
+                createDefaultProblems().forEach(function (p) {
+                    if (!existing[p.id]) data.problems.push(p);
+                });
+                data.defaultsVersion = 2;
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* ignore */ }
+            }
             return {
                 version: 1,
                 seeded: true,
+                defaultsVersion: 2,
                 problems: data.problems.map(normalizeProblem).filter(Boolean)
             };
         } catch (e) {
@@ -679,8 +711,11 @@
         return window.ContentDB.ensure().then(function (db) {
             var list = db && db.tables ? db.tables.algorithms : null;
             if (Array.isArray(list) && list.length) {
-                DEFAULT_PROBLEM_SEEDS = list.map(function (a) {
-                    return {
+                var byId = {};
+                DEFAULT_PROBLEM_SEEDS.forEach(function (seed) { byId[seed.id] = true; });
+                list.forEach(function (a) {
+                    if (!a || !a.id || byId[a.id]) return;
+                    DEFAULT_PROBLEM_SEEDS.push({
                         id: a.id,
                         title: a.title,
                         pattern: a.pattern,
@@ -691,7 +726,7 @@
                         stuck: a.stuck,
                         template: a.template,
                         link: a.link
-                    };
+                    });
                 });
                 return true;
             }
@@ -720,20 +755,32 @@
     }
 
     function openWorkbench(problemId) {
-        if (problemId && findProblem(problemId)) ui.playgroundProblemId = problemId;
+        var target = problemId ? findProblem(problemId) : null;
+        if (target) ui.playgroundProblemId = target.id;
+        if (ui.tab === 'playground' && root && root.querySelector('.algo-workbench-left')) {
+            // 已在工作台时只更新题目区，避免 iframe 重新加载。
+            if (target) renderWorkbenchProblemPanel();
+            return true;
+        }
         ui.tab = 'playground';
         render();
+        return true;
+    }
+
+    function renderWorkbenchProblemPanel() {
+        var left = root && root.querySelector('.algo-workbench-left');
+        if (!left) return false;
+        left.innerHTML = workbenchLeftHtml();
         return true;
     }
 
     function selectPlaygroundProblem(problemId) {
         if (!findProblem(problemId)) return false;
         ui.playgroundProblemId = problemId;
-        var left = root && root.querySelector('.algo-workbench-left');
-        if (left) {
-            left.innerHTML = workbenchLeftHtml();
-        } else {
-            renderTab();
+        // 优先只替换题目区；只有不在工作台时才渲染整个标签页。
+        if (!renderWorkbenchProblemPanel()) {
+            ui.tab = 'playground';
+            render();
         }
         return true;
     }
@@ -808,8 +855,8 @@
             '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="quiz">自测</button>',
             '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="problems">题目本</button>',
             '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="patterns">模式识别</button>',
-            '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="playground">C# 实验</button>',
-              '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="method">方法论</button>',
+            '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="playground">算法工作台</button>',
+            '  <button type="button" class="algo-tab" role="tab" data-action="tab" data-tab="method">方法论</button>',
             '</nav>',
             '<div id="algo-tab-content" class="algo-tab-content"></div>',
             '<div id="algo-modal-root"></div>',
@@ -818,12 +865,14 @@
     }
 
     function render() {
+        if (!root) return;
         renderStats();
         renderTabs();
         renderTab();
     }
 
     function renderStats() {
+        if (!root) return;
         var today = todayStr();
         var due = dueProblems().length;
         var learning = store.problems.filter(function (p) { return p.stage < 3; }).length;
@@ -841,11 +890,13 @@
     }
 
     function setText(id, value) {
+        if (!root) return;
         var el = root.querySelector('#' + id);
         if (el) el.textContent = String(value);
     }
 
     function renderTabs() {
+        if (!root) return;
         root.querySelectorAll('.algo-tab').forEach(function (btn) {
             var active = btn.dataset.tab === ui.tab;
             btn.classList.toggle('is-active', active);
@@ -854,6 +905,7 @@
     }
 
     function renderTab() {
+        if (!root) return;
         var content = root.querySelector('#algo-tab-content');
         if (!content) return;
         root.classList.toggle('is-playground', ui.tab === 'playground');
@@ -870,6 +922,7 @@
             content.innerHTML = patternsHtml();
         } else if (ui.tab === 'playground') {
             content.innerHTML = playgroundHtml();
+            wirePlaygroundStatus();
         } else {
             content.innerHTML = methodHtml();
         }
@@ -995,7 +1048,7 @@
             '    <span class="algo-card-meta">' + (p.lastReview ? '上次复习：' + escapeHtml(p.lastReview) : '尚未复习') + (p.lapses ? ' · 卡壳 ' + p.lapses + ' 次' : '') + '</span>',
             '    <div class="algo-card-actions">',
             '      <button type="button" class="algo-btn algo-btn-small" data-action="review" data-id="' + escapeHtml(p.id) + '"><i class="fas fa-redo"></i> ' + (p.stage >= 3 ? '再复习' : '复习') + '</button>',
-              '      <button type="button" class="algo-btn algo-btn-small algo-btn-ghost" data-action="open-playground" data-id="' + escapeHtml(p.id) + '"><i class="fas fa-code"></i> C# 实验</button>',
+            '      <button type="button" class="algo-btn algo-btn-small algo-btn-ghost" data-action="open-playground" data-id="' + escapeHtml(p.id) + '"><i class="fas fa-code"></i> 算法工作台</button>',
             '      <button type="button" class="algo-btn algo-btn-small algo-btn-ghost" data-action="edit" data-id="' + escapeHtml(p.id) + '"><i class="fas fa-pen"></i> 编辑</button>',
             '      <button type="button" class="algo-icon-btn" data-action="delete" data-id="' + escapeHtml(p.id) + '" title="删除"><i class="fas fa-trash"></i></button>',
             '    </div>',
@@ -1267,9 +1320,17 @@
         ].join('');
     }
 
+    function renderWorkbenchProblemPanel() {
+        if (!root) return false;
+        var panel = root.querySelector('.algo-workbench-left');
+        if (!panel) return false;
+        panel.innerHTML = workbenchLeftHtml();
+        return true;
+    }
+
     function workbenchLeftHtml() {
         var selected = findProblem(ui.playgroundProblemId) || store.problems[0] || null;
-        var keyword = ui.playgroundSearch.trim().toLowerCase();
+        var keyword = String(ui.playgroundSearch || '').trim().toLowerCase();
         var list = store.problems.filter(function (p) {
             if (ui.playgroundPattern && p.pattern !== ui.playgroundPattern) return false;
             if (!keyword) return true;
@@ -1302,32 +1363,48 @@
             }).join('') + '</ul>'
             : '<p class="algo-problem-muted">暂无约束说明。</p>';
 
+        var selfCheckOn = !!selected && selfCheckActive(selected.id);
+
+        function foldOpen(key, defaultOpen) {
+            if (!selfCheckOn) return defaultOpen ? ' open' : '';
+            return ui.selfCheck.opened.indexOf(key) !== -1 ? ' open' : '';
+        }
+
         var detail = selected ? [
-            '<div class="algo-workbench-detail">',
+            '<div class="algo-workbench-detail' + (selfCheckOn ? ' is-selfcheck' : '') + '">',
             '  <div class="algo-workbench-detail-top"><span class="algo-pill algo-pill-pattern">' + escapeHtml(selected.pattern || '未分类') + '</span>',
             selected.link ? '  <a class="algo-btn algo-btn-small" href="' + escapeHtml(selected.link) + '" target="_blank" rel="noopener noreferrer">原题链接</a>' : '',
             '</div>',
             '  <h3>' + escapeHtml(selected.title || '未命名题目') + '</h3>',
-            '  <details class="algo-problem-fold" open>',
-            '    <summary>题目描述</summary>',
-            '    <p>' + escapeHtml(selected.description || selected.insight || selected.trigger || '暂无题目描述。') + '</p>',
+            '  <div class="algo-selfcheck-bar">',
+            selfCheckOn
+                ? '  <button type="button" class="algo-btn algo-btn-small algo-btn-primary" data-action="finish-selfcheck" data-id="' + escapeHtml(selected.id) + '"><i class="fas fa-flag-checkered"></i> 结束自测</button>'
+                : '  <button type="button" class="algo-btn algo-btn-small" data-action="start-selfcheck" data-id="' + escapeHtml(selected.id) + '"><i class="fas fa-eye-slash"></i> 开始自测</button>',
+            '    <span class="algo-selfcheck-state">' + (selfCheckOn ? '自测中：' + ui.selfCheck.opened.length + ' 段已展开' : '先只凭题名 + 触发词回忆') + '</span>',
+            '  </div>',
+            selfCheckSummaryHtml(selected),
+            '  <details class="algo-problem-fold" data-section="description"' + foldOpen('description', true) + '>',
+            '    <summary><span class="algo-fold-label">题目描述</span></summary>',
+            '    <div class="algo-problem-fold-body"><p>' + escapeHtml(selected.description || selected.insight || selected.trigger || '暂无题目描述。') + '</p></div>',
             '  </details>',
-            '  <details class="algo-problem-fold" open>',
-            '    <summary>示例</summary>',
-            examplesHtml,
+            '  <details class="algo-problem-fold" data-section="examples"' + foldOpen('examples', true) + '>',
+            '    <summary><span class="algo-fold-label">示例</span></summary>',
+            '    <div class="algo-problem-fold-body">' + examplesHtml + '</div>',
             '  </details>',
-            '  <details class="algo-problem-fold">',
-            '    <summary>约束</summary>',
-            constraintsHtml,
+            '  <details class="algo-problem-fold" data-section="constraints"' + foldOpen('constraints', false) + '>',
+            '    <summary><span class="algo-fold-label">约束</span></summary>',
+            '    <div class="algo-problem-fold-body">' + constraintsHtml + '</div>',
             '  </details>',
-            '  <details class="algo-problem-fold">',
-            '    <summary>复盘笔记</summary>',
-            '    <dl class="algo-workbench-meta">',
-            '      <dt>触发词</dt><dd>' + escapeHtml(selected.trigger || '待补充') + '</dd>',
-            '      <dt>关键洞察</dt><dd>' + escapeHtml(selected.insight || '待补充') + '</dd>',
-            '      <dt>我卡在哪</dt><dd>' + escapeHtml(selected.stuck || '待补充') + '</dd>',
-            '      <dt>模板 / 步骤</dt><dd><div class="algo-template-text">' + escapeHtml(selected.template || '暂无模板') + '</div></dd>',
-            '    </dl>',
+            '  <details class="algo-problem-fold" data-section="notes"' + foldOpen('notes', false) + '>',
+            '    <summary><span class="algo-fold-label">复盘笔记</span></summary>',
+            '    <div class="algo-problem-fold-body">',
+            '      <dl class="algo-workbench-meta">',
+            '        <dt>触发词</dt><dd>' + escapeHtml(selected.trigger || '待补充') + '</dd>',
+            '        <dt>关键洞察</dt><dd>' + escapeHtml(selected.insight || '待补充') + '</dd>',
+            '        <dt>我卡在哪</dt><dd>' + escapeHtml(selected.stuck || '待补充') + '</dd>',
+            '        <dt>模板 / 步骤</dt><dd><div class="algo-template-text">' + escapeHtml(selected.template || '暂无模板') + '</div></dd>',
+            '      </dl>',
+            '    </div>',
             '  </details>',
             '  <button type="button" class="algo-btn algo-btn-primary" data-action="copy-playground-template" data-id="' + escapeHtml(selected.id) + '"><i class="fas fa-copy"></i> 复制模板（粘贴到下方编辑器）</button>',
             '</div>'
@@ -1348,23 +1425,162 @@
         ].join('');
     }
 
+    var SELF_CHECK_SECTIONS = [
+        { key: 'description', label: '题目描述' },
+        { key: 'examples', label: '示例' },
+        { key: 'constraints', label: '约束' },
+        { key: 'notes', label: '复盘笔记' }
+    ];
+
+    function selfCheckActive(problemId) {
+        return !!ui.selfCheck.problemId && ui.selfCheck.problemId === problemId;
+    }
+
+    function startSelfCheck(problemId) {
+        var p = findProblem(problemId);
+        if (!p) return false;
+        ui.selfCheck = { problemId: p.id, startedAt: Date.now(), opened: [] };
+        renderWorkbenchProblemPanel();
+        toast('自测开始：先只凭题名回忆，需要时再逐段展开');
+        return true;
+    }
+
+    function finishSelfCheck(problemId) {
+        var p = findProblem(problemId);
+        if (!p) return false;
+        if (!selfCheckActive(p.id)) return false;
+        var durationMs = Math.max(0, Date.now() - ui.selfCheck.startedAt);
+        var opened = ui.selfCheck.opened.slice(0, SELF_CHECK_SECTIONS.length);
+        p.selfCheckLog = (p.selfCheckLog || []).concat([{
+            at: new Date().toISOString().slice(0, 16).replace('T', ' '),
+            durationMs: durationMs,
+            opened: opened
+        }]).slice(-20);
+        saveStore();
+        ui.selfCheck = { problemId: null, startedAt: 0, opened: [] };
+        renderWorkbenchProblemPanel();
+        toast('自测已留痕：' + Math.max(1, Math.round(durationMs / 1000)) + ' 秒，展开 ' + opened.length + ' 段');
+        return true;
+    }
+
+    function toggleSelfCheckSection(sectionKey) {
+        if (!ui.selfCheck.problemId) return false;
+        var index = ui.selfCheck.opened.indexOf(sectionKey);
+        if (index === -1) ui.selfCheck.opened.push(sectionKey);
+        else ui.selfCheck.opened.splice(index, 1);
+        var el = root && root.querySelector('.algo-problem-fold[data-section="' + sectionKey + '"]');
+        if (el) el.open = index === -1;
+        return true;
+    }
+
+    function selfCheckSummaryHtml(problem) {
+        var last = problem && problem.selfCheckLog && problem.selfCheckLog.length
+            ? problem.selfCheckLog[problem.selfCheckLog.length - 1]
+            : null;
+        if (!last) return '<p class="algo-selfcheck-hint">还没有自测留痕。点「开始自测」后逐段展开，结束时自动记录用时。</p>';
+        var labels = last.opened.map(function (key) {
+            for (var i = 0; i < SELF_CHECK_SECTIONS.length; i++) {
+                if (SELF_CHECK_SECTIONS[i].key === key) return SELF_CHECK_SECTIONS[i].label;
+            }
+            return key;
+        });
+        return '<p class="algo-selfcheck-hint">最近自测：' + escapeHtml(last.at) + ' · 用时 ' +
+            Math.max(1, Math.round(last.durationMs / 1000)) + ' 秒 · 展开 ' + last.opened.length + ' 段' +
+            (labels.length ? '（' + escapeHtml(labels.join(' / ')) + '）' : '') + '</p>';
+    }
+
+    function playgroundObservationHtml() {
+        return '<i class="fas fa-spinner fa-spin"></i>' +
+            '<span class="algo-playground-status-text">正在加载 C# 编译器，首次打开可能需要 10~30 秒…</span>' +
+            '<span class="algo-playground-metrics" id="algo-playground-metrics">' + playgroundMetricsHtml() + '</span>' +
+            '<a href="https://csharp-roslyn-wasm-playground.pages.dev/" target="_blank" rel="noopener noreferrer">新窗口打开</a>';
+    }
+
+    function playgroundMetricsHtml() {
+        var obs = ui.playgroundObservation;
+        var stateLabel = obs.state === 'loaded' ? '已就绪' : (obs.state === 'timeout' ? '超时' : '加载中');
+        return '<span class="algo-playground-metric">状态：' + escapeHtml(stateLabel) + '</span>' +
+            '<span class="algo-playground-metric">加载耗时：' + (obs.loadMs > 0 ? (obs.loadMs / 1000).toFixed(1) + ' 秒' : '—') + '</span>' +
+            '<span class="algo-playground-metric">重载次数：<strong id="algo-playground-reloads">' + obs.reloads + '</strong></span>';
+    }
+
+    function wirePlaygroundStatus() {
+        var wrap = root && root.querySelector('.algo-workbench-right');
+        if (!wrap) return;
+        var iframe = wrap.querySelector('#algo-csharp-playground');
+        var status = wrap.querySelector('#algo-playground-status');
+        if (!iframe || !status) return;
+
+        // 重载次数只在 iframe 被真正重建时增加：每次 render 都会调用本函数，
+        // 用 dataset 标记判断当前节点是否已观测过。
+        var obs = ui.playgroundObservation;
+        var isNewNode = iframe.dataset.algoObserved !== '1';
+        if (isNewNode) {
+            iframe.dataset.algoObserved = '1';
+            if (obs.everObserved) obs.reloads += 1;
+            obs.everObserved = true;
+        }
+
+        // 已加载完成：只刷新指标文本，不再挂新的 load 监听
+        if (obs.state === 'loaded' || !isNewNode) {
+            if (obs.state === 'loaded') renderPlaygroundMetrics();
+            return;
+        }
+
+        obs.state = 'loading';
+        var startedAt = Date.now();
+
+        var timer = setTimeout(function () {
+            if (obs.state === 'loading') {
+                obs.state = 'timeout';
+                status.classList.add('is-timeout');
+                status.innerHTML = '<i class="fas fa-triangle-exclamation"></i><span class="algo-playground-status-text">C# 编辑器长时间未加载，可能是网络或上游服务问题。</span>' +
+                    '<span class="algo-playground-metrics" id="algo-playground-metrics">' + playgroundMetricsHtml() + '</span>' +
+                    '<a href="https://csharp-roslyn-wasm-playground.pages.dev/" target="_blank" rel="noopener noreferrer">新窗口打开</a>';
+            }
+        }, 30000);
+
+        iframe.addEventListener('load', function () {
+            clearTimeout(timer);
+            obs.state = 'loaded';
+            obs.loadMs = Math.max(1, Date.now() - startedAt);
+            wrap.classList.add('is-loaded');
+            // 保留状态条（含耗时与重载次数），只更新指标，不整块重建
+            renderPlaygroundMetrics();
+            status.hidden = false;
+            status.classList.remove('is-timeout');
+            var icon = status.querySelector('i');
+            if (icon) icon.className = 'fas fa-circle-check';
+            var text = status.querySelector('.algo-playground-status-text');
+            if (text) text.textContent = 'C# 编译器已就绪，代码只在本地 Web Worker 中运行。';
+        }, { once: true });
+    }
+
+    // 只更新指标文本，不重建状态条，避免破坏 aria-live 阅读顺序
+    function renderPlaygroundMetrics() {
+        var el = root && root.querySelector('#algo-playground-metrics');
+        if (!el) return;
+        el.innerHTML = playgroundMetricsHtml();
+    }
+
     function playgroundHtml() {
         return [
             '<section class="algo-playground">',
             '  <div class="algo-section-head">',
             '    <div>',
-            '      <h2>刷题工作台</h2>',
-            '      <p>上方阅读题目与示例，下方直接编译运行 C#。代码只在浏览器本地 Web Worker 中运行。</p>',
+            '      <h2>算法工作台</h2>',
+            '      <p>上方读题与自测，下方直接编译运行 C#。代码只在浏览器本地 Web Worker 中运行。</p>',
             '    </div>',
             '    <div class="algo-workbench-actions">',
-            '      <button type="button" class="algo-btn algo-btn-small" data-action="toggle-problem-panel"><i class="fas fa-chevron-up"></i> ' + (ui.problemPanelCollapsed ? '展开题目区' : '收起题目区') + '</button>',
+            '      <button type="button" class="algo-btn algo-btn-small" data-action="toggle-problem-panel" aria-controls="algo-workbench-problem-panel" aria-expanded="' + (ui.problemPanelCollapsed ? 'false' : 'true') + '"><i class="fas fa-chevron-' + (ui.problemPanelCollapsed ? 'down' : 'up') + '"></i> ' + (ui.problemPanelCollapsed ? '展开题目区' : '收起题目区') + '</button>',
             '      <a class="algo-btn algo-btn-small" href="https://csharp-roslyn-wasm-playground.pages.dev/" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i> 独立页面</a>',
             '    </div>',
             '  </div>',
             '  <div class="algo-playground-tip"><i class="fas fa-info-circle"></i> 首次加载需要下载 .NET 运行时，可能需要 10~30 秒。复制模板后粘贴到下方编辑器即可运行。</div>',
             '  <div class="algo-workbench">',
-            '    <aside class="algo-workbench-left' + (ui.problemPanelCollapsed ? ' is-collapsed' : '') + '">' + workbenchLeftHtml() + '</aside>',
+            '    <aside id="algo-workbench-problem-panel" class="algo-workbench-left' + (ui.problemPanelCollapsed ? ' is-collapsed' : '') + '">' + workbenchLeftHtml() + '</aside>',
             '    <div class="algo-workbench-right">',
+            '      <div id="algo-playground-status" class="algo-playground-status" role="status" aria-live="polite">' + playgroundObservationHtml() + '</div>',
             '      <iframe',
             '        id="algo-csharp-playground"',
             '        src="https://csharp-roslyn-wasm-playground.pages.dev/?theme=auto&accent=indigo&layout=stacked&chrome=minimal&completion=manual"',
@@ -1992,7 +2208,7 @@
                 ui.playgroundProblemId = pgProblem ? pgProblem.id : null;
                 if (pgProblem && pgProblem.template && navigator.clipboard) {
                     navigator.clipboard.writeText(pgProblem.template).then(function () {
-                        toast('模板已复制，粘贴到 C# 编辑器即可运行');
+                        toast('模板已复制，粘贴到算法工作台下方的编辑器即可运行');
                     }).catch(function () { /* clipboard may be unavailable */ });
                 }
                 ui.tab = 'playground';
@@ -2007,24 +2223,27 @@
                 ui.problemPanelCollapsed = !ui.problemPanelCollapsed;
                 var panel = root.querySelector('.algo-workbench-left');
                 if (panel) panel.classList.toggle('is-collapsed', ui.problemPanelCollapsed);
-                actionEl.innerHTML = '<i class="fas fa-chevron-up"></i> ' + (ui.problemPanelCollapsed ? '展开题目区' : '收起题目区');
+                actionEl.setAttribute('aria-expanded', ui.problemPanelCollapsed ? 'false' : 'true');
+                actionEl.innerHTML = '<i class="fas fa-chevron-' + (ui.problemPanelCollapsed ? 'down' : 'up') + '"></i> ' + (ui.problemPanelCollapsed ? '展开题目区' : '收起题目区');
                 return;
             }
             if (action === 'select-playground') {
-                ui.playgroundProblemId = actionEl.dataset.id || null;
-                var left = root.querySelector('.algo-workbench-left');
-                if (left) {
-                    left.innerHTML = workbenchLeftHtml();
-                } else {
-                    renderTab();
-                }
+                selectPlaygroundProblem(actionEl.dataset.id || null);
+                return;
+            }
+            if (action === 'start-selfcheck') {
+                startSelfCheck(actionEl.dataset.id);
+                return;
+            }
+            if (action === 'finish-selfcheck') {
+                finishSelfCheck(actionEl.dataset.id);
                 return;
             }
             if (action === 'copy-playground-template') {
                 var copyProblem = findProblem(actionEl.dataset.id);
                 if (copyProblem && copyProblem.template && navigator.clipboard) {
                     navigator.clipboard.writeText(copyProblem.template).then(function () {
-                        toast('模板已复制，粘贴到下方 C# 编辑器');
+                        toast('模板已复制，粘贴到下方算法工作台的编辑器');
                     }).catch(function () { toast('复制失败，请手动选择模板'); });
                 }
                 return;
@@ -2095,14 +2314,11 @@
                 renderProblemList();
             } else if (e.target && e.target.id === 'algo-workbench-search') {
                 ui.playgroundSearch = e.target.value;
-                var panel = root.querySelector('.algo-workbench-left');
-                if (panel) {
-                    panel.innerHTML = workbenchLeftHtml();
-                    var search = panel.querySelector('#algo-workbench-search');
-                    if (search) {
-                        search.focus();
-                        search.setSelectionRange(search.value.length, search.value.length);
-                    }
+                renderWorkbenchProblemPanel();
+                var search = root.querySelector('#algo-workbench-search');
+                if (search) {
+                    search.focus();
+                    search.setSelectionRange(search.value.length, search.value.length);
                 }
             }
         });
@@ -2114,8 +2330,7 @@
                 renderProblemList();
             } else if (e.target.id === 'algo-workbench-pattern') {
                 ui.playgroundPattern = e.target.value;
-                var panel = root.querySelector('.algo-workbench-left');
-                if (panel) panel.innerHTML = workbenchLeftHtml();
+                renderWorkbenchProblemPanel();
             } else if (e.target.id === 'algo-filter-status') {
                 ui.status = e.target.value;
                 renderProblemList();
@@ -2131,6 +2346,23 @@
                 saveProblemForm(e.target);
             }
         });
+
+        // 自测中记录用户真正展开了哪些题面段落（<details> 的 toggle 不冒泡，必须捕获阶段监听）
+        root.addEventListener('toggle', function (e) {
+            var fold = e.target;
+            if (!fold || !fold.classList || !fold.classList.contains('algo-problem-fold')) return;
+            if (!ui.selfCheck.problemId) return;
+            var key = fold.getAttribute('data-section');
+            if (!key) return;
+            var index = ui.selfCheck.opened.indexOf(key);
+            if (fold.open && index === -1) {
+                ui.selfCheck.opened.push(key);
+            } else if (!fold.open && index !== -1) {
+                ui.selfCheck.opened.splice(index, 1);
+            }
+            var state = root.querySelector('.algo-selfcheck-state');
+            if (state) state.textContent = '自测中：' + ui.selfCheck.opened.length + ' 段已展开';
+        }, true);
     }
 
     function deleteProblem(id) {

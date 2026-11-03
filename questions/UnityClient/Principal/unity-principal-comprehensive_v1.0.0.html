@@ -1,0 +1,757 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity 客户端资深综合模拟卷（一） | 我与岁月的森林的博客</title><meta name="author" content="我与岁月的森林"><meta name="copyright" content="我与岁月的森林"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="倒计时就绪             00:40:00             设置计时时长时分秒取消确定             开始暂停重置                               1-30 题（单选&#x2F;多选）已完成 0&#x2F;30             1ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9A">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Unity 客户端资深综合模拟卷（一）">
+<meta property="og:url" content="https://jokevallen.github.io/questions/UnityClient/Principal/unity-principal-comprehensive_v1.0.0.html">
+<meta property="og:site_name" content="我与岁月的森林的博客">
+<meta property="og:description" content="倒计时就绪             00:40:00             设置计时时长时分秒取消确定             开始暂停重置                               1-30 题（单选&#x2F;多选）已完成 0&#x2F;30             1ABCD2ABCD3ABCD4ABCD5ABCD6ABCD7ABCD8ABCD9A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jokevallen.github.io/images/head.png">
+<meta property="article:published_time" content="2026-11-02T02:20:00.000Z">
+<meta property="article:modified_time" content="2026-11-03T05:23:06.383Z">
+<meta property="article:author" content="我与岁月的森林">
+<meta property="article:tag" content="编程,学习,生活,哲理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jokevallen.github.io/images/head.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://jokevallen.github.io/questions/UnityClient/Principal/unity-principal-comprehensive_v1.0.0.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-60ZJ4C727K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-60ZJ4C727K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-60ZJ4C727K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/xml/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity 客户端资深综合模拟卷（一）',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/custom-global.css"><link rel="stylesheet" href="/css/hexo-timer.css"><link rel="stylesheet" href="/css/hexo-answer-sheet.css"><link rel="stylesheet" href="/css/knowledge.css"><link rel="stylesheet" href="/css/algo-review.css"><link rel="stylesheet" href="/css/deepseek-pet.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JokeVallen/pet-lab@v1.0.3/css/deepseek-pet.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.png" onerror="this.onerror=null;this.src='/images/friend_404.gif'" alt="avatar"/ loading='lazy'></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">156</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">26</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/mock/"><i class="fa-fw fas fa-user-tie"></i><span> 求职模拟</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div><div class="menus_item"><a class="site-page" href="/stats/"><i class="fa-fw fas fa-chart-line"></i><span> 统计</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/logo-light.png" alt="Logo" loading='lazy'></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> 实用工具</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 个人游戏</span></a></div><div class="menus_item"><a class="site-page" href="/questions/"><i class="fa-fw fas fa-database"></i><span> 题库</span></a></div><div class="menus_item"><a class="site-page" href="/mock/"><i class="fa-fw fas fa-user-tie"></i><span> 求职模拟</span></a></div><div class="menus_item"><a class="site-page" href="/algorithm/"><i class="fa-fw fas fa-brain"></i><span> 算法库</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-lightbulb"></i><span> 知识库</span></a></div><div class="menus_item"><a class="site-page" href="/stats/"><i class="fa-fw fas fa-chart-line"></i><span> 统计</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">Unity 客户端资深综合模拟卷（一）</h1></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="page-title">Unity 客户端资深综合模拟卷（一）</div><div class="container" id="article-container"><div class="exam-paper" id="exam-paper-unity-principal-comprehensive" data-shuffle-questions="true" data-shuffle-options="true">
+        <div class="hexo-timer is-sticky pos-middle-left" id="exam-timer-unity-principal-comprehensive" data-mode="down" data-initial="2400" data-persist="false" data-auto="false" data-custom="true" style="position:fixed;z-index:9999;top:50%;left:2vw;transform:translateY(-50%);">
+            <div class="timer-header"><span class="timer-label">倒计时</span><div class="timer-header-right"><span class="timer-status">就绪</span><button class="timer-settings" type="button" title="设置时间"><i class="fas fa-cog"></i></button><button class="timer-toggle" type="button" aria-expanded="true" title="收起/展开"><i class="fas fa-chevron-down"></i></button></div></div>
+            <div class="timer-display">00:40:00</div>
+            <div class="timer-settings-panel" hidden><div class="timer-settings-title">设置计时时长</div><div class="timer-settings-row"><label>时<input class="timer-set-h" type="number" min="0" max="99" inputmode="numeric" value="0"></label><label>分<input class="timer-set-m" type="number" min="0" max="59" inputmode="numeric" value="40"></label><label>秒<input class="timer-set-s" type="number" min="0" max="59" inputmode="numeric" value="0"></label></div><div class="timer-settings-actions"><button type="button" class="timer-btn timer-settings-cancel">取消</button><button type="button" class="timer-btn timer-settings-apply">确定</button></div></div>
+            <div class="timer-controls"><button class="timer-btn timer-start" type="button">开始</button><button class="timer-btn timer-pause" type="button" disabled>暂停</button><button class="timer-btn timer-reset" type="button">重置</button></div>
+        </div>
+        <div class="hexo-answer-sheet is-sticky pos-middle-right cols-1" id="exam-sheet-unity-principal-comprehensive" data-answers="B|C|A|D|C|D|A|D|A|B|D|A|C|C|A|C|C|C|C|C|A|B|D|B|B|B|B|D|A|B" data-multiple="000000000000000000000000000000" data-persist="false" data-opts="ABCD" style="width:15%;height:60%;position:fixed;z-index:9999;top:50%;right:2vw;transform:translateY(-50%);">
+            <div class="as-header"><div class="as-header-top"><span class="as-label">1-30 题（单选/多选）</span><button type="button" class="as-toggle" aria-expanded="true" title="收起/展开"><i class="fas fa-chevron-down"></i></button></div><div class="as-header-bottom"><span class="as-progress">已完成 0/30</span></div></div>
+            <div class="as-body"><div class="as-row" data-index="0" data-original-index="0" data-multiple="0"><span class="as-num">1</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="1" data-original-index="1" data-multiple="0"><span class="as-num">2</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="2" data-original-index="2" data-multiple="0"><span class="as-num">3</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="3" data-original-index="3" data-multiple="0"><span class="as-num">4</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="4" data-original-index="4" data-multiple="0"><span class="as-num">5</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="5" data-original-index="5" data-multiple="0"><span class="as-num">6</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="6" data-original-index="6" data-multiple="0"><span class="as-num">7</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="7" data-original-index="7" data-multiple="0"><span class="as-num">8</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="8" data-original-index="8" data-multiple="0"><span class="as-num">9</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="9" data-original-index="9" data-multiple="0"><span class="as-num">10</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="10" data-original-index="10" data-multiple="0"><span class="as-num">11</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="11" data-original-index="11" data-multiple="0"><span class="as-num">12</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="12" data-original-index="12" data-multiple="0"><span class="as-num">13</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="13" data-original-index="13" data-multiple="0"><span class="as-num">14</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="14" data-original-index="14" data-multiple="0"><span class="as-num">15</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="15" data-original-index="15" data-multiple="0"><span class="as-num">16</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="16" data-original-index="16" data-multiple="0"><span class="as-num">17</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="17" data-original-index="17" data-multiple="0"><span class="as-num">18</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="18" data-original-index="18" data-multiple="0"><span class="as-num">19</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="19" data-original-index="19" data-multiple="0"><span class="as-num">20</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="20" data-original-index="20" data-multiple="0"><span class="as-num">21</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="21" data-original-index="21" data-multiple="0"><span class="as-num">22</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="22" data-original-index="22" data-multiple="0"><span class="as-num">23</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="23" data-original-index="23" data-multiple="0"><span class="as-num">24</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="24" data-original-index="24" data-multiple="0"><span class="as-num">25</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="25" data-original-index="25" data-multiple="0"><span class="as-num">26</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="26" data-original-index="26" data-multiple="0"><span class="as-num">27</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="27" data-original-index="27" data-multiple="0"><span class="as-num">28</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="28" data-original-index="28" data-multiple="0"><span class="as-num">29</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div><div class="as-row" data-index="29" data-original-index="29" data-multiple="0"><span class="as-num">30</span><div class="as-options"><button type="button" class="as-opt" data-opt="A">A</button><button type="button" class="as-opt" data-opt="B">B</button><button type="button" class="as-opt" data-opt="C">C</button><button type="button" class="as-opt" data-opt="D">D</button></div></div></div>
+            <div class="as-controls"><button type="button" class="as-btn as-grade">批卷</button><button type="button" class="as-btn as-reset">重置</button></div>
+            <div class="as-result" style="display:none;"></div>
+        </div>
+        <div class="ep-head"><p class="ep-kicker">v1.0.0</p><h1>Unity 客户端资深综合模拟卷（一）</h1><p>30 道客观题 + 4 道主观题，聚焦技术选型、架构治理、性能体系与团队工程化。</p></div>
+        <section class="ep-stats" id="ep-stats-unity-principal-comprehensive" data-paper-id="unity-principal-comprehensive">
+            <div class="ep-stats-head"><h3>答题记录</h3><button type="button" class="ep-stats-clear">清空记录</button></div>
+            <div class="ep-stats-body">暂无记录，完成一次批卷后会生成。</div>
+        </section>
+        <h2 class="ep-section-title">一、客观题</h2><article class="ep-question" data-q-index="0" data-question-id="q1" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q1"><h3><span class="ep-number">1.</span> 团队决定引入新框架前，最先应确认的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">框架在社区的流行程度</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">解决明确痛点与迁移成本</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">作者是否出自大厂团队</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">官方文档是否有中文版</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">技术选型应先对齐问题、收益与迁移成本，避免为新技术而改。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq1&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq1%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%9B%A2%E9%98%9F%E5%86%B3%E5%AE%9A%E5%BC%95%E5%85%A5%E6%96%B0%E6%A1%86%E6%9E%B6%E5%89%8D%EF%BC%8C%E6%9C%80%E5%85%88%E5%BA%94%E7%A1%AE%E8%AE%A4%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="1" data-question-id="q2" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q2"><h3><span class="ep-number">2.</span> 模块间出现大量循环依赖，优先的治理手段是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">提升编译的线程数量</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">全部合并为单程序集</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">抽取接口与分层边界</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">增加编辑器辅助插件</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">循环依赖本质是边界缺失，应通过接口与分层约束拆解依赖方向。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq2&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq2%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%A8%A1%E5%9D%97%E9%97%B4%E5%87%BA%E7%8E%B0%E5%A4%A7%E9%87%8F%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%EF%BC%8C%E4%BC%98%E5%85%88%E7%9A%84%E6%B2%BB%E7%90%86%E6%89%8B%E6%AE%B5%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="2" data-question-id="q3" data-paper-id="unity-principal-comprehensive" data-answer="A" data-section="一、客观题" id="q3"><h3><span class="ep-number">3.</span> 团队要建设性能基线，最需要先统一的是什么？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">测试设备与测量口径</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">自动修复所有卡顿</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">精简测试人员的配置</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">提高美术资源的产能</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">基线让版本间差异可量化，避免以主观感受判断优化效果。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq3&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq3%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%9B%A2%E9%98%9F%E8%A6%81%E5%BB%BA%E8%AE%BE%E6%80%A7%E8%83%BD%E5%9F%BA%E7%BA%BF%EF%BC%8C%E6%9C%80%E9%9C%80%E8%A6%81%E5%85%88%E7%BB%9F%E4%B8%80%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="3" data-question-id="q4" data-paper-id="unity-principal-comprehensive" data-answer="D" data-section="一、客观题" id="q4"><h3><span class="ep-number">4.</span> 关于技术债，较合理的处理方式是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">集中一次性全部重构</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">维持现状不再记录</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只写进文档暂不排期</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">登记排期并分批偿还</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">技术债要有可见清单与优先级，结合业务节奏分批偿还。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq4&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq4%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%8A%80%E6%9C%AF%E5%80%BA%EF%BC%8C%E8%BE%83%E5%90%88%E7%90%86%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="4" data-question-id="q5" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q5"><h3><span class="ep-number">5.</span> 客户端与服务器数据契约演进的关键是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">每次全量替换结构</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">各环境独立演进协议</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">字段可扩展与向后兼容</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只保留最新版本结构</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">契约应支持新增可选字段与版本协商，避免新旧客户端同时在线时解析失败。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq5&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq5%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%95%B0%E6%8D%AE%E5%A5%91%E7%BA%A6%E6%BC%94%E8%BF%9B%E7%9A%84%E5%85%B3%E9%94%AE%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="5" data-question-id="q6" data-paper-id="unity-principal-comprehensive" data-answer="D" data-section="一、客观题" id="q6"><h3><span class="ep-number">6.</span> 灰度发布体系中最关键的能力是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">一次性全量推送给全部用户</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">关闭日志上报以降低开销</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">精简测试覆盖以加快节奏</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">指标可观测与快速回滚</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">灰度依赖指标观测与快速回滚，否则无法控制影响面。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq6&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq6%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83%E4%BD%93%E7%B3%BB%E4%B8%AD%E6%9C%80%E5%85%B3%E9%94%AE%E7%9A%84%E8%83%BD%E5%8A%9B%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="6" data-question-id="q7" data-paper-id="unity-principal-comprehensive" data-answer="A" data-section="一、客观题" id="q7"><h3><span class="ep-number">7.</span> 大型项目按模块拆分 asmdef 后，最直接的工程收益是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">缩短编译时间与明确边界</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">自动压缩贴图与音频资源</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">提升 GPU 的渲染性能</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">替代版本管理工具</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">程序集拆分可增量编译并显式约束依赖方向。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq7&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq7%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E6%8C%89%E6%A8%A1%E5%9D%97%E6%8B%86%E5%88%86%20asmdef%20%E5%90%8E%EF%BC%8C%E6%9C%80%E7%9B%B4%E6%8E%A5%E7%9A%84%E5%B7%A5%E7%A8%8B%E6%94%B6%E7%9B%8A%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="7" data-question-id="q8" data-paper-id="unity-principal-comprehensive" data-answer="D" data-section="一、客观题" id="q8"><h3><span class="ep-number">8.</span> 关于自动化测试在客户端的定位，正确的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">完全替代全部人工测试</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只在发布前执行一次</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只做 UI 截图像素比对</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">覆盖关键路径回归</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">自动化适合稳定的关键路径回归，复杂体验仍依赖人工与真机验证。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq8&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq8%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%9C%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E5%AE%9A%E4%BD%8D%EF%BC%8C%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="8" data-question-id="q9" data-paper-id="unity-principal-comprehensive" data-answer="A" data-section="一、客观题" id="q9"><h3><span class="ep-number">9.</span> 团队遇到线上崩溃率上升，最先应做的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">先按版本与机型看分布</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">立刻回滚全部功能</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">关闭崩溃上报的通道</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">重写核心业务模块</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">先看分布定位影响范围与可疑变更，再决定回滚或修复。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq9&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq9%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%9B%A2%E9%98%9F%E9%81%87%E5%88%B0%E7%BA%BF%E4%B8%8A%E5%B4%A9%E6%BA%83%E7%8E%87%E4%B8%8A%E5%8D%87%EF%BC%8C%E6%9C%80%E5%85%88%E5%BA%94%E5%81%9A%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="9" data-question-id="q10" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q10"><h3><span class="ep-number">10.</span> 代码评审中最应关注的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">变量命名是否足够简短</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">边界条件与错误处理</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">注释数量是否达标</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">提交时间是否在工作日</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">评审重点在正确性、边界与可维护性，形式问题次要。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq10&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq10%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%AF%84%E5%AE%A1%E4%B8%AD%E6%9C%80%E5%BA%94%E5%85%B3%E6%B3%A8%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="10" data-question-id="q11" data-paper-id="unity-principal-comprehensive" data-answer="D" data-section="一、客观题" id="q11"><h3><span class="ep-number">11.</span> 关于日志分级，较合理的实践是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">全部统一用 Error 级别</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只在编辑器内打印输出</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">全部关闭以保证性能</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">按场景分级并支持线上开关</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">分级日志配合运行时开关，可在排查与性能之间取得平衡。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq11&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq11%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%97%A5%E5%BF%97%E5%88%86%E7%BA%A7%EF%BC%8C%E8%BE%83%E5%90%88%E7%90%86%E7%9A%84%E5%AE%9E%E8%B7%B5%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="11" data-question-id="q12" data-paper-id="unity-principal-comprehensive" data-answer="A" data-section="一、客观题" id="q12"><h3><span class="ep-number">12.</span> 资源版本与代码版本不一致时，最可能的结果是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">运行时资源缺失或表现异常</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">客户端自动升级到最新</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">包体体积自动缩小</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">渲染帧率自动提升</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">程序集、资源与配置需版本对齐，否则会出现引用缺失与兼容问题。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq12&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq12%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E8%B5%84%E6%BA%90%E7%89%88%E6%9C%AC%E4%B8%8E%E4%BB%A3%E7%A0%81%E7%89%88%E6%9C%AC%E4%B8%8D%E4%B8%80%E8%87%B4%E6%97%B6%EF%BC%8C%E6%9C%80%E5%8F%AF%E8%83%BD%E7%9A%84%E7%BB%93%E6%9E%9C%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="12" data-question-id="q13" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q13"><h3><span class="ep-number">13.</span> 评估一个新优化方案的收益时，较可靠的做法是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">只看单点压测数据</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">参考论坛的通用结论</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">真机与目标机型实测对比</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">仅看理论复杂度推导</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">优化效果与机型、场景强相关，需在目标环境实测对比。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq13&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq13%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E8%AF%84%E4%BC%B0%E4%B8%80%E4%B8%AA%E6%96%B0%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88%E7%9A%84%E6%94%B6%E7%9B%8A%E6%97%B6%EF%BC%8C%E8%BE%83%E5%8F%AF%E9%9D%A0%E7%9A%84%E5%81%9A%E6%B3%95%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="13" data-question-id="q14" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q14"><h3><span class="ep-number">14.</span> 关于框架抽象层，说法正确的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">抽象层次越多越好</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">一律不做任何抽象</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">按变化点抽象并保持可测</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只为展示技术能力</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">抽象应围绕真实变化点，过度抽象会增加理解与维护成本。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq14&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq14%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%A1%86%E6%9E%B6%E6%8A%BD%E8%B1%A1%E5%B1%82%EF%BC%8C%E8%AF%B4%E6%B3%95%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="14" data-question-id="q15" data-paper-id="unity-principal-comprehensive" data-answer="A" data-section="一、客观题" id="q15"><h3><span class="ep-number">15.</span> 团队并行开发时最容易冲突的资产是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">场景与 Prefab 资源</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只读的静态配置表</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">未经修改的静态图片</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">版本号文本文件</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">场景与 Prefab 为二进制或复杂序列化资产，多人同时编辑易冲突，需要拆分与规范。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq15&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq15%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%9B%A2%E9%98%9F%E5%B9%B6%E8%A1%8C%E5%BC%80%E5%8F%91%E6%97%B6%E6%9C%80%E5%AE%B9%E6%98%93%E5%86%B2%E7%AA%81%E7%9A%84%E8%B5%84%E4%BA%A7%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="15" data-question-id="q16" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q16"><h3><span class="ep-number">16.</span> 关于热更新灰度，较稳妥的策略是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">直接向全量用户推送</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">只在周末集中发布</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">内部到小比例再到全量</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">不设置任何监控指标</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">分阶段放量可在影响面可控时观察指标并随时回滚。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq16&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq16%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E7%83%AD%E6%9B%B4%E6%96%B0%E7%81%B0%E5%BA%A6%EF%BC%8C%E8%BE%83%E7%A8%B3%E5%A6%A5%E7%9A%84%E7%AD%96%E7%95%A5%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="16" data-question-id="q17" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q17"><h3><span class="ep-number">17.</span> 排查偶现问题的关键手段是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">反复重启测试设备</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">提高帧率上限阈值</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">补充上下文日志与复现步骤</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">关闭异常捕获与上报</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">偶现问题依赖足够的现场信息与可复现条件，需补日志与埋点。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq17&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq17%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E6%8E%92%E6%9F%A5%E5%81%B6%E7%8E%B0%E9%97%AE%E9%A2%98%E7%9A%84%E5%85%B3%E9%94%AE%E6%89%8B%E6%AE%B5%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="17" data-question-id="q18" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q18"><h3><span class="ep-number">18.</span> 关于依赖注入在 Unity 项目中的落地，说法正确的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">必须引入完整容器框架</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">完全不可用于客户端</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">可用轻量手工注入并按需引入</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只适合服务端架构</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">手工注入或轻量容器均可，重点在于显式依赖与可测试性。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq18&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq18%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%9C%A8%20Unity%20%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E8%90%BD%E5%9C%B0%EF%BC%8C%E8%AF%B4%E6%B3%95%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="18" data-question-id="q19" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q19"><h3><span class="ep-number">19.</span> 项目内存持续上涨但无明显泄漏点，较有效的下一步是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">直接升级设备内存</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">关闭 Profiler 采样</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">定期抓快照对比对象增量</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">减少回归测试用例</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">通过多次内存快照对比对象增量，可定位持续增长的持有链。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq19&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq19%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E9%A1%B9%E7%9B%AE%E5%86%85%E5%AD%98%E6%8C%81%E7%BB%AD%E4%B8%8A%E6%B6%A8%E4%BD%86%E6%97%A0%E6%98%8E%E6%98%BE%E6%B3%84%E6%BC%8F%E7%82%B9%EF%BC%8C%E8%BE%83%E6%9C%89%E6%95%88%E7%9A%84%E4%B8%8B%E4%B8%80%E6%AD%A5%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="19" data-question-id="q20" data-paper-id="unity-principal-comprehensive" data-answer="C" data-section="一、客观题" id="q20"><h3><span class="ep-number">20.</span> 关于特性开关（Feature Flag），主要价值是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">提高渲染帧率上限</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">减少代码总行数</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">降低上线与回滚风险</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">压缩安装包体积</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：C</strong></p><p class="ep-explanation">特性开关让功能可按人群与配置启用，降低发布风险。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq20&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq20%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E7%89%B9%E6%80%A7%E5%BC%80%E5%85%B3%EF%BC%88Feature%20Flag%EF%BC%89%EF%BC%8C%E4%B8%BB%E8%A6%81%E4%BB%B7%E5%80%BC%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="20" data-question-id="q21" data-paper-id="unity-principal-comprehensive" data-answer="A" data-section="一、客观题" id="q21"><h3><span class="ep-number">21.</span> 团队协作中，代码规范自动化的最佳载体是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">提交前检查与 CI 校验</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">团队口头约定流程</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">只在代码评审时提醒</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">写在个人开发笔记里</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">规范需要工具化在提交与集成环节执行，避免依赖人工记忆。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq21&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq21%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C%E4%B8%AD%EF%BC%8C%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84%E6%9C%80%E4%BD%B3%E8%BD%BD%E4%BD%93%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="21" data-question-id="q22" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q22"><h3><span class="ep-number">22.</span> 关于性能预算（budget），较合理的用法是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">只在立项时写一次</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">设定阈值并在 CI 中检查</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">每次发版随机调整</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">完全由美术团队决定</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">性能预算需写入流程并在集成环节自动校验，才能真正约束改动。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq22&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq22%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%80%A7%E8%83%BD%E9%A2%84%E7%AE%97%EF%BC%88budget%EF%BC%89%EF%BC%8C%E8%BE%83%E5%90%88%E7%90%86%E7%9A%84%E7%94%A8%E6%B3%95%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="22" data-question-id="q23" data-paper-id="unity-principal-comprehensive" data-answer="D" data-section="一、客观题" id="q23"><h3><span class="ep-number">23.</span> 出现大范围闪退且集中在某机型时，合理的排查顺序是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">先重构全部渲染流程</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">先关闭崩溃统计上报</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">先升级所有第三方库</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">先看该机型特有路径与日志</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">先定位机型相关差异与日志特征，再针对性修复，避免盲目大改。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq23&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq23%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%87%BA%E7%8E%B0%E5%A4%A7%E8%8C%83%E5%9B%B4%E9%97%AA%E9%80%80%E4%B8%94%E9%9B%86%E4%B8%AD%E5%9C%A8%E6%9F%90%E6%9C%BA%E5%9E%8B%E6%97%B6%EF%BC%8C%E5%90%88%E7%90%86%E7%9A%84%E6%8E%92%E6%9F%A5%E9%A1%BA%E5%BA%8F%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="23" data-question-id="q24" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q24"><h3><span class="ep-number">24.</span> 关于接口设计，较合理的实践是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">暴露实现细节便于调试</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">保持最小契约与稳定语义</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">允许随时变更方法签名</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">全部改为静态方法实现</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">接口应保持最小稳定契约，变更需评估对所有调用方的影响。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq24&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq24%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1%EF%BC%8C%E8%BE%83%E5%90%88%E7%90%86%E7%9A%84%E5%AE%9E%E8%B7%B5%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="24" data-question-id="q25" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q25"><h3><span class="ep-number">25.</span> 项目需要在低端机上保障体验，最有效的第一步是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">先提升美术资源精度</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">明确目标机型与体验底线</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">先增加更多后处理效果</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">先关闭全部特效资源</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">先界定目标设备与底线指标，再决定分级策略与优化手段。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq25&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq25%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E9%A1%B9%E7%9B%AE%E9%9C%80%E8%A6%81%E5%9C%A8%E4%BD%8E%E7%AB%AF%E6%9C%BA%E4%B8%8A%E4%BF%9D%E9%9A%9C%E4%BD%93%E9%AA%8C%EF%BC%8C%E6%9C%80%E6%9C%89%E6%95%88%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AD%A5%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="25" data-question-id="q26" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q26"><h3><span class="ep-number">26.</span> 关于多人协作分支策略，较合理的做法是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">长期维护独立大分支</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">小而频繁的主干合并</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">所有人直接改主分支不评审</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">各自分支从不合并</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">小步合并可降低冲突规模与集成风险。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq26&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq26%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E5%A4%9A%E4%BA%BA%E5%8D%8F%E4%BD%9C%E5%88%86%E6%94%AF%E7%AD%96%E7%95%A5%EF%BC%8C%E8%BE%83%E5%90%88%E7%90%86%E7%9A%84%E5%81%9A%E6%B3%95%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="26" data-question-id="q27" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q27"><h3><span class="ep-number">27.</span> 线上问题复盘时，最有价值的部分是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">找出责任人进行批</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">可复用的预防措施</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">隐藏问题的敏感细节</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">只记录发生的具体时间</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">复盘的价值在于沉淀检测手段与流程改进，避免同因复发。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq27&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq27%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%E6%97%B6%EF%BC%8C%E6%9C%80%E6%9C%89%E4%BB%B7%E5%80%BC%E7%9A%84%E9%83%A8%E5%88%86%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="27" data-question-id="q28" data-paper-id="unity-principal-comprehensive" data-answer="D" data-section="一、客观题" id="q28"><h3><span class="ep-number">28.</span> 关于第三方 SDK 接入评估，最应关注的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">SDK 图标是否美观</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">社区相关帖子的数量</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">官方文档是否为中文</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">包体、性能与隐私合规</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：D</strong></p><p class="ep-explanation">SDK 会带来包体、运行时开销与合规风险，需要接入前评估。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq28&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq28%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E7%AC%AC%E4%B8%89%E6%96%B9%20SDK%20%E6%8E%A5%E5%85%A5%E8%AF%84%E4%BC%B0%EF%BC%8C%E6%9C%80%E5%BA%94%E5%85%B3%E6%B3%A8%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="28" data-question-id="q29" data-paper-id="unity-principal-comprehensive" data-answer="A" data-section="一、客观题" id="q29"><h3><span class="ep-number">29.</span> 大规模重构时，较稳妥的推进方式是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">小步替换并保持可运行</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">一次性切换全部模块</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">先删除旧代码再重建</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">停止所有需求集中改造</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：A</strong></p><p class="ep-explanation">渐进式替换保持主干可运行，降低重构风险与回滚难度。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq29&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq29%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%87%8D%E6%9E%84%E6%97%B6%EF%BC%8C%E8%BE%83%E7%A8%B3%E5%A6%A5%E7%9A%84%E6%8E%A8%E8%BF%9B%E6%96%B9%E5%BC%8F%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article><article class="ep-question" data-q-index="29" data-question-id="q30" data-paper-id="unity-principal-comprehensive" data-answer="B" data-section="一、客观题" id="q30"><h3><span class="ep-number">30.</span> 关于团队知识沉淀，下列做法最不推荐的是？</h3><div class="ep-options"><div class="ep-option"><span class="ep-option-key">A</span><span class="ep-option-text">文档与代码示例同步维护</span></div><div class="ep-option"><span class="ep-option-key">B</span><span class="ep-option-text">关键决策只靠口口相传</span></div><div class="ep-option"><span class="ep-option-key">C</span><span class="ep-option-text">建立可检索的规范索引</span></div><div class="ep-option"><span class="ep-option-key">D</span><span class="ep-option-text">定期复盘并更新文档</span></div></div><details class="ep-answer">
+            <summary>查看答案与解析</summary>
+            <div class="ep-answer-body"><p><strong>正确答案：B</strong></p><p class="ep-explanation">只靠口头传递会随人员流动丢失，应沉淀为可检索的文档与示例。</p></div>
+        </details><a class="ep-feedback" href="https://github.com/JokeVallen/JokeVallen.github.io/issues/new?template=question-feedback.yml&title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D%20unity-principal-comprehensive%3Aq30&body=%E8%AF%95%E5%8D%B7%EF%BC%9Aunity-principal-comprehensive%0A%E9%A2%98%E7%9B%AE%EF%BC%9Aq30%0A%E9%A2%98%E5%B9%B2%EF%BC%9A%E5%85%B3%E4%BA%8E%E5%9B%A2%E9%98%9F%E7%9F%A5%E8%AF%86%E6%B2%89%E6%B7%80%EF%BC%8C%E4%B8%8B%E5%88%97%E5%81%9A%E6%B3%95%E6%9C%80%E4%B8%8D%E6%8E%A8%E8%8D%90%E7%9A%84%E6%98%AF%EF%BC%9F%0A%0A%E8%AF%B7%E6%8F%8F%E8%BF%B0%E9%97%AE%E9%A2%98%EF%BC%88%E7%AD%94%E6%A1%88%E9%94%99%E8%AF%AF%20%2F%20%E9%80%89%E9%A1%B9%E9%94%99%E8%AF%AF%20%2F%20%E8%A1%A8%E8%BF%B0%E4%B8%8D%E6%B8%85%20%2F%20%E9%87%8D%E5%A4%8D%E9%A2%98%E7%9B%AE%20%2F%20%E5%85%B6%E4%BB%96%EF%BC%89%EF%BC%9A%0A" target="_blank" rel="noopener noreferrer"><i class="fas fa-flag"></i> 反馈本题</a></article>
+        <h2 class="ep-section-title">主观题</h2><article class="ep-question ep-subjective" id="s1"><h3><span class="ep-number">1.</span> 团队要在 3 个月内把一个 5 年历史的 Unity 项目从 AssetBundle 迁移到 Addressables，请给出分阶段计划、风险点与回滚策略。</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>盘点资源与依赖关系</li><li>双轨并行与灰度</li><li>引用计数与泄漏治理</li><li>版本一致性与 CDN 发布</li><li>回滚开关与真机验证</li></ul></div></details></article><article class="ep-question ep-subjective" id="s2"><h3><span class="ep-number">2.</span> 客户端崩溃率从上个版本的 0.3% 上升到 1.2%，请给出从数据分布到根因定位再到修复验证的完整流程。</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>按版本机型系统看分布</li><li>堆栈聚合与关键变更关联</li><li>复现与日志补强</li><li>灰度验证与回滚预案</li><li>复盘并沉淀检测手段</li></ul></div></details></article><article class="ep-question ep-subjective" id="s3"><h3><span class="ep-number">3.</span> 为一个 30 人客户端团队设计性能治理体系，要求可量化、可持续并有明确责任人。</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>指标基线与目标机型</li><li>CI 自动采集与门禁</li><li>版本对比报告</li><li>预算分级与豁免流程</li><li>问题闭环与复盘</li></ul></div></details></article><article class="ep-question ep-subjective" id="s4"><h3><span class="ep-number">4.</span> 项目出现 UI 层直接调用网络与存档导致难以测试，请设计分层改造方案与验证手段。</h3><p class="ep-subjective-tip">先在心里作答，再展开参考答案对照。</p><details class="ep-answer"><summary>查看参考答案</summary><div class="ep-answer-body"><ul><li>表现层与应用层边界</li><li>领域模型与接口抽象</li><li>依赖注入与可测性</li><li>asmdef 依赖方向约束</li><li>分阶段替换与回归</li></ul></div></details></article>
+    </div>
+</div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 我与岁月的森林</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
+
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
+
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      lastPointerX: 0,
+      lastPointerY: 0
+    }
+
+    const onPointerDown = e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (state.pointers.size === 1) {
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = curVb.slice()
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
+        return
+      }
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+      } else if (state.pointers.size === 1) {
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+      }
+    }
+
+    const onWheel = e => {
+      // Prevent event bubbling from triggering external scroll
+      e.preventDefault()
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (init) setCurVb(init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      // Clean up event listeners before removing old SVG
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
+
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
+    })
+  }
+
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (true) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="/js/content-db.js" defer></script><script src="/js/content-db-sql.js" defer></script><script src="/js/question-index.js" defer></script><script src="/js/site-content-api.js" defer></script><script src="/js/site-events.js" defer></script><script src="/js/site-navigation-api.js" defer></script><script src="/js/site-action-api.js" defer></script><script src="/js/site-api.js" defer></script><script src="/js/site-bookmarks.js" defer></script><script src="/js/site-reading-position.js" defer></script><script src="/js/site-search-api.js" defer></script><script src="/js/site-context.js" defer></script><script src="/js/site-history.js" defer></script><script src="/js/site-notes.js" defer></script><script src="/js/site-quiz-api.js" defer></script><script src="/js/site-recommend-api.js" defer></script><script src="/js/site-data-api.js" defer></script><script src="/js/theme-sync.js" defer></script><script src="/js/privacy-notice.js" defer></script><script src="/js/custom-global.js?v=35249d8d" defer></script><script src="/js/hexo-timer.js" defer></script><script src="/js/exam-paper.js" defer></script><script src="/js/hexo-answer-sheet.js" defer></script><script src="/js/stats-center.js" defer></script><script src="/js/exam-paper-stats-v2.js" defer></script><script src="/js/exam-paper-actions.js" defer></script><script src="/js/stats-center-page.js" defer></script><script src="/js/knowledge.js"></script><script src="/js/algo-review.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"]):not([data-fancybox]):not([href="/tools/skip/"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: true,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || ''
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

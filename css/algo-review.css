@@ -1558,6 +1558,127 @@ body.algo-modal-open {
 #algo-review-app .algo-workbench-right {
     min-width: 0;
 }
+
+#algo-review-app .algo-workbench-right {
+    position: relative;
+}
+
+#algo-review-app .algo-playground-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--algo-border);
+    border-radius: 10px;
+    background: var(--algo-card-2);
+    color: var(--algo-muted);
+    font-size: 13px;
+}
+
+#algo-review-app .algo-playground-status[hidden] {
+    display: none;
+}
+
+#algo-review-app .algo-playground-status i {
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-playground-status a {
+    margin-left: auto;
+    color: var(--algo-primary);
+    font-weight: 600;
+}
+
+#algo-review-app .algo-playground-status.is-timeout {
+    border-color: rgba(217, 119, 6, 0.3);
+    background: var(--algo-warning-soft);
+    color: var(--algo-warning);
+}
+
+#algo-review-app .algo-playground-status.is-timeout i {
+    color: var(--algo-warning);
+}
+
+#algo-review-app .algo-playground-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-playground-status.is-timeout .algo-playground-metrics {
+    color: var(--algo-warning);
+}
+
+#algo-review-app .algo-playground-metric {
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--algo-card);
+    white-space: nowrap;
+}
+
+#algo-review-app .algo-playground-status.is-timeout .algo-playground-metric {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] #algo-review-app .algo-playground-status.is-timeout .algo-playground-metric {
+    background: rgba(15, 23, 42, 0.35);
+}
+
+#algo-review-app .algo-playground-metric strong {
+    color: var(--algo-primary);
+    font-weight: 700;
+}
+
+/* ---------- 题面自测 ---------- */
+
+#algo-review-app .algo-selfcheck-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--algo-border);
+    border-radius: 10px;
+    background: var(--algo-card-2);
+}
+
+#algo-review-app .algo-workbench-detail.is-selfcheck .algo-selfcheck-bar {
+    border-color: var(--algo-primary);
+    background: var(--algo-primary-soft);
+}
+
+#algo-review-app .algo-selfcheck-state {
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+#algo-review-app .algo-workbench-detail.is-selfcheck .algo-selfcheck-state {
+    color: var(--algo-primary);
+    font-weight: 600;
+}
+
+#algo-review-app .algo-selfcheck-hint {
+    margin: 0 0 10px;
+    color: var(--algo-muted);
+    font-size: 12px;
+}
+
+/* 自测中：题面段落收起时也保留可点的 summary 视觉提示 */
+#algo-review-app .algo-workbench-detail.is-selfcheck .algo-problem-fold > summary {
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-workbench-detail.is-selfcheck .algo-problem-fold[open] > summary {
+    color: var(--algo-text);
+}
+
 #algo-review-app .algo-workbench-actions {
     display: flex;
     align-items: center;
@@ -1625,6 +1746,9 @@ body.algo-modal-open {
 }
 
 #algo-review-app .algo-workbench-detail {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
     padding: 14px 16px;
     border: 1px solid var(--algo-border);
     border-radius: 12px;
@@ -1635,8 +1759,10 @@ body.algo-modal-open {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 8px;
+    min-width: 0;
 }
 
 #algo-review-app .algo-workbench-detail h3 {
@@ -1685,38 +1811,132 @@ body.algo-modal-open {
     box-shadow: var(--algo-shadow);
 }
 
+#algo-review-app .algo-workbench-right.is-loaded #algo-playground-status {
+    border-color: var(--algo-border);
+}
+
 #algo-review-app .algo-problem-fold {
     margin: 0 0 10px;
     border: 1px solid var(--algo-border);
     border-radius: 10px;
     background: var(--algo-card-2);
+    overflow: hidden;
 }
 
+/* 统一 summary：所有折叠共用一套，箭头用伪元素，不用绝对定位跑出边框 */
 #algo-review-app .algo-problem-fold > summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
     padding: 10px 14px;
     color: var(--algo-text);
+    font-size: 13.5px;
     font-weight: 700;
+    line-height: 1.5;
+    list-style: none;
     cursor: pointer;
     user-select: none;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+/* 去掉各浏览器默认的三角度标记，统一用自绘箭头 */
+#algo-review-app .algo-problem-fold > summary::-webkit-details-marker,
+#algo-review-app .algo-problem-fold > summary::marker {
+    display: none;
+    content: '';
+}
+
+#algo-review-app .algo-problem-fold > summary::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    margin-right: 2px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.18s ease;
+}
+
+#algo-review-app .algo-problem-fold[open] > summary::before {
+    transform: rotate(45deg);
+}
+
+#algo-review-app .algo-problem-fold > summary:hover {
+    background: var(--algo-primary-soft);
+    color: var(--algo-primary);
+}
+
+#algo-review-app .algo-problem-fold > summary:focus-visible {
+    outline: 2px solid var(--algo-primary);
+    outline-offset: -2px;
+}
+
+/* 标签允许收缩，避免长标题把 summary 撑出框 */
+#algo-review-app .algo-fold-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #algo-review-app .algo-problem-fold[open] > summary {
     border-bottom: 1px solid var(--algo-border);
 }
 
-#algo-review-app .algo-problem-fold > p,
-#algo-review-app .algo-problem-fold > ul,
-#algo-review-app .algo-problem-fold > div,
-#algo-review-app .algo-problem-fold > dl {
-    margin: 12px 14px;
+/* 内容容器：统一 padding，并防止子元素横向溢出 */
+#algo-review-app .algo-problem-fold-body {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+#algo-review-app .algo-problem-fold-body > * {
+    min-width: 0;
+    max-width: 100%;
+}
+
+#algo-review-app .algo-problem-fold-body > :first-child {
+    margin-top: 0;
+}
+
+#algo-review-app .algo-problem-fold-body > :last-child {
+    margin-bottom: 0;
+}
+
+#algo-review-app .algo-problem-fold-body > p,
+#algo-review-app .algo-problem-fold-body > ul,
+#algo-review-app .algo-problem-fold-body > div,
+#algo-review-app .algo-problem-fold-body > dl {
+    margin: 0;
 }
 
 #algo-review-app .algo-problem-example {
+    box-sizing: border-box;
     padding: 10px 12px;
-    margin: 10px 14px;
+    margin: 10px 0;
     border-left: 3px solid var(--algo-primary);
     border-radius: 8px;
     background: var(--algo-card);
+    max-width: 100%;
+    min-width: 0;
+}
+
+#algo-review-app .algo-problem-example:first-child {
+    margin-top: 0;
+}
+
+#algo-review-app .algo-problem-example:last-child {
+    margin-bottom: 0;
 }
 
 #algo-review-app .algo-problem-example-title {
@@ -1741,13 +1961,18 @@ body.algo-modal-open {
 }
 
 #algo-review-app .algo-problem-constraints {
-    padding-left: 20px;
+    box-sizing: border-box;
+    padding-left: 18px;
+    margin: 0;
+    max-width: 100%;
     color: var(--algo-text);
     font-size: 13px;
 }
 
 #algo-review-app .algo-problem-constraints li {
     margin: 4px 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 #algo-review-app .algo-problem-muted {
@@ -1807,6 +2032,34 @@ body.algo-modal-open {
 
     #algo-review-app .algo-problem-filters {
         grid-template-columns: 1fr;
+    }
+
+    /* 移动端：折叠头部收紧 padding，标签截断，禁止横向溢出 */
+    #algo-review-app .algo-workbench-detail {
+        padding: 12px;
+    }
+
+    #algo-review-app .algo-problem-fold > summary {
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+
+    #algo-review-app .algo-problem-fold-body {
+        padding: 10px 12px;
+    }
+
+    #algo-review-app .algo-fold-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #algo-review-app .algo-workbench-detail,
+    #algo-review-app .algo-problem-fold,
+    #algo-review-app .algo-problem-fold-body {
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
     }
 }
 

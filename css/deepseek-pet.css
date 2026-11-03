@@ -1,6 +1,12 @@
 /* ============================================================
- * DeepSeek 鲸鱼娘博客宠物 · 小深
- * 立绘 + localStorage，不依赖任何外部接口、不需要 API Key
+ * 博客桌宠（鲸鱼娘）样式 · 归属 PET_INTEGRATION
+ *
+ * 宠物本体（DOM、状态机、调度）在 source/js/pet/，是黑盒：
+ * 本文件只做视觉层，不改变宠物的结构与行为。
+ *
+ * 角色名不写死在这里——名字来自 config/pet.yaml 的 name
+ * （当前为「大肥鱼」），改名字只改配置，不要改 CSS。
+ * 立绘 + localStorage，不依赖任何外部接口、不需要 API Key。
  * ============================================================ */
 
 .dp-root {
@@ -17,7 +23,8 @@
     bottom: calc(6px + var(--dp-oy, 0px));
     /* 低于主题右下角按钮，避免挡住深色模式等开关 */
     z-index: 90;
-    /* 尺寸由 CONFIG.size 写成 --dp-w / --dp-h，这里的值只是缺省 */
+    /* 尺寸由 CONFIG.size 写成 --dp-w / --dp-h，这里的值只是缺省
+       素材规格 320×283（见 docs/PET_SPEC.md），缺省按 200×177 等比回落 */
     width: var(--dp-w, 200px);
     pointer-events: none;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -37,7 +44,7 @@
 .dp-root .dp-character {
     position: relative;
     width: var(--dp-w, 200px);
-    /* 与动画素材同比例，由 CONFIG.size 决定 */
+    /* 与动画素材同比例（320×283 ≈ 1.131，200 → 177），由 CONFIG.size 决定 */
     height: var(--dp-h, 177px);
     pointer-events: auto;
     cursor: grab;
@@ -599,6 +606,8 @@
 }
 
 /* ---------- 移动端 ---------- */
+/* 断点与其它工作流共用 768px：手机竖屏只留 146px 宽，给正文让位；
+   底部留出 safe-area + 74px，避开来路按钮与主题右下角开关。 */
 @media (max-width: 768px) {
     .dp-root {
         right: 8px;
